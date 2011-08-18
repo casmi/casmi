@@ -20,7 +20,6 @@
 package casmi.parser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -39,51 +38,113 @@ import casmi.io.Writer;
 /**
  * JSON parser class.
  * 
+ * <p>
+ * This class uses JSONIC library
+ * (jsonic-1.2.5) licensed by Apache 2.0 license.
+ * </p>
+ * 
+ * @see casmi.exception.ParserException
+ * 
  * @author T. Takeuchi
  * 
  */
 public class JSON {
 
+    /**
+     * Creates a JSON object.
+     */
     public JSON() {}
 
+    /**
+     * Encodes a object into a JSON string.
+     * 
+     * @param source A object to encode.
+     * @return A JSON string.
+     */
     public String encode(Object source) {
-        
+
         return net.arnx.jsonic.JSON.encode(source, true);
     }
 
+    /**
+     * Encodes a object into a JSON string and outputs a file.
+     * 
+     * @param source A object to encode.
+     * @param file An output file.
+     * 
+     * @throws IOException
+     *             If an I/O error is occurred.
+     * @throws ParserException
+     *             If an error is occurred while parsing the read data.
+     */
     public void encode(Object source, File file) throws IOException, ParserException {
-        
-        Writer writer = new Writer(file);
+
+        Writer writer = null;
+
         try {
+            writer = new Writer(file);
             net.arnx.jsonic.JSON.encode(source, writer, true);
         } catch (net.arnx.jsonic.JSONException e) {
             throw new ParserException(e.getMessage());
         } finally {
-            writer.close();
+            if (writer != null) writer.close();
         }
     }
 
+    /**
+     * Convert a XML object to a JSON string.
+     * 
+     * @param xml
+     * @return
+     * @throws ParserException
+     * @throws SAXException
+     * @throws IOException
+     */
     public String encode(XML xml) throws ParserException, SAXException, IOException {
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
+
+        InputSource is = new InputSource(new StringReader(xml.toString()));
+
         try {
             builder = dbFactory.newDocumentBuilder();
+            Document doc = builder.parse(is);
+            return net.arnx.jsonic.JSON.encode(doc, true);
+        } catch (SAXException e) {
+            throw new ParserException(e.getMessage());
         } catch (ParserConfigurationException e) {
             throw new ParserException(e.getMessage());
         }
-        InputSource is = new InputSource(new StringReader(xml.toString()));
-        Document doc = builder.parse(is);
-        return net.arnx.jsonic.JSON.encode(doc, true);
     }
 
+    /**
+     * Decodes a JSON string into a typed object.
+     * 
+     * @param source A Json string to decode.
+     * @param cls Class for converting.
+     * 
+     * @return A decoded object.
+     */
     public <T> T decode(String source, Class<? extends T> cls) {
 
         return cls.cast(net.arnx.jsonic.JSON.decode(source, cls));
     }
 
-    public <T> T decode(File file, Class<? extends T> cls)
-        throws ParserException, FileNotFoundException, IOException {
+    /**
+     * Decodes a JSON file into a typed object.
+     * 
+     * @param file A JSON file to decode.
+     * @param cls Class for converting.
+     * 
+     * @return A decoded object.
+     * 
+     * @throws ParserException
+     *             If an error is occurred while parsing the read data.
+     * @throws IOException
+     *             If an I/O error is occurred.
+     */
+    public <T> T decode(File file, Class<? extends T> cls) throws ParserException, IOException {
 
         try {
             return net.arnx.jsonic.JSON.decode(new Reader(file), cls);

@@ -29,6 +29,21 @@ import au.com.bytecode.opencsv.CSVWriter;
 /**
  * CSV parser class.
  * 
+ * <p>
+ * This class uses <a href="http://opencsv.sourceforge.net/">opencsv-2.1</a>
+ * library (licensed by Apache 2.0).
+ * </p>
+ * 
+ * <p>
+ * If you want to parse other separated files (e.g. TSV file), you can also use
+ * this CSV class. Use a constructor "CSV(String pathname, char separator)"
+ * like,
+ * 
+ * <pre>
+ * CSV tsv = new CSV(&quot;file.tsv&quot;, &quot;\t&quot;);
+ * </pre>
+ * </p>
+ * 
  * @author T. Takeuchi
  * 
  */
@@ -120,7 +135,8 @@ public class CSV {
      * Reads the next line from the buffer and converts to a string array.
      * 
      * @return
-     *         a string array with each comma-separated element as a separate entry
+     *         a string array with each comma-separated element as a separate
+     *         entry
      * 
      * @throws IOException
      *             if bad things happen during the read
@@ -152,7 +168,8 @@ public class CSV {
      * Writes the next line to the file.
      * 
      * @param elements
-     *            element strings or a string array with each comma-separated element
+     *            element strings or a string array with each comma-separated
+     *            element
      *            as a separate entry
      * 
      * @throws IOException

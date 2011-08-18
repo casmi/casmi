@@ -22,6 +22,7 @@ package casmi.parser;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -38,6 +39,8 @@ public class XMLTest {
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         System.out.println(xml);
@@ -52,6 +55,8 @@ public class XMLTest {
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         recursivePrint(xml, 0);
@@ -116,7 +121,7 @@ public class XMLTest {
 
         try {
             xml.save(new File("rsrc/write_example.xml"));
-        } catch (ParserException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to generate XML.");
         }

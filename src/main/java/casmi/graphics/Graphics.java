@@ -19,8 +19,8 @@
 
 package casmi.graphics;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -47,7 +47,7 @@ public class Graphics {
 	private int width;
 	private int height;
 
-	private static List<Image> textureImages = new ArrayList<Image>();
+	private static List<Image> textureImages = new CopyOnWriteArrayList<Image>();
 
 	public void render(Renderable r) {
 		r.render(this.gl, this.glu, this.width, this.height);
@@ -62,6 +62,18 @@ public class Graphics {
 		this.height = height;
 	}
 
+	public GL getGL(){
+	    return gl;
+	}
+	
+	public GLU getGLU(){
+	    return glu;
+	}
+	
+	public GLUT getGLUT(){
+	    return glut;
+	}
+	
 	public void init() {
 		for (Image img : textureImages) {
 			img.unloadTexture();
@@ -600,6 +612,7 @@ public class Graphics {
 	 */
 	public void image(Image img, double x, double y) {
 		if (img.texture != null) {
+		    gl.glDisable(GL.GL_DEPTH_TEST);
 			img.texture.enable();
 			gl.glBindTexture(GL.GL_TEXTURE_2D, img.texture.getTextureObject());
 			gl.glBegin(GL.GL_QUADS);
@@ -632,6 +645,7 @@ public class Graphics {
 			}
 			gl.glEnd();
 			img.texture.disable();
+			gl.glEnable(GL.GL_DEPTH_TEST);
 		}
 
 	}
@@ -643,6 +657,7 @@ public class Graphics {
 	 * */
 	public void image(Image img, double x, double y, double w, double h) {
 		if (img.texture != null) {
+            gl.glDisable(GL.GL_DEPTH_TEST);
 			img.texture.enable();
 			gl.glBindTexture(GL.GL_TEXTURE_2D, img.texture.getTextureObject());
 			gl.glBegin(GL.GL_QUADS);
@@ -681,6 +696,7 @@ public class Graphics {
 			}
 			gl.glEnd();
 			img.texture.disable();
+            gl.glEnable(GL.GL_DEPTH_TEST);
 		}
 
 	}
@@ -688,6 +704,13 @@ public class Graphics {
 	// textures
 	public static void addTextureImage(Image img) {
 		textureImages.add(img);
+	}
+	
+	public static void reloadTextures() {
+	    for (Image img : textureImages) {
+            img.unloadTexture();
+            img.loadTexture();
+        }
 	}
 
 	// camera
@@ -832,4 +855,6 @@ public class Graphics {
 				(height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0), width / 2.0,
 				height / 2.0, 0, 0, 1, 0);
 	}
+	
+
 }

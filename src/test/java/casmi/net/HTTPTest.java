@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import casmi.exception.ParserException;
 import casmi.io.Reader;
 import casmi.parser.XML;
 import casmi.parser.XMLElement;
@@ -61,11 +62,7 @@ public class HTTPTest {
         }
 
         http.disconnect();
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        reader.close();
     }
 
     @Test
@@ -98,11 +95,7 @@ public class HTTPTest {
         }
 
         http.disconnect();
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        reader.close();
     }
 
     @Test
@@ -129,18 +122,17 @@ public class HTTPTest {
             xml.parseString(reader.readAll());
 
             for (XMLElement status : xml.getChildren()) {
-                System.out.println(status.getChild("text").getContent());
+                System.out.println(status.getChildren("text")[0].getContent());
             }
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to read.");
+        } catch (ParserException e) {
+            e.printStackTrace();
+            fail("Failed to parse.");
         }
 
         http.disconnect();
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        reader.close();
     }
 }

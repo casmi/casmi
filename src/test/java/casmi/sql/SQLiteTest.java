@@ -29,45 +29,38 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import casmi.sql.SQLite;
-import casmi.util.FileUtil;
-
 public class SQLiteTest {
 
 	public static void cleanup() {
-		String path = FileUtil.searchFilePath("casmi.sqlite3");
-		if( path != null ) {
-			File f = new File(path);
-			f.delete();
+		File file = new File("/tmp/test.sqlite3");
+		if( file != null ) {
+			file.delete();
 		}
 	}
 	
 	@BeforeClass
 	public static void beforeClass() {
 		cleanup();
+		
+		try {
+            SQLite.createDatabase("/tmp/test.sqlite3");
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Failed to create database file.");
+        }
 	}
 	
 	@AfterClass
 	public static void afterClass() {
 		cleanup();	
 	}
-	
-    @Test
-    public void createDatabaseTest() {
-        try {
-            SQLite.createDatabase("rsrc/casmi.sqlite3");
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Failed to create database file.");
-        }
-    }
     
     @Test
     public void createTableTest() {
         SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite("rsrc/casmi.sqlite3");
+            sqlite = new SQLite("/tmp/test.sqlite3");
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");
@@ -96,7 +89,7 @@ public class SQLiteTest {
         SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite("rsrc/casmi.sqlite3");
+            sqlite = new SQLite("/tmp/test.sqlite3");
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");
@@ -134,7 +127,7 @@ public class SQLiteTest {
         SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite("rsrc/casmi.sqlite3");
+            sqlite = new SQLite("/tmp/test.sqlite3");
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");

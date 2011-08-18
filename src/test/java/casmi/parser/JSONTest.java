@@ -3,6 +3,7 @@ package casmi.parser;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -58,6 +59,8 @@ public class JSONTest {
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         try {

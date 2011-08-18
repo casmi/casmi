@@ -52,7 +52,7 @@ public class Box extends Element implements Renderable {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
         
-        gl.glPushMatrix();
+       // gl.glPushMatrix();
         
         if (this.fill) {
             this.fillColor.setup(gl);
@@ -63,7 +63,7 @@ public class Box extends Element implements Renderable {
             drawBox(gl, (float)this.width, GL.GL_QUADS);
             gl.glPopMatrix();
         }
-        //gl.glDisable(GL.GL_DEPTH_TEST);
+        gl.glDisable(GL.GL_DEPTH_TEST);
         if (this.stroke) {
             this.strokeColor.setup(gl);
 
@@ -72,8 +72,8 @@ public class Box extends Element implements Renderable {
             drawBox(gl, (float)(this.width * STROKE_BIAS_RATIO), GL.GL_LINE_STRIP);
             gl.glPopMatrix();
         }
-        
-        gl.glPopMatrix();
+        gl.glEnable(GL.GL_DEPTH_TEST);
+       // gl.glPopMatrix();
         
         if (this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0) {
             gl.glEnable(GL.GL_DEPTH_TEST);
@@ -124,7 +124,7 @@ public class Box extends Element implements Renderable {
         float[][] n = boxNormals;
         int[][] faces = boxFaces;
 
-        for (int i = 5; i >= 0; i--) {
+        for (int i = 4; i >= 0; i--) {
             gl.glBegin(type);
             gl.glNormal3fv(n[i], 0);
             

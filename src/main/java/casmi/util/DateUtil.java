@@ -145,4 +145,33 @@ public class DateUtil {
 
         return new SimpleDateFormat(pattern).parse(source);
     }
+
+    /**
+     * Convert a java.util.Date object to a java.sql.Date object.
+     * 
+     * @param date A java.util.Date object.
+     * @return A java.sql.Date object.
+     */
+    public static java.sql.Date toSqlDate(java.util.Date date) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return new java.sql.Date(cal.getTimeInMillis());
+    }
+
+    /**
+     * Convert a java.sql.Date object to a java.util.Date object.
+     * This method is equal to simple upcast.
+     * 
+     * @param date A java.sql.Date object.
+     * @return A java.util.Date object.
+     */
+    public static java.util.Date toUtilDate(java.sql.Date date) {
+
+        return (java.util.Date)date;
+    }
 }

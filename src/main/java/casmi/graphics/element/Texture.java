@@ -19,11 +19,13 @@
   
 package casmi.graphics.element;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.Graphics;
 import casmi.image.Image;
 import casmi.matrix.Vertex;
 
@@ -51,14 +53,37 @@ public class Texture extends Element implements Renderable {
     private int MODE;
     
     private Image image;
+    
+
+    public int Width,Height;
+    private static boolean reloadFlag = false;
 
     public Texture(String s) {
         image = new Image(s);
+        Width = image.width;
+        Height = image.height;
         x= new ArrayList<Double>();
         y= new ArrayList<Double>();
         z= new ArrayList<Double>();
         nx=new ArrayList<Float>();
         ny=new ArrayList<Float>();
+        
+        reloadFlag = true;
+    }
+    
+    public Texture(URL url) {
+        image = new Image(url);
+        Width = image.width;
+        Height = image.height;
+
+        
+        x= new ArrayList<Double>();
+        y= new ArrayList<Double>();
+        z= new ArrayList<Double>();
+        nx=new ArrayList<Float>();
+        ny=new ArrayList<Float>();
+        
+        reloadFlag = true;
     }
     
     public void vertex(float x, float y,float nx,float ny){
@@ -128,11 +153,20 @@ public class Texture extends Element implements Renderable {
         this.y.set(i, y);
         this.z.set(i, z);
     }
+    
+    public Image getImage(){
+        return this.image;
+    }
 
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
 
+        if (reloadFlag) {
+            Graphics.reloadTextures();
+            reloadFlag = false;
+        }
+        gl.glDisable(GL.GL_DEPTH_TEST);
         this.strokeColor.setup(gl);
         double tmpx,tmpy,tmpz;
         float tmpnx,tmpny;
@@ -165,8 +199,9 @@ public class Texture extends Element implements Renderable {
                 gl.glEnd();
         default:
             break;
-        }        
-        
+        }    
+        image.disableTexture();
+        gl.glEnable(GL.GL_DEPTH_TEST);
     }
 
 }

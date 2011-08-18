@@ -19,9 +19,7 @@
 
 package casmi.sql;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,32 +32,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import casmi.util.DateUtil;
-import casmi.util.FileUtil;
 
 /**
- * SQLite class.
+ * MySQL class.
  * 
  * @author T. Takeuchi
  */
-public class SQLite implements SQL {
+public class MySQL implements SQL {
 
     /** Driver name. */
-    private static final String DRIVER = "org.sqlite.JDBC";
-
-    /** Date formats. */
-    private static final String[][] DATE_FORMATS = {
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2}", "yyyy-MM-dd"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd HH:mm"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd HH:mm:ss"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd'T'HH:mm"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd'T'HH:mm:ss"}};
+    private static final String DRIVER = "com.mysql.jdbc.Driver";
 
     /** Database URL. */
     private final String url;
+
+    /** User name. */
+    private final String user;
+
+    /** Password. */
+    private final String password;
 
     /** java.sql.Connection. */
     private Connection connection;
@@ -73,59 +64,82 @@ public class SQLite implements SQL {
     /** java.sql.ResultSet. */
     private ResultSet resultSet;
 
-    /**
-     * Creates new SQLite object from the specified database file path.
-     * 
-     * @param dbPath
-     *            The SQLite3 database file's path.
-     */
-    public SQLite(String dbPath) {
+    // Load driver.
+    static {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        String path;
-
-        File file = new File(dbPath);
-        if (file.isFile()) {
-            path = file.getAbsolutePath();
-        } else {
-            path = FileUtil.searchFilePath(dbPath);
-        }
-        if (path == null)
-            throw new IllegalArgumentException();
-
-        url = "jdbc:sqlite:" + path;
     }
 
     /**
-     * Create SQLite3 database file.
+     * Creates new MySQL object from the specified host and database name.
      * 
-     * @param dbPath
-     *            database file path.
-     * @throws IOException
+     * @param host
+     *            The host name of a MySQL server.
+     * 
+     * @param database
+     *            The database name.
      */
-    public static void createDatabase(String dbPath) throws IOException {
-      
-        URL url = SQLite.class.getResource("template.sqlite3");
+    public MySQL(String host, String database) {
 
-        if (url == null)
-            throw new IOException("Template file does not found.");
+        if (host == null) {
+            throw new IllegalArgumentException("The host name is null.");
+        } else if (database == null) {
+            throw new IllegalArgumentException("The database name is null.");
+        }
 
-        File src = new File(url.getPath());
-        File dest = new File(dbPath);
-        FileUtil.copyFile(src, dest);
+        url = "jdbc:mysql://" + host + "/" + database;
+        user = null;
+        password = null;
+    }
+
+    /**
+     * Creates new MySQL object from the specified host, database, user, and password.
+     * 
+     * @param host
+     *            The host name of a MySQL server.
+     * 
+     * @param database
+     *            The database name.
+     * 
+     * @param user
+     *            The user name to log in the MySQL server.
+     * 
+     * @param password
+     *            The password to log in the MySQL server.
+     */
+    public MySQL(String host, String database, String user, String password) {
+
+        if (host == null) {
+            throw new IllegalArgumentException("The host name is null.");
+        } else if (database == null) {
+            throw new IllegalArgumentException("The database name is null.");
+        } else if (user == null) {
+            throw new IllegalArgumentException("The user name is null.");
+        } else if (password == null) {
+            throw new IllegalArgumentException("The password is null.");
+        }
+
+        url = "jdbc:mysql://" + host + "/" + database;
+        this.user = user;
+        this.password = password;
     }
 
     @Override
     public void connect() throws SQLException {
-        connection = DriverManager.getConnection(url);
+
+        if (user == null || password == null) {
+            connection = DriverManager.getConnection(url);
+        } else {
+            connection = DriverManager.getConnection(url, user, password);
+        }
     }
 
     @Override
     public void close() {
+
         if (connection != null) {
             try {
                 connection.close();
@@ -137,6 +151,7 @@ public class SQLite implements SQL {
      * Closes statement and preparedStatement.
      */
     private void closeStatements() {
+
         if (statement != null) {
             try {
                 statement.close();
@@ -151,13 +166,14 @@ public class SQLite implements SQL {
 
     @Override
     public void execute(String sql, Object... params) throws SQLException {
+
         if (connection == null)
             throw new SQLException();
 
         closeStatements();
 
         if (0 < params.length) {
-            // Prepared statement.
+            // User a prepared statement.
             preparedStatement = connection.prepareStatement(sql);
             for (int i = 0; i < params.length; i++) {
                 setParameter(i + 1, params[i]);
@@ -165,7 +181,7 @@ public class SQLite implements SQL {
             if (!isSQLQuery(sql)) preparedStatement.executeUpdate();
             else resultSet = preparedStatement.executeQuery();
         } else {
-            // Normal statement.
+            // User a normal statement.
             statement = connection.createStatement();
             if (!isSQLQuery(sql)) statement.executeUpdate(sql);
             else resultSet = statement.executeQuery(sql);
@@ -179,6 +195,7 @@ public class SQLite implements SQL {
      * @return
      */
     private boolean isSQLQuery(String sql) {
+
         Pattern pattern = Pattern.compile("select", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(sql);
         if (matcher.find())
@@ -197,9 +214,10 @@ public class SQLite implements SQL {
      */
     private void setParameter(int parameterIndex, Object param) throws SQLException {
 
-        if (param instanceof java.util.Date) {
-            String dateStr = DateUtil.format((java.util.Date)param, DATE_FORMATS[2][1]);
-            preparedStatement.setString(parameterIndex, dateStr);
+        if (param instanceof Blob) {
+            preparedStatement.setBlob(parameterIndex, (Blob)param);
+        } else if (param instanceof java.util.Date) {
+            preparedStatement.setDate(parameterIndex, DateUtil.toSqlDate((java.util.Date)param));
         } else if (param instanceof Double) {
             preparedStatement.setDouble(parameterIndex, (Double)param);
         } else if (param instanceof Float) {
@@ -209,12 +227,13 @@ public class SQLite implements SQL {
         } else if (param instanceof String) {
             preparedStatement.setString(parameterIndex, (String)param);
         } else {
-            throw new SQLException();
+            throw new SQLException("The object type is not supported.");
         }
     }
 
     @Override
     public boolean getAutoCommit() throws SQLException {
+
         if (connection == null)
             throw new SQLException();
         return connection.getAutoCommit();
@@ -222,6 +241,7 @@ public class SQLite implements SQL {
 
     @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException {
+
         if (connection == null)
             throw new SQLException();
         connection.setAutoCommit(autoCommit);
@@ -229,6 +249,7 @@ public class SQLite implements SQL {
 
     @Override
     public void commit() throws SQLException {
+
         if (connection == null)
             throw new SQLException();
         connection.commit();
@@ -236,6 +257,7 @@ public class SQLite implements SQL {
 
     @Override
     public void rollback() throws SQLException {
+
         if (connection == null)
             throw new SQLException();
         connection.rollback();
@@ -243,6 +265,7 @@ public class SQLite implements SQL {
 
     @Override
     public boolean next() throws SQLException {
+
         if (resultSet == null)
             throw new SQLException();
         return resultSet.next();
@@ -252,15 +275,47 @@ public class SQLite implements SQL {
     // Getters from resultSet.
     // -------------------------------------------------------------------------
 
-    // public Blob getBlob(int column) throws SQLException {
-    // if (resultSet == null) throw new SQLException();
-    // return resultSet.getBlob(column);
-    // }
-    //
-    // public Blob getBlob(String field) throws SQLException {
-    // if (resultSet == null) throw new SQLException();
-    // return resultSet.getBlob(field);
-    // }
+    /**
+     * Retrieves the value of the designated column in the current row as a Blob
+     * object in the Java programming language.
+     * 
+     * @param column
+     *            The first column is 1, the second is 2, ...
+     * 
+     * @return
+     *         a Blob object representing the SQL BLOB value in the specified column.
+     * 
+     * @throws SQLException
+     *             if the columnIndex is not valid; if a database access error
+     *             occurs or this method is called on a closed result set.
+     */
+    public Blob getBlob(int column) throws SQLException {
+
+        if (resultSet == null) throw new SQLException();
+
+        return resultSet.getBlob(column);
+    }
+
+    /**
+     * Retrieves the value of the designated column in the current row as a Blob
+     * object in the Java programming language.
+     * 
+     * @param field
+     *            The name of the field.
+     * 
+     * @return
+     *         a Blob object representing the SQL BLOB value in the specified column.
+     * 
+     * @throws SQLException
+     *             if the columnIndex is not valid; if a database access error
+     *             occurs or this method is called on a closed result set.
+     */
+    public Blob getBlob(String field) throws SQLException {
+
+        if (resultSet == null) throw new SQLException();
+
+        return resultSet.getBlob(field);
+    }
 
     /**
      * Retrieves the value of the designated column in the current row as
@@ -282,20 +337,15 @@ public class SQLite implements SQL {
 
         if (resultSet == null) throw new SQLException();
 
-        String dateStr = resultSet.getString(column);
-        for (int i = 0; i < DATE_FORMATS.length; i++) {
-            if (dateStr.matches(DATE_FORMATS[i][0])) return DateUtil.parse(dateStr, DATE_FORMATS[i][1]);
-        }
-
-        return null;
+        return DateUtil.toUtilDate(resultSet.getDate(column));
     }
 
     /**
      * Retrieves the value of the designated column in the current row as
      * java.util.Date object.
      * 
-     * @param column
-     *            The first column is 1, the second is 2, ...
+     * @param field
+     *            The name of the field.
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
@@ -310,12 +360,7 @@ public class SQLite implements SQL {
 
         if (resultSet == null) throw new SQLException();
 
-        String dateStr = resultSet.getString(field);
-        for (int i = 0; i < DATE_FORMATS.length; i++) {
-            if (dateStr.matches(DATE_FORMATS[i][0])) return DateUtil.parse(dateStr, DATE_FORMATS[i][1]);
-        }
-
-        return null;
+        return DateUtil.toUtilDate(resultSet.getDate(field));
     }
 
     /**
@@ -343,8 +388,8 @@ public class SQLite implements SQL {
      * Retrieves the value of the designated column in the current row as a
      * double in the Java programming language.
      * 
-     * @param column
-     *            The first column is 1, the second is 2, ...
+     * @param field
+     *            The name of the field.
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0.
@@ -385,8 +430,8 @@ public class SQLite implements SQL {
      * Retrieves the value of the designated column in the current row as a
      * float in the Java programming language.
      * 
-     * @param column
-     *            The first column is 1, the second is 2, ...
+     * @param field
+     *            The name of the field.
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0f.
@@ -427,8 +472,8 @@ public class SQLite implements SQL {
      * Retrieves the value of the designated column in the current row as a int
      * in the Java programming language.
      * 
-     * @param column
-     *            The first column is 1, the second is 2, ...
+     * @param field
+     *            The name of the field.
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
@@ -442,6 +487,48 @@ public class SQLite implements SQL {
         if (resultSet == null)
             throw new SQLException();
         return resultSet.getInt(field);
+    }
+
+    /**
+     * Retrieves the value of the designated column in the current row as a
+     * Object in the Java programming language.
+     * 
+     * @param column
+     *            The first column is 1, the second is 2, ...
+     * 
+     * @return
+     *         A java.lang.Object holding the column value.
+     * 
+     * @throws SQLException
+     *             If the columnIndex is not valid; if a database access error
+     *             occurs or this method is called on a closed result set.
+     */
+    public Object getObject(int column) throws SQLException {
+
+        if (resultSet == null) throw new SQLException();
+
+        return resultSet.getObject(column);
+    }
+
+    /**
+     * Retrieves the value of the designated column in the current row as a
+     * Object in the Java programming language.
+     * 
+     * @param column
+     *            The name of the field.
+     * 
+     * @return
+     *         A java.lang.Object holding the column value.
+     * 
+     * @throws SQLException
+     *             If the columnIndex is not valid; if a database access error
+     *             occurs or this method is called on a closed result set.
+     */
+    public Object getObject(String field) throws SQLException {
+
+        if (resultSet == null) throw new SQLException();
+
+        return resultSet.getObject(field);
     }
 
     /**
@@ -469,8 +556,8 @@ public class SQLite implements SQL {
      * Retrieves the value of the designated column in the current row as a
      * String in the Java programming language.
      * 
-     * @param column
-     *            The first column is 1, the second is 2, ...
+     * @param field
+     *            The name of the field.
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
@@ -497,6 +584,7 @@ public class SQLite implements SQL {
      * @throws SQLException
      */
     public String recordToString() throws SQLException {
+
         if (resultSet == null)
             throw new SQLException();
 
@@ -516,6 +604,7 @@ public class SQLite implements SQL {
      * @throws SQLException
      */
     public void println() throws SQLException {
+
         System.out.println(recordToString());
     }
 
@@ -529,7 +618,18 @@ public class SQLite implements SQL {
      * @return A database's URL string.
      */
     public String getURL() {
+
         return url;
+    }
+
+    /**
+     * Return a user name.
+     * 
+     * @return A user name string.
+     */
+    public String getUser() {
+
+        return user;
     }
 
     /**
@@ -538,6 +638,7 @@ public class SQLite implements SQL {
      * @return java.sql.Connection object.
      */
     public Connection getConnection() {
+
         return connection;
     }
 
@@ -547,6 +648,7 @@ public class SQLite implements SQL {
      * @return java.sql.Statement object.
      */
     public Statement getStatement() {
+
         return statement;
     }
 
@@ -556,6 +658,7 @@ public class SQLite implements SQL {
      * @return java.sql.PreparedStatement object.
      */
     public PreparedStatement getPreparedStatement() {
+
         return preparedStatement;
     }
 
@@ -565,6 +668,7 @@ public class SQLite implements SQL {
      * @return java.sql.ResultSet object.
      */
     public ResultSet getResultSet() {
+
         return resultSet;
     }
 }

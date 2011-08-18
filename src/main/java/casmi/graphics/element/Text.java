@@ -51,8 +51,6 @@ public class Text extends Element implements Renderable {
     private TextRenderer tr;
     public enum TextAlign {RIGHT,CENTER,LEFT};
     private TextAlign modeX = TextAlign.LEFT;
-    private enum TextDimention {XY,XYZ};
-    private TextDimention dm = TextDimention.XY;
     private double leading;
     
     /**
@@ -104,23 +102,29 @@ public class Text extends Element implements Renderable {
         this.z = k;
         font = f;
         this.string = string;
+        strAry = this.string.split("\n");
         tr = new TextRenderer(font.getAWTFont(), true, true); 
         frc = new FontRenderContext(new AffineTransform(), false, false);
         layout = new TextLayout[strAry.length];
         for(int num = 0; num<strAry.length; num++){
             layout[num] = new TextLayout(this.strAry[num], font.getAWTFont(), frc);
         }
-        dm = TextDimention.XYZ;
     }   
 
+    
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         if(this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
-        if(this.stroke) {
-             tr.beginRendering(width, height);
-            this.strokeColor.calcColor();
-            tr.setColor(this.strokeColor.getNormalR(), this.strokeColor.getNormalG(), this.strokeColor.getNormalB(), this.strokeColor.getNormalA());
+        
+            tr.begin3DRendering();
+            if(this.stroke == true){
+                this.strokeColor.calcColor();
+                tr.setColor(this.strokeColor.getNormalR(), this.strokeColor.getNormalG(), this.strokeColor.getNormalB(), this.strokeColor.getNormalA());}
+            else if(this.fill == true){
+                this.fillColor.calcColor();
+                tr.setColor(this.fillColor.getNormalR(), this.fillColor.getNormalG(), this.fillColor.getNormalB(), this.fillColor.getNormalA());
+            }
             tmpx = x; 
             tmpy = y;
             for(int i = 0; i<strAry.length; i++){
@@ -134,17 +138,10 @@ public class Text extends Element implements Renderable {
                 case RIGHT:
                     tmpx = x - textWidth(i);
                 }
-                switch(dm){
-                default:
-                case XY:
-                    tr.draw(strAry[i], (int)tmpx, (int)(tmpy-leading*i));
-                    break;
-                case XYZ:
-                    tr.draw3D(strAry[i], (int)tmpx, (int)(tmpy-leading*i), z, 1.0f);
-                }
+                     tr.draw3D(strAry[i], (int)tmpx, (int)(tmpy-leading*i), z, 1.0f);
             }
-            tr.endRendering();
-        }
+                tr.end3DRendering();
+        
         if(this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
     }
@@ -338,4 +335,15 @@ public class Text extends Element implements Renderable {
     public void setText(int i, String s){
         this.strAry[i] = s;
     }
+    
+    /**
+     * Returns the TextRenderer of this Text.
+     * 
+     * @return
+     *           The TextRenderer of this Text.
+     */
+    public TextRenderer getRenderer(){
+        return tr;
+    }
+    
 }

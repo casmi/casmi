@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
 /**
@@ -39,7 +40,8 @@ public class FileUtil {
      * string for convenience.
      * This string contains a single character.
      * This field is initialized to contain the first character of the value of
-     * the system property file.separator. On UNIX systems the value of this field
+     * the system property file.separator. On UNIX systems the value of this
+     * field
      * is '/'; on Microsoft Windows systems it is '\\'.
      */
     public static final String SEPARATOR = java.io.File.separator;
@@ -53,6 +55,26 @@ public class FileUtil {
      * Windows systems it is ';'.
      */
     public static final String PATH_SEPARATOR = java.io.File.pathSeparator;
+
+    /**
+     * Moves a file from src to dest.
+     * This method is equals to "copy -> delete."
+     * 
+     * @param src
+     *            An existing file to move, must not be <code>null</code>.
+     * @param dest
+     *            The destination file, must not be <code>null</code> and exist.
+     * 
+     * @throws IOException
+     *             If moving is failed.
+     */
+    public static void moveFile(File src, File dest) throws IOException {
+
+        copyFile(src, dest);
+        if (!delete(src)) {
+            throw new IOException("Failed to delete the src file '" + src + "' after copying.");
+        }
+    }
 
     /**
      * Copies a file to a new location preserving the file date.
@@ -85,8 +107,12 @@ public class FileUtil {
 
             in.transferTo(0, in.size(), out);
         } finally {
-            in.close();
-            out.close();
+            try {
+                in.close();
+                out.close();
+            } catch (IOException e) {
+                // Ignore.
+            }
         }
 
         if (src.length() != dest.length()) {
@@ -98,11 +124,30 @@ public class FileUtil {
     }
 
     /**
-     * Get suffix from File.
+     * Deletes a file.
      * 
-     * @param file File object.
+     * @param file A file to delete.
      * 
-     * @return Suffix.
+     * @return <code>true</code> if the file was deleted, otherwise
+     *         <code>false</code>.
+     */
+    public static boolean delete(File file) {
+
+        if (file == null) {
+            return false;
+        } else if (!file.isFile()) {
+            return false;
+        }
+
+        return file.delete();
+    }
+
+    /**
+     * Returns a suffix string from a File.
+     * 
+     * @param file The file to know the suffix.
+     * 
+     * @return A suffix string
      */
     public static String getSuffix(File file) {
 
@@ -145,4 +190,30 @@ public class FileUtil {
 
         return null;
     }
+
+    /**
+     * Implements the same behavior as the "touch" utility on Unix.
+     * It creates a new file with size 0 byte or, if the file exists already, it
+     * is opened and closed without modifying it, but updating the file date and
+     * time.
+     * 
+     * @param file The file to "touch."
+     * 
+     * @throws FileNotFoundException
+     *             If the file is not found.
+     */
+    public static void touch(File file) throws FileNotFoundException {
+
+        if (!file.exists()) {
+            OutputStream out = new FileOutputStream(file);
+            try {
+                out.close();
+            } catch (IOException e) {
+                // Ignore.
+            }
+        }
+
+        file.setLastModified(System.currentTimeMillis());
+    }
+
 }

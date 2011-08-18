@@ -2,6 +2,7 @@ package casmi.image;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -43,6 +44,21 @@ public class Image {
         this.height = img.getHeight();
         
         Graphics.addTextureImage(this);
+    }
+    
+    public Image(URL url) {
+        
+        try {
+            img = ImageIO.read(url);
+         } catch (IOException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+         }
+
+         this.width = img.getWidth();
+         this.height = img.getHeight();
+         
+         Graphics.addTextureImage(this);
     }
 
     public void loadTexture() {

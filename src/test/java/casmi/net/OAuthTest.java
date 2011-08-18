@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import casmi.exception.NetException;
+import casmi.exception.ParserException;
 import casmi.extension.net.OAuth;
 import casmi.io.Reader;
 import casmi.parser.XML;
@@ -50,21 +51,21 @@ public class OAuthTest {
             xml.parseString(reader.readAll());
 
             for (XMLElement status : xml.getChildren()) {
-                String user = status.getChild("user").getChild("screen_name").getContent();
-                String text = status.getChild("text").getContent();
+                String user = status.getChildren("user")[0].getChildren("screen_name")[0].getContent();
+                String text = status.getChildren("text")[0].getContent();
 
                 System.out.println("@" + user + ": " + text);
             }
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to read xml.");
+        } catch (ParserException e) {
+            e.printStackTrace();
+            fail("Failed to parse.");
         }
 
         http.disconnect();
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }    }
+        reader.close();
+    }
 
 }

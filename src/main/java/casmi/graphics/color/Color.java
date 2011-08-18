@@ -22,6 +22,13 @@ package casmi.graphics.color;
 import javax.media.opengl.GL;
 import static casmi.graphics.color.ColorMode.*;
 
+/**
+ * Color class.
+ * Wrap JOGL and make it easy to use.
+ * 
+ * @author Y. Ban
+ * 
+ */
 public class Color {
 
 	private int r;

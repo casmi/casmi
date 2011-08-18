@@ -31,12 +31,6 @@ import javax.media.opengl.glu.GLU;
  */
 public class Rect extends Element implements Renderable {
 
-    public enum ShapeMode {
-        CORNER, CORNERS, RADIUS, CENTER
-    };
-
-    private double x;
-    private double y;
     private double w;
     private double h;
     private double x1;
@@ -48,94 +42,30 @@ public class Rect extends Element implements Renderable {
     private double x4;
     private double y4;
 
-    private ShapeMode MODE = ShapeMode.CORNER;
-
-
-    /**
-     * Modifies the location from which rectangles draw. The default mode is rectMode(CORNER),
-     * which specifies the location to be the upper left corner of the shape and uses the third 
-     * and fourth parameters of Rect() to specify the width and height. The syntax rectMode(CORNERS) 
-     * uses the first and second parameters of Rect() to set the location of one corner and uses 
-     * the third and fourth parameters to set the opposite corner. The syntax rectMode(CENTER) 
-     * draws the image from its center point and uses the third and forth parameters of Rect() to 
-     * specify the image's width and height. The syntax rectMode(RADIUS) draws the image from its 
-     * center point and uses the third and forth parameters of Rect() to specify half of the image's 
-     * width and height.
-     * 
-     * @param mode
-     *              Either CORNER, CORNERS, CENTER or RADIUS
-     */
-    public void rectMode(ShapeMode mode) {
-        this.MODE = mode;
-    }
-
     /**
      * Creates a new Rect object using position of the upper-left corner, width and height.
-     * 
-     * @param x
-     *              The x-coordinate of the upper-left corner.
-     * @param y
-     *              The y-coordinate of the upper-left corner.
+     *
      * @param w
      *              The width of the rectangle.
      * @param h 
      *              The height of the rectangle.                          
      */
-    public Rect(double x, double y, double w, double h) {
-        this.x = x;
-        this.y = y;
+    public Rect(double w, double h) {
         this.w = w;
         this.h = h;
     }
 
     private void calcRect() {
-        switch (MODE) {
-        case CORNER:
-            this.x1 = x;
-            this.y1 = y;
-            this.x2 = x;
-            this.y2 = y - h;
-            this.x3 = x + w;
-            this.y3 = y - h;
-            this.x4 = x + w;
-            this.y4 = y;
-            break;
-        case CORNERS:
-            this.x1 = x;
-            this.y1 = y;
-            this.x2 = x;
-            this.y2 = h;
-            this.x3 = w;
-            this.y3 = h;
-            this.x4 = w;
-            this.y4 = y;
-            break;
-        case CENTER:
-            this.x1 = x - w / 2;
-            this.y1 = y + h / 2;
-            this.x2 = x - w / 2;
-            this.y2 = y - h / 2;
-            this.x3 = x + w / 2;
-            this.y3 = y - h / 2;
-            this.x4 = x + w / 2;
-            this.y4 = y + h / 2;
-            break;
-        case RADIUS:
-            this.x1 = x - w;
-            this.y1 = y + h;
-            this.x2 = x - w;
-            this.y2 = y - h;
-            this.x3 = x + w;
-            this.y3 = y - h;
-            this.x4 = x + w;
-            this.y4 = y + h;
-            break;
-
-        }
+        this.x1 = 0.0 - w / 2;
+        this.y1 = 0.0 + h / 2;
+        this.x2 = 0.0 - w / 2;
+        this.y2 = 0.0 - h / 2;
+        this.x3 = 0.0 + w / 2;
+        this.y3 = 0.0 - h / 2;
+        this.x4 = 0.0 + w / 2;
+        this.y4 = 0.0 + h / 2;
     }
     
-   
-
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         calcRect();

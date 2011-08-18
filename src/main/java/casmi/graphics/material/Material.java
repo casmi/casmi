@@ -41,27 +41,41 @@ public class Material {
     private Boolean Sp = false;
     private Boolean Em = false;
     
+    /**
+     * Creates Material object.
+     */
     public Material(){
         
     }
     
-    
+    /**
+     * Sets the amount of gloss in the surface of shapes. 
+     */
     public void shininess(float s){
         shininess[0] = s;
         Sh = true;
     }
     
+    /**
+     * Sets the amount of gloss in the surface of shapes. 
+     */
     public void shininess(float s[]){
         shininess[0] = s[0];
         Sh = true;
     }
     
+    /**
+     * Sets the ambient reflectance for shapes drawn to the screen. 
+     */
     public void ambient(float a[]){
         for(int i = 0; i<a.length;i++)
             ambient[i]=a[i];
         Am = true;
     }
     
+    /**
+     * Sets the ambient reflectance for shapes drawn to the screen. 
+     */
     public void ambient(float r, float g, float b){
         ambient[0]=r;
         ambient[1]=g;
@@ -69,6 +83,9 @@ public class Material {
         Am = true;
     }
     
+    /**
+     * Sets the ambient reflectance for shapes drawn to the screen. 
+     */
     public void ambient(float gray){
         ambient[0]=gray;
         ambient[1]=gray;
@@ -76,12 +93,18 @@ public class Material {
         Am = true;
     }
     
+    /**
+     * Sets the diffuse color of the materials used for shapes drawn to the screen.
+     */
     public void diffuse(float d[]){
         for(int i = 0; i<d.length;i++)
             diffuse[i]=d[i];
         Di = true;
     }
     
+    /**
+     * Sets the diffuse color of the materials used for shapes drawn to the screen.
+     */
     public void diffuse(float r, float g, float b){
         diffuse[0] = r;
         diffuse[1] = g;
@@ -89,6 +112,9 @@ public class Material {
         Di = true;
     }
     
+    /**
+     * Sets the diffuse color of the materials used for shapes drawn to the screen.
+     */
     public void diffuse(float gray){
         diffuse[0] = gray;
         diffuse[1] = gray;
@@ -96,12 +122,18 @@ public class Material {
         Di = true;
     }
     
+    /**
+     * Sets the specular color of the materials used for shapes drawn to the screen.
+     */
     public void specular(float s[]){
         for(int i = 0; i<s.length;i++)
             diffuse[i]=s[i];
         Sp = true;
     }
     
+    /**
+     * Sets the specular color of the materials used for shapes drawn to the screen.
+     */
     public void specular(float r, float g, float b){
         specular[0] = r;
         specular[1] = g;
@@ -109,6 +141,9 @@ public class Material {
         Sp = true;
     }
     
+    /**
+     * Sets the specular color of the materials used for shapes drawn to the screen.
+     */
     public void specular(float gray){
         specular[0] = gray;
         specular[1] = gray;
@@ -116,12 +151,18 @@ public class Material {
         Sp = true;
     }
     
+    /**
+     *Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     */
     public void emissive(float e[]){
         for(int i = 0; i<e.length;i++)
             emissive[i]=e[i];
         Em = true;
     }
     
+    /**
+     *Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     */
     public void emissive(float r, float g, float b){
         emissive[0] = r;
         emissive[1] = g;
@@ -129,6 +170,9 @@ public class Material {
         Em = true;
     }
     
+    /**
+     *Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     */
     public void emissive(float gray){
         emissive[0] = gray;
         emissive[1] = gray;
@@ -136,6 +180,9 @@ public class Material {
         Em = true;
     }
     
+    /**
+     * Returns the array normalized from 0-255 to 0-1.0.
+     */
     public float[] normalize(float in[]){
         float out[] = new float[in.length];
         for(int i= 0; i<in.length;i++){

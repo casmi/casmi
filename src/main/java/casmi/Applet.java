@@ -69,6 +69,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	private int mouseX, mouseY;
 	private int preMouseX, preMouseY;
 	private char key;
+	private double fps = 30.0;
 	
 	public int width = 100, height = 100;
 	
@@ -172,7 +173,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		this.add(panel);
 
 		timer = new Timer();
-		timer.schedule(new GLRedisplayTask(), 0, 10);
+		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0/fps));
 	}
 
 	public void setSize(int w, int h) {
@@ -186,6 +187,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		}
 	}
 
+	
 	private void initCursor() {
 		cursormode[0] = new Cursor(Cursor.DEFAULT_CURSOR);
 		cursormode[1] = new Cursor(Cursor.CROSSHAIR_CURSOR);
@@ -238,10 +240,17 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 					"Custom Cursor");
 			setCursor(cursor);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	public void setFPS(double fps){
+	    this.fps = fps;
+	}
+	
+	public double getFPS(){
+        return fps;
+    }
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -253,6 +262,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public void mouseClicked(MouseEvent e) {
 		mouseClicked = true;
 		updateMouse(CLICKED);
+		mouseClicked = false;
 	}
 
 	@Override
@@ -448,6 +458,8 @@ class AppletGLEventListener implements GLEventListener {
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
 		this.setSize(width, height);
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
@@ -462,4 +474,6 @@ class AppletGLEventListener implements GLEventListener {
 		this.g.setWidth(w);
 		this.g.setHeight(h);
 	}
+	
+	
 }

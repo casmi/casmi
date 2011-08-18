@@ -59,7 +59,8 @@ public class Reader extends java.io.BufferedReader {
      * @param file File object.
      * 
      * @throws FileNotFoundException
-     *             If the file does not exist, is a directory rather than a regular
+     *             If the file does not exist, is a directory rather than a
+     *             regular
      *             file, or for some other reason cannot be opened for reading.
      */
     public Reader(File file) throws FileNotFoundException {
@@ -73,12 +74,22 @@ public class Reader extends java.io.BufferedReader {
      * @param pathname The file path string.
      * 
      * @throws FileNotFoundException
-     *             If the file does not exist, is a directory rather than a regular
+     *             If the file does not exist, is a directory rather than a
+     *             regular
      *             file, or for some other reason cannot be opened for reading.
      */
     public Reader(String pathname) throws FileNotFoundException {
 
         this(new java.io.FileReader(new File(pathname)));
+    }
+
+    public void close() {
+
+        try {
+            super.close();
+        } catch (IOException e) {
+            // Ignore.
+        }
     }
 
     /**
