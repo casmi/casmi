@@ -30,7 +30,22 @@ public class MySQLTest {
     
     @BeforeClass
     public static void beforeClass() {
-        cleanup();
+        MySQL mysql = null;
+        try {
+            mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("failed to create instance");
+        }
+        try {
+            mysql.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("failed to connect database");
+        }finally {
+            mysql.close();
+        }
+    	cleanup();
     }
     
     @Test
@@ -41,7 +56,7 @@ public class MySQLTest {
             mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
         } catch (Exception e) {
             e.printStackTrace();
-            fail("failed create instance");
+            fail("failed to create instance");
         }
 
         try {
@@ -55,7 +70,7 @@ public class MySQLTest {
             mysql.execute("CREATE TABLE example2 (id integer, value double)");
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Some Error Occurred");
+            fail("failed to create table or insert data");
         } finally {
             mysql.close();
         }
@@ -70,7 +85,7 @@ public class MySQLTest {
             mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
         } catch (Exception e) {
             e.printStackTrace();
-            fail("failed create instance");
+            fail("failed to create instance");
         }
 
         try {
@@ -93,7 +108,7 @@ public class MySQLTest {
 
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Some Error Occurred");
+            fail("failed to execute SELECT sentence");
         } finally {
             mysql.close();
         }
@@ -108,7 +123,7 @@ public class MySQLTest {
             mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
         } catch (Exception e) {
             e.printStackTrace();
-            fail("failed create instance");
+            fail("failed to create instance");
         }
 
         try {
@@ -134,7 +149,7 @@ public class MySQLTest {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Some Error Occurred");
+            fail("failed to insert data");
         } finally {
             mysql.close();
         }

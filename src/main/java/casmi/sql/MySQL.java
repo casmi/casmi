@@ -143,7 +143,9 @@ public class MySQL implements SQL {
         if (connection != null) {
             try {
                 connection.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+                // Ignore.
+            }
         }
     }
 
@@ -155,12 +157,16 @@ public class MySQL implements SQL {
         if (statement != null) {
             try {
                 statement.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+                // Ignore.
+            }
         }
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+                // Ignore.
+            }
         }
     }
 
@@ -168,7 +174,7 @@ public class MySQL implements SQL {
     public void execute(String sql, Object... params) throws SQLException {
 
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
 
         closeStatements();
 
@@ -235,7 +241,7 @@ public class MySQL implements SQL {
     public boolean getAutoCommit() throws SQLException {
 
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
         return connection.getAutoCommit();
     }
 
@@ -243,7 +249,7 @@ public class MySQL implements SQL {
     public void setAutoCommit(boolean autoCommit) throws SQLException {
 
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
         connection.setAutoCommit(autoCommit);
     }
 
@@ -251,7 +257,7 @@ public class MySQL implements SQL {
     public void commit() throws SQLException {
 
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
         connection.commit();
     }
 
@@ -259,7 +265,7 @@ public class MySQL implements SQL {
     public void rollback() throws SQLException {
 
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
         connection.rollback();
     }
 
@@ -267,7 +273,7 @@ public class MySQL implements SQL {
     public boolean next() throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
         return resultSet.next();
     }
 
@@ -291,7 +297,8 @@ public class MySQL implements SQL {
      */
     public Blob getBlob(int column) throws SQLException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null) 
+            throw new SQLException("Result set is not exist.");
 
         return resultSet.getBlob(column);
     }
@@ -312,7 +319,8 @@ public class MySQL implements SQL {
      */
     public Blob getBlob(String field) throws SQLException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null) 
+            throw new SQLException("Result set is not exist.");
 
         return resultSet.getBlob(field);
     }
@@ -335,7 +343,8 @@ public class MySQL implements SQL {
      */
     public java.util.Date getDate(int column) throws SQLException, ParseException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null) 
+            throw new SQLException("Result set is not exist.");
 
         return DateUtil.toUtilDate(resultSet.getDate(column));
     }
@@ -358,7 +367,8 @@ public class MySQL implements SQL {
      */
     public java.util.Date getDate(String field) throws SQLException, ParseException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null)
+            throw new SQLException("Result set is not exist.");
 
         return DateUtil.toUtilDate(resultSet.getDate(field));
     }
@@ -380,7 +390,8 @@ public class MySQL implements SQL {
     public double getDouble(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getDouble(column);
     }
 
@@ -401,7 +412,8 @@ public class MySQL implements SQL {
     public double getDouble(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getDouble(field);
     }
 
@@ -422,7 +434,8 @@ public class MySQL implements SQL {
     public float getFloat(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getFloat(column);
     }
 
@@ -443,7 +456,8 @@ public class MySQL implements SQL {
     public float getFloat(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getFloat(field);
     }
 
@@ -464,7 +478,8 @@ public class MySQL implements SQL {
     public int getInt(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getInt(column);
     }
 
@@ -505,7 +520,8 @@ public class MySQL implements SQL {
      */
     public Object getObject(int column) throws SQLException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null) 
+            throw new SQLException("Result set is not exist.");
 
         return resultSet.getObject(column);
     }
@@ -526,7 +542,8 @@ public class MySQL implements SQL {
      */
     public Object getObject(String field) throws SQLException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null) 
+            throw new SQLException("Result set is not exist.");
 
         return resultSet.getObject(field);
     }
@@ -548,7 +565,8 @@ public class MySQL implements SQL {
     public String getString(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getString(column);
     }
 
@@ -569,7 +587,8 @@ public class MySQL implements SQL {
     public String getString(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+        
         return resultSet.getString(field);
     }
 
@@ -586,7 +605,7 @@ public class MySQL implements SQL {
     public String recordToString() throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
 
         String out = "| ";
 

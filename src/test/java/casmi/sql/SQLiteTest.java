@@ -32,7 +32,8 @@ import org.junit.Test;
 public class SQLiteTest {
 
 	public static void cleanup() {
-		File file = new File("/tmp/test.sqlite3");
+		File file = new File(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
+		System.out.println(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
 		if( file != null ) {
 			file.delete();
 		}
@@ -43,7 +44,7 @@ public class SQLiteTest {
 		cleanup();
 		
 		try {
-            SQLite.createDatabase("/tmp/test.sqlite3");
+            SQLite.createDatabase(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to create database file.");
@@ -60,7 +61,7 @@ public class SQLiteTest {
         SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite("/tmp/test.sqlite3");
+            sqlite = new SQLite(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");
@@ -89,7 +90,7 @@ public class SQLiteTest {
         SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite("/tmp/test.sqlite3");
+            sqlite = new SQLite(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");
@@ -127,7 +128,7 @@ public class SQLiteTest {
         SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite("/tmp/test.sqlite3");
+            sqlite = new SQLite(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");

@@ -43,6 +43,8 @@ public class SystemUtil {
     public static final String JAVA_VENDOR_URL = System.getProperty("java.vendor.url");
     /** Java version. */
     public static final String JAVA_VERSION = System.getProperty("java.version");
+    /** Java temp dir. */
+    public static final String JAVA_TMP_PATH = System.getProperty("java.io.tmpdir");
     
     // JVM
     /** JVM name. */

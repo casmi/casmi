@@ -22,6 +22,7 @@ package casmi.sql;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -73,6 +74,15 @@ public class SQLite implements SQL {
     /** java.sql.ResultSet. */
     private ResultSet resultSet;
 
+    // Load driver.
+    static {
+        try {
+            Class.forName(DRIVER);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Creates new SQLite object from the specified database file path.
      * 
@@ -80,11 +90,6 @@ public class SQLite implements SQL {
      *            The SQLite3 database file's path.
      */
     public SQLite(String dbPath) {
-        try {
-            Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
         String path;
 
@@ -108,7 +113,7 @@ public class SQLite implements SQL {
      * @throws IOException
      */
     public static void createDatabase(String dbPath) throws IOException {
-      
+
         URL url = SQLite.class.getResource("template.sqlite3");
 
         if (url == null)
@@ -121,15 +126,19 @@ public class SQLite implements SQL {
 
     @Override
     public void connect() throws SQLException {
+
         connection = DriverManager.getConnection(url);
     }
 
     @Override
     public void close() {
+
         if (connection != null) {
             try {
                 connection.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+                // Ignore.
+            }
         }
     }
 
@@ -137,22 +146,28 @@ public class SQLite implements SQL {
      * Closes statement and preparedStatement.
      */
     private void closeStatements() {
+
         if (statement != null) {
             try {
                 statement.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+                // Ignore.
+            }
         }
         if (preparedStatement != null) {
             try {
                 preparedStatement.close();
-            } catch (SQLException e) {}
+            } catch (SQLException e) {
+                // Ignore.
+            }
         }
     }
 
     @Override
     public void execute(String sql, Object... params) throws SQLException {
+
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
 
         closeStatements();
 
@@ -179,6 +194,7 @@ public class SQLite implements SQL {
      * @return
      */
     private boolean isSQLQuery(String sql) {
+
         Pattern pattern = Pattern.compile("select", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(sql);
         if (matcher.find())
@@ -209,42 +225,51 @@ public class SQLite implements SQL {
         } else if (param instanceof String) {
             preparedStatement.setString(parameterIndex, (String)param);
         } else {
-            throw new SQLException();
+            throw new SQLException("The object type is not supported.");
         }
     }
 
     @Override
     public boolean getAutoCommit() throws SQLException {
+
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
         return connection.getAutoCommit();
     }
 
     @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException {
+
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
+
         connection.setAutoCommit(autoCommit);
     }
 
     @Override
     public void commit() throws SQLException {
+
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
+
         connection.commit();
     }
 
     @Override
     public void rollback() throws SQLException {
+
         if (connection == null)
-            throw new SQLException();
+            throw new SQLException("Connection is not exist.");
+
         connection.rollback();
     }
 
     @Override
     public boolean next() throws SQLException {
+
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.next();
     }
 
@@ -252,15 +277,51 @@ public class SQLite implements SQL {
     // Getters from resultSet.
     // -------------------------------------------------------------------------
 
-    // public Blob getBlob(int column) throws SQLException {
-    // if (resultSet == null) throw new SQLException();
-    // return resultSet.getBlob(column);
-    // }
-    //
-    // public Blob getBlob(String field) throws SQLException {
-    // if (resultSet == null) throw new SQLException();
-    // return resultSet.getBlob(field);
-    // }
+    /**
+     * Retrieves the value of the designated column in the current row as a Blob
+     * object in the Java programming language.
+     * 
+     * @param column
+     *            The first column is 1, the second is 2, ...
+     * 
+     * @return
+     *         a Blob object representing the SQL BLOB value in the specified
+     *         column.
+     * 
+     * @throws SQLException
+     *             if the columnIndex is not valid; if a database access error
+     *             occurs or this method is called on a closed result set.
+     */
+    public Blob getBlob(int column) throws SQLException {
+
+        if (resultSet == null)
+            throw new SQLException("Result set is not exist.");
+
+        return resultSet.getBlob(column);
+    }
+
+    /**
+     * Retrieves the value of the designated column in the current row as a Blob
+     * object in the Java programming language.
+     * 
+     * @param field
+     *            The name of the field.
+     * 
+     * @return
+     *         a Blob object representing the SQL BLOB value in the specified
+     *         column.
+     * 
+     * @throws SQLException
+     *             if the columnIndex is not valid; if a database access error
+     *             occurs or this method is called on a closed result set.
+     */
+    public Blob getBlob(String field) throws SQLException {
+
+        if (resultSet == null)
+            throw new SQLException("Result set is not exist.");
+
+        return resultSet.getBlob(field);
+    }
 
     /**
      * Retrieves the value of the designated column in the current row as
@@ -280,7 +341,8 @@ public class SQLite implements SQL {
      */
     public java.util.Date getDate(int column) throws SQLException, ParseException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null)
+            throw new SQLException("Result set is not exist.");
 
         String dateStr = resultSet.getString(column);
         for (int i = 0; i < DATE_FORMATS.length; i++) {
@@ -308,7 +370,8 @@ public class SQLite implements SQL {
      */
     public java.util.Date getDate(String field) throws SQLException, ParseException {
 
-        if (resultSet == null) throw new SQLException();
+        if (resultSet == null)
+            throw new SQLException("Result set is not exist.");
 
         String dateStr = resultSet.getString(field);
         for (int i = 0; i < DATE_FORMATS.length; i++) {
@@ -335,7 +398,8 @@ public class SQLite implements SQL {
     public double getDouble(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getDouble(column);
     }
 
@@ -356,7 +420,8 @@ public class SQLite implements SQL {
     public double getDouble(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getDouble(field);
     }
 
@@ -377,7 +442,8 @@ public class SQLite implements SQL {
     public float getFloat(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getFloat(column);
     }
 
@@ -398,7 +464,8 @@ public class SQLite implements SQL {
     public float getFloat(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getFloat(field);
     }
 
@@ -419,7 +486,8 @@ public class SQLite implements SQL {
     public int getInt(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getInt(column);
     }
 
@@ -440,7 +508,8 @@ public class SQLite implements SQL {
     public int getInt(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getInt(field);
     }
 
@@ -461,7 +530,8 @@ public class SQLite implements SQL {
     public String getString(int column) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getString(column);
     }
 
@@ -482,7 +552,8 @@ public class SQLite implements SQL {
     public String getString(String field) throws SQLException {
 
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
+
         return resultSet.getString(field);
     }
 
@@ -497,8 +568,9 @@ public class SQLite implements SQL {
      * @throws SQLException
      */
     public String recordToString() throws SQLException {
+
         if (resultSet == null)
-            throw new SQLException();
+            throw new SQLException("Result set is not exist.");
 
         String out = "| ";
 
@@ -516,6 +588,7 @@ public class SQLite implements SQL {
      * @throws SQLException
      */
     public void println() throws SQLException {
+
         System.out.println(recordToString());
     }
 
@@ -529,6 +602,7 @@ public class SQLite implements SQL {
      * @return A database's URL string.
      */
     public String getURL() {
+
         return url;
     }
 
@@ -538,6 +612,7 @@ public class SQLite implements SQL {
      * @return java.sql.Connection object.
      */
     public Connection getConnection() {
+
         return connection;
     }
 
@@ -547,6 +622,7 @@ public class SQLite implements SQL {
      * @return java.sql.Statement object.
      */
     public Statement getStatement() {
+
         return statement;
     }
 
@@ -556,6 +632,7 @@ public class SQLite implements SQL {
      * @return java.sql.PreparedStatement object.
      */
     public PreparedStatement getPreparedStatement() {
+
         return preparedStatement;
     }
 
@@ -565,6 +642,7 @@ public class SQLite implements SQL {
      * @return java.sql.ResultSet object.
      */
     public ResultSet getResultSet() {
+
         return resultSet;
     }
 }

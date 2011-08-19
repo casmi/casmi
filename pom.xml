@@ -9,11 +9,11 @@
 
 	<name>casmi</name>
 	<url>http://casmi.github.com</url>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<repositories>
 		<repository>
 			<id>casmi</id>
@@ -72,6 +72,11 @@
 			<groupId>gluegen</groupId>
 			<artifactId>gluegen-rt</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.17</version>
 		</dependency>
 	</dependencies>
 
