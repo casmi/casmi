@@ -131,6 +131,134 @@ public class Triangle extends Element implements Renderable {
         this.z3 = z3;
     }
     
+    /**
+     * Sets x,y-coordinate of corners.
+     * 
+     * @param x1
+     *              The x-coordinate of the first corner.
+     * @param y1
+     *              The y-coordinate of the first corner.
+     * @param x2
+     *              The x-coordinate of the second corner.
+     * @param y2
+     *              The y-coordinate of the second corner.
+     * @param x3
+     *              The x-coordinate of the third corner.
+     * @param y3
+     *              The y-coordinate of the third corner.
+     */
+    public void set(double x1, double y1, double x2, double y2, double x3, double y3) {
+        this.MODE = TRIANGLE;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = y3;
+    }
+    
+    /**
+     * Sets x,y-coordinate of corners.
+     * 
+     * @param v1
+     *              The coordinates of the first corner.
+     * @param v2
+     *              The coordinates of the second corner.
+     * @param v3
+     *              The coordinates of the third corner.
+     */
+    public void set(Vertex v1, Vertex v2, Vertex v3){
+        this.MODE = TRIANGLE_3D;
+        this.x1 = v1.x;
+        this.y1 = v1.y;
+        this.z1 = v1.z;
+        this.x2 = v2.x;
+        this.y2 = v2.y;
+        this.z1 = v2.z;
+        this.x3 = v3.x;
+        this.y3 = v3.y;
+        this.z1 = v3.z;
+    }
+
+    /**
+     * Sets x,y-coordinate of corners.
+     * 
+     * @param x1
+     *              The x-coordinate of the first corner.
+     * @param y1
+     *              The y-coordinate of the first corner.
+     * @param z1
+     *              The z-coordinate of the first corner.
+     * @param x2
+     *              The x-coordinate of the second corner.
+     * @param y2
+     *              The y-coordinate of the second corner.
+     * @param z2
+     *              The z-coordinate of the second corner.
+     * @param x3
+     *              The x-coordinate of the third corner.
+     * @param y3
+     *              The y-coordinate of the third corner.
+     * @param z3
+     *              The z-coordinate of the third corner.
+     */
+    public void set(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
+        this.MODE = TRIANGLE_3D;
+        this.x1 = x1;
+        this.y1 = y1;
+        this.z1 = z1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.z2 = z2;
+        this.x3 = x3;
+        this.y3 = y3;
+        this.z3 = z3;
+    }
+    
+    public void setCorner(int number, double x, double y){
+    	if(number<=0){
+    		this.x1 = x;
+    		this.y1 = y;
+    	} else if(number==1){
+    		this.x2 = x;
+    		this.y2 = y;
+    	} else if(number>=2){
+    		this.x3 = x;
+    		this.y3 = y;
+    	}
+    }
+    
+    public void setCorner(int number, double x, double y, double z){
+    	if(number<=0){
+    		this.x1 = x;
+    		this.y1 = y;
+    		this.z1 = z;
+    	} else if(number==1){
+    		this.x2 = x;
+    		this.y2 = y;
+    		this.z2 = z;
+    	} else if(number>=2){
+    		this.x3 = x;
+    		this.y3 = y;
+    		this.z3 = z;
+    	}
+    }
+    
+    public void setConer(int number, Vertex v){
+    	if(number<=0){
+    		this.x1 = v.x;
+    		this.y1 = v.y;
+    		this.z1 = v.z;
+    	} else if(number==1){
+    		this.x2 = v.x;
+    		this.y2 = v.y;
+    		this.z2 = v.z;
+    	} else if(number>=2){
+    		this.x3 = v.x;
+    		this.y3 = v.y;
+    		this.z3 = v.z;
+    	}
+    }
     
 
     @Override

@@ -29,6 +29,13 @@ import static casmi.graphics.color.ColorMode.*;
  * @author Y. Ban
  * 
  */
+
+/**
+ * Creates colors for storing in variables of the color datatype.
+ * The parameters are interpreted as RGB or HSB values depending on the current colorMode(). 
+ * The default mode is RGB values from 0 to 255
+ */
+
 public class Color {
 
 	private int r;
@@ -38,6 +45,13 @@ public class Color {
 	private ColorMode colormode = RGB;
 	private int tmpcolor[] = { 0, 0, 0 };
 
+	
+	/**
+     * Creates a new Color object using Grayscale value.
+     *
+     * @param Gray 
+     * 				The grayscale value.
+     */
 	public Color(int Gray) {
 		this.setR(Gray);
 		this.setG(Gray);
@@ -45,6 +59,14 @@ public class Color {
 		this.a = 255;
 	}
 
+	/**
+     * Creates a new Color object using Grayscale and alpha values.
+     *
+     * @param Gray 
+     * 				The grayscale value.
+     * @param cA 
+     * 				The alpha value.
+     */
 	public Color(int Gray, int cA) {
 		this.setR(Gray);
 		this.setG(Gray);
@@ -52,6 +74,16 @@ public class Color {
 		this.a = cA;
 	}
 
+	/**
+     * Creates a new Color object using RGB or HSB values.
+     *
+     * @param cR 
+     * 				The R or H value.
+     * @param cG 
+     * 				The G or S value.
+     * @param cB 
+     * 				The B value.
+     */
 	public Color(int cR, int cG, int cB) {
 		this.setR(cR);
 		this.setG(cG);
@@ -59,6 +91,18 @@ public class Color {
 		this.a = 255;
 	}
 
+	/**
+     * Creates a new Color object using RGB or HSB and alpha values.
+     *
+     * @param cR 
+     * 				The R or H value.
+     * @param cG 
+     * 				The G or S value.
+     * @param cB 
+     * 				The B value.
+     * @param cA 
+     * 				The Alpha value.
+     */
 	public Color(int cR, int cG, int cB, int cA) {
 		this.setR(cR);
 		this.setG(cG);
@@ -66,6 +110,13 @@ public class Color {
 		this.a = cA;
 	}
 
+	/**
+	 * Returns the colorset's RGB values.
+	 * @param c
+	 * 				The ColorSet.
+	 * @return	
+	 * 				The ColorSet's RGB values.
+	 */
 	public static Color color(ColorSet c) {
 		switch (c) {
 		case ALICEBLUE:
@@ -369,6 +420,12 @@ public class Color {
 		return null;
 	}
 
+	/**
+	 * Sets the colormode, RGB or HSB.
+	 * 
+	 * @param cm
+	 * 				The colormode, RGB or HSB.
+	 **/
 	public void colorMode(ColorMode cm) {
 		switch (cm) {
 		case RGB:
@@ -448,6 +505,17 @@ public class Color {
 		return color;
 	}
 
+	/**
+	 * Calculates a color or colors between two color at a specific increment. 
+	 * @param c1
+	 * 				interpolate from this color
+	 * @param c2
+	 * 				interpolate to this color
+	 * @param amt
+	 * 				between 0.0 and 1.0
+	 * @return
+	 * 				The calculated color values.
+	 */
 	public static Color lerpColor(Color c1, Color c2, float amt) {
 		float r, g, b;
 		r = c2.r * amt + c1.r * (1 - amt);

@@ -54,6 +54,23 @@ public class Sphere extends Element implements Renderable {
         this.slices = slices;
         this.stacks = stacks;
     }
+    
+    public void setRadius(double r){
+    	this.r = r;
+    }
+    
+    public void setDetail(int slices, int stacks){
+    	this.slices = slices;
+    	this.stacks = stacks;
+    }
+    
+    public void setSlices(int slices){
+    	this.slices = slices;
+    }
+    
+    public void setStacks(int stacks){
+    	this.stacks = stacks;
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
@@ -64,6 +81,10 @@ public class Sphere extends Element implements Renderable {
         
         this.material.setup(gl);
         gl.glPushMatrix();
+        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        gl.glPolygonOffset(1f, 1f);
+        gl.glEnable(GL.GL_CULL_FACE);
+       
         
         if (this.fill) {
             this.fillColor.setup(gl);
@@ -76,7 +97,8 @@ public class Sphere extends Element implements Renderable {
         }
 
         gl.glPopMatrix();
-        
+        gl.glDisable(GL.GL_CULL_FACE);
+        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL); 
         if( this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0 ) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
@@ -97,6 +119,7 @@ public class Sphere extends Element implements Renderable {
         quadObjInit(glu);
         glu.gluQuadricDrawStyle(quadObj, GLU.GLU_FILL);
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
+        glu.gluQuadricTexture(quadObj, true);
         glu.gluSphere(quadObj, radius, slices, stacks);   
     }
     

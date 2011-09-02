@@ -115,6 +115,26 @@ public class XML extends XMLElement {
     }
 
     /**
+     * Parse a XML from Reader.
+     * 
+     * @param reader The Reader.
+     * 
+     * @throws ParserException
+     *             If an error is occurred while i/o processing or parsing the
+     *             read data.
+     * @throws IOException 
+     * 			   If an I/O error is occurred.
+     */
+    public void parseReader(Reader reader) throws ParserException, IOException {
+
+        try {
+            nanoElement.parseFromReader(reader);
+        } catch (XMLParseException e) {
+            throw new ParserException(e.getMessage());
+        }
+    }
+    
+    /**
      * Save this XML object as a XML file.
      * 
      * @param file The output XML file.

@@ -245,4 +245,24 @@ public class Cylinder extends Element implements Renderable {
       public void setHeight(double height) {
           this.height = height;
       }
+      
+      /**
+       * Set the slices of this Cylinder.
+       * 
+       * @param slices
+       *            The slices of the Cylinder.      
+       */
+      public void setSlices(int slices) {
+          this.slices = slices;
+      }
+      
+      /**
+       * Set the stacks of this Cylinder.
+       * 
+       * @param stacks
+       *            The stacks of the Cylinder.      
+       */
+      public void setStacks(int stacks) {
+          this.stacks = stacks;
+      }
 }

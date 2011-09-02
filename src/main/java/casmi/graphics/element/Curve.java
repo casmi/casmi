@@ -182,6 +182,146 @@ public class Curve extends Element implements Renderable {
         this.points[11] = (float)v4.z;
 
     }
+    
+    /**
+     * Sets coordinates for the anchor and control points.
+     * 
+     * @param x1,y1
+     *            The coordinates for the first anchor point.
+     * @param x2,y2
+     *            The coordinates for the first control point.
+     * @param x3,y3
+     *            The coordinates for the second control point.
+     * @param x4,y4
+     *            The coordinates for the second ancor point.
+     */
+    public void set(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+        this.points[0] = x1;
+        this.points[1] = y1;
+        this.points[2] = 0;
+        this.points[3] = x2;
+        this.points[4] = y2;
+        this.points[5] = 0;
+        this.points[6] = x3;
+        this.points[7] = y3;
+        this.points[8] = 0;
+        this.points[9] = x4;
+        this.points[10] = y4;
+        this.points[11] = 0;
+
+    }
+
+    /**
+     * Sets coordinates for the anchor and control points.
+     * 
+     * @param x1,y1
+     *            The coordinates for the first anchor point.
+     * @param x2,y2
+     *            The coordinates for the first control point.
+     * @param x3,y3
+     *            The coordinates for the second control point.
+     * @param x4,y4
+     *            The coordinates for the second ancor point.
+     */
+    public void set(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
+        this.points[0] = (float)x1;
+        this.points[1] = (float)y1;
+        this.points[2] = 0;
+        this.points[3] = (float)x2;
+        this.points[4] = (float)y2;
+        this.points[5] = 0;
+        this.points[6] = (float)x3;
+        this.points[7] = (float)y3;
+        this.points[8] = 0;
+        this.points[9] = (float)x4;
+        this.points[10] = (float)y4;
+        this.points[11] = 0;
+
+    }
+
+    /**
+     * Sets coordinates for the anchor and control points.
+     * 
+     * @param x1,y1,z1
+     *            The coordinates for the first anchor point.
+     * @param x2,y2,z2
+     *            The coordinates for the first control point.
+     * @param x3,y3,z3
+     *            The coordinates for the second control point.
+     * @param x4,y4,z4
+     *            The coordinates for the second ancor point.
+     */
+    public void set(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) {
+        this.points[0] = x1;
+        this.points[1] = y1;
+        this.points[2] = 0;
+        this.points[3] = x2;
+        this.points[4] = y2;
+        this.points[5] = 0;
+        this.points[6] = x3;
+        this.points[7] = y3;
+        this.points[8] = 0;
+        this.points[9] = x4;
+        this.points[10] = y4;
+        this.points[11] = 0;
+
+    }
+
+    /**
+     * Sets coordinates for the anchor and control points.
+     * 
+     * @param x1,y1,z1
+     *            The coordinates for the first anchor point.
+     * @param x2,y2,z2
+     *            The coordinates for the first control point.
+     * @param x3,y3,z3
+     *            The coordinates for the second control point.
+     * @param x4,y4,z4
+     *            The coordinates for the second ancor point.
+     */
+    public void set(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4) {
+        this.points[0] = (float)x1;
+        this.points[1] = (float)y1;
+        this.points[2] = (float)z1;
+        this.points[3] = (float)x2;
+        this.points[4] = (float)y2;
+        this.points[5] = (float)z2;
+        this.points[6] = (float)x3;
+        this.points[7] = (float)y3;
+        this.points[8] = (float)z3;
+        this.points[9] = (float)x4;
+        this.points[10] = (float)y4;
+        this.points[11] = (float)z4;
+
+    }
+    
+    /**
+     * Sets coordinates for the anchor and control points.
+     * 
+     * @param v1
+     *            The coordinates for the first anchor point.
+     * @param v2
+     *            The coordinates for the first control point.
+     * @param v3
+     *            The coordinates for the second control point.
+     * @param v4
+     *            The coordinates for the second ancor point.
+     */
+    public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+        this.points[0] = (float)v1.x;
+        this.points[1] = (float)v1.y;
+        this.points[2] = (float)v1.z;
+        this.points[3] = (float)v2.x;
+        this.points[4] = (float)v2.y;
+        this.points[5] = (float)v2.z;
+        this.points[6] = (float)v3.x;
+        this.points[7] = (float)v3.y;
+        this.points[8] = (float)v3.z;
+        this.points[9] = (float)v4.x;
+        this.points[10] = (float)v4.y;
+        this.points[11] = (float)v4.z;
+
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {

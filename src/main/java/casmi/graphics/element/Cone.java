@@ -131,15 +131,16 @@ public class Cone extends Element implements Renderable {
         this.base = base;
         this.setHeight(height);
     }
+    
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
 
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if(this.fillColor.getA()<1.0||this.strokeColor.getA()<1.0)
             gl.glDisable(GL.GL_DEPTH_TEST);
 
         gl.glPushMatrix();
-
+        gl.glRotated(90, -1, 0, 0);
         gl.glTranslated(x, y, z);
         if (this.fill) {
             this.fillColor.setup(gl);
@@ -217,5 +218,25 @@ public class Cone extends Element implements Renderable {
      */
     public void setHeight(double height) {
         this.height = height;
+    }
+    
+    /**
+     * Set the slices of this Cone.
+     * 
+     * @param slices
+     *            The slices of the Cone.      
+     */
+    public void setSlices(int slices) {
+        this.slices = slices;
+    }
+    
+    /**
+     * Set the stacks of this Cone.
+     * 
+     * @param stacks
+     *            The stacks of the Cone.      
+     */
+    public void setStacks(int stacks) {
+        this.stacks = stacks;
     }
 }

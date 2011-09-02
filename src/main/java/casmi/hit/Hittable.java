@@ -16,15 +16,10 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+  
+package casmi.hit;
 
-package casmi.exception;
 
-public class ParserException extends CasmiException {
-
-	public ParserException() {
-	}
-
-	public ParserException(String message) {
-		super(message);
-	}
+public interface Hittable {
+    boolean hit(int x, int y);
 }

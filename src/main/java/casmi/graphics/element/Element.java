@@ -35,7 +35,7 @@ abstract public class Element implements Renderable {
     private int sR = 0;
     private int sG = 0;
     private int sB = 0;
-    private int sA = 0;
+    private int sA = 255;
     private int fR = 255;
     private int fG = 255;
     private int fB = 255;
@@ -150,5 +150,7 @@ abstract public class Element implements Renderable {
     public void setMaterial(Material m){
         this.material = m;
     }
+    
+
 
 }

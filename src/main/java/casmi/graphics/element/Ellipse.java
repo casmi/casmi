@@ -84,6 +84,22 @@ public class Ellipse extends Element implements Renderable {
         this.w = w;
         this.h = h;
     }
+    
+    /**
+     * Creates a new Ellipse object using width and height.
+     * 
+
+     * @param w 
+     *            The width of the Ellipse.
+     * @param h
+     *            The height of the Ellipse.
+     */
+    public Ellipse(double w, double h) {
+        this.x = 0;
+        this.y = 0;
+        this.w = w;
+        this.h = h;
+    }
 
     /**
      * Creates a new Ellipse object using x,y-coordinate and radius.
@@ -115,6 +131,138 @@ public class Ellipse extends Element implements Renderable {
         this.y = v.y;
         this.w = r*2;
         this.h = r*2;
+    }
+    
+    /**
+     * Creates a new Ellipse object using radius.
+     * 
+     * @param r 
+     *            The radius of the Ellipse.
+     */
+    public Ellipse(double r) {
+        this.x = 0;
+        this.y = 0;
+        this.w = r*2;
+        this.h = r*2;
+    }
+    
+    /**
+     * Sets x,y-coordinate, width and height.
+     * 
+     * @param x
+     *            The x-coordinate of the center of the Ellipse.
+     * @param y
+     *            The y-coordinate of the center of the Ellipse.
+     * @param w 
+     *            The width of the Ellipse.
+     * @param h
+     *            The height of the Ellipse.
+     */
+    public void set(double x, double y, double w, double h) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
+    
+    /**
+     * Sets x,y-coordinate, width and height.
+     * 
+     * @param v
+     *            The x,y-coordinate of the center of the Ellipse.
+     * @param w 
+     *            The width of the Ellipse.
+     * @param h
+     *            The height of the Ellipse.
+     */
+    public void set(Vertex v, double w, double h) {
+        this.x = v.x;
+        this.y = v.x;
+        this.w = w;
+        this.h = h;
+    }
+
+    /**
+     * Sets x,y-coordinate and radius.
+     * 
+     * @param x
+     *            The x-coordinate of the center of the Ellipse.
+     * @param y
+     *            The y-coordinate of the center of the Ellipse.
+     * @param r 
+     *            The radius of the Ellipse.
+     */
+    public void set(double x, double y, double r) {
+        this.x = x;
+        this.y = y;
+        this.w = r*2;
+        this.h = r*2;
+    }
+    
+    /**
+     * Sets x,y-coordinate and radius.
+     * 
+     * @param v
+     *            The x,y-coordinate of the center of the Ellipse.
+     * @param r 
+     *            The radius of the Ellipse.
+     */
+    public void set(Vertex v, double r) {
+        this.x = v.x;
+        this.y = v.y;
+        this.w = r*2;
+        this.h = r*2;
+    }
+    
+    /**
+     * Sets x-coordinate.
+     * 
+     * @param x
+     *            The x-coordinate of the center of the Ellipse.
+     */
+    public void setX(double x){
+    	this.x = x;
+    }
+    
+    /**
+     * Sets y-coordinate.
+     * 
+     * @param y
+     *            The y-coordinate of the center of the Ellipse.
+     */
+    public void setY(double y){
+    	this.y = y;
+    }
+    
+    /**
+     * Sets radius.
+     * 
+     * @param r
+     *            The radius of the Ellipse.
+     */
+    public void setRadius(double r){
+    	this.w = r*2;
+    	this.h = r*2;
+    }
+    
+    /**
+     * Sets width.
+     * 
+     * @param w
+     *            The width of the Ellipse.
+     */
+    public void setWidth(double w){
+    	this.w = w;
+    }
+    
+    /**
+     * Sets height.
+     * 
+     * @param h
+     *            The height of the Ellipse.
+     */
+    public void setHeight(double h){
+    	this.h = h;
     }
 
     @Override

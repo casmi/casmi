@@ -157,6 +157,14 @@ public class Texture extends Element implements Renderable {
     public Image getImage(){
         return this.image;
     }
+    
+    public void enableTexture(){
+    	this.image.enableTexture();
+    }
+    
+    public void disableTexture(){
+    	this.image.disableTexture();
+    }
 
 
     @Override

@@ -19,6 +19,7 @@
 
 package casmi.graphics;
 
+import java.nio.DoubleBuffer;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,6 +30,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.element.Renderable;
 import casmi.image.Image;
 import casmi.matrix.Vertex;
+import casmi.timeline.Timelinerender;
 
 import com.sun.opengl.util.GLUT;
 
@@ -51,6 +53,10 @@ public class Graphics {
 
 	public void render(Renderable r) {
 		r.render(this.gl, this.glu, this.width, this.height);
+	}
+	
+	public void render(Timelinerender tr){
+		tr.render(this);
 	}
 
 	public Graphics(GL g, GLU Glu, GLUT Glut, int width, int height) {
@@ -178,6 +184,16 @@ public class Graphics {
         c.calcColor();
         gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), a / 255);
     }
+	
+	public void setcolor(Color c){
+		c.calcColor();
+		gl.glColor3d(c.getNormalR(), c.getNormalG(), c.getNormalB());
+	}
+	
+	public void setcolor(float gray){
+		gl.glColor3d(gray/255.0f, gray/255.0f, gray/255.0f);
+	}
+	
 
 	// Matrix Stack
 
@@ -208,12 +224,20 @@ public class Graphics {
 	public void applyMatrix(double n[]) {
 		gl.glMultMatrixd(java.nio.DoubleBuffer.wrap(n));
 	}
+	
+	public void applyMatrix(DoubleBuffer n){
+		gl.glMultMatrixd(n);
+	}
 
 	/**
 	 * Loads the transformation matrix.
 	 */
 	public void loadMatrix(double n[]) {
 		gl.glLoadMatrixd(java.nio.DoubleBuffer.wrap(n));
+	}
+	
+	public void loadMatrix(DoubleBuffer n){
+		gl.glLoadMatrixd(n);
 	}
 
 	public enum MatrixMode {
@@ -613,7 +637,7 @@ public class Graphics {
 	public void image(Image img, double x, double y) {
 		if (img.texture != null) {
 		    gl.glDisable(GL.GL_DEPTH_TEST);
-			img.texture.enable();
+		    img.enableTexture();
 			gl.glBindTexture(GL.GL_TEXTURE_2D, img.texture.getTextureObject());
 			gl.glBegin(GL.GL_QUADS);
 			switch (img.mode) {
@@ -644,7 +668,7 @@ public class Graphics {
 				break;
 			}
 			gl.glEnd();
-			img.texture.disable();
+			img.disableTexture();
 			gl.glEnable(GL.GL_DEPTH_TEST);
 		}
 
@@ -658,7 +682,7 @@ public class Graphics {
 	public void image(Image img, double x, double y, double w, double h) {
 		if (img.texture != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
-			img.texture.enable();
+			img.enableTexture();
 			gl.glBindTexture(GL.GL_TEXTURE_2D, img.texture.getTextureObject());
 			gl.glBegin(GL.GL_QUADS);
 			switch (img.mode) {
@@ -695,7 +719,7 @@ public class Graphics {
 				break;
 			}
 			gl.glEnd();
-			img.texture.disable();
+			img.disableTexture();
             gl.glEnable(GL.GL_DEPTH_TEST);
 		}
 

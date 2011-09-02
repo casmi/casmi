@@ -242,5 +242,57 @@ public class Arc extends Element implements Renderable {
 	public void setDetail(double detail) {
 		this.precision = detail;
 	}
+	
+	/**
+     * Set the width of this Arc.
+     * 
+     * @param width
+     *             The width of the Arc.
+     */
+	public void setWidth(double width) {
+		this.w = width;
+	}
+
+	/**
+     * Set the height of this Arc.
+     * 
+     * @param height
+     *             The height of the Arc.
+     */
+	public void setHeight(double height) {
+		this.h = height;
+	}
+	
+	/**
+     * Set the radius of this Arc.
+     * 
+     * @param radius
+     *             The radius of the Arc.
+     */
+	public void setRadius(double radius) {
+		this.h = radius*2;
+		this.w = radius*2;
+	}
+	
+	/**
+     * Set the start degree of this Arc.
+     * 
+     * @param start
+     *             The start degree of the Arc.
+     */
+	public void setStart(double start) {
+		this.radStart = start;
+	}
+	
+	/**
+     * Set the end degree of this Arc.
+     * 
+     * @param end
+     *             The end degree of the Arc.
+     */
+	public void setEnd(double end) {
+		this.radEnd = end;
+	}
+
 
 }

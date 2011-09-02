@@ -19,11 +19,13 @@
 
 package casmi;
 
+import java.awt.AWTEvent;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -84,17 +86,19 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 	private Timer timer;
 
-	public boolean mousePressed = false;
-	public boolean mouseClicked = false;
-	public boolean mouseEntered = false;
-	public boolean mouseExited = false;
-	public boolean mouseReleased = false;
-	public boolean mouseDragged = false;
-	public boolean mouseMoved = false;
-	public boolean keypressed = false;
+
+
+	private boolean mousePressed = false;
+	private boolean mouseClicked = false;
+	private boolean mouseEntered = false;
+	private boolean mouseExited = false;
+	private boolean mouseReleased = false;
+	private boolean mouseDragged = false;
+	private boolean mouseMoved = false;
+	private boolean keypressed = false;
 
 	private boolean runAsApplication = false;
-
+	
     // TODO need to refactoring
 	/*
 	 * Set system property "java.library.path" programmatically. This static
@@ -151,6 +155,14 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		public void run() {
 			if (panel != null) { // TODO if no update, do not re-render
 				panel.display();
+				mousePressed = false;
+				mouseClicked = false;
+				mouseEntered = false;
+				mouseExited = false;
+				mouseReleased = false;
+				mouseDragged = false;
+				mouseMoved = false;
+				keypressed = false;
 			}
 		}
 	}
@@ -163,10 +175,10 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		this.panel = new GLJPanel();
 		listener = new AppletGLEventListener(this, width, height);
 		panel.addGLEventListener(listener);
-
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
 		panel.addKeyListener(this);
+	//	this.addComponentListener();
 		setFocusable(true);
 		initCursor();
 
@@ -179,14 +191,12 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public void setSize(int w, int h) {
 		width = w;
 		height = h;
-
 		super.setSize(new Dimension(w, h));
 
 		if (panel != null) {
 			panel.setSize(new Dimension(w, h));
 		}
 	}
-
 	
 	private void initCursor() {
 		cursormode[0] = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -254,7 +264,8 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		mousePressed = true;
+		mousePressed = true;		
+		//System.out.println(e.getPoint().x+" "+e.getPoint().y);
 		updateMouse(PRESSED);
 	}
 
@@ -262,7 +273,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public void mouseClicked(MouseEvent e) {
 		mouseClicked = true;
 		updateMouse(CLICKED);
-		mouseClicked = false;
 	}
 
 	@Override
@@ -279,8 +289,9 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		mousePressed = false;
-		mouseDragged = false;
+		//mousePressed = false;
+		//mouseDragged = false;
+		mouseReleased = true;
 		updateMouse(RELEASED);
 	}
 
@@ -288,19 +299,15 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public void mouseDragged(MouseEvent e) {
 		mouseDragged = true;
 		updateMouse(DRAGGED);
-		panel.display();
+		//panel.display();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		mouseMoved = true;
+		mouseMoved = true;	
 		updateMouse(MOVED);
-
-		if (preMouseX == mouseX && preMouseY == mouseY) {
-			mouseMoved = false;
-		}
-
-		panel.display();
+		
+		//panel.display();
 	}
 
 	private void updateMouse(int MODE) {
@@ -313,30 +320,28 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 			mouseY = height - p.y;
 		}
 
-		panel.display();
+		//panel.display();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		keypressed = true;
-		setKey(e.getKeyChar());
-		this.keyPressed();
+		this.key = e.getKeyChar();
 		panel.display();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keypressed = false;
-		this.keyReleased();
 		panel.display();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		keypressed = true;
-		setKey(e.getKeyChar());
+		this.key = e.getKeyChar();
 		this.keyPressed();
-		setKey(e.getKeyChar());
+		this.key = e.getKeyChar();
 
 		panel.display();
 	}
@@ -364,10 +369,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
         return key;
     }
 
-    public void setKey(char key) {
-        this.key = key;
-    }
-
     public int getPreMouseX() {
         return preMouseX;
     }
@@ -384,9 +385,38 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
         return mouseY;
     }
     
+	public boolean isMousePressed() {
+		return mousePressed;
+	}
+
+	public boolean isMouseClicked() {
+		return mouseClicked;
+	}
+
+	public boolean isMouseEntered() {
+		return mouseEntered;
+	}
+
+	public boolean isMouseExited() {
+		return mouseExited;
+	}
+
+	public boolean isMouseReleased() {
+		return mouseReleased;
+	}
+
+	public boolean isMouseDragged() {
+		return mouseDragged;
+	}
+
+	public boolean isMouseMoved() {
+		return mouseMoved;
+	}
+	
     abstract public void setup();
 
     abstract public void draw(Graphics g);
+    
 }
 
 /**
@@ -458,8 +488,6 @@ class AppletGLEventListener implements GLEventListener {
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
 		this.setSize(width, height);
-		this.width = width;
-		this.height = height;
 	}
 
 	@Override
@@ -470,10 +498,10 @@ class AppletGLEventListener implements GLEventListener {
 	public void setSize(int w, int h) {
 		this.width = w;
 		this.height = h;
-
 		this.g.setWidth(w);
 		this.g.setHeight(h);
 	}
+	
 	
 	
 }

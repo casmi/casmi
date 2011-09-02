@@ -71,6 +71,37 @@ public class Point extends Element implements Renderable {
         this.y = y;
         this.z = z;
     }
+    
+    /**
+     * Sets x,y-coordinate.
+     * 
+     * @param x
+     *            The x-coordinate of the Point.
+     * @param y
+     *            The y-coordinate of the Point.
+     */
+    public void set(double x, double y) {
+        this.MODE = POINTS;
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Sets x,y,z-coordinate.
+     * 
+     * @param x
+     *            The x-coordinate of the Point.
+     * @param y
+     *            The y-coordinate of the Point.
+     * @param z
+     *            The z-coordinate of the Point.
+     */
+    public void set(double x, double y, double z) {
+        this.MODE = POINTS_3D;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {

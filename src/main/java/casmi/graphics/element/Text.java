@@ -110,6 +110,30 @@ public class Text extends Element implements Renderable {
             layout[num] = new TextLayout(this.strAry[num], font.getAWTFont(), frc);
         }
     }   
+    
+    /**
+     * Creates a new Text object using letters to be displayed, x,y,z-coordinate and Font.
+     * 
+     * @param string
+     *           The letters to be displayed.      
+     * @param f
+     *           The font of text.                          
+     */
+    public Text(String string,Font f) {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        font = f;
+        this.string = string;
+        strAry = this.string.split("\n");
+        tr = new TextRenderer(font.getAWTFont(), true, true); 
+        frc = new FontRenderContext(new AffineTransform(), false, false);
+        layout = new TextLayout[strAry.length];
+        for(int num = 0; num<strAry.length; num++){
+            layout[num] = new TextLayout(this.strAry[num], font.getAWTFont(), frc);
+        }
+    }   
+
 
     
     @Override

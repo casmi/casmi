@@ -96,6 +96,61 @@ public class Quad extends Element implements Renderable {
         this.y4 = (float)v4.y;
 
     }
+    
+    /**
+     * Sets x,y-coordinate of corners.
+     * 
+     * @param x1
+     *              The x-coordinate of the first corner.
+     * @param y1
+     *              The y-coordinate of the first corner.
+     * @param x2
+     *              The x-coordinate of the second corner.
+     * @param y2
+     *              The y-coordinate of the second corner.
+     * @param x3
+     *              The x-coordinate of the third corner.
+     * @param y3
+     *              The y-coordinate of the third corner.
+     * @param x4
+     *              The x-coordinate of the fourth corner.
+     * @param y4
+     *              The y-coordinate of the fourth corner.
+     */
+    public void set(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.x3 = x3;
+        this.y3 = x3;
+        this.x4 = x4;
+        this.y4 = y4;
+    }
+    
+    /**
+     * Sets x,y-coordinate of corners.
+     * 
+     * @param v1
+     *              The coordinates of the first corner.
+     * @param v2
+     *              The coordinates of the second corner.
+     * @param v3
+     *              The coordinates of the third corner.
+     * @param v4
+     *              The coordinates of the fourth corner.
+     */
+    public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+        this.x1 = (float)v1.x;
+        this.y1 = (float)v1.y;
+        this.x2 = (float)v2.x;
+        this.y2 = (float)v2.y;
+        this.x3 = (float)v3.x;
+        this.y3 = (float)v3.y;
+        this.x4 = (float)v4.x;
+        this.y4 = (float)v4.y;
+
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {

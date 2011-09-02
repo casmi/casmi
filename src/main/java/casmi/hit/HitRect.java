@@ -17,20 +17,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
   
-package casmi.graphics.element;
+package casmi.hit;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.element.Element;
+import casmi.graphics.element.Renderable;
+
 /**
- * Rect class.
- * Wrap JOGL and make it easy to use.
+ * Detecting and checking hit area for rect
+ * HitRect
  * 
- * @author Y. Ban
+ * @author K. Nishimura
  * 
  */
-public class Rect extends Element implements Renderable {
-
+public class HitRect extends Element implements Hittable, Renderable {
+    private boolean hitted = false;
+    private double x = 0.0;
+    private double y = 0.0;
     private double w;
     private double h;
     private double x1;
@@ -41,58 +46,55 @@ public class Rect extends Element implements Renderable {
     private double y3;
     private double x4;
     private double y4;
-
+ 
+    
     /**
-     * Creates a new Rect object using width and height.
+     * Creates a new HitRect object using width and height.
      *
      * @param w
      *              The width of the rectangle.
      * @param h 
      *              The height of the rectangle.                          
      */
-    public Rect(double w, double h) {
+    public HitRect(double w, double h) {
         this.w = w;
         this.h = h;
     }
     
-    /**
-     * Sets a Rect's position of the upper-left corner, width and height.
-     *
-     * @param w
-     *              The width of the rectangle.
-     * @param h 
-     *              The height of the rectangle.                          
-     */
-    public void set(double w, double h){
-    	this.w = w;
-    	this.h = h;
-    }
-    
-    public void setWidth(double w){
-    	this.w = w;
-    }
-    
-    public void setHeight(double h){
-    	this.h = h;
-    }
-    
-    public double getWidth(){
-    	return this.w;
-    }
-    
-    public double getHeight(){
-    	return this.h;
+    public boolean hit(int x, int y){
+    	if( x >= this.x - this.w / 2.0 
+    			&& x <= this.x + this.w / 2.0
+    			&& y >= this.y - this.h / 2.0
+    			&& y <= this.y + this.h / 2.0){
+    		hitted = true;
+    	}else{
+    		hitted = false;
+    	}
+    	return hitted;
     }
 
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+    public void setPosition(double x, double y){
+    	this.x = x;
+    	this.y = y;
+    }
+    
     private void calcRect() {
-        this.x1 = 0.0 - w / 2;
-        this.y1 = 0.0 + h / 2;
-        this.x2 = 0.0 - w / 2;
-        this.y2 = 0.0 - h / 2;
-        this.x3 = 0.0 + w / 2;
-        this.y3 = 0.0 - h / 2;
-        this.x4 = 0.0 + w / 2;
-        this.y4 = 0.0 + h / 2;
+        this.x1 = x - w / 2;
+        this.y1 = y + h / 2;
+        this.x2 = x - w / 2;
+        this.y2 = y - h / 2;
+        this.x3 = x + w / 2;
+        this.y3 = y - h / 2;
+        this.x4 = x + w / 2;
+        this.y4 = y + h / 2;
     }
     
     @Override
