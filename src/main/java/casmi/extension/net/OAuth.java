@@ -23,7 +23,6 @@ import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
-import casmi.exception.CasmiException;
 import casmi.exception.NetException;
 import casmi.net.HTTP;
 
@@ -41,10 +40,12 @@ public class OAuth {
     public OAuth() {}
 
     public void setConsumer(String consumerKey, String consumerSecret) {
+       
         consumer = new oauth.signpost.basic.DefaultOAuthConsumer(consumerKey, consumerSecret);
     }
 
     public void setProvider(String requestTokenEndpointUrl, String accessTokenEndpointUrl,
+      
         String authorizationWebsiteUrl) {
         provider = new oauth.signpost.basic.DefaultOAuthProvider(
             requestTokenEndpointUrl,
@@ -52,55 +53,61 @@ public class OAuth {
             authorizationWebsiteUrl);
     }
 
-    public String retrieveRequestToken() throws CasmiException {
+    public String retrieveRequestToken() throws NetException {
+      
         try {
             return provider.retrieveRequestToken(consumer, oauth.signpost.OAuth.OUT_OF_BAND);
         } catch (OAuthMessageSignerException e) {
-            throw new CasmiException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthNotAuthorizedException e) {
-            throw new CasmiException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthExpectationFailedException e) {
-            throw new CasmiException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthCommunicationException e) {
-            throw new CasmiException(e.getMessage());
+            throw new NetException(e);
         }
     }
 
     public void retrieveAccessToken(String pin) throws NetException {
+       
         try {
             provider.retrieveAccessToken(consumer, pin);
         } catch (OAuthMessageSignerException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthNotAuthorizedException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthExpectationFailedException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthCommunicationException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         }
     }
     
     public void sign(HTTP http) throws NetException {
+        
         try {
             consumer.sign(http.getConnection());
         } catch (OAuthMessageSignerException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthExpectationFailedException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         } catch (OAuthCommunicationException e) {
-            throw new NetException(e.getMessage());
+            throw new NetException(e);
         }
     }
     
     public String getConsumerKey() {
+        
         return consumer.getConsumerKey();
     }
     
     public String getConsumerSecret() {
+        
         return consumer.getConsumerSecret();
     }
     
     public String getToken() {
+    
         return consumer.getToken();
     }
     

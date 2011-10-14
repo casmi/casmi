@@ -4,33 +4,42 @@ import static org.junit.Assert.fail;
 
 import java.sql.SQLException;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class MySQLTest {
 
-    static final String HOST = "localhost";
-    static final String DATABASE = "casmi";
-    static final String USER = "hoge";
-    static final String PASSWORD = "hoge";
+    private static final String HOST     = "localhost";
+    private static final String DATABASE = "casmi";
+    private static final String USER     = "casmi_user";
+    private static final String PASSWORD = "casmi_password";
+    
+    private static MySQL mysql = null;
     
     public static void cleanup() {
-        MySQL mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
+        
         try {
-            mysql.connect();
             mysql.execute("DROP TABLE example");
+        } catch (SQLException e) {
+            // Ignore.
+        }
+        try {
             mysql.execute("DROP TABLE example2");
         } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            mysql.close();
+            // Ignore.
+        }
+        try {
+            mysql.execute("DROP TABLE " + mysql.getTablename(Alcohol.class));
+        } catch (SQLException e) {
+            // Ignore.
         }
     }
     
     @BeforeClass
     public static void beforeClass() {
-        MySQL mysql = null;
+        
         try {
             mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
         } catch (Exception e) {
@@ -42,26 +51,21 @@ public class MySQLTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed to connect database");
-        }finally {
-            mysql.close();
         }
+        
     	cleanup();
+    }
+    
+    @AfterClass
+    public static void AfterClass() {
+        
+        mysql.close();
     }
     
     @Test
     public void createTableTest() {
-        MySQL mysql = null;
 
         try {
-            mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("failed to create instance");
-        }
-
-        try {
-            mysql.connect();
-
             mysql.execute("CREATE TABLE example (id integer, text text, date datetime, value double)");
             mysql.execute("INSERT INTO example VALUES (0, 'Test 1', '2011-07-15', 0.1)");
             mysql.execute("INSERT INTO example VALUES (1, 'Test 2', '2011-07-15 13:24', 0.2)");
@@ -71,26 +75,13 @@ public class MySQLTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed to create table or insert data");
-        } finally {
-            mysql.close();
         }
     }
 
     @Test
     public void selectTest() {
 
-        MySQL mysql = null;
-
         try {
-            mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("failed to create instance");
-        }
-
-        try {
-            mysql.connect();
-
             mysql.execute("SELECT * FROM example");
 
             while (mysql.next()) {
@@ -109,28 +100,13 @@ public class MySQLTest {
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed to execute SELECT sentence");
-        } finally {
-            mysql.close();
         }
     }
 
     @Test
     public void insertTest() {
 
-        MySQL mysql = null;
-
         try {
-            mysql = new MySQL(HOST, DATABASE, USER, PASSWORD);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("failed to create instance");
-        }
-
-        try {
-            mysql.connect();
-
-            mysql.execute("DELETE FROM example2");
-
             mysql.setAutoCommit(false);
 
             for (int i = 0; i < 10; i++) {
@@ -147,12 +123,182 @@ public class MySQLTest {
             while (mysql.next()) {
                 mysql.println();
             }
+            
+            mysql.setAutoCommit(true);
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed to insert data");
-        } finally {
-            mysql.close();
+        }
+    }
+    
+    @Test
+    public void orSaveTest() {
+
+        Alcohol alcohol;
+        
+        alcohol = mysql.entity(Alcohol.class);
+        Assert.assertNotNull(alcohol);
+
+        alcohol.setName("Urakasumi");
+        alcohol.setAbv(15);
+        alcohol.origin = "Miyagi";
+        try {
+            alcohol.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to save");
+        }
+        
+        alcohol = mysql.entity(Alcohol.class);
+        Assert.assertNotNull(alcohol);
+
+        alcohol.setName("Houhai");
+        alcohol.setAbv(16);
+        alcohol.origin = "Aomori";
+        try {
+            alcohol.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to save");
         }
     }
 
+    @Test
+    public void orFindTest() {
+        
+        Alcohol[] alcohols = null;
+        Alcohol   alcohol  = null;
+        
+        // all
+        try {
+            alcohols = mysql.all(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+        }
+        
+        // find
+        try {
+            alcohol = mysql.find(Alcohol.class, 2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohol);
+        System.out.println(alcohol);
+        
+        // first
+        try {
+            alcohol = mysql.first(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohol);
+        System.out.println(alcohol);
+        
+        // last
+        try {
+            alcohol = mysql.last(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohol);
+        System.out.println(alcohol);
+    }
+    
+    @Test
+    public void orFindByQueryTest() {
+        
+        Alcohol[] alcohols = null;
+        Alcohol   alcohol  = null;
+        
+        // select
+        try {
+            alcohols = mysql.all(Alcohol.class, new Query().select("name", "abv"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+            
+            Assert.assertNotNull(a.getID());
+            Assert.assertNotNull(a.getName());
+            Assert.assertNotNull(a.getAbv());
+            Assert.assertNull(a.origin);
+        }
+        
+        // where
+        try {
+            alcohol = mysql.first(Alcohol.class, new Query().where("abv=15"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        System.out.println(alcohol);
+        
+        try {
+            alcohol = mysql.last(Alcohol.class, new Query().where("abv=15"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        System.out.println(alcohol);
+        
+        // order by
+        try {
+            alcohols = mysql.all(Alcohol.class, new Query().order("abv").desc(true));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+        }
+    }
+
+    @Test
+    public void orDeleteTest() {
+
+        Alcohol alcohol = null;
+        
+        try {
+            alcohol = mysql.find(Alcohol.class, 1);
+            alcohol.delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to delete.");
+        }
+    }
+    
+    @Test
+    public void orTruncateTest() {
+        
+        try {
+            mysql.truncate(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to truncate.");
+        }
+    }
+    
+    @Test
+    public void orDropTest() {
+        
+        try {
+            mysql.drop(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to drop table.");
+        }
+    }
+    
 }

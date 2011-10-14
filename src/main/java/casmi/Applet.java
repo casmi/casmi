@@ -19,13 +19,11 @@
 
 package casmi;
 
-import java.awt.AWTEvent;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -60,20 +58,21 @@ import com.sun.opengl.util.GLUT;
 
 abstract public class Applet extends JApplet implements GraphicsDrawable, MouseListener, MouseMotionListener, KeyListener {
 
-	private static final int PRESSED = 0;
-	private static final int CLICKED = 1;
-	private static final int ENTERED = 2;
-	private static final int EXITED = 3;
-	private static final int RELEASED = 4;
-	private static final int DRAGGED = 5;
-	private static final int MOVED = 6;
-
+//	private static final int PRESSED = 0;
+//	private static final int CLICKED = 1;
+//	private static final int ENTERED = 2;
+//	private static final int EXITED = 3;
+//	private static final int RELEASED = 4;
+//	private static final int DRAGGED = 5;
+//	private static final int MOVED = 6;
+	
 	private int mouseX, mouseY;
 	private int preMouseX, preMouseY;
 	private char key;
+	private int keycode;
 	private double fps = 30.0;
 	
-	public int width = 100, height = 100;
+	private int width = 100, height = 100;
 	
 	private Cursor cursormode[] = new Cursor[5];
 
@@ -82,11 +81,12 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
     }
 	
 	private GLJPanel panel = null;
-	private AppletGLEventListener listener = null;
+	AppletGLEventListener listener = null;
 
 	private Timer timer;
 
-
+	private boolean isFullScreen = false;
+	private boolean isInitializing = true;
 
 	private boolean mousePressed = false;
 	private boolean mouseClicked = false;
@@ -95,11 +95,12 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	private boolean mouseReleased = false;
 	private boolean mouseDragged = false;
 	private boolean mouseMoved = false;
-	private boolean keypressed = false;
+	private boolean keyPressed = false;
+	private boolean keyReleased = false;
+	private boolean keyTyped = false;
 
 	private boolean runAsApplication = false;
 	
-    // TODO need to refactoring
 	/*
 	 * Set system property "java.library.path" programmatically. This static
 	 * scope is required to load native libraries of JOGL. This is called
@@ -162,7 +163,9 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 				mouseReleased = false;
 				mouseDragged = false;
 				mouseMoved = false;
-				keypressed = false;
+				keyPressed = false;
+				keyReleased = false;
+				keyTyped = false;
 			}
 		}
 	}
@@ -173,24 +176,31 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 		// JOGL setup
 		this.panel = new GLJPanel();
-		listener = new AppletGLEventListener(this, width, height);
+		listener = new AppletGLEventListener(this, getWidth(), getHeight());
 		panel.addGLEventListener(listener);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
-		panel.addKeyListener(this);
-	//	this.addComponentListener();
-		setFocusable(true);
+		if (!isFullScreen) {
+		    panel.addKeyListener(this);
+		} else {
+		    AppletRunner.frame.addKeyListener(this);    
+		}
 		initCursor();
-
-		this.add(panel);
-
+		
+		add(panel);
+		setFocusable(false);
+		panel.setFocusable(true);
+		
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0/fps));
+		
+		isInitializing = false;
 	}
 
+	@Override
 	public void setSize(int w, int h) {
-		width = w;
-		height = h;
+		this.width = w;
+		this.height = h;
 		super.setSize(new Dimension(w, h));
 
 		if (panel != null) {
@@ -261,96 +271,104 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public double getFPS(){
         return fps;
     }
+	
+	public boolean isFullScreen() {
+	    
+	    return isFullScreen;
+	}
+	
+	public void setFullScreen(boolean isFullScreen) {
+	    
+	    if (!isInitializing) return;
+	    
+	    this.isFullScreen = isFullScreen;
+	    
+	    if (isFullScreen) {
+	        AppletRunner.frame.setUndecorated(true);
+	        AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
+	        setSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
+	                AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+	    }
+	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		mousePressed = true;		
-		//System.out.println(e.getPoint().x+" "+e.getPoint().y);
-		updateMouse(PRESSED);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		mouseClicked = true;
-		updateMouse(CLICKED);
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		mouseEntered = true;
-		updateMouse(ENTERED);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		mouseEntered = false;
-		updateMouse(EXITED);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		//mousePressed = false;
-		//mouseDragged = false;
 		mouseReleased = true;
-		updateMouse(RELEASED);
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mouseDragged = true;
-		updateMouse(DRAGGED);
-		//panel.display();
+		updateMouse();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mouseMoved = true;	
-		updateMouse(MOVED);
-		
-		//panel.display();
+		updateMouse();
 	}
 
-	private void updateMouse(int MODE) {
+	private void updateMouse() {
 		preMouseX = mouseX;
 		preMouseY = mouseY;
 
 		Point p = getMousePosition(true);
 		if (p != null) {
 			mouseX = p.x;
-			mouseY = height - p.y;
+			mouseY = getHeight() - p.y;
 		}
-
-		//panel.display();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		keypressed = true;
+		keyPressed = true;
 		this.key = e.getKeyChar();
-		panel.display();
+		this.keycode = e.getKeyCode();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		keypressed = false;
-		panel.display();
+		keyReleased = true;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		keypressed = true;
+		keyPressed = true;
 		this.key = e.getKeyChar();
-		this.keyPressed();
-		this.key = e.getKeyChar();
-
-		panel.display();
+	}
+	
+	public boolean isKeyPressed(){
+		return keyPressed;
+	}
+	
+	public boolean isKeyReleased(){
+		return keyReleased;
+	}
+	
+	public boolean isKeyTyped(){
+		return keyTyped;
 	}
 
-	public void keyPressed() {
-	};
-
-	public void keyReleased() {
-	};
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
@@ -367,6 +385,10 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
     public char getKey() {
         return key;
+    }
+    
+    public int getKeycode(){
+    	return keycode;
     }
 
     public int getPreMouseX() {
@@ -413,10 +435,17 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		return mouseMoved;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+	
     abstract public void setup();
 
     abstract public void draw(Graphics g);
-    
 }
 
 /**
@@ -482,6 +511,7 @@ class AppletGLEventListener implements GLEventListener {
 		}
 
 		gl.glFlush();
+		
 	}
 
 	@Override

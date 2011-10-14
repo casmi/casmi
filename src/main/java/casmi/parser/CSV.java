@@ -22,6 +22,11 @@ package casmi.parser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import casmi.util.FileUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -102,6 +107,15 @@ public class CSV {
         this(pathname, DEFAULT_SEPARATOR);
     }
 
+    /**
+     * Creates CSV object from a file path URL.
+     * 
+     * @param file a file path string of a csv file
+     */
+    public CSV(URL url) {
+    	this(new File( FileUtil.url2Uri(url) ), DEFAULT_SEPARATOR);
+    }
+    
     /**
      * Creates CSV object from a file path string.
      * Second argument is a character to separate each element.
@@ -214,13 +228,23 @@ public class CSV {
 
     /**
      * Close reader and writer objects.
-     * 
-     * @throws IOException
-     *             if an I/O error occurs
      */
-    public void close() throws IOException {
+    public void close() {
 
-        if (csvReader != null) csvReader.close();
-        if (csvWriter != null) csvWriter.close();
+        if (csvReader != null) {
+            try {
+                csvReader.close();
+            } catch (IOException e) {
+                // Ignore.
+            }
+        }
+        
+        if (csvWriter != null) {
+            try {
+                csvWriter.close();
+            } catch (IOException e) {
+                // Ignore.
+            }
+        }
     }
 }

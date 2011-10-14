@@ -55,8 +55,11 @@ public class Texture extends Element implements Renderable {
     private Image image;
     
 
-    public int Width,Height;
+    public double Width,Height;
     private static boolean reloadFlag = false;
+    
+    private double X;
+    private double Y;
 
     public Texture(String s) {
         image = new Image(s);
@@ -84,6 +87,10 @@ public class Texture extends Element implements Renderable {
         ny=new ArrayList<Float>();
         
         reloadFlag = true;
+    }
+    
+    public void copyTexture(Texture src,Texture dst){
+    	
     }
     
     public void vertex(float x, float y,float nx,float ny){
@@ -169,16 +176,47 @@ public class Texture extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
+ 
 
         if (reloadFlag) {
             Graphics.reloadTextures();
             reloadFlag = false;
         }
         gl.glDisable(GL.GL_DEPTH_TEST);
-        this.strokeColor.setup(gl);
+        gl.glPushMatrix();
+        this.setTweenParameter(gl);
+        getSceneFillColor().setup(gl);
         double tmpx,tmpy,tmpz;
         float tmpnx,tmpny;
         image.enableTexture();
+        if(x.size()<1){
+        	Image img = getImage();
+        	gl.glBegin(GL.GL_QUADS);
+			switch (img.mode) {
+			default:
+			case CORNER:
+				gl.glTexCoord2f(0.0f, 1.0f);
+				gl.glVertex2f((float) X+tX, (float) (Y+tY - Height*tSY));
+				gl.glTexCoord2f(0.0f, 0.0f);
+				gl.glVertex2f((float) X+tX, (float) Y+tY);
+				gl.glTexCoord2f(1.0f, 0.0f);
+				gl.glVertex2f((float) (X+tX + Width*tSX ), (float) Y+tY);
+				gl.glTexCoord2f(1.0f, 1.0f);
+				gl.glVertex2f((float) (X+tX + Width*tSX ), (float) (Y+tY - Height*tSY));
+				break;
+			case CENTER:
+				gl.glTexCoord2f(0.0f, 1.0f);
+				gl.glVertex2f((float) (X+tX - Width*tSX / 2.0), (float) (Y+tY - Height*tSY / 2.0));
+				gl.glTexCoord2f(0.0f, 0.0f);
+				gl.glVertex2f((float) (X+tX - Width*tSX / 2.0), (float) (Y+tY + Height*tSY / 2.0));
+				gl.glTexCoord2f(1.0f, 0.0f);
+				gl.glVertex2f((float) (X+tX + Width*tSX / 2.0), (float) (Y+tY + Height*tSY / 2.0));
+				gl.glTexCoord2f(1.0f, 1.0f);
+				gl.glVertex2f((float) (X+tX + Width*tSX / 2.0), (float) (Y+tY - Height*tSY / 2.0));
+				break;
+			}
+			gl.glEnd();
+        }else{
         switch (MODE) {
         case LINES:
                 gl.glBegin(GL.GL_POLYGON);
@@ -207,9 +245,52 @@ public class Texture extends Element implements Renderable {
                 gl.glEnd();
         default:
             break;
-        }    
+        }   
+        }
         image.disableTexture();
+        gl.glPopMatrix();
         gl.glEnable(GL.GL_DEPTH_TEST);
     }
+   
 
+	public double getX() {
+		return X;
+	}
+
+	public void setX(double x) {
+		X = x;
+	}
+
+	public double getY() {
+		return Y;
+	}
+
+	public void setY(double y) {
+		Y = y;
+	}
+	
+	public double getWidth(){
+		return Width;
+	}
+	
+	public double getHeight(){
+		return Height;
+	}
+	
+	public void setWidth(double width){
+		this.Width = width;
+	}
+	
+	public void setHeight(double height){
+		this.Height = height;
+	}
+	
+	public void set(double x, double y, double width, double height){
+		this.X = x;
+		this.Y = y;
+		this.Width = width;
+		this.Height = height;
+		
+	}
+    
 }

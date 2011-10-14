@@ -33,15 +33,16 @@ import casmi.matrix.Vertex;
  */
 public class Ellipse extends Element implements Renderable {
 
-    private double x;
-    private double y;
+    private double x=0;
+    private double y=0;
     private double w;
     private double h;
     private double x1;
     private double y1;
     private double x2;
     private double y2;
-    private double detail = 10;
+    private double detail = 36;
+    private double detailangle = 10;
 
     private double th1;
     private double th2;
@@ -264,42 +265,106 @@ public class Ellipse extends Element implements Renderable {
     public void setHeight(double h){
     	this.h = h;
     }
+    
+    /**
+     * Gets x-coordinate.
+     * 
+     * @return
+     *            The x-coordinate of the center of the Ellipse.
+     */
+    public double getX(){
+    	return this.x;
+    }
+    
+    /**
+     * Gets y-coordinate.
+     * 
+     * @return
+     *            The y-coordinate of the center of the Ellipse.
+     */
+    public double getY(){
+    	return this.y;
+    }
+    
+    /**
+     * Gets radius.
+     * 
+     * @return
+     *            The radius of the Ellipse.
+     */
+    public double getRadius(){
+    	return this.w/2;
+    }
+    
+    /**
+     * Gets width.
+     * 
+     * @return
+     *            The width of the Ellipse.
+     */
+    public double getWidth(){
+    	return this.w;
+    }
+    
+    /**
+     * Gets height.
+     * 
+     * @return
+     *            The height of the Ellipse.
+     */
+    public double getHeight(){
+    	return this.h;
+    }
+    
+    public double getRotate(){
+    	return this.rotate;
+    }
+    
+    public void setRotate(double rotate){
+    	this.rotate = rotate;
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-
+    	
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
         
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glRotated(this.rotate, 0, 0, 1.0);
+        this.setTweenParameter(gl);
         if (this.fill) {
+//            getSceneFillColor().setup(gl);
             this.fillColor.setup(gl);
             gl.glBegin(GL.GL_TRIANGLE_FAN);
-            gl.glVertex2d(x, y);
+            gl.glVertex2d(0, 0);
 
-            for (th1 = 0.0; th1 <= 360.0; th1 = th1 + detail)
+            for (th1 = 0.0; th1 <= 360.0; th1 = th1 + detailangle)
             {
                 th1_rad = th1 / 180.0 * Math.PI;
 
-                x1 = (w / 2.0) * Math.cos(th1_rad) + x;
-                y1 = (h / 2.0) * Math.sin(th1_rad) + y;
+                x1 = (w / 2.0) * Math.cos(th1_rad);
+                y1 = (h / 2.0) * Math.sin(th1_rad);
                 gl.glVertex2d(x1, y1);
             }
             gl.glEnd();
         }
 
         if (this.stroke) {
+//            getSceneStrokeColor().setup(gl);
             this.strokeColor.setup(gl);
             gl.glLineWidth(this.strokeWidth);
-            for (th1 = 0.0; th1 <= 360.0; th1 = th1 + detail)
+            for (th1 = 0.0; th1 < 360.0; th1 = th1 + detailangle)
             {
-                th2 = th1 + 10.0;
+                th2 = th1 + detailangle;
                 th1_rad = th1 / 180.0 * Math.PI;
                 th2_rad = th2 / 180.0 * Math.PI;
 
-                x1 = (w / 2.0) * Math.cos(th1_rad) + x;
-                y1 = (h / 2.0) * Math.sin(th1_rad) + y;
-                x2 = (w / 2.0) * Math.cos(th2_rad) + x;
-                y2 = (h / 2.0) * Math.sin(th2_rad) + y;
+                x1 = (w / 2.0) * Math.cos(th1_rad);
+                y1 = (h / 2.0) * Math.sin(th1_rad);
+                x2 = (w / 2.0) * Math.cos(th2_rad);
+                y2 = (h / 2.0) * Math.sin(th2_rad);
 
                 gl.glBegin(GL.GL_LINES);
                 gl.glVertex2d(x1, y1);
@@ -307,7 +372,7 @@ public class Ellipse extends Element implements Renderable {
                 gl.glEnd();
             }
         }
-        
+        gl.glPopMatrix();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
     }
@@ -327,6 +392,7 @@ public class Ellipse extends Element implements Renderable {
      */
     public void setDetail(double detail) {
         this.detail = detail;
+        this.detailangle = 360.0/detail;
     }
 
 }

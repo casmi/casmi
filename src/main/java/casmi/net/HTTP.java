@@ -19,9 +19,12 @@
 
 package casmi.net;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.zip.GZIPInputStream;
 
 import casmi.io.Reader;
 import casmi.io.Writer;
@@ -88,7 +91,33 @@ public class HTTP {
 
         return new Reader(connection.getInputStream());
     }
+    
+    public Reader requestGetWithGzip() throws IOException {
+    	
+    	connection.setRequestMethod("GET");
+        connection.setDoOutput(false);
 
+        final GZIPInputStream gzipInStream = new GZIPInputStream(connection.getInputStream());
+        
+        try {
+            final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            
+            for (;;) {
+                int iRead = gzipInStream.read();
+                if (iRead < 0) break;
+                outStream.write(iRead);
+            }
+            
+            Reader result = new Reader(new ByteArrayInputStream(outStream.toByteArray()));
+            outStream.flush();
+            outStream.close();
+            
+            return result;
+        } finally {
+            gzipInStream.close();
+        }
+    }
+    
     /**
      * Do a HTTP POST request forward specified URL and data string.
      * Creates and return Reader object.

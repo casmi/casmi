@@ -27,15 +27,19 @@ import java.io.IOException;
 import org.junit.Test;
 
 import casmi.exception.ParserException;
+import casmi.util.FileUtil;
+import casmi.util.SystemUtil;
 
 public class XMLTest {
 
     @Test
     public void simpleReadTest() {
         XML xml = new XML();
-
+        
+        File f = new File( FileUtil.url2Uri(getClass().getResource("example.xml")) );
+        
         try {
-            xml.parseFile(new File("rsrc/example.xml"));
+            xml.parseFile(f);
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
@@ -50,8 +54,10 @@ public class XMLTest {
     public void readTest() {
         XML xml = new XML();
 
+        File f = new File( FileUtil.url2Uri(getClass().getResource("example.xml")) );
+        
         try {
-            xml.parseFile(new File("rsrc/example.xml"));
+            xml.parseFile(f);
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
@@ -119,8 +125,12 @@ public class XMLTest {
         
         xml.addChild(sake);
 
+        String path = SystemUtil.JAVA_TMP_PATH + "write_example.xml";
+        
         try {
-            xml.save(new File("rsrc/write_example.xml"));
+            xml.save(new File(path));
+            
+            System.out.println("write data to " + path);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to generate XML.");

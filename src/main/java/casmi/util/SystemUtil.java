@@ -19,6 +19,14 @@
   
 package casmi.util;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import casmi.exception.NetException;
+
 
 /**
  * Utility class to access system properties easily.
@@ -121,5 +129,26 @@ public class SystemUtil {
         }
 
         return OS.OTHER;
+    }
+    
+    /**
+     * Launches the default browser to display a URL. 
+     * 
+     * @param url 
+     *            The URL to be displayed in the user default browser.
+     * 
+     * @throws NetException
+     *            If errors occur
+     */
+    public static void browse(URL url) throws NetException {
+        
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            desktop.browse(new URI(url.toString()));
+        } catch (URISyntaxException e) {
+            throw new NetException(e);
+        } catch (IOException e) {
+            throw new NetException(e);
+        }
     }
 }

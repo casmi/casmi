@@ -138,21 +138,31 @@ public class Cone extends Element implements Renderable {
 
         if(this.fillColor.getA()<1.0||this.strokeColor.getA()<1.0)
             gl.glDisable(GL.GL_DEPTH_TEST);
+        
+        gl.glPushMatrix();
+        this.setTweenParameter(gl);
 
+        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        gl.glPolygonOffset(1f, 1f);
+        
         gl.glPushMatrix();
         gl.glRotated(90, -1, 0, 0);
         gl.glTranslated(x, y, z);
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             drawSolidCone(glu, base, getHeight(), slices, stacks);
         }
         else if (this.stroke) {
-            this.strokeColor.setup(gl);
+            getSceneStrokeColor().setup(gl);
             drawWireCone(glu, base, getHeight(), slices, stacks);
         }
 
         gl.glPopMatrix();
+        
+        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 
+        gl.glPopMatrix();
+        
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
 

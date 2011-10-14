@@ -43,6 +43,9 @@ public class Polygon extends Element implements Renderable {
     private ArrayList<Double> y;
     private ArrayList<Double> z;
 
+    private double X = 0;
+    private double Y = 0;
+    
     private Vertex tmpv = new Vertex(0,0,0);
     
     private int MODE;
@@ -113,38 +116,42 @@ public class Polygon extends Element implements Renderable {
     
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-
+    	calcG();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
         
-        this.strokeColor.setup(gl);
         double tmpx,tmpy,tmpz;
+
+        gl.glPushMatrix();
+        gl.glTranslated(X, Y, 0);
+        gl.glRotated(rotate, 0, 0, 1.0);
+        this.setTweenParameter(gl);
 
         switch (MODE) {
         case LINES:
             if (this.fill) {
-                this.fillColor.setup(gl);
+                getSceneFillColor().setup(gl);
                 gl.glBegin(GL.GL_POLYGON);
                 for(int i = 0;i<x.size();i++){
                     tmpx = (Double)this.x.get(i);
                     tmpy = (Double)this.y.get(i);
-                gl.glVertex2d(tmpx, tmpy);
+                gl.glVertex2d(tmpx-X, tmpy-Y);
                 }
                 gl.glEnd();
             }
 
             if (this.stroke) {
                 gl.glLineWidth(this.strokeWidth);
-                this.strokeColor.setup(gl);
+                getSceneStrokeColor().setup(gl);
                 gl.glBegin(GL.GL_LINE_STRIP);
                 for(int i = 0;i<x.size();i++){
                     tmpx = (Double)this.x.get(i);
                     tmpy = (Double)this.y.get(i);
-                gl.glVertex2d(tmpx, tmpy);
+                gl.glVertex2d(tmpx-X, tmpy-Y);
                 }
                 tmpx = (Double)this.x.get(0);
                 tmpy = (Double)this.y.get(0);
-                gl.glVertex2d(tmpx, tmpy);
+                gl.glVertex2d(tmpx-X, tmpy-Y);
                 gl.glEnd();
             }
             break;
@@ -156,7 +163,7 @@ public class Polygon extends Element implements Renderable {
                     tmpx = (Double)this.x.get(i);
                     tmpy = (Double)this.y.get(i);
                     tmpz = (Double)this.z.get(i);
-                gl.glVertex3d(tmpx, tmpy, tmpz);
+                gl.glVertex3d(tmpx-X, tmpy-Y, tmpz);
                 }
                 gl.glEnd();
             }
@@ -169,12 +176,12 @@ public class Polygon extends Element implements Renderable {
                     tmpx = (Double)this.x.get(i);
                     tmpy = (Double)this.y.get(i);
                     tmpz = (Double)this.z.get(i);
-                gl.glVertex3d(tmpx, tmpy, tmpz);
+                gl.glVertex3d(tmpx-X, tmpy-Y, tmpz);
                 }
                 tmpx = (Double)this.x.get(0);
                 tmpy = (Double)this.y.get(0);
                 tmpz = (Double)this.z.get(0);
-                gl.glVertex3d(tmpx, tmpy, tmpz);
+                gl.glVertex3d(tmpx-X, tmpy-Y, tmpz);
                 gl.glEnd();
             }
             break;
@@ -183,9 +190,42 @@ public class Polygon extends Element implements Renderable {
             break;
         }
         
+        gl.glPopMatrix();
+        
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
         
+    }
+    
+    private void calcG(){
+    	X=Y=0;
+    	for(int i=0;i<x.size();i++){
+    		X += x.get(i);
+    		Y += y.get(i);}
+    	X/=x.size();
+    	Y/=y.size();
+    }
+    
+    public double getX(){
+    	return this.X;
+    }
+    
+    public double getY(){
+    	return this.Y;
+    }
+    
+    public void setX(double x){
+    	this.X = x;
+    }
+    
+    public void setY(double y){
+    	this.Y = y;
+    }
+    
+    
+    public void setXY(double x, double y){
+    	this.X = x;
+    	this.Y = y;
     }
 
 }

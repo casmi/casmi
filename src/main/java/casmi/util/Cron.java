@@ -80,6 +80,13 @@ public class Cron {
     public void stop() throws IllegalStateException {
         cron4jScheduler.stop();
     }
+    
+    /**
+     * Executes immediately a task.
+     */
+    public void exec() {
+        cron4jScheduler.launch(cron4jScheduler.getTask(id));
+    }
 
     /**
      * Tests if this scheduler is started.

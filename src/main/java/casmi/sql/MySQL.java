@@ -20,7 +20,6 @@
 package casmi.sql;
 
 import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,7 +37,10 @@ import casmi.util.DateUtil;
  * 
  * @author T. Takeuchi
  */
-public class MySQL implements SQL {
+public class MySQL extends SQL {
+
+    /** SQL database type. */
+    private static final SQLType SQL_TYPE = SQLType.MYSQL_5;
 
     /** Driver name. */
     private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -51,9 +53,6 @@ public class MySQL implements SQL {
 
     /** Password. */
     private final String password;
-
-    /** java.sql.Connection. */
-    private Connection connection;
 
     /** java.sql.Statement. */
     private Statement statement;
@@ -84,6 +83,8 @@ public class MySQL implements SQL {
      */
     public MySQL(String host, String database) {
 
+        super(SQL_TYPE);
+
         if (host == null) {
             throw new IllegalArgumentException("The host name is null.");
         } else if (database == null) {
@@ -96,7 +97,8 @@ public class MySQL implements SQL {
     }
 
     /**
-     * Creates new MySQL object from the specified host, database, user, and password.
+     * Creates new MySQL object from the specified host, database, user, and
+     * password.
      * 
      * @param host
      *            The host name of a MySQL server.
@@ -111,6 +113,8 @@ public class MySQL implements SQL {
      *            The password to log in the MySQL server.
      */
     public MySQL(String host, String database, String user, String password) {
+
+        super(SQL_TYPE);
 
         if (host == null) {
             throw new IllegalArgumentException("The host name is null.");
@@ -281,6 +285,30 @@ public class MySQL implements SQL {
     // Getters from resultSet.
     // -------------------------------------------------------------------------
 
+    @Override
+    @SuppressWarnings("unchecked")
+    <T> T get(ResultSet resultSet, Class<T> type, String field) throws SQLException {
+        
+        if (type == Blob.class) {
+            return (T)resultSet.getBlob(field);
+        } else if (type ==     int.class ||
+                   type == Integer.class) {
+            return (T)(Integer)resultSet.getInt(field);
+        } else if (type == double.class || 
+                   type == Double.class) {
+            return (T)(Double)resultSet.getDouble(field);
+        } else if (type == float.class || 
+                   type == Float.class) {
+            return (T)(Float)resultSet.getFloat(field);
+        } else if (type == java.util.Date.class) {
+            return (T)DateUtil.toUtilDate(resultSet.getDate(field));
+        } else if (type == String.class) {
+            return (T)resultSet.getString(field);
+        }
+        
+        return null;
+    }
+    
     /**
      * Retrieves the value of the designated column in the current row as a Blob
      * object in the Java programming language.
@@ -289,7 +317,8 @@ public class MySQL implements SQL {
      *            The first column is 1, the second is 2, ...
      * 
      * @return
-     *         a Blob object representing the SQL BLOB value in the specified column.
+     *         a Blob object representing the SQL BLOB value in the specified
+     *         column.
      * 
      * @throws SQLException
      *             if the columnIndex is not valid; if a database access error
@@ -297,7 +326,7 @@ public class MySQL implements SQL {
      */
     public Blob getBlob(int column) throws SQLException {
 
-        if (resultSet == null) 
+        if (resultSet == null)
             throw new SQLException("Result set is not exist.");
 
         return resultSet.getBlob(column);
@@ -311,7 +340,8 @@ public class MySQL implements SQL {
      *            The name of the field.
      * 
      * @return
-     *         a Blob object representing the SQL BLOB value in the specified column.
+     *         a Blob object representing the SQL BLOB value in the specified
+     *         column.
      * 
      * @throws SQLException
      *             if the columnIndex is not valid; if a database access error
@@ -319,7 +349,7 @@ public class MySQL implements SQL {
      */
     public Blob getBlob(String field) throws SQLException {
 
-        if (resultSet == null) 
+        if (resultSet == null)
             throw new SQLException("Result set is not exist.");
 
         return resultSet.getBlob(field);
@@ -343,7 +373,7 @@ public class MySQL implements SQL {
      */
     public java.util.Date getDate(int column) throws SQLException, ParseException {
 
-        if (resultSet == null) 
+        if (resultSet == null)
             throw new SQLException("Result set is not exist.");
 
         return DateUtil.toUtilDate(resultSet.getDate(column));
@@ -391,7 +421,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getDouble(column);
     }
 
@@ -413,7 +443,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getDouble(field);
     }
 
@@ -435,7 +465,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getFloat(column);
     }
 
@@ -457,7 +487,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getFloat(field);
     }
 
@@ -479,7 +509,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getInt(column);
     }
 
@@ -520,7 +550,7 @@ public class MySQL implements SQL {
      */
     public Object getObject(int column) throws SQLException {
 
-        if (resultSet == null) 
+        if (resultSet == null)
             throw new SQLException("Result set is not exist.");
 
         return resultSet.getObject(column);
@@ -542,7 +572,7 @@ public class MySQL implements SQL {
      */
     public Object getObject(String field) throws SQLException {
 
-        if (resultSet == null) 
+        if (resultSet == null)
             throw new SQLException("Result set is not exist.");
 
         return resultSet.getObject(field);
@@ -566,7 +596,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getString(column);
     }
 
@@ -588,7 +618,7 @@ public class MySQL implements SQL {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
-        
+
         return resultSet.getString(field);
     }
 
@@ -626,6 +656,16 @@ public class MySQL implements SQL {
 
         System.out.println(recordToString());
     }
+    
+    // O/R mapping.
+    
+    public <T extends Entity> void drop(Class<T> type) throws SQLException {
+        
+        Statement statement = connection.createStatement();
+        String stmt = StatementGenerator.drop(getSQLType(), getTablename(type));
+        statement.executeUpdate(stmt);
+        statement.close();
+    }
 
     // -------------------------------------------------------------------------
     // Getter of private variables.
@@ -649,16 +689,6 @@ public class MySQL implements SQL {
     public String getUser() {
 
         return user;
-    }
-
-    /**
-     * Return java.sql.Connection object.
-     * 
-     * @return java.sql.Connection object.
-     */
-    public Connection getConnection() {
-
-        return connection;
     }
 
     /**
@@ -690,4 +720,5 @@ public class MySQL implements SQL {
 
         return resultSet;
     }
+
 }

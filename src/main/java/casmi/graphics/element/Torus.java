@@ -133,13 +133,15 @@ public class Torus extends Element implements Renderable {
             gl.glDisable(GL.GL_DEPTH_TEST);
         gl.glPushMatrix();
         gl.glTranslated(x, y, z);
+        this.setTweenParameter(gl);
 
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             drawSolidTorus(glu, in, out, nside, rings);
         }
 
         if (this.stroke) {
+        	getSceneStrokeColor().setup(gl);
             this.strokeColor.setup(gl);
             drawWireTorus(glu, in, out, nside, rings);
         }

@@ -16,52 +16,53 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.sql;
 
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import casmi.util.FileUtil;
+import casmi.util.SystemUtil;
+
+/**
+ * Test class for SQLite.
+ * 
+ * @author T. Takeuchi
+ * 
+ */
 public class SQLiteTest {
 
-	public static void cleanup() {
-		File file = new File(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
-		System.out.println(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
-		if( file != null ) {
-			file.delete();
-		}
-	}
-	
-	@BeforeClass
-	public static void beforeClass() {
-		cleanup();
-		
-		try {
-            SQLite.createDatabase(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
+    private static final String DATABASE_PATH = SystemUtil.JAVA_TMP_PATH + "test.sqlite3"; 
+    private static SQLite sqlite = null;
+
+    public static void cleanup() {
+
+        FileUtil.delete(new File(DATABASE_PATH));
+    }
+
+    @BeforeClass
+    public static void beforeClass() {
+
+        cleanup();
+
+        try {
+            SQLite.createDatabase(DATABASE_PATH);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to create database file.");
         }
-	}
-	
-	@AfterClass
-	public static void afterClass() {
-		cleanup();	
-	}
-    
-    @Test
-    public void createTableTest() {
-        SQLite sqlite = null;
 
         try {
-            sqlite = new SQLite(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
+            sqlite = new SQLite(DATABASE_PATH);
         } catch (Exception e) {
             e.printStackTrace();
             fail("failed create instance");
@@ -69,36 +70,40 @@ public class SQLiteTest {
 
         try {
             sqlite.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to connect.");
+        }
+    }
 
+    @AfterClass
+    public static void afterClass() {
+
+        sqlite.close();
+
+        cleanup();
+    }
+
+    @Test
+    public void createTableTest() {
+
+        try {
             sqlite.execute("CREATE TABLE example (id INTEGER, text TEXT, date TEXT, value REAL)");
             sqlite.execute("INSERT INTO example VALUES (0, 'Test 1', '2011-07-15', 0.1)");
             sqlite.execute("INSERT INTO example VALUES (1, 'Test 2', '2011-07-15 13:24', 0.2)");
             sqlite.execute("INSERT INTO example VALUES (2, 'Test 3', '2011-07-15 13:25:36', 0.3)");
-            
+
             sqlite.execute("CREATE TABLE example2 (id INTEGER, value REAL)");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             fail("Some Error Occurred");
-        } finally {
-            sqlite.close();
         }
     }
 
     @Test
     public void selectTest() {
 
-        SQLite sqlite = null;
-
         try {
-            sqlite = new SQLite(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("failed create instance");
-        }
-
-        try {
-            sqlite.connect();
-
             sqlite.execute("SELECT * FROM example");
 
             while (sqlite.next()) {
@@ -114,31 +119,16 @@ public class SQLiteTest {
                 System.out.println(id + " | " + text + " | " + date + " | " + value);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             fail("Some Error Occurred");
-        } finally {
-            sqlite.close();
         }
     }
 
     @Test
     public void insertTest() {
 
-        SQLite sqlite = null;
-
         try {
-            sqlite = new SQLite(casmi.util.SystemUtil.JAVA_TMP_PATH + "test.sqlite3");
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("failed create instance");
-        }
-
-        try {
-            sqlite.connect();
-
-            sqlite.execute("DELETE FROM example2");
-
             sqlite.setAutoCommit(false);
 
             for (int i = 0; i < 10; i++) {
@@ -155,11 +145,170 @@ public class SQLiteTest {
             while (sqlite.next()) {
                 sqlite.println();
             }
-        } catch (Exception e) {
+            
+            sqlite.setAutoCommit(true);
+        } catch (SQLException e) {
             e.printStackTrace();
             fail("Some Error Occurred");
-        } finally {
-            sqlite.close();
+        }
+    }
+
+    @Test
+    public void orSaveTest() {
+
+        Alcohol alcohol;
+        
+        alcohol = sqlite.entity(Alcohol.class);
+        Assert.assertNotNull(alcohol);
+
+        alcohol.setName("Urakasumi");
+        alcohol.setAbv(15);
+        alcohol.origin = "Miyagi";
+        try {
+            alcohol.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to save");
+        }
+        
+        alcohol = sqlite.entity(Alcohol.class);
+        Assert.assertNotNull(alcohol);
+
+        alcohol.setName("Houhai");
+        alcohol.setAbv(16);
+        alcohol.origin = "Aomori";
+        try {
+            alcohol.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to save");
+        }
+    }
+
+    @Test
+    public void orFindTest() {
+        
+        Alcohol[] alcohols = null;
+        Alcohol   alcohol  = null;
+        
+        // all
+        try {
+            alcohols = sqlite.all(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+        }
+        
+        // find
+        try {
+            alcohol = sqlite.find(Alcohol.class, 2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohol);
+        System.out.println(alcohol);
+        
+        // first
+        try {
+            alcohol = sqlite.first(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohol);
+        System.out.println(alcohol);
+        
+        // last
+        try {
+            alcohol = sqlite.last(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohol);
+        System.out.println(alcohol);
+    }
+    
+    @Test
+    public void orFindByQueryTest() {
+        
+        Alcohol[] alcohols = null;
+        Alcohol   alcohol  = null;
+        
+        // select
+        try {
+            alcohols = sqlite.all(Alcohol.class, new Query().select("name", "alcohol_by_volume"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+            
+            Assert.assertNotNull(a.getID());
+            Assert.assertNotNull(a.getName());
+            Assert.assertNotNull(a.getAbv());
+            Assert.assertNull(a.origin);
+        }
+        
+        // where
+        try {
+            alcohol = sqlite.first(Alcohol.class, new Query().where("alcohol_by_volume=15"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        System.out.println(alcohol);
+        
+        try {
+            alcohol = sqlite.last(Alcohol.class, new Query().where("alcohol_by_volume=15"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        System.out.println(alcohol);
+        
+        // order by
+        try {
+            alcohols = sqlite.all(Alcohol.class, new Query().order("alcohol_by_volume").desc(true));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+        }
+    }
+
+    @Test
+    public void orDeleteTest() {
+
+        Alcohol alcohol = null;
+        
+        try {
+            alcohol = sqlite.find(Alcohol.class, 1);
+            alcohol.delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to delete.");
+        }
+    }
+    
+    @Test
+    public void orTruncateTest() {
+        
+        try {
+            sqlite.truncate(Alcohol.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to truncate.");
         }
     }
 }

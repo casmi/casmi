@@ -3,7 +3,10 @@ package casmi.net;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import casmi.exception.NetException;
@@ -12,22 +15,74 @@ import casmi.extension.net.OAuth;
 import casmi.io.Reader;
 import casmi.parser.XML;
 import casmi.parser.XMLElement;
+import casmi.util.SystemUtil;
 
 public class OAuthTest {
 
+    private static final String REQUEST_TOKEN_URL = "https://api.twitter.com/oauth/request_token";
+    private static final String AUTHORIZE_URL     = "https://api.twitter.com/oauth/authorize";
+    private static final String ACCESS_TOKEN_URL  = "https://api.twitter.com/oauth/access_token";
+    
+    private static final String CONSUMER_KEY      = "YCm3oD8BBayFDVVHBja0Vw";
+    private static final String CONSUMER_SECRET   = "NB9LPGmr3rXneAqOqaNM7veSvyb4ecKchgo1ZbwFw";
+    
+    private static final String HOME_TIMELINE_URL = "http://api.twitter.com/1/statuses/home_timeline.xml";
+    
+    private OAuth oauth = new OAuth();
+    
+    @Before
+    public void twitterAuthorizeTest() {
+        
+        oauth.setConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+        oauth.setProvider(REQUEST_TOKEN_URL, ACCESS_TOKEN_URL, AUTHORIZE_URL);
+        String url = null;
+        try {
+            url = oauth.retrieveRequestToken();
+        } catch (NetException e) {
+            e.printStackTrace();
+            fail();
+        }
+        
+        // Browse an authorization page.
+        try {
+            SystemUtil.browse(new URL(url));
+        } catch (NetException e) {
+            e.printStackTrace();
+            fail();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        // Input a PIN code.
+        System.out.println("Input the PIN code to authorize.");
+        System.out.print("PIN: ");
+        Reader reader = new Reader(System.in);
+        String pin = null;
+        try {
+            pin = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+        
+        // Retrieve an access token and a secret.
+        try {
+            oauth.retrieveAccessToken(pin);
+        } catch (NetException e) {
+            e.printStackTrace();
+            fail();
+        }
+        oauth.setTokenWithSecret(oauth.getToken(), oauth.getTokenSecret());
+    }
+    
     @Test
-    public void test() {
-        OAuth oauth = new OAuth();
+    public void twitterReadTest() {
         HTTP http = null;
         Reader reader = null;
 
-        oauth.setConsumer("ybqI6NgKiRv8cvo86zE1xw", "uOzNUoFHuaoqr6nL2xJkOIT3WmKOpRq1oheY6rRfI");
-
-        oauth.setTokenWithSecret("102987848-gGurDKBC7DGCjJXcX2BcS1LVkL8OylBXiOsJSxNs",
-            "Tl5DF7cTeGwOlnTb3VwvfBgKZSNYLLzQQwQ2zL9iE");
-
         try {
-            http = new HTTP("http://api.twitter.com/1/statuses/home_timeline.xml");
+            http = new HTTP(HOME_TIMELINE_URL);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to create instance.");

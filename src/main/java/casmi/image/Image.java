@@ -26,7 +26,7 @@ public class Image {
 
     public BufferedImage img = null;
     public Texture texture = null;
-    public ImageMode mode = ImageMode.CORNER;
+    public ImageMode mode = ImageMode.CENTER;
 
     public int width, height;
 
@@ -39,9 +39,11 @@ public class Image {
            System.err.println(e.getMessage());
            e.printStackTrace();
         }
-
-        this.width = img.getWidth();
-        this.height = img.getHeight();
+        
+        if( img != null ) {
+        	this.width = img.getWidth();
+        	this.height = img.getHeight();
+        }
         
         Graphics.addTextureImage(this);
     }

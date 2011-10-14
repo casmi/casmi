@@ -176,7 +176,36 @@ public class Bezier extends Element implements Renderable {
         this.points[9] = (float)v4.x;
         this.points[10] = (float)v4.y;
         this.points[11] = (float)v4.z;
-
+    }
+    
+    public void setNode(int number, double x, double y){
+    	if(number<=0)
+    		number = 0;
+    	if(number>=3)
+    		number = 3;
+    	this.points[number*3] = (float)x;
+    	this.points[number*3+1] = (float)y;
+    	this.points[number*3+2] = 0;
+    }
+    
+    public void setNode(int number, double x, double y, double z){
+    	if(number<=0)
+    		number = 0;
+    	if(number>=3)
+    		number = 3;
+    	this.points[number*3] = (float)x;
+    	this.points[number*3+1] = (float)y;
+    	this.points[number*3+2] = (float)z;
+    }
+    
+    public void setNode(int number, Vertex v){
+    	if(number<=0)
+    		number = 0;
+    	if(number>=3)
+    		number = 3;
+    	this.points[number*3] = (float)v.x;
+    	this.points[number*3+1] = (float)v.y;
+    	this.points[number*3+2] = (float)v.z;
     }
 
     @Override
@@ -184,10 +213,13 @@ public class Bezier extends Element implements Renderable {
         
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
+
+        gl.glPushMatrix();
+        this.setTweenParameter(gl);
         
         if (this.fill) {
 
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
 
             gl.glMap1f(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.FloatBuffer.wrap(points));
             gl.glEnable(GL.GL_MAP1_VERTEX_3);
@@ -202,7 +234,7 @@ public class Bezier extends Element implements Renderable {
 
         if (this.stroke) {
 
-            this.strokeColor.setup(gl);
+            getSceneStrokeColor().setup(gl);
 
             gl.glMap1f(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.FloatBuffer.wrap(points));
             gl.glEnable(GL.GL_MAP1_VERTEX_3);
@@ -214,6 +246,8 @@ public class Bezier extends Element implements Renderable {
             gl.glEnd();
             gl.glDisable(GL.GL_MAP1_VERTEX_3);
         }
+        
+        gl.glPopMatrix();
         
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);

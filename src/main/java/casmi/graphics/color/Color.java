@@ -41,7 +41,7 @@ public class Color {
 	private int r;
 	private int g;
 	private int b;
-	private int a;
+	private int a = 255;
 	private ColorMode colormode = RGB;
 	private int tmpcolor[] = { 0, 0, 0 };
 
@@ -109,7 +109,767 @@ public class Color {
 		this.b = cB;
 		this.a = cA;
 	}
+	
+	public Color(ColorSet colorset){
+		colorset(colorset);
+	}
+	
+	public Color(ColorSet colorset,int alpha){
+		colorset(colorset);
+		this.a = alpha;
+	}
 
+	
+	/**
+	 * Returns the colorset's RGB values.
+	 * @param c
+	 * 				The ColorSet.
+	 * @return	
+	 * 				The ColorSet's RGB values.
+	 */
+	private void colorset(ColorSet c) {
+		switch (c) {
+		case ALICEBLUE:
+			this.setR(240);
+			this.setG(248);
+			this.setB(255);
+			break;
+		case ANTIQUEWHITE:
+			this.setR(250);
+			this.setG(235);
+			this.setB(215);
+			break;
+		case AQUA:
+			this.setR(0);
+			this.setG(255);
+			this.setB(255);
+			break;
+		case AQUAMARINE:
+			this.setR(127);
+			this.setG(255);
+			this.setB(212);
+			break;
+		case AZURE:
+			this.setR(240);
+			this.setG(255);
+			this.setB(255);
+			break;
+		case BEIGE:
+			this.setR(245);
+			this.setG(245);
+			this.setB(220);
+			break;
+		case BISQUE:
+			this.setR(255);
+			this.setG(228);
+			this.setB(196);
+			break;
+		case BLACK:
+			this.setR(0);
+			this.setG(0);
+			this.setB(0);
+			break;
+		case BLANCHEDALMOND:
+			this.setR(255);
+			this.setG(235);
+			this.setB(205);
+			break;
+		case BLUE:
+			this.setR(0);
+			this.setG(0);
+			this.setB(255);
+			break;
+		case BLUEVIOLET:
+			this.setR(138);
+			this.setG(43);
+			this.setB(226);
+			break;
+		case BROWN:
+			this.setR(165);
+			this.setG(42);
+			this.setB(42);
+			break;
+		case BURLYWOOD:
+			this.setR(222);
+			this.setG(184);
+			this.setB(135);
+			break;
+		case CADETBLUE:
+			this.setR(95);
+			this.setG(158);
+			this.setB(160);
+			break;
+		case CHARTREUSE:
+			this.setR(127);
+			this.setG(255);
+			this.setB(0);
+			break;
+		case CHOCOLATE:
+			this.setR(210);
+			this.setG(105);
+			this.setB(30);
+			break;
+		case CORAL:
+			this.setR(255);
+			this.setG(127);
+			this.setB(80);
+			break;
+		case CORNFLOWERBLUE:
+			this.setR(100);
+			this.setG(149);
+			this.setB(237);
+			break;
+		case CORNSILK:
+			this.setR(255);
+			this.setG(248);
+			this.setB(220);
+			break;
+		case CRIMSON:
+			this.setR(220);
+			this.setG(20);
+			this.setB(60);
+			break;
+		case CYAN:
+			this.setR(0);
+			this.setG(255);
+			this.setB(255);
+			break;
+		case DARKBLUE:
+			this.setR(0);
+			this.setG(0);
+			this.setB(139);
+			break;
+		case DARKCYAN:
+			this.setR(0);
+			this.setG(139);
+			this.setB(139);
+			break;
+		case DARKGOLDENROD:
+			this.setR(184);
+			this.setG(134);
+			this.setB(11);
+			break;
+		case DARKGRAY:
+			this.setR(169);
+			this.setG(169);
+			this.setB(169);
+			break;
+		case DARKGREEN:
+			this.setR(0);
+			this.setG(100);
+			this.setB(0);
+			break;
+		case DARKGREY:
+			this.setR(169);
+			this.setG(169);
+			this.setB(169);
+			break;
+		case DARKKHAKI:
+			this.setR(189);
+			this.setG(183);
+			this.setB(107);
+			break;
+		case DARKMAGENTA:
+			this.setR(139);
+			this.setG(0);
+			this.setB(139);
+			break;
+		case DARKOLIVEGREEN:
+			this.setR(85);
+			this.setG(107);
+			this.setB(47);
+			break;
+		case DARKORANGE:
+			this.setR(255);
+			this.setG(140);
+			this.setB(0);
+			break;
+		case DARKORCHID:
+			this.setR(153);
+			this.setG(50);
+			this.setB(204);
+			break;
+		case DARKRED:
+			this.setR(139);
+			this.setG(0);
+			this.setB(0);
+			break;
+		case DARKSALMON:
+			this.setR(233);
+			this.setG(150);
+			this.setB(122);
+			break;
+		case DARKSEAGREEN:
+			this.setR(143);
+			this.setG(188);
+			this.setB(143);
+			break;
+		case DARKSLATEBLUE:
+			this.setR(72);
+			this.setG(61);
+			this.setB(139);
+			break;
+		case DARKSLATEGRAY:
+			this.setR(47);
+			this.setG(79);
+			this.setB(79);
+			break;
+		case DARKSLATEGREY:
+			this.setR(47);
+			this.setG(79);
+			this.setB(79);
+			break;
+		case DARKTURQUOISE:
+			this.setR(0);
+			this.setG(206);
+			this.setB(209);
+			break;
+		case DARKVIOLET:
+			this.setR(148);
+			this.setG(0);
+			this.setB(211);
+			break;
+		case DEEPPINK:
+			this.setR(255);
+			this.setG(20);
+			this.setB(147);
+			break;
+		case DEEPSKYBLUE:
+			this.setR(0);
+			this.setG(191);
+			this.setB(255);
+			break;
+		case DIMGRAY:
+			this.setR(105);
+			this.setG(105);
+			this.setB(105);
+			break;
+		case DIMGREY:
+			this.setR(105);
+			this.setG(105);
+			this.setB(105);
+			break;
+		case DODGERBLUE:
+			this.setR(30);
+			this.setG(144);
+			this.setB(255);
+			break;
+		case FIREBRICK:
+			this.setR(178);
+			this.setG(34);
+			this.setB(34);
+			break;
+		case FLORALWHITE:
+			this.setR(255);
+			this.setG(250);
+			this.setB(240);
+			break;
+		case FORESTGREEN:
+			this.setR(34);
+			this.setG(139);
+			this.setB(34);
+			break;
+		case FUCHSIA:
+			this.setR(255);
+			this.setG(0);
+			this.setB(255);
+			break;
+		case GAINSBORO:
+			this.setR(220);
+			this.setG(220);
+			this.setB(220);
+			break;
+		case GHOSTWHITE:
+			this.setR(248);
+			this.setG(248);
+			this.setB(255);
+			break;
+		case GOLD:
+			this.setR(255);
+			this.setG(215);
+			this.setB(0);
+			break;
+		case GOLDENROD:
+			this.setR(218);
+			this.setG(165);
+			this.setB(32);
+			break;
+		case GRAY:
+			this.setR(128);
+			this.setG(128);
+			this.setB(128);
+			break;
+		case GREEN:
+			this.setR(0);
+			this.setG(128);
+			this.setB(0);
+			break;
+		case GREENYELLOW:
+			this.setR(173);
+			this.setG(255);
+			this.setB(47);
+			break;
+		case GREY:
+			this.setR(128);
+			this.setG(128);
+			this.setB(128);
+			break;
+		case HONEYDEW:
+			this.setR(240);
+			this.setG(255);
+			this.setB(240);
+			break;
+		case HOTPINK:
+			this.setR(255);
+			this.setG(105);
+			this.setB(180);
+			break;
+		case INDIANRED:
+			this.setR(205);
+			this.setG(92);
+			this.setB(92);
+			break;
+		case INDIGO:
+			this.setR(75);
+			this.setG(0);
+			this.setB(130);
+			break;
+		case IVORY:
+			this.setR(255);
+			this.setG(255);
+			this.setB(240);
+			break;
+		case KHAKI:
+			this.setR(240);
+			this.setG(230);
+			this.setB(140);
+			break;
+		case LAVENDER:
+			this.setR(230);
+			this.setG(230);
+			this.setB(250);
+			break;
+		case LAVENDERBLUSH:
+			this.setR(255);
+			this.setG(240);
+			this.setB(245);
+			break;
+		case LAWNGREEN:
+			this.setR(124);
+			this.setG(252);
+			this.setB(0);
+			break;
+		case LEMONCHIFFON:
+			this.setR(255);
+			this.setG(250);
+			this.setB(205);
+			break;
+		case LIGHTBLUE:
+			this.setR(173);
+			this.setG(216);
+			this.setB(230);
+			break;
+		case LIGHTCORAL:
+			this.setR(240);
+			this.setG(128);
+			this.setB(128);
+			break;
+		case LIGHTCYAN:
+			this.setR(224);
+			this.setG(255);
+			this.setB(255);
+			break;
+		case LIGHTGOLDENRODYELLOW:
+			this.setR(250);
+			this.setG(250);
+			this.setB(210);
+			break;
+		case LIGHTGRAY:
+			this.setR(211);
+			this.setG(211);
+			this.setB(211);
+			break;
+		case LIGHTGREEN:
+			this.setR(144);
+			this.setG(238);
+			this.setB(144);
+			break;
+		case LIGHTGREY:
+			this.setR(211);
+			this.setG(211);
+			this.setB(211);
+			break;
+		case LIGHTPINK:
+			this.setR(255);
+			this.setG(182);
+			this.setB(193);
+			break;
+		case LIGHTSALMON:
+			this.setR(255);
+			this.setG(160);
+			this.setB(122);
+			break;
+		case LIGHTSEAGREEN:
+			this.setR(32);
+			this.setG(178);
+			this.setB(170);
+			break;
+		case LIGHTSKYBLUE:
+			this.setR(135);
+			this.setG(206);
+			this.setB(250);
+			break;
+		case LIGHTSLATEGRAY:
+			this.setR(119);
+			this.setG(136);
+			this.setB(153);
+			break;
+		case LIGHTSLATEGREY:
+			this.setR(119);
+			this.setG(136);
+			this.setB(153);
+			break;
+		case LIGHTSTEELBLUE:
+			this.setR(176);
+			this.setG(196);
+			this.setB(222);
+			break;
+		case LIGHTYELLOW:
+			this.setR(255);
+			this.setG(255);
+			this.setB(224);
+			break;
+		case LIME:
+			this.setR(0);
+			this.setG(255);
+			this.setB(0);
+			break;
+		case LIMEGREEN:
+			this.setR(50);
+			this.setG(205);
+			this.setB(50);
+			break;
+		case LINEN:
+			this.setR(250);
+			this.setG(240);
+			this.setB(230);
+			break;
+		case MAGENTA:
+			this.setR(255);
+			this.setG(0);
+			this.setB(255);
+			break;
+		case MAROON:
+			this.setR(128);
+			this.setG(0);
+			this.setB(0);
+			break;
+		case MEDIUMAQUAMARINE:
+			this.setR(102);
+			this.setG(205);
+			this.setB(170);
+			break;
+		case MEDIUMBLUE:
+			this.setR(0);
+			this.setG(0);
+			this.setB(205);
+			break;
+		case MEDIUMORCHID:
+			this.setR(186);
+			this.setG(85);
+			this.setB(211);
+			break;
+		case MEDIUMPURPLE:
+			this.setR(147);
+			this.setG(112);
+			this.setB(219);
+			break;
+		case MEDIUMSEAGREEN:
+			this.setR(60);
+			this.setG(179);
+			this.setB(113);
+			break;
+		case MEDIUMSLATEBLUE:
+			this.setR(123);
+			this.setG(104);
+			this.setB(238);
+			break;
+		case MEDIUMSPRINGGREEN:
+			this.setR(0);
+			this.setG(250);
+			this.setB(154);
+			break;
+		case MEDIUMTURQUOISE:
+			this.setR(72);
+			this.setG(209);
+			this.setB(204);
+			break;
+		case MEDIUMVIOLETRED:
+			this.setR(199);
+			this.setG(21);
+			this.setB(133);
+			break;
+		case MIDNIGHTBLUE:
+			this.setR(25);
+			this.setG(25);
+			this.setB(112);
+			break;
+		case MINTCREAM:
+			this.setR(245);
+			this.setG(255);
+			this.setB(250);
+			break;
+		case MISTYROSE:
+			this.setR(255);
+			this.setG(228);
+			this.setB(225);
+			break;
+		case MOCCASIN:
+			this.setR(255);
+			this.setG(228);
+			this.setB(181);
+			break;
+		case NAVAJOWHITE:
+			this.setR(255);
+			this.setG(222);
+			this.setB(173);
+			break;
+		case NAVY:
+			this.setR(0);
+			this.setG(0);
+			this.setB(128);
+			break;
+		case OLDLACE:
+			this.setR(253);
+			this.setG(245);
+			this.setB(230);
+			break;
+		case OLIVE:
+			this.setR(128);
+			this.setG(128);
+			this.setB(0);
+			break;
+		case OLIVEDRAB:
+			this.setR(107);
+			this.setG(142);
+			this.setB(35);
+			break;
+		case ORANGE:
+			this.setR(255);
+			this.setG(165);
+			this.setB(0);
+			break;
+		case ORANGERED:
+			this.setR(255);
+			this.setG(69);
+			this.setB(0);
+			break;
+		case ORCHID:
+			this.setR(218);
+			this.setG(112);
+			this.setB(214);
+			break;
+		case PALEGOLDENROD:
+			this.setR(238);
+			this.setG(232);
+			this.setB(170);
+			break;
+		case PALEGREEN:
+			this.setR(152);
+			this.setG(251);
+			this.setB(152);
+			break;
+		case PALETURQUOISE:
+			this.setR(175);
+			this.setG(238);
+			this.setB(238);
+			break;
+		case PALEVIOLETRED:
+			this.setR(219);
+			this.setG(112);
+			this.setB(147);
+			break;
+		case PAPAYAWHIP:
+			this.setR(255);
+			this.setG(239);
+			this.setB(213);
+			break;
+		case PEACHPUFF:
+			this.setR(255);
+			this.setG(218);
+			this.setB(185);
+			break;
+		case PERU:
+			this.setR(205);
+			this.setG(133);
+			this.setB(63);
+			break;
+		case PINK:
+			this.setR(255);
+			this.setG(192);
+			this.setB(203);
+			break;
+		case PLUM:
+			this.setR(221);
+			this.setG(160);
+			this.setB(221);
+			break;
+		case POWDERBLUE:
+			this.setR(176);
+			this.setG(224);
+			this.setB(230);
+			break;
+		case PURPLE:
+			this.setR(128);
+			this.setG(0);
+			this.setB(128);
+			break;
+		case RED:
+			this.setR(255);
+			this.setG(0);
+			this.setB(0);
+			break;
+		case ROSYBROWN:
+			this.setR(188);
+			this.setG(136);
+			this.setB(153);
+			break;
+		case ROYALBLUE:
+			this.setR(65);
+			this.setG(105);
+			this.setB(255);
+			break;
+		case SADDLEBROWN:
+			this.setR(139);
+			this.setG(69);
+			this.setB(19);
+			break;
+		case SALMON:
+			this.setR(250);
+			this.setG(128);
+			this.setB(114);
+			break;
+		case SANDYBROWN:
+			this.setR(244);
+			this.setG(164);
+			this.setB(96);
+			break;
+		case SEAGREEN:
+			this.setR(46);
+			this.setG(139);
+			this.setB(87);
+			break;
+		case SEASHELL:
+			this.setR(255);
+			this.setG(245);
+			this.setB(238);
+			break;
+		case SIENNA:
+			this.setR(160);
+			this.setG(82);
+			this.setB(45);
+			break;
+		case SILVER:
+			this.setR(192);
+			this.setG(192);
+			this.setB(192);
+			break;
+		case SKYBLUE:
+			this.setR(135);
+			this.setG(206);
+			this.setB(235);
+			break;
+		case SLATEBLUE:
+			this.setR(106);
+			this.setG(90);
+			this.setB(205);
+			break;
+		case SLATEGRAY:
+			this.setR(112);
+			this.setG(128);
+			this.setB(144);
+			break;
+		case SLATEGREY:
+			this.setR(112);
+			this.setG(128);
+			this.setB(144);
+			break;
+		case SNOW:
+			this.setR(255);
+			this.setG(250);
+			this.setB(250);
+			break;
+		case SPRINGGREEN:
+			this.setR(0);
+			this.setG(255);
+			this.setB(127);
+			break;
+		case STEELBLUE:
+			this.setR(70);
+			this.setG(130);
+			this.setB(180);
+			break;
+		case TAN:
+			this.setR(210);
+			this.setG(180);
+			this.setB(140);
+			break;
+		case TEAL:
+			this.setR(0);
+			this.setG(128);
+			this.setB(128);
+			break;
+		case THISTLE:
+			this.setR(216);
+			this.setG(191);
+			this.setB(216);
+			break;
+		case TOMATO:
+			this.setR(255);
+			this.setG(99);
+			this.setB(71);
+			break;
+		case TURQUOISE:
+			this.setR(64);
+			this.setG(224);
+			this.setB(208);
+			break;
+		case VIOLET:
+			this.setR(238);
+			this.setG(130);
+			this.setB(238);
+			break;
+		case WHEAT:
+			this.setR(245);
+			this.setG(222);
+			this.setB(179);
+			break;
+		case WHITE:
+			this.setR(255);
+			this.setG(255);
+			this.setB(255);
+			break;
+		case WHITESMOKE:
+			this.setR(245);
+			this.setG(245);
+			this.setB(245);
+			break;
+		case YELLOW:
+			this.setR(255);
+			this.setG(255);
+			this.setB(0);
+			break;
+		case YELLOWGREEN:
+			this.setR(154);
+			this.setG(205);
+			this.setB(50);
+			break;
+		default:
+			break;
+		}
+
+	}
+	
 	/**
 	 * Returns the colorset's RGB values.
 	 * @param c
@@ -450,12 +1210,12 @@ public class Color {
 			tmpcolor[2] = this.b;
 			break;
 		case HSB:
-			tmpcolor = calcRGBtoHSB();
+			tmpcolor = calcHSBtoRGB();
 			break;
 		}
 	}
 
-	private int[] calcRGBtoHSB() {
+	private int[] calcHSBtoRGB() {
 		int color[] = { 0, 0, 0 };
 		int tmph = this.r;
 		int tmps = this.g;
@@ -522,6 +1282,14 @@ public class Color {
 		g = c2.g * amt + c1.g * (1 - amt);
 		b = c2.b * amt + c1.b * (1 - amt);
 		return new Color((int) r, (int) g, (int) b);
+	}
+	
+	public static void copyColor(Color src, Color dst){
+		dst.setR(src.getR());
+		dst.setG(src.getG());
+		dst.setB(src.getB());
+		dst.setA(src.getA());
+		dst.colormode = src.colormode;
 	}
 
 	public int getR() {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alcoholic>
+	<sake>
+		<urakasumi abv="15" origin="Miyagi">
+			UraKasumi
+		</urakasumi>
+		<houhai abv="16" origin="Aomori">
+			Houhai
+		</houhai>	
+	</sake>
+	<beer></beer>
+	<whiskey></whiskey>
+</alcoholic>

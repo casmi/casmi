@@ -25,6 +25,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 
 /**
@@ -141,7 +144,24 @@ public class FileUtil {
 
         return file.delete();
     }
-
+    
+    /**
+     * Check file existence
+     * 
+     * @param filePath
+     * @return
+     */
+    public static boolean exist(String filePath) {
+    	
+    	File f = new File(filePath);
+    	
+    	if( !f.isFile() ) {
+    		return false;
+    	}
+    	
+    	return true;
+    }
+    
     /**
      * Returns a suffix string from a File.
      * 
@@ -216,4 +236,19 @@ public class FileUtil {
         file.setLastModified(System.currentTimeMillis());
     }
 
+    
+    /**
+     * Convert URL object to URI object
+     * 
+     * @param url
+     * @return
+     */
+    public static URI url2Uri(URL url) {
+    	try {
+    		return new URI(url.toString());
+    	} catch (URISyntaxException e) {
+    		e.printStackTrace();
+    		return null;
+		}
+    }
 }

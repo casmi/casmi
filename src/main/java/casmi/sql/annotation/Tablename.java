@@ -16,10 +16,25 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
-package casmi.hit;
 
+package casmi.sql.annotation;
 
-public interface Hittable {
-    boolean hit(int x, int y);
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Indicates what a name of the table is in a SQL database.
+ * Must be used in a sub class of casmi.sql.Entity only.
+ * 
+ * @see casmi.sql.Entity
+ * 
+ * @author T. Takeuchi
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Tablename {
+
+    String value();
 }

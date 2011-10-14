@@ -95,7 +95,7 @@ public class XML extends XMLElement {
             if (reader != null) reader.close();
         }
     }
-
+    
     /**
      * Parse a XML string.
      * 
@@ -192,7 +192,7 @@ public class XML extends XMLElement {
 
         for (String attributeName : element.getAttributeNames()) {
             String value = element.getAttribute(attributeName);
-            sb.append(" " + attributeName + "=\"" + value + "\"");
+            sb.append(" " + attributeName + "=\"" + replaceEntityReference(value) + "\"");
         }
 
         sb.append(">");
@@ -201,7 +201,7 @@ public class XML extends XMLElement {
         // Content.
         if (element.hasContent()) {
             sb.append(indentStr + indent);
-            sb.append(element.getContent());
+            sb.append(replaceEntityReference(element.getContent()));
             sb.append("\n");
         }
 
@@ -224,5 +224,39 @@ public class XML extends XMLElement {
         sb.append("</" + element.getName() + ">");
 
         return sb;
+    }
+    
+    public static String replaceEntityReference(String value) {
+        if (value == null) {
+            return value;
+        }
+        StringBuffer buff = new StringBuffer();
+        for (int i = 0; i < value.length(); i++) {
+            switch (value.charAt(i)) {
+                case '&' :
+                    if (i + 1 <= value.length() && value.charAt(i + 1) == '#') {
+                        buff.append('&');
+                    } else {
+                        buff.append("&amp;");
+                    }
+                    break;
+                case '<' :
+                    buff.append("&lt;");
+                    break;
+                case '>' :
+                    buff.append("&gt;");
+                    break;
+                case '"' :
+                    buff.append("&quot;");
+                    break;
+                case '\'' :
+                    buff.append("&#39;");
+                    break;
+                default :
+                    buff.append(value.charAt(i));
+                    break;
+            }
+        }
+        return buff.toString();
     }
 }

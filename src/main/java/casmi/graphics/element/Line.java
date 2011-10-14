@@ -42,6 +42,8 @@ public class Line extends Element implements Renderable {
     private double y2;
     private double z1;
     private double z2;
+    private double x=0;
+    private double y=0;
 
     private int MODE;
 
@@ -159,33 +161,67 @@ public class Line extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        
+        calcG();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
 
-        this.strokeColor.setup(gl);
+        getSceneStrokeColor().setup(gl);
+
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glRotated(rotate, 0, 0, 1.0);
+        this.setTweenParameter(gl);
 
         switch (MODE) {
         case LINES:
             gl.glLineWidth(this.strokeWidth);
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(this.x1, this.y1);
-            gl.glVertex2d(this.x2, this.y2);
+            gl.glVertex2d(this.x1-x, this.y1-y);
+            gl.glVertex2d(this.x2-x, this.y2-y);
             gl.glEnd();
             break;
         case LINES_3D:
             gl.glLineWidth(this.strokeWidth);
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex3d(this.x1, this.y1, this.z1);
-            gl.glVertex3d(this.x2, this.y2, this.z2);
+            gl.glVertex3d(this.x1-x, this.y1-y, this.z1);
+            gl.glVertex3d(this.x2-x, this.y2-y, this.z2);
             gl.glEnd();
             break;
         default:
             break;
         }
         
+        gl.glPopMatrix();
+        
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
+    }
+    
+    private void calcG(){
+    	x = (x1+x2)/2.0;
+    	y = (y1+y2)/2.0;
+    }
+    
+    public double getX(){
+    	return this.x;
+    }
+    
+    public double getY(){
+    	return this.y;
+    }
+    
+    public void setX(double x){
+    	this.x = x;
+    }
+    
+    public void setY(double y){
+    	this.y = y;
+    }
+    
+    
+    public void setXY(double x, double y){
+    	this.x = x;
+    	this.y = y;
     }
 
 }

@@ -41,6 +41,8 @@ public class Quad extends Element implements Renderable {
     private double y3;
     private double x4;
     private double y4;
+    private double x=0;
+    private double y=0;
 
     /**
      * Creates a new Quad object using x,y-coordinate of corners.
@@ -68,7 +70,7 @@ public class Quad extends Element implements Renderable {
         this.x2 = x2;
         this.y2 = y2;
         this.x3 = x3;
-        this.y3 = x3;
+        this.y3 = y3;
         this.x4 = x4;
         this.y4 = y4;
     }
@@ -151,45 +153,138 @@ public class Quad extends Element implements Renderable {
         this.y4 = (float)v4.y;
 
     }
+    
+    public void setCorner(int number, double x, double y){
+    	if(number<=0){
+    		this.x1 = x;
+    		this.y1 = y;
+    	} else if(number==1){
+    		this.x2 = x;
+    		this.y2 = y;
+    	} else if(number==2){
+    		this.x3 = x;
+    		this.y3 = y;
+    	} else if(number>=3){
+    		this.x4 = x;
+    		this.y4 = y;
+    	}
+    }
+    
+    public void setCorner(int number, double x, double y, double z){
+    	if(number<=0){
+    		this.x1 = x;
+    		this.y1 = y;
+    	} else if(number==1){
+    		this.x2 = x;
+    		this.y2 = y;
+    	} else if(number==2){
+    		this.x3 = x;
+    		this.y3 = y;
+    	} else if(number>=3){
+    		this.x4 = x;
+    		this.y4 = y;
+    	}
+    }
+    
+    public void setConer(int number, Vertex v){
+    	if(number<=0){
+    		this.x1 = v.x;
+    		this.y1 = v.y;
+    	} else if(number==1){
+    		this.x2 = v.x;
+    		this.y2 = v.y;
+    	} else if(number==2){
+    		this.x3 = v.x;
+    		this.y3 = v.y;
+    	} else if(number>=3){
+    		this.x4 = v.x;
+    		this.y4 = v.y;
+    	}
+    }
+    
+    public Vertex getConer(int number){
+    	Vertex v = new Vertex(0,0,0);
+    	
+    	if(number<=0){
+    		v.set(this.x1,this.y1);
+    	} else if(number==1){
+    		v.set(this.x2,this.y2);
+    	} else if(number==2){
+    		v.set(this.x3,this.y3);
+    	} else if(number>=3){
+    		v.set(this.x4,this.y4);
+    	}
+    	return v;
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-
+    	calcG();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
-        
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glRotated(rotate, 0, 0, 1.0);
+        this.setTweenParameter(gl);
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             gl.glBegin(GL.GL_QUADS);
-            gl.glVertex2d(x1, y1);
-            gl.glVertex2d(x2, y2);
-            gl.glVertex2d(x3, y3);
-            gl.glVertex2d(x4, y4);
+            gl.glVertex2d(x1-x, y1-y);
+            gl.glVertex2d(x2-x, y2-y);
+            gl.glVertex2d(x3-x, y3-y);
+            gl.glVertex2d(x4-x, y4-y);
             gl.glEnd();
         }
 
         if (this.stroke) {
             gl.glLineWidth(this.strokeWidth);
-            this.strokeColor.setup(gl);
+            getSceneStrokeColor().setup(gl);
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x1, y1);
-            gl.glVertex2d(x2, y2);
+            gl.glVertex2d(x1-x, y1-y);
+            gl.glVertex2d(x2-x, y2-y);
             gl.glEnd();
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x2, y2);
-            gl.glVertex2d(x3, y3);
+            gl.glVertex2d(x2-x, y2-y);
+            gl.glVertex2d(x3-x, y3-y);
             gl.glEnd();
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x3, y3);
-            gl.glVertex2d(x4, y4);
+            gl.glVertex2d(x3-x, y3-y);
+            gl.glVertex2d(x4-x, y4-y);
             gl.glEnd();
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x4, y4);
-            gl.glVertex2d(x1, y1);
+            gl.glVertex2d(x4-x, y4-y);
+            gl.glVertex2d(x1-x, y1-y);
             gl.glEnd();
         }
-        
+        gl.glPopMatrix();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
+    }
+    
+    private void calcG(){
+    	x = (x1+x2+x3+x4)/4.0;
+    	y = (y1+y2+y3+y4)/4.0;
+    }
+    
+    public double getX(){
+    	return this.x;
+    }
+    
+    public double getY(){
+    	return this.y;
+    }
+    
+    public void setX(double x){
+    	this.x = x;
+    }
+    
+    public void setY(double y){
+    	this.y = y;
+    }
+    
+    
+    public void setXY(double x, double y){
+    	this.x = x;
+    	this.y = y;
     }
 }

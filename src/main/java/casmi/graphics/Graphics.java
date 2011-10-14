@@ -30,7 +30,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.element.Renderable;
 import casmi.image.Image;
 import casmi.matrix.Vertex;
-import casmi.timeline.Timelinerender;
+import casmi.timeline.TimelineRender;
 
 import com.sun.opengl.util.GLUT;
 
@@ -48,14 +48,16 @@ public class Graphics {
 
 	private int width;
 	private int height;
+	private double sceneAlpha = 1.0;
 
 	private static List<Image> textureImages = new CopyOnWriteArrayList<Image>();
 
 	public void render(Renderable r) {
+		r.setAlpha(sceneAlpha);
 		r.render(this.gl, this.glu, this.width, this.height);
 	}
 	
-	public void render(Timelinerender tr){
+	public void render(TimelineRender tr){
 		tr.render(this);
 	}
 
@@ -169,29 +171,28 @@ public class Graphics {
      */
 	public void background(Color c) {
 	    c.calcColor();
-	    gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), 1);
+	    gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), (float) (c.getNormalA()*sceneAlpha));
 	}
 	
-	/**
-     *Sets the background to a RGB or HSB and alpha value.
-     *
-     * @param c 
-     *            The RGB or HSB value of the background.
-     * @param alpha
-     *            The alpha opacity of the background.           
-     */
-	public void background(Color c, float a) {
-        c.calcColor();
-        gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), a / 255);
-    }
 	
 	public void setcolor(Color c){
 		c.calcColor();
-		gl.glColor3d(c.getNormalR(), c.getNormalG(), c.getNormalB());
+		gl.glColor4d(c.getNormalR(), c.getNormalG(), c.getNormalB(), c.getNormalA()*sceneAlpha);
 	}
 	
 	public void setcolor(float gray){
-		gl.glColor3d(gray/255.0f, gray/255.0f, gray/255.0f);
+		//System.out.println(sceneAlpha);
+		gl.glColor4d(gray/255.0f, gray/255.0f, gray/255.0f, 1.0*sceneAlpha);
+	}
+	
+	public void setcolor(int x, int y, int z, int a){
+		Color c = new Color(x, y, z, a);
+		c.calcColor();
+		gl.glColor4d(c.getNormalR(), c.getNormalG(), c.getNormalB(), c.getNormalA()*sceneAlpha);
+	}
+	
+	public void setcolor(int x, int y, int z){
+		setcolor(x, y, z, 255);
 	}
 	
 
@@ -629,7 +630,7 @@ public class Graphics {
 		gl.glTexCoord2f(nx, ny);
 		gl.glVertex3d(v.x, v.y, v.z);
 	}
-
+	
 	/**
 	 * Displays texture img at position (x,y). 
 	 * If 
@@ -878,6 +879,14 @@ public class Graphics {
 		glu.gluLookAt(width / 2.0, height / 2.0,
 				(height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0), width / 2.0,
 				height / 2.0, 0, 0, 1, 0);
+	}
+	
+	public void setSceneA(double a){
+		this.sceneAlpha = a;
+	}
+	
+	public double getSceneA(){
+		return this.sceneAlpha;
 	}
 	
 

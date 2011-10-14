@@ -134,18 +134,19 @@ public class Cylinder extends Element implements Renderable {
         
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
-        
+
         gl.glPushMatrix();
+        this.setTweenParameter(gl);
 
         gl.glTranslated(x, y, z);
 
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             drawSolidCylinder(gl,glu,radius, getHeight(), slices, stacks);
         }
 
         if (this.stroke) {
-            this.strokeColor.setup(gl);
+            getSceneStrokeColor().setup(gl);
             drawWireCylinder(glu,radius, getHeight(), slices, stacks);
         }
 

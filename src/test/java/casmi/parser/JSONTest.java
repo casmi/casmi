@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import casmi.exception.ParserException;
+import casmi.util.FileUtil;
 
 /**
  * JSON test class.
@@ -54,8 +55,10 @@ public class JSONTest {
         JSON json = new JSON();
         XML xml = new XML();
 
+        File xmlFile = new File( FileUtil.url2Uri(getClass().getResource("example.xml")) );
+        
         try {
-            xml.parseFile(new File("rsrc/example.xml"));
+            xml.parseFile(xmlFile);
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
@@ -92,8 +95,10 @@ public class JSONTest {
         JSON json = new JSON();
         Sake[] sakes = null;
 
+        File f = new File( FileUtil.url2Uri(getClass().getResource("example.json")) );
+        
         try {
-            sakes = json.decode(new File("rsrc/example.json"), Sake[].class);
+            sakes = json.decode(f, Sake[].class);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed to decode.");

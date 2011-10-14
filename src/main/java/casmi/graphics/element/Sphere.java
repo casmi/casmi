@@ -78,21 +78,21 @@ public class Sphere extends Element implements Renderable {
         if( this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0 ) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
-        
         this.material.setup(gl);
         gl.glPushMatrix();
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         gl.glPolygonOffset(1f, 1f);
         gl.glEnable(GL.GL_CULL_FACE);
+        this.setTweenParameter(gl);
        
         
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             drawSolidSphere(glu,(float)r, slices, stacks);
         }
         
         if (this.stroke) {
-            this.strokeColor.setup(gl);
+        	getSceneStrokeColor().setup(gl);
             drawWireSphere(glu, (float)r, slices, stacks);
         }
 

@@ -128,7 +128,7 @@ public class JSON {
      */
     public <T> T decode(String source, Class<? extends T> cls) {
 
-        return cls.cast(net.arnx.jsonic.JSON.decode(source, cls));
+        return net.arnx.jsonic.JSON.decode(source, cls);
     }
 
     /**
@@ -144,10 +144,30 @@ public class JSON {
      * @throws IOException
      *             If an I/O error is occurred.
      */
-    public <T> T decode(File file, Class<? extends T> cls) throws ParserException, IOException {
+    public <T> T decode(File file, Class<? extends T> cls) 
+        throws ParserException, IOException {
 
+        return decode(new Reader(file), cls);
+    }
+    
+    /**
+     * Decodes a JSON reader into a typed object.
+     * 
+     * @param reader A JSON reader to decode.
+     * @param cls Class for converting.
+     * 
+     * @return A decoded object.
+     * 
+     * @throws ParserException
+     *             If an error is occurred while parsing the read data.
+     * @throws IOException
+     *             If an I/O error is occurred.
+     */
+    public <T> T decode(Reader reader, Class<? extends T> cls) 
+        throws ParserException, IOException {
+        
         try {
-            return net.arnx.jsonic.JSON.decode(new Reader(file), cls);
+            return net.arnx.jsonic.JSON.decode(reader, cls);
         } catch (net.arnx.jsonic.JSONException e) {
             throw new ParserException(e.getMessage());
         }

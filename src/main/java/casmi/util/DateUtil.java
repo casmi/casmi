@@ -110,6 +110,26 @@ public class DateUtil {
 
         return new GregorianCalendar().get(Calendar.YEAR);
     }
+    
+    public static final int secondToMillis(int second) {
+        
+        return second * 1000;
+    }
+    
+    public static final int minuteToMillis(int minute) {
+        
+        return secondToMillis(minute * 60);
+    }
+    
+    public static final int hourToMillis(int hour) {
+        
+        return minuteToMillis(hour * 60);
+    }
+    
+    public static final int dayToMillis(int day) {
+        
+        return hourToMillis(day * 24);
+    }
 
     /**
      * Formats a Date into a date/time string.
@@ -122,9 +142,9 @@ public class DateUtil {
      * @return
      *         The formatted time string.
      */
-    public static String format(Date date, String patter) {
+    public static String format(Date date, String pattern) {
 
-        return new SimpleDateFormat(patter).format(date);
+        return new SimpleDateFormat(pattern).format(date);
     }
 
     /**

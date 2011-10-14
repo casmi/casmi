@@ -32,6 +32,10 @@ import casmi.util.SystemUtil;
 
 public class AppletRunner {
 
+    static JFrame frame;
+    static GraphicsDevice displayDevice;
+    
+    
     // TODO need to refactoring
     // following static initialization code is duplicated with Applet.java
     static {
@@ -92,34 +96,37 @@ public class AppletRunner {
 
         applet.setRunAsApplication(true);
 
-        GraphicsDevice displayDevice = null;
-
         if (displayDevice == null) {
             GraphicsEnvironment environment =
                 GraphicsEnvironment.getLocalGraphicsEnvironment();
             displayDevice = environment.getDefaultScreenDevice();
         }
 
-        JFrame frame = new JFrame(displayDevice.getDefaultConfiguration());
+        frame = new JFrame(displayDevice.getDefaultConfiguration());
         frame.setTitle(title);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
+        
         frame.setResizable(true);
 
         frame.setLayout(null);
 
         frame.add(applet);
-
+        
         applet.init();
 
-        Insets insets = frame.getInsets();
-
-        frame.setSize(applet.getWidth() + insets.left + insets.right,
-            applet.getHeight() + insets.top + insets.bottom);
+        frame.pack();
+        
+        if (!applet.isFullScreen()) {
+            Insets insets = frame.getInsets();
+            frame.setSize(applet.getWidth() + insets.left + insets.right,
+                applet.getHeight() + insets.top + insets.bottom);
+        } else {
+            frame.setSize(applet.getWidth(), applet.getHeight());
+        }
 
         frame.setBackground(Color.BLACK); // TODO better to setup applet's default background color
-
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

@@ -23,8 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -40,9 +40,14 @@ import casmi.util.FileUtil;
 /**
  * SQLite class.
  * 
+ * @see casmi.sql.Entity
+ * 
  * @author T. Takeuchi
  */
-public class SQLite implements SQL {
+public class SQLite extends SQL {
+
+    /** SQL database type. */
+    private static final SQLType SQL_TYPE = SQLType.SQLITE_3;
 
     /** Driver name. */
     private static final String DRIVER = "org.sqlite.JDBC";
@@ -61,9 +66,6 @@ public class SQLite implements SQL {
 
     /** Database URL. */
     private final String url;
-
-    /** java.sql.Connection. */
-    private Connection connection;
 
     /** java.sql.Statement. */
     private Statement statement;
@@ -90,6 +92,8 @@ public class SQLite implements SQL {
      *            The SQLite3 database file's path.
      */
     public SQLite(String dbPath) {
+
+        super(SQL_TYPE);
 
         String path;
 
@@ -213,7 +217,11 @@ public class SQLite implements SQL {
      */
     private void setParameter(int parameterIndex, Object param) throws SQLException {
 
-        if (param instanceof java.util.Date) {
+        if (param == null) {
+            ParameterMetaData metaData = preparedStatement.getParameterMetaData();
+            int sqlType = metaData.getParameterType(1);
+            preparedStatement.setNull(parameterIndex, sqlType);
+        } else if (param instanceof java.util.Date) {
             String dateStr = DateUtil.format((java.util.Date)param, DATE_FORMATS[2][1]);
             preparedStatement.setString(parameterIndex, dateStr);
         } else if (param instanceof Double) {
@@ -222,10 +230,16 @@ public class SQLite implements SQL {
             preparedStatement.setFloat(parameterIndex, (Float)param);
         } else if (param instanceof Integer) {
             preparedStatement.setInt(parameterIndex, (Integer)param);
+        } else if (param instanceof Short) {
+            preparedStatement.setShort(parameterIndex, (Short)param);
+        } else if (param instanceof Long) {
+            preparedStatement.setLong(parameterIndex, (Long)param);
         } else if (param instanceof String) {
             preparedStatement.setString(parameterIndex, (String)param);
+        } else if (param instanceof Blob) {
+            preparedStatement.setBlob(parameterIndex, (Blob)param);
         } else {
-            throw new SQLException("The object type is not supported.");
+            throw new SQLException(param.getClass() + ": The object type is not supported.");
         }
     }
 
@@ -273,10 +287,47 @@ public class SQLite implements SQL {
         return resultSet.next();
     }
 
+    
     // -------------------------------------------------------------------------
     // Getters from resultSet.
     // -------------------------------------------------------------------------
-
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    <T> T get(ResultSet resultSet, Class<T> type, String field) throws SQLException {
+        if (type == int.class ||
+            type == Integer.class) {
+            return (T)(Integer)resultSet.getInt(field);
+        } else if (type == short.class ||
+                   type == Short.class) {
+            return (T)(Short)resultSet.getShort(field);
+        } else if (type == long.class ||
+                   type == Long.class) {
+            return (T)(Long)resultSet.getLong(field);
+        } else if (type == double.class || 
+                   type == Double.class) {
+            return (T)(Double)resultSet.getDouble(field);
+        } else if (type == float.class || 
+                   type == Float.class) {
+            return (T)(Float)resultSet.getFloat(field);
+        } else if (type == java.util.Date.class) {
+            String dateStr = resultSet.getString(field);
+            java.util.Date date;
+            try {
+                date = parseDate(dateStr);
+            } catch (ParseException e) {
+                throw new SQLException(e);
+            }
+            return (T)date;
+        } else if (type == String.class) {
+            return (T)resultSet.getString(field);
+        } else if (type == Blob.class) {
+            return (T)(Blob)resultSet.getBlob(field);
+        }
+        
+        return null;
+    }
+    
     /**
      * Retrieves the value of the designated column in the current row as a Blob
      * object in the Java programming language.
@@ -336,20 +387,18 @@ public class SQLite implements SQL {
      * @throws SQLException
      *             If the column index is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
-     * @throws ParseException
-     *             If the column value is invalid as date.
      */
-    public java.util.Date getDate(int column) throws SQLException, ParseException {
+    public java.util.Date getDate(int column) throws SQLException {
 
         if (resultSet == null)
             throw new SQLException("Result set is not exist.");
 
         String dateStr = resultSet.getString(column);
-        for (int i = 0; i < DATE_FORMATS.length; i++) {
-            if (dateStr.matches(DATE_FORMATS[i][0])) return DateUtil.parse(dateStr, DATE_FORMATS[i][1]);
+        try {
+            return parseDate(dateStr);
+        } catch (ParseException e) {
+            throw new SQLException(e);
         }
-
-        return null;
     }
 
     /**
@@ -365,19 +414,27 @@ public class SQLite implements SQL {
      * @throws SQLException
      *             If the column index is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
-     * @throws ParseException
-     *             If the column value is invalid as date.
      */
-    public java.util.Date getDate(String field) throws SQLException, ParseException {
+    public java.util.Date getDate(String field) throws SQLException {
 
-        if (resultSet == null)
-            throw new SQLException("Result set is not exist.");
+        if (resultSet == null) throw new SQLException("Result set is not exist.");
 
         String dateStr = resultSet.getString(field);
-        for (int i = 0; i < DATE_FORMATS.length; i++) {
-            if (dateStr.matches(DATE_FORMATS[i][0])) return DateUtil.parse(dateStr, DATE_FORMATS[i][1]);
+        try {
+            return parseDate(dateStr);
+        } catch (ParseException e) {
+            throw new SQLException(e);
         }
-
+    }
+    
+    private java.util.Date parseDate(String dateStr) throws ParseException {
+        
+        for (int i = 0; i < DATE_FORMATS.length; i++) {
+            if (dateStr.matches(DATE_FORMATS[i][0])) {
+                return DateUtil.parse(dateStr, DATE_FORMATS[i][1]);
+            }
+        }
+        
         return null;
     }
 
@@ -607,16 +664,6 @@ public class SQLite implements SQL {
     }
 
     /**
-     * Return java.sql.Connection object.
-     * 
-     * @return java.sql.Connection object.
-     */
-    public Connection getConnection() {
-
-        return connection;
-    }
-
-    /**
      * Return java.sql.Statement object.
      * 
      * @return java.sql.Statement object.
@@ -645,4 +692,5 @@ public class SQLite implements SQL {
 
         return resultSet;
     }
+
 }

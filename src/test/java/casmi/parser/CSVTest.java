@@ -25,12 +25,14 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import casmi.util.SystemUtil;
+
 public class CSVTest {
 
     @Test
     public void readLineTest() {
 
-        CSV csv = new CSV("rsrc/example.csv");
+        CSV csv = new CSV( getClass().getResource("example.csv") );
 
         try {
             String[] line;
@@ -44,33 +46,28 @@ public class CSVTest {
             e.printStackTrace();
             fail("Failed to read next line.");
         } finally {
-            try {
-                csv.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            csv.close();
         }
     }
 
     @Test
     public void writeLineTest() {
 
-        CSV csv = new CSV("rsrc/write_example.csv");
+    	String path = SystemUtil.JAVA_TMP_PATH + "write_example.csv";
+        CSV csv = new CSV( path );
 
         try {
             csv.writeLine("Urakasumi", "15", "Miyagi");
 
             String[] line = {"Houhai", "16", "Aomori"};
             csv.writeLine(line);
+            
+            System.out.println("write data to " + path);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to write next line.");
         } finally {
-            try {
-                csv.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            csv.close();
         }
     }
 }

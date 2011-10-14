@@ -45,6 +45,8 @@ public class Triangle extends Element implements Renderable {
     private double x3;
     private double y3;
     private double z3;
+    private double x=0;
+    private double y=0;
     private int MODE;
 
     /**
@@ -260,37 +262,55 @@ public class Triangle extends Element implements Renderable {
     	}
     }
     
+    public Vertex getConer(int number){
+    	Vertex v = new Vertex(0,0,0);
+    	
+    	if(number<=0){
+    		v.set(this.x1,this.y1,this.z1);
+    	} else if(number==1){
+    		v.set(this.x2,this.y2,this.z2);
+    	} else if(number>=2){
+    		v.set(this.x3,this.y3,this.z3);
+    	}
+    	return v;
+    }
+    
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
+    	calcG();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glRotated(rotate, 0, 0, 1.0);
+        this.setTweenParameter(gl);
         switch (MODE) {
         case TRIANGLE:
             
             if (this.fill) {
-                this.fillColor.setup(gl);
+            	getSceneFillColor().setup(gl);
                 gl.glBegin(GL.GL_TRIANGLE_FAN);
-                gl.glVertex2d(x1, y1);
-                gl.glVertex2d(x2, y2);
-                gl.glVertex2d(x3, y3);
+                gl.glVertex2d(x1-x, y1-y);
+                gl.glVertex2d(x2-x, y2-y);
+                gl.glVertex2d(x3-x, y3-y);
                 gl.glEnd();
             }
             
             if (this.stroke) {
                 gl.glLineWidth(this.strokeWidth);
-                this.strokeColor.setup(gl);
+                getSceneStrokeColor().setup(gl);
                 gl.glBegin(GL.GL_LINES);
-                gl.glVertex2d(x1, y1);
-                gl.glVertex2d(x2, y2);
+                gl.glVertex2d(x1-x, y1-y);
+                gl.glVertex2d(x2-x, y2-y);
                 gl.glEnd();
                 gl.glBegin(GL.GL_LINES);
-                gl.glVertex2d(x2, y2);
-                gl.glVertex2d(x3, y3);
+                gl.glVertex2d(x2-x, y2-y);
+                gl.glVertex2d(x3-x, y3-y);
                 gl.glEnd();
                 gl.glBegin(GL.GL_LINES);
-                gl.glVertex2d(x1, y1);
-                gl.glVertex2d(x3, y3);
+                gl.glVertex2d(x1-x, y1-y);
+                gl.glVertex2d(x3-x, y3-y);
                 gl.glEnd();
             }
             
@@ -301,9 +321,9 @@ public class Triangle extends Element implements Renderable {
             if (this.fill) {
                 this.fillColor.setup(gl);
                 gl.glBegin(GL.GL_TRIANGLE_FAN);
-                gl.glVertex3d(x1, y1, z1);
-                gl.glVertex3d(x2, y2, z2);
-                gl.glVertex3d(x3, y3, z3);
+                gl.glVertex3d(x1-x, y1-y, z1);
+                gl.glVertex3d(x2-x, y2-y, z2);
+                gl.glVertex3d(x3-x, y3-y, z3);
                 gl.glEnd();
             }
             
@@ -311,16 +331,16 @@ public class Triangle extends Element implements Renderable {
                 gl.glLineWidth(this.strokeWidth);
                 this.strokeColor.setup(gl);
                 gl.glBegin(GL.GL_LINES);
-                gl.glVertex3d(x1, y1, z1);
-                gl.glVertex3d(x2, y2, z2);
+                gl.glVertex3d(x1-x, y1-y, z1);
+                gl.glVertex3d(x2-x, y2-y, z2);
                 gl.glEnd();
                 gl.glBegin(GL.GL_LINES);
-                gl.glVertex3d(x2, y2, z2);
-                gl.glVertex3d(x3, y3, z3);
+                gl.glVertex3d(x2-x, y2-y, z2);
+                gl.glVertex3d(x3-x, y3-y, z3);
                 gl.glEnd();
                 gl.glBegin(GL.GL_LINES);
-                gl.glVertex3d(x1, y1, z1);
-                gl.glVertex3d(x3, y3, z3);
+                gl.glVertex3d(x1-x, y1-y, z1);
+                gl.glVertex3d(x3-x, y3-y, z3);
                 gl.glEnd();
             }
             
@@ -329,7 +349,35 @@ public class Triangle extends Element implements Renderable {
             // do nothing
             break;
         }
+        gl.glPopMatrix();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
+    }
+    
+    private void calcG(){
+    	x = (x1+x2+x3)/3.0;
+    	y = (y1+y2+y3)/3.0;
+    }
+    
+    public double getX(){
+    	return this.x;
+    }
+    
+    public double getY(){
+    	return this.y;
+    }
+    
+    public void setX(double x){
+    	this.x = x;
+    }
+    
+    public void setY(double y){
+    	this.y = y;
+    }
+    
+    
+    public void setXY(double x, double y){
+    	this.x = x;
+    	this.y = y;
     }
 }

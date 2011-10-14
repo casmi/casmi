@@ -45,7 +45,7 @@ public class Font {
     private static final FontStyle DEFAULT_STYLE = FontStyle.PLAIN;
 
     /** Default font size. */
-    private static final float DEFAULT_SIZE = 18.0f;
+    private static final double DEFAULT_SIZE = 18.0;
 
     // -------------------------------------------------------------------------
     // Valuables.
@@ -85,7 +85,7 @@ public class Font {
      * @param size
      *            The point size of the Font.
      */
-    public Font(String name, FontStyle style, float size) {
+    public Font(String name, FontStyle style, double size) {
         awtFont = new java.awt.Font(name, fontStyleToInt(style),
             (int)DEFAULT_SIZE);
         setSize(size);
@@ -101,7 +101,7 @@ public class Font {
      * @param size
      *            The point size of the Font.
      */
-    public Font(String name, String style, float size) {
+    public Font(String name, String style, double size) {
         this(name, stringToFontStyle(style), size);
     }
 
@@ -138,11 +138,11 @@ public class Font {
      * @throws IOException
      *             If the fontFile cannot be read.
      */
-    public Font(File file, FontStyle style, float size)
+    public Font(File file, FontStyle style, double size)
         throws FontFormatException, IOException {
         String suffix = FileUtil.getSuffix(file);
         if (suffix.matches("otf|ttf")) {
-            awtFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, file).deriveFont(fontStyleToInt(style), size);
+            awtFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, file).deriveFont(fontStyleToInt(style), (float)size);
         } else {
             throw new IOException("The file is invalid. An OTF or TTF file can be used.");
         }
@@ -165,7 +165,7 @@ public class Font {
      * @throws IOException
      *             If the fontFile cannot be read.
      */
-    public Font(File file, String style, float size)
+    public Font(File file, String style, double size)
         throws FontFormatException, IOException {
         this(file, stringToFontStyle(style), size);
     }
@@ -194,11 +194,11 @@ public class Font {
     }
 
     /**
-     * Returns the point size of this Font in float value.
+     * Returns the point size of this Font in double value.
      * 
-     * @return The point size of this Font as a float value.
+     * @return The point size of this Font as a double value.
      */
-    public float getSize() {
+    public double getSize() {
         return awtFont.getSize2D();
     }
 
@@ -208,8 +208,8 @@ public class Font {
      * @param size
      *            The new point size of the Font.
      */
-    public void setSize(float size) {
-        awtFont = awtFont.deriveFont(size);
+    public void setSize(double size) {
+        awtFont = awtFont.deriveFont((float)size);
     }
 
     /**

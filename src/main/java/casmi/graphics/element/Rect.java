@@ -29,10 +29,12 @@ import javax.media.opengl.glu.GLU;
  * @author Y. Ban
  * 
  */
-public class Rect extends Element implements Renderable {
+public class Rect extends Element implements Renderable{
 
     private double w;
     private double h;
+    private double x=0;
+    private double y=0;
     private double x1;
     private double y1;
     private double x2;
@@ -53,6 +55,13 @@ public class Rect extends Element implements Renderable {
     public Rect(double w, double h) {
         this.w = w;
         this.h = h;
+    }
+    
+    public Rect(double x, double y, double w, double h) {
+        this.w = w;
+        this.h = h;
+        this.x = x;
+        this.y = y;
     }
     
     /**
@@ -76,6 +85,28 @@ public class Rect extends Element implements Renderable {
     	this.h = h;
     }
     
+    public void setX(double x){
+    	this.x = x;
+    }
+    
+    public void setY(double y){
+    	this.y = y;
+    }
+    
+    
+    public void setXY(double x, double y){
+    	this.x = x;
+    	this.y = y;
+    }
+    
+    public void setRotate(double angle){
+    	this.rotate = angle;
+    }
+    
+    public double getRotate(){
+    	return this.rotate;
+    }
+    
     public double getWidth(){
     	return this.w;
     }
@@ -83,16 +114,25 @@ public class Rect extends Element implements Renderable {
     public double getHeight(){
     	return this.h;
     }
+    
+    public double getX(){
+    	return this.x;
+    }
+    
+    public double getY(){
+    	return this.y;
+    }
+    
 
     private void calcRect() {
-        this.x1 = 0.0 - w / 2;
-        this.y1 = 0.0 + h / 2;
-        this.x2 = 0.0 - w / 2;
-        this.y2 = 0.0 - h / 2;
-        this.x3 = 0.0 + w / 2;
-        this.y3 = 0.0 - h / 2;
-        this.x4 = 0.0 + w / 2;
-        this.y4 = 0.0 + h / 2;
+        this.x1 = 0 - w / 2;
+        this.y1 = 0 + h / 2;
+        this.x2 = 0 - w / 2;
+        this.y2 = 0 - h / 2;
+        this.x3 = 0 + w / 2;
+        this.y3 = 0 - h / 2;
+        this.x4 = 0 + w / 2;
+        this.y4 = 0 + h / 2;
     }
     
     @Override
@@ -101,8 +141,12 @@ public class Rect extends Element implements Renderable {
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
 
+        gl.glPushMatrix();
+        gl.glTranslated(x, y, 0);
+        gl.glRotated(rotate, 0, 0, 1.0);
+        this.setTweenParameter(gl);
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             gl.glBegin(GL.GL_QUADS);
             gl.glVertex2d(x1, y1);
             gl.glVertex2d(x2, y2);
@@ -113,7 +157,7 @@ public class Rect extends Element implements Renderable {
 
         if (this.stroke) {
             gl.glLineWidth(this.strokeWidth);
-            this.strokeColor.setup(gl);
+            getSceneStrokeColor().setup(gl);
             gl.glBegin(GL.GL_LINE_STRIP);
             gl.glVertex2d(x1, y1);
             gl.glVertex2d(x2, y2);
@@ -122,6 +166,8 @@ public class Rect extends Element implements Renderable {
             gl.glVertex2d(x1, y1);
             gl.glEnd();
         }
+        
+        gl.glPopMatrix();
         
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);

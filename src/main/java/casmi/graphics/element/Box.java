@@ -52,11 +52,15 @@ public class Box extends Element implements Renderable {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
         
+
+        gl.glPushMatrix();
+        this.setTweenParameter(gl);
+        
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         gl.glPolygonOffset(1f, 1f);
         
         if (this.fill) {
-            this.fillColor.setup(gl);
+            getSceneFillColor().setup(gl);
             gl.glLineWidth(this.strokeWidth);
             
             gl.glPushMatrix();
@@ -66,8 +70,7 @@ public class Box extends Element implements Renderable {
         }
        // gl.glDisable(GL.GL_DEPTH_TEST);
         if (this.stroke) {
-            this.strokeColor.setup(gl);
-
+            getSceneStrokeColor().setup(gl);
             gl.glPushMatrix();
             gl.glScaled(1.0, this.height / this.width, 1.0);
             drawBox(gl, (float)(this.width * STROKE_BIAS_RATIO), GL.GL_LINE_STRIP);
@@ -76,6 +79,8 @@ public class Box extends Element implements Renderable {
         
         gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
          
+
+        gl.glPopMatrix();
         
         if (this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0) {
             gl.glEnable(GL.GL_DEPTH_TEST);

@@ -106,7 +106,10 @@ public class Point extends Element implements Renderable {
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
 
-        this.strokeColor.setup(gl);
+        getSceneStrokeColor().setup(gl);
+
+        gl.glPushMatrix();
+        this.setTweenParameter(gl);
 
         switch (MODE) {
         case POINTS:
@@ -122,6 +125,8 @@ public class Point extends Element implements Renderable {
         default:
             break;
         }
+        
+        gl.glPopMatrix();
     }
 
 }

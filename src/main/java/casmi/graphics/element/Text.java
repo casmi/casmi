@@ -34,170 +34,210 @@ import com.sun.opengl.util.j2d.TextRenderer;
  * Text class.
  * Wrap JOGL and make it easy to use.
  * 
- * @author Y. Ban
+ * @author Y. Ban, T. Takeuchi
  * 
  */
 public class Text extends Element implements Renderable {
 
-    private int x;
-    private int y;
-    private int z;
-    private double tmpx=0,tmpy=0;
+    private double x = 0.0;
+    private double y = 0.0;
+    private double z = 0.0;
     private Font font;
-    private String string;
-    private String[] strAry;
+    private String str;
+    private String[] strArray;
     private FontRenderContext frc;
     private TextLayout[] layout;
-    private TextRenderer tr;
-    public enum TextAlign {RIGHT,CENTER,LEFT};
-    private TextAlign modeX = TextAlign.LEFT;
-    private double leading;
+    private TextRenderer textRenderer;
+    private TextAlign align = TextAlign.LEFT;
+    private double leading = 0.0;
+    
+    /**
+     * Creates a new Text object.
+     */
+    public Text() {
+        
+        this(null);
+    }
+    
+    /**
+     * Creates a new Text object using letters to be displayed.
+     * 
+     * @param text
+     *           The letters to be displayed.      
+     */
+    public Text(String text) {
+        
+        this(text, new Font());
+    }
+    
+    /**
+     * Creates a new Text object using letters to be displayed, and Font.
+     * 
+     * @param text
+     *           The letters to be displayed.      
+     * @param font
+     *           The font of text.                          
+     */
+    public Text(String text, Font font) {
+        
+        this(text, font, 0, 0, 0);
+    } 
+    
+    /**
+     * Creates a new Text object using letters to be displayed, x,y-coordinate.
+     * 
+     * @param text
+     *           The letters to be displayed.      
+     * @param x
+     *           The x-coordinate of text.      
+     * @param y
+     *           The y-coordinate of text.
+     */
+    public Text(String text, double x, double y) {
+        
+        this(text, new Font(), x, y);
+    }
     
     /**
      * Creates a new Text object using letters to be displayed, x,y-coordinate and Font.
      * 
-     * @param string
-     *           The letters to be displayed.      
-     * @param i
+     * @param text
+     *           The letters to be displayed. 
+     * @param font
+     *           The font of text.      
+     * @param x
      *           The x-coordinate of text.      
-     * @param j
+     * @param y
      *           The y-coordinate of text.
-     * @param f
-     *           The font of text.                          
      */
-    public Text(String string, int i, int j,Font f) {
-        this.x = i;
-        this.y = j;
-        this.z = 0;
-        font = f;
-        this.string = string;
-        strAry = this.string.split("\n");
-        tr = new TextRenderer(font.getAWTFont(), true, true); 
-        frc = new FontRenderContext(new AffineTransform(), false, false);
-        layout = new TextLayout[strAry.length];
-        for(int num = 0; num<strAry.length; num++){
-            layout[num] = new TextLayout(this.strAry[num], font.getAWTFont(), frc);
-        }
-        this.leading = font.getSize()+2;            
+    public Text(String text, Font font, double x, double y) {
+
+        this(text, font, x, y, 0);
+    }
+    
+    /**
+     * Creates a new Text object using letters to be displayed, x,y,z-coordinate.
+     * 
+     * @param text
+     *           The letters to be displayed.      
+     * @param x
+     *           The x-coordinate of text.      
+     * @param y
+     *           The y-coordinate of text.      
+     * @param z
+     *           The z-coordinate of text.
+     */
+    public Text(String text, double x, double y, double z) {
         
+        this(text, new Font(), x, y, z);
     }
     
     /**
      * Creates a new Text object using letters to be displayed, x,y,z-coordinate and Font.
      * 
-     * @param string
+     * @param text
      *           The letters to be displayed.      
-     * @param i
+     * @param font
+     *           The font of text.
+     * @param x
      *           The x-coordinate of text.      
-     * @param j
+     * @param y
      *           The y-coordinate of text.      
-     * @param k
+     * @param z
      *           The z-coordinate of text.
-     * @param f
-     *           The font of text.                          
      */
-    public Text(String string, int i, int j, int k, Font f) {
-        this.x = i;
-        this.y = j;
-        this.z = k;
-        font = f;
-        this.string = string;
-        strAry = this.string.split("\n");
-        tr = new TextRenderer(font.getAWTFont(), true, true); 
-        frc = new FontRenderContext(new AffineTransform(), false, false);
-        layout = new TextLayout[strAry.length];
-        for(int num = 0; num<strAry.length; num++){
-            layout[num] = new TextLayout(this.strAry[num], font.getAWTFont(), frc);
+    public Text(String text, Font font, double x, double y, double z) {
+        
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.font = font;
+        if (text == null) {
+            this.str = "";
+        } else {
+            this.str = text;
         }
-    }   
-    
-    /**
-     * Creates a new Text object using letters to be displayed, x,y,z-coordinate and Font.
-     * 
-     * @param string
-     *           The letters to be displayed.      
-     * @param f
-     *           The font of text.                          
-     */
-    public Text(String string,Font f) {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        font = f;
-        this.string = string;
-        strAry = this.string.split("\n");
-        tr = new TextRenderer(font.getAWTFont(), true, true); 
-        frc = new FontRenderContext(new AffineTransform(), false, false);
-        layout = new TextLayout[strAry.length];
-        for(int num = 0; num<strAry.length; num++){
-            layout[num] = new TextLayout(this.strAry[num], font.getAWTFont(), frc);
+        strArray = this.str.split("\n");
+        leading = font.getSize() * 1.2;
+        
+        try{
+            textRenderer = new TextRenderer(font.getAWTFont(), true, true);
+            frc = new FontRenderContext(new AffineTransform(), false, false);
+            layout = new TextLayout[strArray.length];
+            for(int num = 0; num < strArray.length; num++) {
+                layout[num] = new TextLayout(strArray[num], font.getAWTFont(), frc);
+            }
+        } catch(java.lang.IllegalArgumentException e) {
+        	// ignore
         }
-    }   
-
-
+    }
     
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        if(this.strokeColor.getA()!=1)
-            gl.glDisable(GL.GL_DEPTH_TEST);
         
-            tr.begin3DRendering();
-            if(this.stroke == true){
-                this.strokeColor.calcColor();
-                tr.setColor(this.strokeColor.getNormalR(), this.strokeColor.getNormalG(), this.strokeColor.getNormalB(), this.strokeColor.getNormalA());}
-            else if(this.fill == true){
-                this.fillColor.calcColor();
-                tr.setColor(this.fillColor.getNormalR(), this.fillColor.getNormalG(), this.fillColor.getNormalB(), this.fillColor.getNormalA());
+        if (strokeColor.getA() != 1) {
+            gl.glDisable(GL.GL_DEPTH_TEST);
+        }
+        
+        gl.glPushMatrix();
+        {
+            this.setTextTweenParameter(gl);
+            textRenderer.begin3DRendering();
+            if (this.stroke == true) {
+                getSceneStrokeColor().calcColor();
+                textRenderer.setColor(getSceneStrokeColor().getNormalR(), getSceneStrokeColor().getNormalG(), getSceneStrokeColor().getNormalB(), getSceneStrokeColor().getNormalA());
+            } else if (this.fill == true) {
+                getSceneStrokeColor().calcColor();
+                textRenderer.setColor(getSceneFillColor().getNormalR(), getSceneFillColor().getNormalG(), getSceneFillColor().getNormalB(), getSceneFillColor().getNormalA());
             }
-            tmpx = x; 
-            tmpy = y;
-            for(int i = 0; i<strAry.length; i++){
-                switch(modeX){
+            double tmpX = x; 
+            double tmpY = y;
+            for (int i = 0; i < strArray.length; i++) {
+                switch (align) {
                 default:
                 case LEFT:
                     break;
                 case CENTER:
-                    tmpx = x - textWidth(i)/2.0;
+                    tmpX = x - getWidth(i) / 2.0;
                     break;
                 case RIGHT:
-                    tmpx = x - textWidth(i);
+                    tmpX = x - getWidth(i);
                 }
-                     tr.draw3D(strAry[i], (int)tmpx, (int)(tmpy-leading*i), z, 1.0f);
+                textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
             }
-                tr.end3DRendering();
-        
-        if(this.strokeColor.getA()!=1)
+            textRenderer.end3DRendering();
+        }
+        gl.glPopMatrix();
+
+        if (strokeColor.getA() != 1) {
             gl.glEnable(GL.GL_DEPTH_TEST);
+        }
     }
 
     /**
      * Returns descent of the current font at its current size and line.
      *
-     * @param i
+     * @param line
      *           The number of lines.                          
      * @return 
      *           The descent of text.    
      */
-    public double textDescent(int i) {
-        if(layout[i]!=null)
-            return layout[i].getDescent();
-        else 
-            return 0;
+    public double getDescent(int line) {
+        if (layout[line] == null) return 0;
+        return layout[line].getDescent();
     }
 
     /**
      * Returns ascent of the current font at its current size and line.
      * 
-     * @param i
+     * @param line
      *           The number of lines.                          
      * @return 
      *           The ascent of text.    
      */
-    public double textAscent(int i) {
-        if(layout[i]!=null)
-            return layout[i].getAscent();
-        else 
-            return 0;
+    public double getAscent(int line) {
+        if (layout[line] == null) return 0;
+        return layout[line].getAscent();
     }
     
     /**
@@ -206,10 +246,9 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The descent of text.    
      */
-    public double textDescent() {
-        return textDescent(0);
+    public double getDescent() {
+        return getDescent(0);
     }
-
     
     /**
      * Returns ascent of the current font at its current size.
@@ -217,8 +256,8 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The ascent of text.    
      */
-    public double textAscent() {
-        return textAscent(0);
+    public double getAscent() {
+        return getAscent(0);
     }
     
     /**
@@ -227,8 +266,8 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The letter's width.    
      */
-    public double textWidth() {
-        return textWidth(0);
+    public double getWidth() {
+        return getWidth(0);
     }
     
     
@@ -238,32 +277,32 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The letter's height.    
      */
-    public double textHeight() {
-        return textHeight(0);
+    public double getHeight() {
+        return getHeight(0);
     }
     
     /**
      * Returns letter's width of the current font at its current size and line.
      *
-     * @param i
+     * @param line
      *           The number of lines.                                                     
      * @return 
      *           The letter's width.    
      */
-    public double textWidth(int i) {
-        return tr.getBounds(strAry[i]).getWidth();
+    public double getWidth(int line) {
+        return textRenderer.getBounds(strArray[line]).getWidth();
     }
     
     /**
      * Returns letter's height of the current font at its current size and line.
      *
-     * @param i
+     * @param line
      *           The number of lines.                                                     
      * @return 
      *           The letter's height.    
      */
-    public double textHeight(int i) {
-        return tr.getBounds(strAry[i]).getHeight();
+    public double getHeight(int line) {
+        return textRenderer.getBounds(strArray[line]).getHeight();
     }
     
     /**
@@ -272,20 +311,34 @@ public class Text extends Element implements Renderable {
      * @return
      *           The TextLayout of this Text.
      */
-    public TextLayout getLayout(){
+    public TextLayout getLayout() {
         return layout[0];
     }
     
     /**
      * Returns the TextLayout of the i line.
      *
-     * @param i
+     * @param line
      *           The number of lines. 
      * @return
      *           The TextLayout of the i line.
      */
-    public TextLayout getLayout(int i){
-        return layout[i];
+    public TextLayout getLayout(int line) {
+        return layout[line];
+    }
+    
+    /**
+     * Returns the current alignment for drawing text. 
+     * The parameters LEFT, CENTER, and RIGHT set the display characteristics of
+     * the letters in relation to the values for the x and y parameters of the 
+     * text() function. 
+     * 
+     * @return
+     *        The TextAlign of the text.   
+     */
+    public TextAlign getAlign() {
+        
+        return align;
     }
     
     /**
@@ -295,14 +348,14 @@ public class Text extends Element implements Renderable {
      * in relation to the values for the x and y 
      * parameters of the text() function. 
      * 
-     * @param modex
+     * @param align
      *           Either LEFT, CENTER or LIGHT.
      */
-    public void textAlign(TextAlign modex){
-        this.modeX = modex;       
+    public void setAlign(TextAlign align){
+        this.align = align;       
     }
 
-    public void textLeading(double leading) {
+    public void setLeading(double leading) {
         this.leading = leading;
     }
     
@@ -313,7 +366,11 @@ public class Text extends Element implements Renderable {
      *          The leading of this Text.
      */
     public double getLeading() {
-        return this.leading;
+        return leading;
+    }
+    
+    public int getLine() {
+        return strArray.length;
     }
     
     /**
@@ -323,41 +380,28 @@ public class Text extends Element implements Renderable {
      *          The letters of this Text.
      */
     public String getText() {
-        return getText(0);
-    }
-    
-    /**
-     * Returns the letters of the i line.
-     *
-     * @param i
-     *           The number of lines.                                                 
-     * @return
-     *           The letters to be displayed.
-     */
-    public String getText(int i) {
-        return this.strAry[i];
+        return str;
     }
     
     /**
      * Sets the letters of this Text.
      * 
-     * @param s
+     * @param str
      *          The letters to be displayed.
      */
-    public void setText(String s){
-        setText(0,s);
+    public void setText(String str) {
+        this.str = str;
+        setArrayText(str);
     }
     
-    /**
-     * Sets the letters of the i line.
-     *
-     * @param i
-     *           The number of lines.                                                 
-     * @param s
-     *           The letters to be displayed.
-     */
-    public void setText(int i, String s){
-        this.strAry[i] = s;
+    protected String[] getArrayText() {
+        return strArray; 
+    }
+    
+    protected void setArrayText(String str) {
+        strArray = null;
+        this.str = str;
+        strArray = this.str.split("\n");
     }
     
     /**
@@ -366,8 +410,40 @@ public class Text extends Element implements Renderable {
      * @return
      *           The TextRenderer of this Text.
      */
-    public TextRenderer getRenderer(){
-        return tr;
+    public TextRenderer getRenderer() {
+        return textRenderer;
     }
     
+    public void setX(double x) {
+        this.x = x;
+    }
+    
+    public void setY(double y) {
+        this.y = y;
+    }
+    
+    public void setZ(double z) {
+        this.z = z;
+    }
+    
+    public double getX() {
+        return x;
+    }
+    
+    public double getY() {
+        return y;
+    }
+    
+    public double getZ() {
+        return z;
+    }
+    
+    public Font getFont() {
+        return font;
+    }
+    
+    public void setFont(Font font) {
+        this.font = font;
+        textRenderer = new TextRenderer(font.getAWTFont(), true, true);
+    }
 }

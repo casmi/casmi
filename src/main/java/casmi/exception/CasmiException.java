@@ -24,21 +24,22 @@ public class CasmiException extends java.lang.Exception {
 	/**
 	 * For subclasses only.
 	 */
-	protected CasmiException() {
-	}
+	protected CasmiException() {}
 
 	/**
 	 * @param message
 	 */
 	public CasmiException(String message) {
-		super(message);
+		
+	    super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
 	public CasmiException(Throwable cause) {
-		super(cause);
+		
+	    super(cause);
 	}
 
 	/**
@@ -46,6 +47,7 @@ public class CasmiException extends java.lang.Exception {
 	 * @param cause
 	 */
 	public CasmiException(String message, Throwable cause) {
-		super(message, cause);
+		
+	    super(message, cause);
 	}
 }
