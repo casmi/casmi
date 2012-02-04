@@ -25,14 +25,15 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import casmi.util.SystemUtil;
-
 public class CSVTest {
 
+    private static final String EXAMPLE_CSV = CSVTest.class.getResource("example.csv").getPath();
+    private static final String WRITE_EXAMPLE_CSV = CSVTest.class.getResource("write_example.csv").getPath();
+    
     @Test
     public void readLineTest() {
 
-        CSV csv = new CSV( getClass().getResource("example.csv") );
+        CSV csv = new CSV(EXAMPLE_CSV);
 
         try {
             String[] line;
@@ -53,16 +54,13 @@ public class CSVTest {
     @Test
     public void writeLineTest() {
 
-    	String path = SystemUtil.JAVA_TMP_PATH + "write_example.csv";
-        CSV csv = new CSV( path );
+        CSV csv = new CSV(WRITE_EXAMPLE_CSV);
 
         try {
             csv.writeLine("Urakasumi", "15", "Miyagi");
 
             String[] line = {"Houhai", "16", "Aomori"};
             csv.writeLine(line);
-            
-            System.out.println("write data to " + path);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to write next line.");

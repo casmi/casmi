@@ -54,15 +54,12 @@ public class SQLite extends SQL {
 
     /** Date formats. */
     private static final String[][] DATE_FORMATS = {
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2}", "yyyy-MM-dd"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd HH:mm"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd HH:mm:ss"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd'T'HH:mm"},
-        {"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}",
-            "yyyy-MM-dd'T'HH:mm:ss"}};
+        {"[0-9]{4}-[0-9]{2}-[0-9]{2}",                            "yyyy-MM-dd"},
+        {"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",          "yyyy-MM-dd HH:mm"},
+        {"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}", "yyyy-MM-dd HH:mm:ss"},
+        {"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}",          "yyyy-MM-dd'T'HH:mm"},
+        {"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}", "yyyy-MM-dd'T'HH:mm:ss"}
+    };
 
     /** Database URL. */
     private final String url;
@@ -86,29 +83,53 @@ public class SQLite extends SQL {
     }
 
     /**
+     * Creates new SQLite object from the specified database file.
+     * 
+     * @param dbFile
+     *            The SQLite3 database file.
+     */
+    public SQLite(File dbFile) {
+        super(SQL_TYPE);
+        
+        String path = null;
+        if (dbFile.isFile()) {
+            path = dbFile.getAbsolutePath();
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        url = "jdbc:sqlite:" + path;
+    }
+    
+    /**
      * Creates new SQLite object from the specified database file path.
      * 
      * @param dbPath
      *            The SQLite3 database file's path.
      */
     public SQLite(String dbPath) {
-
-        super(SQL_TYPE);
-
-        String path;
-
-        File file = new File(dbPath);
-        if (file.isFile()) {
-            path = file.getAbsolutePath();
-        } else {
-            path = FileUtil.searchFilePath(dbPath);
-        }
-        if (path == null)
-            throw new IllegalArgumentException();
-
-        url = "jdbc:sqlite:" + path;
+        this(new File(dbPath));
     }
 
+    /**
+     * Create SQLite3 database file.
+     * 
+     * @param dbFile
+     *            the database file.
+     * @throws IOException
+     */
+    public static void createDatabase(File dbFile) throws IOException {
+
+        URL url = SQLite.class.getResource("template.sqlite3");
+
+        if (url == null) {
+            throw new IOException("Template file does not found.");
+        }
+
+        File src = new File(url.getPath());
+        FileUtil.copyFile(src, dbFile);
+    }
+    
     /**
      * Create SQLite3 database file.
      * 
@@ -117,15 +138,7 @@ public class SQLite extends SQL {
      * @throws IOException
      */
     public static void createDatabase(String dbPath) throws IOException {
-
-        URL url = SQLite.class.getResource("template.sqlite3");
-
-        if (url == null)
-            throw new IOException("Template file does not found.");
-
-        File src = new File(url.getPath());
-        File dest = new File(dbPath);
-        FileUtil.copyFile(src, dest);
+        createDatabase(new File(dbPath));
     }
 
     @Override

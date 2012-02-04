@@ -1,0 +1,10 @@
+package casmi.tween;
+
+public enum TweenType {
+	NONE,
+	POSITION, POSITION_3D,
+	ROTATION_2D, ROTATION_3D,
+	ALPHA, ALPHA_STROKE, ALPHA_FILL,
+	SCALE, SCALE_3D,
+	SCALE_X, SCALE_Y, SCALE_Z,
+}

@@ -22,6 +22,8 @@ package casmi.graphics.element;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.matrix.Vertex;
 
 /**
@@ -38,6 +40,10 @@ public class Bezier extends Element implements Renderable {
     };
 
     private int detail = 30;
+    
+    private Color startColor;
+    private Color endColor;
+    private Color gradationColor = new Color(0,0,0);
 
     /**
      * Creates a new Bezier object using coordinates for the anchor and control points.
@@ -64,7 +70,7 @@ public class Bezier extends Element implements Renderable {
         this.points[9] = x4;
         this.points[10] = y4;
         this.points[11] = 0;
-
+        set();
     }
 
     /**
@@ -92,7 +98,7 @@ public class Bezier extends Element implements Renderable {
         this.points[9] = (float)x4;
         this.points[10] = (float)y4;
         this.points[11] = 0;
-
+        set();
     }
 
     /**
@@ -120,7 +126,7 @@ public class Bezier extends Element implements Renderable {
         this.points[9] = x4;
         this.points[10] = y4;
         this.points[11] = z4;
-
+        set();
     }
 
     /**
@@ -148,7 +154,7 @@ public class Bezier extends Element implements Renderable {
         this.points[9] = (float)x4;
         this.points[10] = (float)y4;
         this.points[11] = (float)z4;
-
+        set();
     }
     
     /**
@@ -176,6 +182,7 @@ public class Bezier extends Element implements Renderable {
         this.points[9] = (float)v4.x;
         this.points[10] = (float)v4.y;
         this.points[11] = (float)v4.z;
+        set();
     }
     
     public void setNode(int number, double x, double y){
@@ -186,6 +193,7 @@ public class Bezier extends Element implements Renderable {
     	this.points[number*3] = (float)x;
     	this.points[number*3+1] = (float)y;
     	this.points[number*3+2] = 0;
+    	set();
     }
     
     public void setNode(int number, double x, double y, double z){
@@ -196,6 +204,7 @@ public class Bezier extends Element implements Renderable {
     	this.points[number*3] = (float)x;
     	this.points[number*3+1] = (float)y;
     	this.points[number*3+2] = (float)z;
+    	set();
     }
     
     public void setNode(int number, Vertex v){
@@ -206,6 +215,7 @@ public class Bezier extends Element implements Renderable {
     	this.points[number*3] = (float)v.x;
     	this.points[number*3+1] = (float)v.y;
     	this.points[number*3+2] = (float)v.z;
+    	set();
     }
 
     @Override
@@ -216,7 +226,7 @@ public class Bezier extends Element implements Renderable {
 
         gl.glPushMatrix();
         this.setTweenParameter(gl);
-        
+        gl.glTranslated(-this.points[0],-this.points[1], -this.points[2]);
         if (this.fill) {
 
             getSceneFillColor().setup(gl);
@@ -225,8 +235,17 @@ public class Bezier extends Element implements Renderable {
             gl.glEnable(GL.GL_MAP1_VERTEX_3);
             gl.glBegin(GL.GL_TRIANGLE_FAN);
 
-            for (int i = 0; i <= detail; i++)
+            for (int i = 0; i <= detail; i++){
+                if (i == 0 && isGradation() == true && startColor != null)
+                    getSceneColor(this.startColor).setup(gl);
+                if (i == detail && isGradation() == true && endColor != null)
+                    getSceneColor(this.endColor).setup(gl);
+                if (i != 0 && i != detail && isGradation() && endColor != null && startColor != null) {
+                    gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double)detail));
+                    getSceneColor(this.gradationColor).setup(gl);
+                }
                 gl.glEvalCoord1f((float)(i / (float)detail));
+            }
 
             gl.glEnd();
             gl.glDisable(GL.GL_MAP1_VERTEX_3);
@@ -240,13 +259,22 @@ public class Bezier extends Element implements Renderable {
             gl.glEnable(GL.GL_MAP1_VERTEX_3);
             gl.glBegin(GL.GL_LINE_STRIP);
 
-            for (int i = 0; i <= detail; i++)
+            for (int i = 0; i <= detail; i++) {
+                if (i == 0 && isGradation()&& startColor != null)
+                    getSceneColor(this.startColor).setup(gl);
+                if (i == detail && isGradation() && endColor != null)
+                    getSceneColor(this.endColor).setup(gl);
+                if (i != 0 && i != detail && isGradation() && endColor != null && startColor != null) {
+                    gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double)detail));
+                    getSceneColor(this.gradationColor).setup(gl);
+                }
                 gl.glEvalCoord1f((float)(i / (float)detail));
-
+            }
             gl.glEnd();
             gl.glDisable(GL.GL_MAP1_VERTEX_3);
         }
-        
+
+        gl.glTranslated(this.points[0],this.points[1], this.points[2]);
         gl.glPopMatrix();
         
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
@@ -279,5 +307,41 @@ public class Bezier extends Element implements Renderable {
     public void setDetail(int d) {
         detail = d;
     }
+    
+    private void set(){
+    	x = this.points[0];
+    	y = this.points[1];
+    	z = this.points[2];
+    }
+    
+    public void setAnchorColor(int index,ColorSet colorset){
+    	if(index==0){
+    	if(startColor == null)
+			startColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.startColor = Color.color(colorset);
+    	}
+    	if(index==1){
+        	if(endColor == null)
+    			endColor = new Color(0,0,0);
+        	setGradation(true);
+        	this.endColor = Color.color(colorset);
+        	}
+    }
+    
+    public void setAnchorColor(int index,Color color){
+    	if(index==0){
+    	if(startColor == null)
+			startColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.startColor = color;
+    	}
+    	if(index==1){
+        	if(endColor == null)
+    			endColor = new Color(0,0,0);
+        	setGradation(true);
+        	this.endColor = color;
+		}
+	}
 
 }

@@ -20,9 +20,14 @@
 package casmi.graphics.color;
 
 public enum ColorMode {
+    
     RGB,
+    
     ARGB,
+    
     HSB,
+    
     ALPHA,
+    
     CMYK
 }

@@ -25,9 +25,4 @@ import javax.media.opengl.glu.GLU;
 public interface Renderable {
     void render(GL gl, GLU glu, int width, int height);
     void setAlpha(double alpha);
-    void setEndTweenXYZ(float x,float y,float z);
-	void setEndTweenRotate(float xr,float yr,float zr);
-	void setEndTweenScale(double sx,double sy,double sz);
-	void setEndTweenA(double as,double af);
-	double[] setTween();
 }

@@ -16,186 +16,245 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.matrix.Vertex;
 
 /**
- * Lines class.
- * Wrap JOGL and make it easy to use.
+ * Lines class. Wrap JOGL and make it easy to use.
  * 
  * @author Y. Ban
  * 
  */
 public class Lines extends Element implements Renderable {
 
-    public static final int LINES         =1;
-    public static final int LINES_3D      =3;
-    public static final int LINE_LOOP = 51;
-    
-    private ArrayList<Double> x;
-    private ArrayList<Double> y;
-    private ArrayList<Double> z;
-    
-    private double X = 0;
-    private double Y = 0;
-    
-    private Vertex tmpv = new Vertex(0,0,0);
-    
-    public enum JoinMode {
-        CORNER, CORNERS, RADIUS, CENTER
-    };
+	public static final int LINES = 1;
+	public static final int LINES_3D = 3;
+	public static final int LINE_LOOP = 51;
 
-    private int MODE;
+	private List<Double> x;
+	private List<Double> y;
+	private List<Double> z;
+	private List<Color> colors;
 
-    public Lines() {
-        x= new ArrayList<Double>();
-        y= new ArrayList<Double>();
-        z= new ArrayList<Double>();
-    }
-    
-    public void vertex(float x, float y){
-        MODE = LINES;
-        this.x.add((double)x);
-        this.y.add((double)y);
-    }
-    
-    public void vertex(float x, float y,float z){
-        MODE = LINES_3D;
-        this.x.add((double)x);
-        this.y.add((double)y);
-        this.z.add((double)z);
-    }
-    
-    public void vertex(double x, double y){
-        MODE = LINES;
-        this.x.add(x);
-        this.y.add(y);
-    }
-    
-    public void vertex(double x, double y,double z){
-        MODE = LINES_3D;
-        this.x.add(x);
-        this.y.add(y);
-        this.z.add(z);
-    }
-    
-    public void vertex(Vertex v){
-        MODE = LINES_3D;
-        this.x.add(v.x);
-        this.y.add(v.y);
-        this.z.add(v.z);
-    }
-    
-    public Vertex getVertex(int i){
-    	tmpv.x = x.get(i);
-    	tmpv.y = y.get(i);
-    	tmpv.z = z.get(i);
-    	return tmpv;
-    }
-    
-    public void removeVertex(int i){
-    	this.x.remove(i);
-    	this.y.remove(i);
-    	this.z.remove(i);
-    }
-    
-    public void setVertex(int i, double x, double y){
-    	this.x.set(i, x);
-    	this.y.set(i, y);
-    	this.z.set(i, 0d);
-    }
-    
-    public void setVertex(int i, double x, double y, double z){
-    	this.x.set(i, x);
-    	this.y.set(i, y);
-    	this.z.set(i, z);
-    }
+	private double X = 0;
+	private double Y = 0;
 
+	private Vertex tmpv = new Vertex(0, 0, 0);
 
-    @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+	public enum JoinMode {
+		CORNER, CORNERS, RADIUS, CENTER
+	};
 
-    	calcG();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        
-        getSceneStrokeColor().setup(gl);
-        double tmpx,tmpy,tmpz;
+	private int MODE;
 
-        gl.glPushMatrix();
-        gl.glTranslated(X, Y, 0);
-        gl.glRotated(rotate, 0, 0, 1.0);
-        this.setTweenParameter(gl);
-        
-        switch (MODE) {
-        case LINES:
-            gl.glLineWidth(this.strokeWidth);
-            gl.glBegin(GL.GL_LINE_STRIP);
-            for(int i = 0;i<x.size();i++){
-                tmpx = (Double)this.x.get(i);
-                tmpy = (Double)this.y.get(i);
-            gl.glVertex2d(tmpx-X, tmpy-Y);
-            }
-            gl.glEnd();
-            break;
-        case LINES_3D:
-            gl.glLineWidth(this.strokeWidth);
-            gl.glBegin(GL.GL_LINE_STRIP);
-            for(int i = 0;i<x.size();i++){
-                tmpx = (Double)this.x.get(i);
-                tmpy = (Double)this.y.get(i);
-                tmpz = (Double)this.z.get(i);
-            gl.glVertex3d(tmpx-X, tmpy-Y, tmpz);
-            }
-            gl.glEnd();
-            break;
-      
-        default:
-            break;
-        }
-        
-        gl.glPopMatrix();
-        
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glEnable(GL.GL_DEPTH_TEST);
-    }
-    
-    private void calcG(){
-    	X=Y=0;
-    	for(int i=0;i<x.size();i++){
-    		X += x.get(i);
-    		Y += y.get(i);}
-    	X/=x.size();
-    	Y/=y.size();
-    }
-    
-    public double getX(){
-    	return this.X;
-    }
-    
-    public double getY(){
-    	return this.Y;
-    }
-    
-    public void setX(double x){
-    	this.X = x;
-    }
-    
-    public void setY(double y){
-    	this.Y = y;
-    }
-    
-    
-    public void setXY(double x, double y){
-    	this.X = x;
-    	this.Y = y;
-    }
+	private Color startColor;
+	private Color endColor;
+	private Color gradationColor = new Color(0, 0, 0);
+
+	private boolean cornerGradation = false;
+
+	public Lines() {
+		x = new ArrayList<Double>();
+		y = new ArrayList<Double>();
+		z = new ArrayList<Double>();
+		colors = new ArrayList<Color>();
+	}
+
+	public void vertex(float x, float y) {
+		MODE = LINES;
+		this.x.add((double) x);
+		this.y.add((double) y);
+		colors.add(this.strokeColor);
+		calcG();
+	}
+
+	public void vertex(float x, float y, float z) {
+		MODE = LINES_3D;
+		this.x.add((double) x);
+		this.y.add((double) y);
+		this.z.add((double) z);
+		colors.add(this.strokeColor);
+		calcG();
+	}
+
+	public void vertex(double x, double y) {
+		MODE = LINES;
+		this.x.add(x);
+		this.y.add(y);
+		colors.add(this.strokeColor);
+		calcG();
+	}
+
+	public void vertex(double x, double y, double z) {
+		MODE = LINES_3D;
+		this.x.add(x);
+		this.y.add(y);
+		this.z.add(z);
+		colors.add(this.strokeColor);
+		calcG();
+	}
+
+	public void vertex(Vertex v) {
+		MODE = LINES_3D;
+		this.x.add(v.x);
+		this.y.add(v.y);
+		this.z.add(v.z);
+		colors.add(this.strokeColor);
+		calcG();
+	}
+
+	public Vertex getVertex(int i) {
+		tmpv.x = x.get(i);
+		tmpv.y = y.get(i);
+		tmpv.z = z.get(i);
+
+		calcG();
+		return tmpv;
+	}
+
+	public void removeVertex(int i) {
+		this.x.remove(i);
+		this.y.remove(i);
+		this.z.remove(i);
+		this.colors.remove(i);
+		calcG();
+	}
+
+	public void setVertex(int i, double x, double y) {
+		this.x.set(i, x);
+		this.y.set(i, y);
+		this.z.set(i, 0d);
+		calcG();
+	}
+
+	public void setVertex(int i, double x, double y, double z) {
+		this.x.set(i, x);
+		this.y.set(i, y);
+		this.z.set(i, z);
+		calcG();
+	}
+
+	@Override
+	public void render(GL gl, GLU glu, int width, int height) {
+
+		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+			gl.glDisable(GL.GL_DEPTH_TEST);
+
+		getSceneStrokeColor().setup(gl);
+		double tmpx, tmpy, tmpz;
+
+		gl.glPushMatrix();
+		this.setTweenParameter(gl);
+
+		switch (MODE) {
+		case LINES:
+			gl.glLineWidth(this.strokeWidth);
+			gl.glBegin(GL.GL_LINE_STRIP);
+			for (int i = 0; i < x.size(); i++) {
+				tmpx = (Double) this.x.get(i);
+				tmpy = (Double) this.y.get(i);
+				if (!cornerGradation) {
+					if (i == 0 && isGradation() && startColor != null)
+						getSceneColor(this.startColor).setup(gl);
+					if (i == x.size() - 1 && isGradation() && endColor != null)
+						getSceneColor(this.endColor).setup(gl);
+					if (i != 0 && i != (x.size() - 1) && isGradation() && endColor != null && startColor != null) {
+						gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double) (x.size() - 1)));
+						getSceneColor(this.gradationColor).setup(gl);
+					}
+				} else {
+					getSceneColor(colors.get(i)).setup(gl);
+				}
+				gl.glVertex2d(tmpx - X, tmpy - Y);
+			}
+			gl.glEnd();
+			break;
+		case LINES_3D:
+			gl.glLineWidth(this.strokeWidth);
+			gl.glBegin(GL.GL_LINE_STRIP);
+			for (int i = 0; i < x.size(); i++) {
+				tmpx = (Double) this.x.get(i);
+				tmpy = (Double) this.y.get(i);
+				tmpz = (Double) this.z.get(i);
+				if (!cornerGradation) {
+					if (i == 0 && isGradation() && startColor != null)
+						getSceneColor(this.startColor).setup(gl);
+					if (i == x.size() - 1 && isGradation() && endColor != null)
+						getSceneColor(this.endColor).setup(gl);
+					if (i != 0 && i != (x.size() - 1) && isGradation() && endColor != null && startColor != null) {
+						gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double) (x.size() - 1)));
+						getSceneColor(this.gradationColor).setup(gl);
+					}
+				} else {
+					getSceneColor(colors.get(i)).setup(gl);
+				}
+				gl.glVertex3d(tmpx - X, tmpy - Y, tmpz);
+			}
+			gl.glEnd();
+			break;
+		default:
+			break;
+		}
+
+		gl.glPopMatrix();
+
+		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+			gl.glEnable(GL.GL_DEPTH_TEST);
+	}
+
+	private void calcG() {
+		X = Y = 0;
+		for (int i = 0; i < x.size(); i++) {
+			X += x.get(i);
+			Y += y.get(i);
+		}
+		X /= x.size();
+		Y /= y.size();
+		setPosition(X, Y);
+	}
+
+	public void setStartCornerColor(Color color) {
+		if (startColor == null)
+			startColor = new Color(0, 0, 0);
+		setGradation(true);
+		this.startColor = color;
+	}
+
+	public void setStartCornerColor(ColorSet colorset) {
+		setStartCornerColor(Color.color(colorset));
+	}
+
+	public void setEndCornerColor(Color color) {
+		if (endColor == null)
+			endColor = new Color(0, 0, 0);
+		setGradation(true);
+		this.endColor = color;
+	}
+
+	public void setEndCornerColor(ColorSet colorset) {
+		setEndCornerColor(Color.color(colorset));
+	}
+
+	public void setCornerColor(int index, Color color) {
+		if (cornerGradation == false) {
+			cornerGradation = true;
+		}
+		colors.set(index, color);
+	}
+
+	public void setCornerColor(int index, ColorSet colorset) {
+
+		setCornerColor(index, Color.color(colorset));
+	}
 
 }

@@ -27,10 +27,14 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Renderable;
+import casmi.graphics.group.GroupRender;
+import casmi.graphics.object.ObjectRender;
 import casmi.image.Image;
 import casmi.matrix.Vertex;
 import casmi.timeline.TimelineRender;
+import casmi.tween.TweenManager;
 
 import com.sun.opengl.util.GLUT;
 
@@ -54,12 +58,30 @@ public class Graphics {
 
 	public void render(Renderable r) {
 		r.setAlpha(sceneAlpha);
+		if(r instanceof GroupRender){
+			GroupRender gr = (GroupRender)r;
+			gr.render(this);
+		} else if(r instanceof ObjectRender){
+			ObjectRender or = (ObjectRender)r;
+			or.render(this);
+		}
+		else{
 		r.render(this.gl, this.glu, this.width, this.height);
+		}
 	}
 	
+/*public void render(ObjectRender or, boolean b){
+		or.render(this,b);
+	}
+	*/
 	public void render(TimelineRender tr){
 		tr.render(this);
 	}
+	
+	public void render(TweenManager tm){
+		tm.render(this);
+	}
+	
 
 	public Graphics(GL g, GLU Glu, GLUT Glut, int width, int height) {
 		this.gl = g;
@@ -83,10 +105,10 @@ public class Graphics {
 	}
 	
 	public void init() {
-		for (Image img : textureImages) {
-			img.unloadTexture();
-			img.loadTexture();
-		}
+//		for (Image img : textureImages) {
+//			img.unloadTexture();
+//			img.loadTexture();
+//		}
 	}
 
 	/**
@@ -172,6 +194,13 @@ public class Graphics {
 	public void background(Color c) {
 	    c.calcColor();
 	    gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), (float) (c.getNormalA()*sceneAlpha));
+	}
+	
+	public void background(ColorSet colorset){
+		Color c = Color.color(colorset);
+		 c.calcColor();
+		 gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), (float) (c.getNormalA()*sceneAlpha));
+		
 	}
 	
 	
@@ -636,36 +665,36 @@ public class Graphics {
 	 * If 
 	 */
 	public void image(Image img, double x, double y) {
-		if (img.texture != null) {
+		if (img.getTexture() != null) {
 		    gl.glDisable(GL.GL_DEPTH_TEST);
 		    img.enableTexture();
-			gl.glBindTexture(GL.GL_TEXTURE_2D, img.texture.getTextureObject());
+			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject());
 			gl.glBegin(GL.GL_QUADS);
-			switch (img.mode) {
+			switch (img.getMode()) {
 			default:
 			case CORNER:
 				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) x, (float) y - img.height);
+				gl.glVertex2f((float) x, (float) y - img.getHeight());
 				gl.glTexCoord2f(0.0f, 0.0f);
 				gl.glVertex2f((float) x, (float) y);
 				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) x + img.width, (float) y);
+				gl.glVertex2f((float) x + img.getWidth(), (float) y);
 				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) x + img.width, (float) y - img.height);
+				gl.glVertex2f((float) x + img.getWidth(), (float) y - img.getHeight());
 				break;
 			case CENTER:
 				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) x - img.width / 2.0f, (float) y
-						- img.height / 2.0f);
+				gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
+						- img.getHeight() / 2.0f);
 				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) x - img.width / 2.0f, (float) y
-						+ img.height / 2.0f);
+				gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
+						+ img.getHeight() / 2.0f);
 				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) x + img.width / 2.0f, (float) y
-						+ img.height / 2.0f);
+				gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
+						+ img.getHeight() / 2.0f);
 				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) x + img.width / 2.0f, (float) y
-						- img.height / 2.0f);
+				gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
+						- img.getHeight() / 2.0f);
 				break;
 			}
 			gl.glEnd();
@@ -681,12 +710,12 @@ public class Graphics {
 	 *  the x and y values of the opposite corner of the image. 
 	 * */
 	public void image(Image img, double x, double y, double w, double h) {
-		if (img.texture != null) {
+		if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
 			img.enableTexture();
-			gl.glBindTexture(GL.GL_TEXTURE_2D, img.texture.getTextureObject());
+			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject());
 			gl.glBegin(GL.GL_QUADS);
-			switch (img.mode) {
+			switch (img.getMode()) {
 			default:
 			case CORNER:
 				gl.glTexCoord2f(0.0f, 1.0f);
@@ -762,6 +791,10 @@ public class Graphics {
 		matrixMode(MatrixMode.MODELVIEW);
 		resetMatrix();
 	}
+	
+	public void simpleperspective(double fov, double aspect, double zNear, double zFar) {
+		glu.gluPerspective(fov, aspect, zNear, zFar);
+		}
 
 	/**
 	 * Sets a default perspective. 
@@ -774,6 +807,12 @@ public class Graphics {
 				/ (double) this.height, cameraZ / 10.0, cameraZ * 10.0);
 		matrixMode(MatrixMode.MODELVIEW);
 		resetMatrix();
+	}
+	
+	public void simpleperspective(){
+		double cameraZ = ((height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
+		glu.gluPerspective(Math.PI / 3.0, (double) this.width
+				/ (double) this.height, cameraZ / 10.0, cameraZ * 10.0);
 	}
 
 	/**
@@ -803,6 +842,11 @@ public class Graphics {
 		matrixMode(MatrixMode.MODELVIEW);
 		resetMatrix();
 	}
+	
+	public void simpleortho(double left, double right, double bottom, double top,
+			double near, double far) {
+		gl.glOrtho(left, right, bottom, top, near, far);
+		}
 
 	/**
 	 * Sets the default orthographic projection.
@@ -813,6 +857,10 @@ public class Graphics {
 		gl.glOrtho(0, this.width, 0, this.height, -1.0e10, 1.0e10);
 		matrixMode(MatrixMode.MODELVIEW);
 		resetMatrix();
+	}
+	
+	public void simpleortho() {
+		gl.glOrtho(0, this.width, 0, this.height, -1.0e10, 1.0e10);
 	}
 
 	/**Sets a perspective matrix defined through the parameters. Works like
@@ -840,6 +888,23 @@ public class Graphics {
 		matrixMode(MatrixMode.MODELVIEW);
 		resetMatrix();
 	}
+	
+	public void simplefrustum(double left, double right, double bottom, double top,
+			double near, double far) {
+		gl.glFrustum(left, right, bottom, top, near, far);
+		}
+	
+	public void frustum() {
+		matrixMode(MatrixMode.PROJECTION);
+		resetMatrix();
+		gl.glFrustum(0, this.width, 0, this.height, -1.0e10, 1.0e10);
+		matrixMode(MatrixMode.MODELVIEW);
+		resetMatrix();
+	}
+	
+	public void simplefrustum() {
+		gl.glFrustum(0, this.width, 0, this.height, -1.0e10, 1.0e10);
+		}
 
 	/**
 	 * Sets the position of the camera through setting the eye position, the 

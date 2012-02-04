@@ -13,8 +13,8 @@ public class MySQLTest {
 
     private static final String HOST     = "localhost";
     private static final String DATABASE = "casmi";
-    private static final String USER     = "casmi_user";
-    private static final String PASSWORD = "casmi_password";
+    private static final String USER     = "test";
+    private static final String PASSWORD = "test";
     
     private static MySQL mysql = null;
     
@@ -46,14 +46,6 @@ public class MySQLTest {
             e.printStackTrace();
             fail("failed to create instance");
         }
-        try {
-            mysql.connect();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail("failed to connect database");
-        }
-        
-    	cleanup();
     }
     
     @AfterClass
@@ -62,6 +54,23 @@ public class MySQLTest {
         mysql.close();
     }
     
+    @Test(expected = SQLException.class)
+    public void nonConnectionTest() throws SQLException {
+        mysql.execute("CREATE TABLE example (id INTEGER, text TEXT, date TEXT, value REAL)");
+    }
+    
+    @Test
+    public void connectTest() {
+        try {
+            mysql.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to connect.");
+        }
+        
+        cleanup();
+    }
+        
     @Test
     public void createTableTest() {
 
@@ -229,7 +238,6 @@ public class MySQLTest {
         for (Alcohol a : alcohols) {
             System.out.println(a);
             
-            Assert.assertNotNull(a.getID());
             Assert.assertNotNull(a.getName());
             Assert.assertNotNull(a.getAbv());
             Assert.assertNull(a.origin);

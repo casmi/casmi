@@ -22,155 +22,188 @@ package casmi.graphics.element;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.Graphics;
+
 /**
- * Box class.
- * Wrap JOGL and make it easy to use.
+ * Box class. Wrap JOGL and make it easy to use.
  * 
  * @author Y. Ban
  * 
  */
 public class Box extends Element implements Renderable {
 
-    private static double STROKE_BIAS_RATIO = 1.01;
-    
-    private double width;
-    private double height;
+	private static double STROKE_BIAS_RATIO = 1.01;
 
-    public Box(double size) {
-        this.width = this.height = size;
-    }
+	private double width;
+	private double height;
 
-    public Box(double width, double height) {
-        this.width = width;
-        this.height = height;
-    }
+	private Texture[] textures = new Texture[6];
 
-    @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+	public Box(double size) {
+		this.width = this.height = size;
+	}
 
-        if (this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        }
-        
+	public Box(double width, double height) {
+		this.width = width;
+		this.height = height;
+	}
 
-        gl.glPushMatrix();
-        this.setTweenParameter(gl);
-        
-        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(1f, 1f);
-        
-        if (this.fill) {
-            getSceneFillColor().setup(gl);
-            gl.glLineWidth(this.strokeWidth);
-            
-            gl.glPushMatrix();
-            gl.glScaled(1.0, this.height / this.width, 1.0);
-            drawBox(gl, (float)this.width, GL.GL_QUADS);
-            gl.glPopMatrix();
-        }
-       // gl.glDisable(GL.GL_DEPTH_TEST);
-        if (this.stroke) {
-            getSceneStrokeColor().setup(gl);
-            gl.glPushMatrix();
-            gl.glScaled(1.0, this.height / this.width, 1.0);
-            drawBox(gl, (float)(this.width * STROKE_BIAS_RATIO), GL.GL_LINE_STRIP);
-            gl.glPopMatrix();
-        }
-        
-        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-         
+	@Override
+	public void render(GL gl, GLU glu, int width, int height) {
 
-        gl.glPopMatrix();
-        
-        if (this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
-        }
-    }
+		if (this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0) {
+			gl.glDisable(GL.GL_DEPTH_TEST);
+		}
 
-    private static float[][] boxVertices;
+		gl.glPushMatrix();
+		this.setTweenParameter(gl);
 
-    private static final float[][] boxNormals = {
-        {-1.0f, 0.0f, 0.0f},
-        {0.0f, 1.0f, 0.0f},
-        {1.0f, 0.0f, 0.0f},
-        {0.0f, -1.0f, 0.0f},
-        {0.0f, 0.0f, 1.0f},
-        {0.0f, 0.0f, -1.0f}
-    };
+		if (this.enableTexture == false) {
+			gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+			gl.glPolygonOffset(1f, 1f);
+		}
 
-    private static final int[][] boxFaces = {
-        {0, 1, 2, 3},
-        {3, 2, 6, 7},
-        {7, 6, 5, 4},
-        {4, 5, 1, 0},
-        {5, 6, 2, 1},
-        {7, 4, 0, 3}
-    };
+		if (this.fill) {
+			getSceneFillColor().setup(gl);
+			gl.glLineWidth(this.strokeWidth);
 
-    private void drawBox(GL gl, float size, int type) {
+			gl.glPushMatrix();
+			gl.glScaled(1.0, this.height / this.width, 1.0);
+			drawBox(gl, (float) (this.width * 1.0), GL.GL_QUADS);
+			gl.glPopMatrix();
+		}
+		// gl.glDisable(GL.GL_DEPTH_TEST);
+		if (this.stroke) {
+			getSceneStrokeColor().setup(gl);
+			gl.glPushMatrix();
+			gl.glScaled(1.0, this.height / this.width, 1.0);
+			if (this.enableTexture == false)
+				drawBox(gl, (float) (this.width * STROKE_BIAS_RATIO),
+						GL.GL_LINE_STRIP);
+			else
+				drawBox(gl, (float) (this.width), GL.GL_LINE_STRIP);
+			gl.glPopMatrix();
+		}
 
-        if (boxVertices == null) {
+		if (this.enableTexture == false)
+			gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 
-            float[][] v = new float[8][];
+		gl.glPopMatrix();
 
-            for (int i = 0; i < 8; i++) {
-                v[i] = new float[3];
-            }
+		if (this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0) {
+			gl.glEnable(GL.GL_DEPTH_TEST);
+		}
+	}
 
-            v[0][0] = v[1][0] = v[2][0] = v[3][0] = -0.5f;
-            v[4][0] = v[5][0] = v[6][0] = v[7][0] = 0.5f;
-            v[0][1] = v[1][1] = v[4][1] = v[5][1] = -0.5f;
-            v[2][1] = v[3][1] = v[6][1] = v[7][1] = 0.5f;
-            v[0][2] = v[3][2] = v[4][2] = v[7][2] = -0.5f;
-            v[1][2] = v[2][2] = v[5][2] = v[6][2] = 0.5f;
+	private static float[][] boxVertices;
 
-            boxVertices = v;
-        }
+	private static final float[][] boxNormals = { { -1.0f, 0.0f, 0.0f },
+			{ 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, -1.0f, 0.0f },
+			{ 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f, -1.0f } };
 
-        float[][] v = boxVertices;
-        float[][] n = boxNormals;
-        int[][] faces = boxFaces;
+	private static final int[][] boxFaces = { { 0, 1, 2, 3 }, { 3, 2, 6, 7 },
+			{ 7, 6, 5, 4 }, { 4, 5, 1, 0 }, { 5, 6, 2, 1 }, { 7, 4, 0, 3 } };
 
-        for (int i = 4; i >= 0; i--) {
-            gl.glBegin(type);
-            gl.glNormal3fv(n[i], 0);
-            
-            float[] vt = v[faces[i][0]];
-            gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
-            vt = v[faces[i][1]];
-            gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
-            vt = v[faces[i][2]];
-            gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
-            vt = v[faces[i][3]];
-            gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
-            
-            if( type == GL.GL_LINE_STRIP ) {
-                vt = v[faces[i][0]];
-                gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
-            }
+	private void drawBox(GL gl, float size, int type) {
 
-            gl.glEnd();
-        }
-    }
+		if (boxVertices == null) {
 
-    public double getWidth() {
-        return width;
-    }
+			float[][] v = new float[8][];
 
-    public void setWidth(double width) {
-        this.width = width;
-    }
+			for (int i = 0; i < 8; i++) {
+				v[i] = new float[3];
+			}
 
-    public double getHeight() {
-        return height;
-    }
+			v[0][0] = v[1][0] = v[2][0] = v[3][0] = -0.5f;
+			v[4][0] = v[5][0] = v[6][0] = v[7][0] = 0.5f;
+			v[0][1] = v[1][1] = v[4][1] = v[5][1] = -0.5f;
+			v[2][1] = v[3][1] = v[6][1] = v[7][1] = 0.5f;
+			v[0][2] = v[3][2] = v[4][2] = v[7][2] = -0.5f;
+			v[1][2] = v[2][2] = v[5][2] = v[6][2] = 0.5f;
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
-    
-    public void setSize(double size){
-    	this.height = size;
-    	this.width = size;
-    }
+			boxVertices = v;
+		}
+
+		float[][] v = boxVertices;
+		float[][] n = boxNormals;
+		int[][] faces = boxFaces;
+
+		for (int i = 5; i >= 0; i--) {
+			if (type == GL.GL_QUADS) {
+				if (this.enableTexture == true) {
+					if (textures[i].reloadFlag) {
+						Graphics.reloadTextures();
+						textures[i].reloadFlag = false;
+					}
+					textures[i].enableTexture();
+				}
+			}
+			gl.glBegin(type);
+			gl.glNormal3fv(n[i], 0);
+
+			float[] vt = v[faces[i][0]];
+
+			if (this.enableTexture == true) {
+				gl.glTexCoord2f(textures[i].getTextureCorner(0, 0),
+						textures[i].getTextureCorner(0, 1));
+			}
+			gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
+
+			vt = v[faces[i][1]];
+			if (this.enableTexture == true) {
+				gl.glTexCoord2f(textures[i].getTextureCorner(1, 0),
+						textures[i].getTextureCorner(1, 1));
+			}
+			gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
+
+			vt = v[faces[i][2]];
+			if (this.enableTexture == true) {
+				gl.glTexCoord2f(textures[i].getTextureCorner(2, 0),
+						textures[i].getTextureCorner(2, 1));
+			}
+			gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
+
+			vt = v[faces[i][3]];
+			if (this.enableTexture == true) {
+				gl.glTexCoord2f(textures[i].getTextureCorner(3, 0),
+						textures[i].getTextureCorner(3, 1));
+			}
+			gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
+
+			if (type == GL.GL_LINE_STRIP) {
+				vt = v[faces[i][0]];
+				gl.glVertex3f(vt[0] * size, vt[1] * size, vt[2] * size);
+			}
+
+			if (this.enableTexture == true && type == GL.GL_QUADS)
+				textures[i].disableTexture();
+			gl.glEnd();
+		}
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
+	public void setSize(double size) {
+		this.height = size;
+		this.width = size;
+	}
+
+	public void setTexture(int index, Texture texture) {
+		this.enableTexture = true;
+		textures[index] = texture;
+	}
 }

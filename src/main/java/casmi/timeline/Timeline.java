@@ -25,8 +25,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-
-
+import casmi.Applet;
 import casmi.graphics.Graphics;
 import casmi.parser.CSV;
 
@@ -46,6 +45,7 @@ public class Timeline implements TimelineRender{
 	private boolean endScene = false;
 	private boolean disolve = false,nextDisolve = false, preDisolve = false;
 	private long disolveStart,disolveNow;
+	private Applet baseApplet;
 	public enum DisolveMode {
 		CROSS, NORMAL
 	};
@@ -129,11 +129,21 @@ public class Timeline implements TimelineRender{
         		name = test[0];
         		time = Double.valueOf(test[3]).doubleValue();
         		Class<?> clazz;
+        		Object obj;
         		try{
         			clazz = loader.loadClass(name);
+        			obj = clazz.newInstance();
+        			if(obj instanceof Scene){
+        				
+        			}
+        			
         		} catch (ClassNotFoundException e){
         			throw new RuntimeException(e);
-        		}
+        		} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
         		
             	//if(!sl.contains()){
             		//sl.add(clazz);
@@ -280,7 +290,7 @@ public class Timeline implements TimelineRender{
 		 }
 		 
 		 if(disolve == false)
-			 sl.get(nowSceneID).draw(g);
+			 sl.get(nowSceneID).drawscene(g);
 		 else{
 			 disolveNow = System.currentTimeMillis();
 			 double tmp = (disolveNow-disolveStart)/(dv.get(nowDisolveID).getTime()*1000);
@@ -289,18 +299,18 @@ public class Timeline implements TimelineRender{
 			 	default:
 				case CROSS:
 					sl.get(nowSceneID).setSceneA((1.0-tmp),g);
-					sl.get(nowSceneID).draw(g);
+					sl.get(nowSceneID).drawscene(g);
 					sl.get(nextSceneID).setSceneA(tmp,g);
-					sl.get(nextSceneID).draw(g);
+					sl.get(nextSceneID).drawscene(g);
 					break;
 				case NORMAL:
 					if(tmp<=0.5){
 						sl.get(nowSceneID).setSceneA((1.0-tmp*2),g);
-						sl.get(nowSceneID).draw(g);
+						sl.get(nowSceneID).drawscene(g);
 					}
 					if(tmp>=0.5){
 						sl.get(nextSceneID).setSceneA(((tmp-0.5)*2),g);
-						sl.get(nextSceneID).draw(g);
+						sl.get(nextSceneID).drawscene(g);
 					}
 					break;
 				}
@@ -313,6 +323,22 @@ public class Timeline implements TimelineRender{
 
 	public boolean isEndScene() {
 		return endScene;
+	}
+	
+	public Scene getScene(){
+		return sl.get(nowSceneID);
+	}
+	
+	public Scene getScene(int index){
+		return sl.get(index);
+	}
+	
+	public void setApplet(Applet a){
+		baseApplet = a;
+	}
+	
+	public Applet get(){
+		return baseApplet;
 	}
 
 	public boolean setEndScene(boolean endScene) {

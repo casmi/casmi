@@ -95,7 +95,7 @@ public class XML extends XMLElement {
             if (reader != null) reader.close();
         }
     }
-    
+
     /**
      * Parse a XML string.
      * 

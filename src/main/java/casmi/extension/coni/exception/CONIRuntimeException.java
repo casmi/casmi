@@ -17,9 +17,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph;
+package casmi.extension.coni.exception;
 
-public class Graph {
+import casmi.exception.CasmiRuntimeException;
 
-    // TODO
+public class CONIRuntimeException extends CasmiRuntimeException {
+
+    public CONIRuntimeException() {
+        super();
+    }
+
+    public CONIRuntimeException(String message) {
+        super(message);
+    }
+    
+    public CONIRuntimeException(Throwable cause) {
+        super(cause);
+    }
 }

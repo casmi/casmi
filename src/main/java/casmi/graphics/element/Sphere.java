@@ -24,6 +24,8 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
+import casmi.graphics.Graphics;
+
 /**
  * Sphere class.
  * Wrap JOGL and make it easy to use.
@@ -74,11 +76,18 @@ public class Sphere extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
+    	
+    	if (this.enableTexture==true){
+    	if (texture.reloadFlag) {
+            Graphics.reloadTextures();
+            texture.reloadFlag = false;
+        }}
         
         if( this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0 ) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
-        this.material.setup(gl);
+        if(this.enableTexture==true)
+        	texture.enableTexture();
         gl.glPushMatrix();
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         gl.glPolygonOffset(1f, 1f);
@@ -99,6 +108,9 @@ public class Sphere extends Element implements Renderable {
         gl.glPopMatrix();
         gl.glDisable(GL.GL_CULL_FACE);
         gl.glDisable(GL.GL_POLYGON_OFFSET_FILL); 
+
+        if(this.enableTexture==true)
+        	texture.disableTexture();
         if( this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0 ) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }

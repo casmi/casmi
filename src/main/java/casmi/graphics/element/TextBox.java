@@ -91,7 +91,18 @@ public class TextBox extends Element implements Renderable {
             }
             
             // text
-            text.setX(x - this.width  / 2.0);
+            switch (text.getAlign()) {
+            case CENTER:
+                text.setX(x);
+                break;
+            case RIGHT:
+                text.setX(x + this.width / 2.0);
+                break;
+            case LEFT:
+            default:
+                text.setX(x - this.width / 2.0);
+                break;
+            }
             text.setY(y + this.height / 2.0 - text.getHeight());
             text.setZ(z);
             text.render(gl, glu, width, height);
@@ -118,15 +129,17 @@ public class TextBox extends Element implements Renderable {
         StringBuilder sb = new StringBuilder();
         
         for (String str : strs) {
-            while (width < tr.getBounds(str).getWidth()) {
+            while (1 < str.length() && width < tr.getBounds(str).getWidth()) {
                 String tmp = str;
-                while (width < tr.getBounds(tmp).getWidth()) {
+                while (1 < tmp.length() && width < tr.getBounds(tmp).getWidth()) {
                     tmp = tmp.substring(0, tmp.length() - 1);
                 }
-                sb.append(tmp + '\n');
+                sb.append(tmp);
+                sb.append('\n');
                 str = str.substring(tmp.length());
             }
-            sb.append(str + '\n');
+            sb.append(str);
+            sb.append('\n');
         }
         
         text.setArrayText(sb.toString());

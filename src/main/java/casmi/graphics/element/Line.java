@@ -22,6 +22,8 @@ package casmi.graphics.element;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.matrix.Vertex;
 
 /**
@@ -42,8 +44,12 @@ public class Line extends Element implements Renderable {
     private double y2;
     private double z1;
     private double z2;
-    private double x=0;
-    private double y=0;
+    private double[] dx = new double[2];
+    private double[] dy = new double[2];
+    private double[] dz = new double[2];
+    
+    private Color startColor;
+    private Color endColor;
 
     private int MODE;
 
@@ -63,11 +69,20 @@ public class Line extends Element implements Renderable {
      *            The coordinates for the first control point.
      */            
     public Line(double x1, double y1, double x2, double y2) {
-        this.MODE = LINES;
+        this.MODE = LINES_3D;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.z1 = 0;
+        this.z2 = 0;
+        calcG();
+        dx[0] = x1 - x;
+        dx[1] = x2 - x;
+        dy[0] = y1 - y;
+        dy[1] = y2 - y;
+        dz[0] = z1 - 0;
+        dz[1] = z2 - 0;
     }
     
     /**
@@ -79,13 +94,20 @@ public class Line extends Element implements Renderable {
      *            The coordinates for the first control point.
      */            
     public Line(Vertex v1, Vertex v2) {
-        this.MODE = LINES;
+        this.MODE = LINES_3D;
         this.x1 = v1.x;
         this.y1 = v1.y;
         this.z1 = v1.z;
         this.x2 = v2.x;
         this.y2 = v2.y;
         this.z2 = v2.z;
+        calcG();
+        dx[0] = x1 - x;
+        dx[1] = x2 - x;
+        dy[0] = y1 - y;
+        dy[1] = y2 - y;
+        dz[0] = z1 - z;
+        dz[1] = z2 - z;
     }
 
     /**
@@ -104,6 +126,13 @@ public class Line extends Element implements Renderable {
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
+        calcG();
+        dx[0] = x1 - x;
+        dx[1] = x2 - x;
+        dy[0] = y1 - y;
+        dy[1] = y2 - y;
+        dz[0] = z1 - z;
+        dz[1] = z2 - z;
     }
     
     /**
@@ -122,6 +151,13 @@ public class Line extends Element implements Renderable {
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
+        calcG();
+        dx[0] = x1 - x;
+        dx[1] = x2 - x;
+        dy[0] = y1 - y;
+        dy[1] = y2 - y;
+        dz[0] = z1 - z;
+        dz[1] = z2 - z;
     }
     
     /**
@@ -138,6 +174,55 @@ public class Line extends Element implements Renderable {
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+
+        calcG();
+        dx[0] = x1 - x;
+        dx[1] = x2 - x;
+        dy[0] = y1 - y;
+        dy[1] = y2 - y;
+        dz[0] = z1 - 0;
+        dz[1] = z2 - 0;
+    }
+    
+    public void set(boolean index, double x, double y){
+    	this.MODE = LINES;
+    	if(index == true){
+    		this.x1 = x;
+            this.y1 = y;
+    	} else {
+    		this.x2 = x;
+            this.y2 = y;
+    	}
+
+        calcG();
+        System.out.println(this.x+" "+this.y);
+        dx[0] = x1 - this.x;
+        dx[1] = x2 - this.x;
+        dy[0] = y1 - this.y;
+        dy[1] = y2 - this.y;
+        dz[0] = z1 - 0;
+        dz[1] = z2 - 0;
+    }
+    
+    public void set(boolean index, double x, double y, double z) {
+        this.MODE = LINES_3D;
+        if(index==true){
+        	this.x1 = x;
+            this.y1 = y;
+            this.z1 = z;
+        } else {
+            this.x2 = x;
+            this.y2 = y;
+            this.z2 = z;
+        	
+        }
+        calcG();
+        dx[0] = x1 - this.x;
+        dx[1] = x2 - this.x;
+        dy[0] = y1 - this.y;
+        dy[1] = y2 - this.y;
+        dz[0] = z1 - this.z;
+        dz[1] = z2 - this.z;
     }
     
     /**
@@ -156,35 +241,48 @@ public class Line extends Element implements Renderable {
         this.x2 = v2.x;
         this.y2 = v2.y;
         this.z2 = v2.z;
+        calcG();
+        dx[0] = x1 - this.x;
+        dx[1] = x2 - this.x;
+        dy[0] = y1 - this.y;
+        dy[1] = y2 - this.y;
+        dz[0] = z1 - this.z;
+        dz[1] = z2 - this.z;
     }
    
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        calcG();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
 
         getSceneStrokeColor().setup(gl);
 
         gl.glPushMatrix();
-        gl.glTranslated(x, y, 0);
-        gl.glRotated(rotate, 0, 0, 1.0);
         this.setTweenParameter(gl);
+     //   setPoint();
 
         switch (MODE) {
         case LINES:
             gl.glLineWidth(this.strokeWidth);
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(this.x1-x, this.y1-y);
-            gl.glVertex2d(this.x2-x, this.y2-y);
+            if(isGradation()==true&&startColor!=null)
+            	getSceneColor(startColor).setup(gl);
+            gl.glVertex2d(this.dx[0], this.dy[0]);
+            if(isGradation()==true&&endColor!=null)
+            	getSceneColor(endColor).setup(gl);
+            gl.glVertex2d(this.dx[1], this.dy[1]);
             gl.glEnd();
             break;
         case LINES_3D:
             gl.glLineWidth(this.strokeWidth);
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex3d(this.x1-x, this.y1-y, this.z1);
-            gl.glVertex3d(this.x2-x, this.y2-y, this.z2);
+            if(isGradation()==true&&startColor!=null)
+            	getSceneColor(startColor).setup(gl);
+            gl.glVertex3d(this.dx[0], this.dy[0], this.dz[0]);
+            if(isGradation()==true&&endColor!=null)
+            	getSceneColor(endColor).setup(gl);
+            gl.glVertex3d(this.dx[1], this.dy[1], this.dz[1]);
             gl.glEnd();
             break;
         default:
@@ -200,28 +298,46 @@ public class Line extends Element implements Renderable {
     private void calcG(){
     	x = (x1+x2)/2.0;
     	y = (y1+y2)/2.0;
+    	z = (z1+z2)/2.0;
     }
     
-    public double getX(){
-    	return this.x;
+    private void setPoint(){
+    	this.x1 = x + dx[0];
+        this.x2 = x + dx[1];
+        this.y1 = y + dy[0];
+        this.y2 = y + dy[1];
+        this.z1 = z + dz[0];
+        this.z2 = z + dz[1];
     }
     
-    public double getY(){
-    	return this.y;
+    public void setCornerColor(int index,Color color){
+    	if(index==0){
+    	if(startColor == null)
+			startColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.startColor = color;
+    	}
+    	if(index==1){
+        	if(endColor == null)
+    			endColor = new Color(0,0,0);
+        	setGradation(true);
+        	this.endColor = color;
+        	}
     }
     
-    public void setX(double x){
-    	this.x = x;
+    public void setCornerColor(int index,ColorSet colorset){
+    	if(index==0){
+    	if(startColor == null)
+			startColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.startColor = Color.color(colorset);
+    	}
+    	if(index==1){
+        	if(endColor == null)
+    			endColor = new Color(0,0,0);
+        	setGradation(true);
+        	this.endColor = Color.color(colorset);
+        	}
     }
-    
-    public void setY(double y){
-    	this.y = y;
-    }
-    
-    
-    public void setXY(double x, double y){
-    	this.x = x;
-    	this.y = y;
-    }
-
+  
 }

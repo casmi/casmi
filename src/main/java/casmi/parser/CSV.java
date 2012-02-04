@@ -26,8 +26,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import casmi.util.FileUtil;
-
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -113,7 +111,7 @@ public class CSV {
      * @param file a file path string of a csv file
      */
     public CSV(URL url) {
-    	this(new File( FileUtil.url2Uri(url) ), DEFAULT_SEPARATOR);
+    	this(new File( url2Uri(url) ), DEFAULT_SEPARATOR);
     }
     
     /**
@@ -246,5 +244,14 @@ public class CSV {
                 // Ignore.
             }
         }
+    }
+    
+    private static URI url2Uri(URL url) {
+    	try {
+    		return new URI(url.toString());
+    	} catch (URISyntaxException e) {
+    		e.printStackTrace();
+    		return null;
+		}
     }
 }

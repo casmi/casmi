@@ -23,8 +23,8 @@ public class OAuthTest {
     private static final String AUTHORIZE_URL     = "https://api.twitter.com/oauth/authorize";
     private static final String ACCESS_TOKEN_URL  = "https://api.twitter.com/oauth/access_token";
     
-    private static final String CONSUMER_KEY      = "YCm3oD8BBayFDVVHBja0Vw";
-    private static final String CONSUMER_SECRET   = "NB9LPGmr3rXneAqOqaNM7veSvyb4ecKchgo1ZbwFw";
+    private static final String CONSUMER_KEY      = "Your Consumer Key";
+    private static final String CONSUMER_SECRET   = "Your Consumer Secret";
     
     private static final String HOME_TIMELINE_URL = "http://api.twitter.com/1/statuses/home_timeline.xml";
     

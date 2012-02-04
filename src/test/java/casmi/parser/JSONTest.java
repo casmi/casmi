@@ -8,7 +8,6 @@ import java.io.IOException;
 import org.junit.Test;
 
 import casmi.exception.ParserException;
-import casmi.util.FileUtil;
 
 /**
  * JSON test class.
@@ -18,6 +17,9 @@ import casmi.util.FileUtil;
  */
 public class JSONTest {
 
+    private static final String EXAMPLE_XML = JSONTest.class.getResource("example.xml").getPath();
+    private static final String EXAMPLE_JSON = JSONTest.class.getResource("example.json").getPath();
+    
     /**
      * Inner class for JSON tests.
      * 
@@ -55,10 +57,8 @@ public class JSONTest {
         JSON json = new JSON();
         XML xml = new XML();
 
-        File xmlFile = new File( FileUtil.url2Uri(getClass().getResource("example.xml")) );
-        
         try {
-            xml.parseFile(xmlFile);
+            xml.parseFile(new File(EXAMPLE_XML));
         } catch (ParserException e) {
             e.printStackTrace();
             fail("Failed to parse XML.");
@@ -95,10 +95,8 @@ public class JSONTest {
         JSON json = new JSON();
         Sake[] sakes = null;
 
-        File f = new File( FileUtil.url2Uri(getClass().getResource("example.json")) );
-        
         try {
-            sakes = json.decode(f, Sake[].class);
+            sakes = json.decode(new File(EXAMPLE_JSON), Sake[].class);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed to decode.");

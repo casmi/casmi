@@ -39,10 +39,7 @@ import com.sun.opengl.util.j2d.TextRenderer;
  */
 public class Text extends Element implements Renderable {
 
-    private double x = 0.0;
-    private double y = 0.0;
-    private double z = 0.0;
-    private Font font;
+     private Font font;
     private String str;
     private String[] strArray;
     private FontRenderContext frc;
@@ -50,6 +47,8 @@ public class Text extends Element implements Renderable {
     private TextRenderer textRenderer;
     private TextAlign align = TextAlign.LEFT;
     private double leading = 0.0;
+    
+    private boolean selection = false;
     
     /**
      * Creates a new Text object.
@@ -179,8 +178,12 @@ public class Text extends Element implements Renderable {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
         
+        
         gl.glPushMatrix();
+        
         {
+        if(isSelection()==false){
+
             this.setTextTweenParameter(gl);
             textRenderer.begin3DRendering();
             if (this.stroke == true) {
@@ -190,24 +193,59 @@ public class Text extends Element implements Renderable {
                 getSceneStrokeColor().calcColor();
                 textRenderer.setColor(getSceneFillColor().getNormalR(), getSceneFillColor().getNormalG(), getSceneFillColor().getNormalB(), getSceneFillColor().getNormalA());
             }
-            double tmpX = x; 
-            double tmpY = y;
+            double tmpX = 0; 
+            double tmpY = 0;
             for (int i = 0; i < strArray.length; i++) {
                 switch (align) {
                 default:
                 case LEFT:
                     break;
                 case CENTER:
-                    tmpX = x - getWidth(i) / 2.0;
+                    tmpX =  - getWidth(i) / 2.0;
                     break;
                 case RIGHT:
-                    tmpX = x - getWidth(i);
+                    tmpX =  - getWidth(i);
                 }
                 textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
+                
+                
+                
             }
             textRenderer.end3DRendering();
+
         }
+        else {
+        	this.setTextTweenParameter(gl);
+            double tmpX = 0; 
+            double tmpY = 0;
+        	
+            for (int i = 0; i < strArray.length; i++) {
+            	switch (align) {
+                default:
+                case LEFT:
+                    break;
+                case CENTER:
+                    tmpX =  - getWidth(i) / 2.0;
+                    break;
+                case RIGHT:
+                    tmpX =  - getWidth(i);
+                }
+
+        	 gl.glBegin(GL.GL_QUADS);
+             {
+                 gl.glVertex2d(tmpX, (tmpY - leading * i)-getDescent(i));
+                 gl.glVertex2d(tmpX, (tmpY - leading * i)+getAscent(i));
+                 gl.glVertex2d(tmpX+getWidth(i), (tmpY - leading * i)+getAscent(i));
+                 gl.glVertex2d(tmpX+getWidth(i), (tmpY - leading * i)-getDescent(i));
+             }
+             gl.glEnd();
+            }
+        }
+        
+        }
+        
         gl.glPopMatrix();
+        
 
         if (strokeColor.getA() != 1) {
             gl.glEnable(GL.GL_DEPTH_TEST);
@@ -290,6 +328,7 @@ public class Text extends Element implements Renderable {
      *           The letter's width.    
      */
     public double getWidth(int line) {
+        if (strArray.length == 0) return 0.0;
         return textRenderer.getBounds(strArray[line]).getWidth();
     }
     
@@ -302,6 +341,7 @@ public class Text extends Element implements Renderable {
      *           The letter's height.    
      */
     public double getHeight(int line) {
+        if (strArray.length == 0) return 0.0;
         return textRenderer.getBounds(strArray[line]).getHeight();
     }
     
@@ -413,31 +453,7 @@ public class Text extends Element implements Renderable {
     public TextRenderer getRenderer() {
         return textRenderer;
     }
-    
-    public void setX(double x) {
-        this.x = x;
-    }
-    
-    public void setY(double y) {
-        this.y = y;
-    }
-    
-    public void setZ(double z) {
-        this.z = z;
-    }
-    
-    public double getX() {
-        return x;
-    }
-    
-    public double getY() {
-        return y;
-    }
-    
-    public double getZ() {
-        return z;
-    }
-    
+        
     public Font getFont() {
         return font;
     }
@@ -446,4 +462,12 @@ public class Text extends Element implements Renderable {
         this.font = font;
         textRenderer = new TextRenderer(font.getAWTFont(), true, true);
     }
+
+	public boolean isSelection() {
+		return selection;
+	}
+
+	public void setSelection(boolean selection) {
+		this.selection = selection;
+	}
 }

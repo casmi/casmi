@@ -35,6 +35,7 @@ class StatementGenerator {
     
     private enum SQLStatement {
         CREATE_TABLE,
+        AUTO_INCREMENT,
         DROP,
         INSERT,
         UPDATE,
@@ -79,21 +80,23 @@ class StatementGenerator {
         
         // SQL_TABLE -----------------------------------------------------------
         // SQLite3
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.CREATE_TABLE), "CREATE TABLE :table (:fields)");
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.DROP),         "DROP TABLE :table");
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.INSERT),       "INSERT INTO :table (:fields) VALUES (:values)");
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.UPDATE),       "UPDATE :table SET :sets WHERE id=:id");
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.DELETE),       "DELETE FROM :table WHERE :where");
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.TRUNCATE),     "DELETE FROM :table");
-        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.SELECT),       "SELECT :selects FROM :table :query");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.CREATE_TABLE),   "CREATE TABLE :table (:fields)");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.AUTO_INCREMENT), "AUTOINCREMENT");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.DROP),           "DROP TABLE :table");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.INSERT),         "INSERT INTO :table (:fields) VALUES (:values)");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.UPDATE),         "UPDATE :table SET :sets WHERE :key=:key_value");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.DELETE),         "DELETE FROM :table WHERE :where");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.TRUNCATE),       "DELETE FROM :table");
+        STATEMENT_TABLE.put(key2(SQLType.SQLITE_3, SQLStatement.SELECT),         "SELECT :selects FROM :table :query");
         // MySQL5
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.CREATE_TABLE), "CREATE TABLE :table (:fields)");
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.DROP),         "DROP TABLE :table");
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.INSERT),       "INSERT INTO :table (:fields) VALUES (:values)");
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.UPDATE),       "UPDATE :table SET :sets WHERE id=:id");
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.DELETE),       "DELETE FROM :table WHERE :where");
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.TRUNCATE),     "TRUNCATE TABLE :table");
-        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.SELECT),       "SELECT :selects FROM :table :query");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.CREATE_TABLE),   "CREATE TABLE :table (:fields)");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.AUTO_INCREMENT), "AUTO_INCREMENT");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.DROP),           "DROP TABLE :table");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.INSERT),         "INSERT INTO :table (:fields) VALUES (:values)");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.UPDATE),         "UPDATE :table SET :sets WHERE :key=:id");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.DELETE),         "DELETE FROM :table WHERE :where");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.TRUNCATE),       "TRUNCATE TABLE :table");
+        STATEMENT_TABLE.put(key2(SQLType.MYSQL_5,  SQLStatement.SELECT),         "SELECT :selects FROM :table :query");
     }
     
     private static List<Object> key1(SQLType type, Class<?> cls) {
@@ -112,12 +115,12 @@ class StatementGenerator {
         return key;
     }
 
-    public static String type(SQLType type, Class<?> cls) {
+    static String type(SQLType type, Class<?> cls) {
 
         return TYPE_TABLE.get(key1(type, cls));
     }
 
-    public static String createTable(SQLType type, String tablename, String fields) {
+    static String createTable(SQLType type, String tablename, String fields) {
        
         String stmt = STATEMENT_TABLE.get(key2(type, SQLStatement.CREATE_TABLE)); 
         stmt = stmt.replaceAll(":table", tablename);
@@ -125,24 +128,98 @@ class StatementGenerator {
         return stmt;
     }
     
-    public static String drop(SQLType type, String tablename) {
+    static String createTable(Entity entity) {
+        StringBuilder sb = new StringBuilder();
+        
+        boolean autoPrimaryKey = entity.autoPrimaryKey;
+        Column primaryKey = entity.primaryKey;
+        
+        switch (entity.sql.getSQLType()) {
+        case MYSQL_5:
+        {
+            if (autoPrimaryKey) {
+                sb.append("id ");
+                sb.append(StatementGenerator.type(SQLType.MYSQL_5, int.class));
+                sb.append(' ');
+                sb.append(StatementGenerator.autoIncrement(SQLType.MYSQL_5));
+            } else {
+                sb.append(entity.primaryKey.getField());
+                sb.append(' ');
+                sb.append(StatementGenerator.type(SQLType.MYSQL_5, entity.primaryKey.getType()));
+            }
+            
+            for (Column column : entity.columns) {
+                sb.append(',');
+                sb.append(column.getField());
+                sb.append(' ');
+                sb.append(StatementGenerator.type(SQLType.MYSQL_5, column.getType()));
+            }
+            
+            if (autoPrimaryKey) {
+                sb.append(',');
+                sb.append("PRIMARY KEY(id)");
+            } else {
+                sb.append(',');
+                sb.append("PRIMARY KEY(");
+                sb.append(primaryKey.getField());
+                if (primaryKey.getType() == String.class) {
+                    sb.append("(255)");
+                }
+                sb.append(')');
+            }
+            
+            break;
+        }
+        case SQLITE_3:
+        {
+            if (autoPrimaryKey) {
+                sb.append("id ");
+                sb.append(StatementGenerator.type(SQLType.SQLITE_3, int.class));
+                sb.append(" PRIMARY KEY ");
+                sb.append(StatementGenerator.autoIncrement(SQLType.SQLITE_3));
+            } else {
+                sb.append(entity.primaryKey.getField());
+                sb.append(' ');
+                sb.append(StatementGenerator.type(SQLType.SQLITE_3, entity.primaryKey.getType()));
+                sb.append(" PRIMARY KEY");
+            }
+            
+            for (Column column : entity.columns) {
+                sb.append(',');
+                sb.append(column.getField());
+                sb.append(' ');
+                sb.append(StatementGenerator.type(SQLType.SQLITE_3, column.getType()));
+            }
+            
+            break;
+        }
+        }
+        
+        return StatementGenerator.createTable(entity.sql.getSQLType(), entity.tablename, sb.toString());
+    }
+    
+    static String autoIncrement(SQLType type) {
+        return STATEMENT_TABLE.get(key2(type, SQLStatement.AUTO_INCREMENT));
+    }
+    
+    static String drop(SQLType type, String tablename) {
         
         String stmt = STATEMENT_TABLE.get(key2(type, SQLStatement.DROP));
         stmt = stmt.replaceAll(":table", tablename);
         return stmt;
     }
     
-    public static String insert(SQLType type) {
+    static String insert(SQLType type) {
         
         return STATEMENT_TABLE.get(key2(type, SQLStatement.INSERT));
     }
     
-    public static String update(SQLType type) {
+    static String update(SQLType type) {
         
         return STATEMENT_TABLE.get(key2(type, SQLStatement.UPDATE));
     }
     
-    public static String delete(SQLType type, String tablename, String where) {
+    static String delete(SQLType type, String tablename, String where) {
         
         String stmt = STATEMENT_TABLE.get(key2(type, SQLStatement.DELETE));
         stmt = stmt.replaceAll(":table", tablename);
@@ -150,14 +227,14 @@ class StatementGenerator {
         return stmt;
     }
     
-    public static String truncate(SQLType type, String tablename) {
+    static String truncate(SQLType type, String tablename) {
         
         String stmt = STATEMENT_TABLE.get(key2(type, SQLStatement.TRUNCATE));
         stmt = stmt.replaceAll(":table", tablename);
         return stmt;
     }
     
-    public static String select(SQLType type) {
+    static String select(SQLType type) {
         
         return STATEMENT_TABLE.get(key2(type, SQLStatement.SELECT));
     }

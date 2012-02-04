@@ -148,8 +148,7 @@ abstract class SQL {
      */
     abstract boolean next() throws SQLException;
     
-    abstract <T> T get(ResultSet resultSet, Class<T> type, String field)
-        throws SQLException;
+    abstract <T> T get(ResultSet resultSet, Class<T> type, String field) throws SQLException;
 
     // -------------------------------------------------------------------------
     // For O/R mapping.
@@ -258,11 +257,13 @@ abstract class SQL {
         return find(type, sqlStr, query.getSelects());
     }
     
+    // TODO: this method is correct only if a primary key is not specified.
     public <T extends Entity> T find(Class<T> type, int id) throws SQLException {
         
         return all(type, new Query().where("id=" + id))[0];
     }
     
+    // TODO: this method is correct only if a primary key is not specified.
     public <T extends Entity> T find(Class<T> type, int id, Query query) 
         throws SQLException {
 
@@ -281,23 +282,22 @@ abstract class SQL {
     }
     
     public <T extends Entity> T last(Class<T> type) throws SQLException {
-        
-        T[] entities = all(type, new Query().order("id").desc(true).limit(1));
+        T[] entities = all(type, new Query().order(Entity.getPrimaryKeyField(type)).desc(true).limit(1));
         return entities[entities.length - 1];
     }
     
     public <T extends Entity> T last(Class<T> type, Query query) throws SQLException {
-        
         if (!query.isOrderEnable()) {
-            query.order("id");
+            query.order(Entity.getPrimaryKeyField(type));
         }
         T[] entities = all(type, query.desc(true).limit(1));
         return entities[entities.length - 1];
     }
     
     @SuppressWarnings("unchecked")
-    private <T extends Entity> T[] find(Class<T> type, String sqlStr, String... selects)
-        throws SQLException {
+    private <T extends Entity> T[] find(Class<T> type, String sqlStr, String... selects) throws SQLException {
+        if (connection == null)
+            throw new SQLException("Connection is not exist.");
         
         List<T> list = new ArrayList<T>();
 
@@ -322,6 +322,8 @@ abstract class SQL {
     }
     
     public <T extends Entity> void truncate(Class<T> type) throws SQLException {
+        if (connection == null)
+            throw new SQLException("Connection is not exist.");
         
         Statement statement = connection.createStatement();
         String stmt = StatementGenerator.truncate(sqlType, getTablename(type));

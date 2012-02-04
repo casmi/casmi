@@ -22,6 +22,9 @@ package casmi.graphics.element;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.Graphics;
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.matrix.Vertex;
 
 /**
@@ -35,14 +38,19 @@ public class Quad extends Element implements Renderable {
 
     private double x1;
     private double y1;
+    private double z1;
     private double x2;
     private double y2;
+    private double z2;
     private double x3;
     private double y3;
+    private double z3;
     private double x4;
     private double y4;
-    private double x=0;
-    private double y=0;
+    private double z4;
+    
+
+    private Color cornerColor[] = new Color[4];
 
     /**
      * Creates a new Quad object using x,y-coordinate of corners.
@@ -73,6 +81,7 @@ public class Quad extends Element implements Renderable {
         this.y3 = y3;
         this.x4 = x4;
         this.y4 = y4;
+    	calcG();
     }
     
     /**
@@ -96,6 +105,7 @@ public class Quad extends Element implements Renderable {
         this.y3 = (float)v3.y;
         this.x4 = (float)v4.x;
         this.y4 = (float)v4.y;
+    	calcG();
 
     }
     
@@ -128,6 +138,7 @@ public class Quad extends Element implements Renderable {
         this.y3 = x3;
         this.x4 = x4;
         this.y4 = y4;
+    	calcG();
     }
     
     /**
@@ -151,6 +162,7 @@ public class Quad extends Element implements Renderable {
         this.y3 = (float)v3.y;
         this.x4 = (float)v4.x;
         this.y4 = (float)v4.y;
+    	calcG();
 
     }
     
@@ -168,6 +180,7 @@ public class Quad extends Element implements Renderable {
     		this.x4 = x;
     		this.y4 = y;
     	}
+    	calcG();
     }
     
     public void setCorner(int number, double x, double y, double z){
@@ -184,6 +197,7 @@ public class Quad extends Element implements Renderable {
     		this.x4 = x;
     		this.y4 = y;
     	}
+    	calcG();
     }
     
     public void setConer(int number, Vertex v){
@@ -200,6 +214,8 @@ public class Quad extends Element implements Renderable {
     		this.x4 = v.x;
     		this.y4 = v.y;
     	}
+    	calcG();
+    	
     }
     
     public Vertex getConer(int number){
@@ -219,20 +235,41 @@ public class Quad extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-    	calcG();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
+        if(this.enableTexture==true){
+        	if (texture.reloadFlag) {
+                Graphics.reloadTextures();
+                texture.reloadFlag = false;
+            }
+        	texture.enableTexture();
+        }
         gl.glPushMatrix();
-        gl.glTranslated(x, y, 0);
-        gl.glRotated(rotate, 0, 0, 1.0);
         this.setTweenParameter(gl);
         if (this.fill) {
             getSceneFillColor().setup(gl);
             gl.glBegin(GL.GL_QUADS);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[0]).setup(gl);
+            if(this.enableTexture==true)
+            	gl.glTexCoord2f(texture.getTextureCorner(0, 0), texture.getTextureCorner(0, 1));
             gl.glVertex2d(x1-x, y1-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[1]).setup(gl);
+            if(this.enableTexture==true)
+            	gl.glTexCoord2f(texture.getTextureCorner(1, 0), texture.getTextureCorner(1, 1));
             gl.glVertex2d(x2-x, y2-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[2]).setup(gl);
+            if(this.enableTexture==true)
+            	gl.glTexCoord2f(texture.getTextureCorner(2, 0), texture.getTextureCorner(2, 1));
             gl.glVertex2d(x3-x, y3-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[3]).setup(gl);
+            if(this.enableTexture==true)
+            	gl.glTexCoord2f(texture.getTextureCorner(3, 0), texture.getTextureCorner(3, 1));
             gl.glVertex2d(x4-x, y4-y);
+            
             gl.glEnd();
         }
 
@@ -240,23 +277,35 @@ public class Quad extends Element implements Renderable {
             gl.glLineWidth(this.strokeWidth);
             getSceneStrokeColor().setup(gl);
             gl.glBegin(GL.GL_LINES);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[0]).setup(gl);
             gl.glVertex2d(x1-x, y1-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[1]).setup(gl);
             gl.glVertex2d(x2-x, y2-y);
             gl.glEnd();
             gl.glBegin(GL.GL_LINES);
             gl.glVertex2d(x2-x, y2-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[2]).setup(gl);
             gl.glVertex2d(x3-x, y3-y);
             gl.glEnd();
             gl.glBegin(GL.GL_LINES);
             gl.glVertex2d(x3-x, y3-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[3]).setup(gl);
             gl.glVertex2d(x4-x, y4-y);
             gl.glEnd();
             gl.glBegin(GL.GL_LINES);
             gl.glVertex2d(x4-x, y4-y);
+            if(isGradation()==true)
+            	getSceneColor(cornerColor[0]).setup(gl);
             gl.glVertex2d(x1-x, y1-y);
             gl.glEnd();
         }
         gl.glPopMatrix();
+        if(this.enableTexture==true)
+        	texture.disableTexture();
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glEnable(GL.GL_DEPTH_TEST);
     }
@@ -266,25 +315,45 @@ public class Quad extends Element implements Renderable {
     	y = (y1+y2+y3+y4)/4.0;
     }
     
-    public double getX(){
-    	return this.x;
+    public void setPosition(double x, double y){
+    	setPosition(x, y, this.z);
     }
     
-    public double getY(){
-    	return this.y;
+    public void setPosition(double x, double y, double z){
+    	x1 = x1 + x - this.x;
+    	y1 = y1 + y - this.y;
+    	z1 = z1 + z - this.z;
+    	x2 = x2 + x - this.x;
+    	y2 = y2 + y - this.y;
+    	z2 = z2 + z - this.z;
+    	x3 = x3 + x - this.x;
+    	y3 = y3 + y - this.y;
+    	z3 = z3 + z - this.z;
+    	x4 = x4 + x - this.x;
+    	y4 = y4 + y - this.y;
+    	z4 = z4 + z - this.z;
+    	calcG();
     }
     
-    public void setX(double x){
-    	this.x = x;
+    public void setCornerColor(int index,Color color){
+    	if(isGradation()==false){
+    		for(int i=0;i<4;i++){
+    			cornerColor[i] = new Color(0,0,0);
+    			cornerColor[i] = this.fillColor;
+    		}
+    		setGradation(true);
+    	}
+    	cornerColor[index] = color;
     }
     
-    public void setY(double y){
-    	this.y = y;
-    }
-    
-    
-    public void setXY(double x, double y){
-    	this.x = x;
-    	this.y = y;
-    }
+    public void setCornerColor(int index,ColorSet colorset){
+    	if(isGradation()==false){
+    		for(int i=0;i<4;i++){
+    			cornerColor[i] = new Color(0,0,0);
+    			cornerColor[i] = this.fillColor;
+    		}
+    		setGradation(true);
+    	}
+		cornerColor[index] = Color.color(colorset);
+	}
 }

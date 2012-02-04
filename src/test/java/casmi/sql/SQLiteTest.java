@@ -67,13 +67,6 @@ public class SQLiteTest {
             e.printStackTrace();
             fail("failed create instance");
         }
-
-        try {
-            sqlite.connect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            fail("Failed to connect.");
-        }
     }
 
     @AfterClass
@@ -84,6 +77,21 @@ public class SQLiteTest {
         cleanup();
     }
 
+    @Test(expected = SQLException.class)
+    public void nonConnectionTest() throws SQLException {
+        sqlite.execute("CREATE TABLE example (id INTEGER, text TEXT, date TEXT, value REAL)");
+    }
+    
+    @Test
+    public void connectTest() {
+        try {
+            sqlite.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to connect.");
+        } 
+    }
+    
     @Test
     public void createTableTest() {
 
@@ -242,7 +250,7 @@ public class SQLiteTest {
         
         // select
         try {
-            alcohols = sqlite.all(Alcohol.class, new Query().select("name", "alcohol_by_volume"));
+            alcohols = sqlite.all(Alcohol.class, new Query().select("name", "abv"));
         } catch (SQLException e) {
             e.printStackTrace();
             fail("Failed to find.");
@@ -251,7 +259,6 @@ public class SQLiteTest {
         for (Alcohol a : alcohols) {
             System.out.println(a);
             
-            Assert.assertNotNull(a.getID());
             Assert.assertNotNull(a.getName());
             Assert.assertNotNull(a.getAbv());
             Assert.assertNull(a.origin);
@@ -259,7 +266,7 @@ public class SQLiteTest {
         
         // where
         try {
-            alcohol = sqlite.first(Alcohol.class, new Query().where("alcohol_by_volume=15"));
+            alcohol = sqlite.first(Alcohol.class, new Query().where("abv=15"));
         } catch (SQLException e) {
             e.printStackTrace();
             fail("Failed to find.");
@@ -267,7 +274,7 @@ public class SQLiteTest {
         System.out.println(alcohol);
         
         try {
-            alcohol = sqlite.last(Alcohol.class, new Query().where("alcohol_by_volume=15"));
+            alcohol = sqlite.last(Alcohol.class, new Query().where("abv=15"));
         } catch (SQLException e) {
             e.printStackTrace();
             fail("Failed to find.");
@@ -276,7 +283,7 @@ public class SQLiteTest {
         
         // order by
         try {
-            alcohols = sqlite.all(Alcohol.class, new Query().order("alcohol_by_volume").desc(true));
+            alcohols = sqlite.all(Alcohol.class, new Query().order("abv").desc(true));
         } catch (SQLException e) {
             e.printStackTrace();
             fail("Failed to find.");
@@ -309,6 +316,49 @@ public class SQLiteTest {
         } catch (SQLException e) {
             e.printStackTrace();
             fail("Failed to truncate.");
+        }
+    }
+    
+    @Test
+    public void orAnnotationTest() {
+        Alcohol2 alcohol;
+        
+        alcohol = sqlite.entity(Alcohol2.class);
+        Assert.assertNotNull(alcohol);
+
+        alcohol.setName("Urakasumi");
+        alcohol.setAbv(15);
+        alcohol.origin = "Miyagi";
+        try {
+            alcohol.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to save");
+        }
+        
+        alcohol = sqlite.entity(Alcohol2.class);
+        Assert.assertNotNull(alcohol);
+
+        alcohol.setName("Houhai");
+        alcohol.setAbv(16);
+        alcohol.origin = "Aomori";
+        try {
+            alcohol.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to save");
+        }
+        
+        Alcohol2[] alcohols = null;
+        try {
+            alcohols = sqlite.all(Alcohol2.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol2 a : alcohols) {
+            System.out.println(a);
         }
     }
 }

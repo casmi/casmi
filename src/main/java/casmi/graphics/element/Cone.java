@@ -34,10 +34,7 @@ import javax.media.opengl.glu.GLUquadric;
  */
 public class Cone extends Element implements Renderable {
 
-    private double x;
-    private double y;
-    private double z;
-    private double base;
+     private double base;
     private double height;
 
     private int slices = 30;
@@ -147,7 +144,6 @@ public class Cone extends Element implements Renderable {
         
         gl.glPushMatrix();
         gl.glRotated(90, -1, 0, 0);
-        gl.glTranslated(x, y, z);
         if (this.fill) {
             getSceneFillColor().setup(gl);
             drawSolidCone(glu, base, getHeight(), slices, stacks);

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import java.net.URL;
@@ -27,6 +27,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
 import casmi.image.Image;
+import casmi.image.ImageMode;
 import casmi.matrix.Vertex;
 
 /**
@@ -38,259 +39,370 @@ import casmi.matrix.Vertex;
  */
 public class Texture extends Element implements Renderable {
 
-    public static final int LINES         =1;
-    public static final int LINES_3D      =3;
+    public static final int LINES     = 1;
+    public static final int LINES_3D  = 3;
     public static final int LINE_LOOP = 51;
     
-    private ArrayList<Double> x;
-    private ArrayList<Double> y;
-    private ArrayList<Double> z;
-    private ArrayList<Float> nx;
-    private ArrayList<Float> ny;
+    public enum TextureFlipMode {Horizontal,Vertical};
+    public enum TextureRotationMode {Half,FrontRight,BackRight};
 
-    private Vertex tmpv = new Vertex(0,0,0);
-   
-    private int MODE;
+    protected final Image image;
+    private Image mask;
+    private Image maskedImage;
     
-    private Image image;
+    protected double width;
+    protected double height;
+    protected double x;
+    protected double y;
+    protected double z;
+    protected int    mode;
     
+    
+    private ArrayList<Double> xList;
+    private ArrayList<Double> yList;
+    private ArrayList<Double> zList;
+    
+    private ArrayList<Double> nx;
+    private ArrayList<Double> ny;
 
-    public double Width,Height;
-    private static boolean reloadFlag = false;
+    private Vertex tmpv = new Vertex();
     
-    private double X;
-    private double Y;
+    protected boolean reloadFlag = false;    
 
-    public Texture(String s) {
-        image = new Image(s);
-        Width = image.width;
-        Height = image.height;
-        x= new ArrayList<Double>();
-        y= new ArrayList<Double>();
-        z= new ArrayList<Double>();
-        nx=new ArrayList<Float>();
-        ny=new ArrayList<Float>();
-        
-        reloadFlag = true;
+    protected boolean masking = false;
+    
+    private float[][] corner = {{0.0f,1.0f},{0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f}}; 
+
+    public Texture(String path) {
+        this(new Image(path));
     }
-    
+
     public Texture(URL url) {
-        image = new Image(url);
-        Width = image.width;
-        Height = image.height;
+        this(new Image(url));
+    }
 
-        
-        x= new ArrayList<Double>();
-        y= new ArrayList<Double>();
-        z= new ArrayList<Double>();
-        nx=new ArrayList<Float>();
-        ny=new ArrayList<Float>();
-        
+    public Texture(Image image) {
+        this.image = image;
+        width  = image.getWidth();
+        height = image.getHeight();
+
+        xList = new ArrayList<Double>();
+        yList = new ArrayList<Double>();
+        zList = new ArrayList<Double>();
+        nx = new ArrayList<Double>();
+        ny = new ArrayList<Double>();
+
         reloadFlag = true;
     }
     
-    public void copyTexture(Texture src,Texture dst){
-    	
-    }
-    
-    public void vertex(float x, float y,float nx,float ny){
-        MODE = LINES;
-        this.x.add((double)x);
-        this.y.add((double)y);
+	public void setMask(String path){
+		setMask(new Image(path));
+	}
+	
+	public void setMask(URL url){
+		setMask(new Image(url));
+	}
+	
+	public void setMask(Image maskImage){
+		masking = true;
+		this.mask = maskImage;
+		maskedImage = Image.clone(image);
+		for(int imageY = 0; imageY<this.maskedImage.getHeight();imageY++){
+			for(int imageX = 0; imageX<this.maskedImage.getWidth();imageX++){
+				if(imageX<=mask.getWidth()&&imageY<=mask.getHeight())
+					this.image.setA(mask.getGray(imageX, imageY), imageX , imageY);
+			}
+		}
+		
+	}
+	
+	public void setMask(Texture maskTexture){
+		masking = true;
+		this.mask = maskTexture.getImage();
+		maskedImage = Image.clone(image);
+		for(int imageY = 0; imageY<this.maskedImage.getHeight();imageY++){
+			for(int imageX = 0; imageX<this.maskedImage.getWidth();imageX++){
+				if(imageX<=mask.getWidth()&&imageY<=mask.getHeight())
+					this.image.setA(mask.getGray(imageX, imageY), imageX , imageY);
+			}
+		}
+		
+	}
+
+
+
+    public void addVertex(double x, double y, double nx, double ny) {
+        mode = LINES;
+        this.xList.add(x);
+        this.yList.add(y);
         this.nx.add(nx);
         this.ny.add(ny);
     }
-    
-    public void vertex(float x, float y,float z, float nx,float ny){
-        MODE = LINES_3D;
-        this.x.add((double)x);
-        this.y.add((double)y);
-        this.z.add((double)z);
+
+    public void addVertex(double x, double y, double z, double nx, double ny) {
+        mode = LINES_3D;
+        this.xList.add(x);
+        this.yList.add(y);
+        this.zList.add(z);
         this.nx.add(nx);
         this.ny.add(ny);
     }
-    
-    public void vertex(double x, double y, double nx,double ny){
-        MODE = LINES;
-        this.x.add(x);
-        this.y.add(y);
-        this.nx.add((float)nx);
-        this.ny.add((float)ny);
-    }
-    
-    public void vertex(double x, double y, double z, double nx,double ny){
-        MODE = LINES_3D;
-        this.x.add(x);
-        this.y.add(y);
-        this.z.add(z);
-        this.nx.add((float)nx);
-        this.ny.add((float)ny);
-    }
-    
-    public void vertex(Vertex v, float nx, float ny){
-        MODE = LINES_3D;
-        this.x.add(v.x);
-        this.y.add(v.y);
-        this.z.add(v.z);
+
+    public void addVertex(Vertex v, double nx, double ny) {
+        mode = LINES_3D;
+        this.xList.add(v.x);
+        this.yList.add(v.y);
+        this.zList.add(v.z);
         this.nx.add(nx);
         this.ny.add(ny);
     }
-    
-    public Vertex getVertex(int i){
-        tmpv.x = x.get(i);
-        tmpv.y = y.get(i);
-        tmpv.z = z.get(i);
+
+    public Vertex getVertex(int i) {
+        tmpv.x = xList.get(i);
+        tmpv.y = yList.get(i);
+        tmpv.z = zList.get(i);
         return tmpv;
     }
     
-    public void removeVertex(int i){
-        this.x.remove(i);
-        this.y.remove(i);
-        this.z.remove(i);
-    }
-    
-    public void setVertex(int i, double x, double y){
-        this.x.set(i, x);
-        this.y.set(i, y);
-        this.z.set(i, 0d);
-    }
-    
-    public void setVertex(int i, double x, double y, double z){
-        this.x.set(i, x);
-        this.y.set(i, y);
-        this.z.set(i, z);
-    }
-    
-    public Image getImage(){
-        return this.image;
-    }
-    
-    public void enableTexture(){
-    	this.image.enableTexture();
-    }
-    
-    public void disableTexture(){
-    	this.image.disableTexture();
+    public Vertex getTextureVertex(int i){
+    	tmpv.x = nx.get(i);
+    	tmpv.y = ny.get(i);
+    	return tmpv;
     }
 
+    public void removeVertex(int i) {
+        this.xList.remove(i);
+        this.yList.remove(i);
+        this.zList.remove(i);
+        this.nx.remove(i);
+        this.ny.remove(i);
+    }
+
+    public void setVertex(int i, double x, double y, double nx, double ny) {
+        this.xList.set(i, x);
+        this.yList.set(i, y);
+        this.zList.set(i, 0d);
+        this.nx.set(i, nx);
+        this.ny.set(i, ny);
+    }
+
+    public void setVertex(int i, double x, double y, double z, double nx, double ny) {
+        this.xList.set(i, x);
+        this.yList.set(i, y);
+        this.zList.set(i, z);
+        this.nx.set(i, nx);
+        this.ny.set(i, ny);
+    }
+    
+    public void clearVertex(){
+    	this.xList.clear();
+    	this.yList.clear();
+    	this.zList.clear();
+    }
+
+    public final void reload() {
+        reloadFlag = true;
+    }
+    
+    public final Image getImage() {
+    	if(masking == false){
+    		return this.image;
+    	}
+    	else{
+    		return this.maskedImage;
+    	}
+    }
+
+    public final void enableTexture() {
+        image.enableTexture();
+    }
+
+    public final void disableTexture() {
+        image.disableTexture();
+    }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
- 
-
         if (reloadFlag) {
             Graphics.reloadTextures();
             reloadFlag = false;
         }
+        
         gl.glDisable(GL.GL_DEPTH_TEST);
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
-        getSceneFillColor().setup(gl);
-        double tmpx,tmpy,tmpz;
-        float tmpnx,tmpny;
-        image.enableTexture();
-        if(x.size()<1){
-        	Image img = getImage();
-        	gl.glBegin(GL.GL_QUADS);
-			switch (img.mode) {
-			default:
-			case CORNER:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) X+tX, (float) (Y+tY - Height*tSY));
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) X+tX, (float) Y+tY);
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) (X+tX + Width*tSX ), (float) Y+tY);
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) (X+tX + Width*tSX ), (float) (Y+tY - Height*tSY));
-				break;
-			case CENTER:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) (X+tX - Width*tSX / 2.0), (float) (Y+tY - Height*tSY / 2.0));
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) (X+tX - Width*tSX / 2.0), (float) (Y+tY + Height*tSY / 2.0));
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) (X+tX + Width*tSX / 2.0), (float) (Y+tY + Height*tSY / 2.0));
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) (X+tX + Width*tSX / 2.0), (float) (Y+tY - Height*tSY / 2.0));
-				break;
-			}
-			gl.glEnd();
-        }else{
-        switch (MODE) {
-        case LINES:
-                gl.glBegin(GL.GL_POLYGON);
-                for(int i = 0;i<x.size();i++){
-                    tmpx = (Double)this.x.get(i);
-                    tmpy = (Double)this.y.get(i);
-                    tmpnx= (Float)this.nx.get(i);
-                    tmpny= (Float)this.ny.get(i);
-                    gl.glTexCoord2f(tmpnx, tmpny);
-                    gl.glVertex2d(tmpx, tmpy);
-                }
-                gl.glEnd();    
-                break;
-        case LINES_3D:
-                gl.glBegin(GL.GL_POLYGON);
-                for(int i = 0;i<x.size();i++){
-                    tmpx = (Double)this.x.get(i);
-                    tmpy = (Double)this.y.get(i);
-                    tmpz = (Double)this.z.get(i);
-                    tmpnx= (Float)this.nx.get(i);
-                    tmpny= (Float)this.ny.get(i);
-                gl.glVertex3d(tmpx, tmpy, tmpz);
-                gl.glTexCoord2f(tmpnx, tmpny);
-                gl.glVertex3d(tmpx, tmpy, tmpz);
+        {
+            this.setTweenParameter(gl);
+            getSceneFillColor().setup(gl);
+            double tmpx, tmpy, tmpz;
+            double tmpnx, tmpny;
+            image.enableTexture();
+            material.setup(gl);
+            if (xList.size() < 1) {
+                Image img = getImage();
+                gl.glBegin(GL.GL_QUADS);
+                switch (img.getMode()) {
+                default:
+                case CORNER:
+                    gl.glTexCoord2f(corner[0][0], corner[0][1]);
+                    gl.glVertex2d(x, y - this.height * scaleY);
+                    gl.glTexCoord2f(corner[1][0], corner[1][1]);
+                    gl.glVertex2d(x, y);
+                    gl.glTexCoord2f(corner[2][0], corner[2][1]);
+                    gl.glVertex2d(x + this.width * scaleX, y);
+                    gl.glTexCoord2f(corner[3][0], corner[3][1]);
+                    gl.glVertex2d(x + this.width * scaleX, y - this.height * scaleY);
+                    break;
+                case CENTER:
+                    gl.glTexCoord2f(corner[0][0], corner[0][1]);
+                    gl.glVertex2d(x - this.width * scaleX / 2.0, y - this.height * scaleY / 2.0);
+                    gl.glTexCoord2f(corner[1][0], corner[1][1]);
+                    gl.glVertex2d(x - this.width * scaleX / 2.0, y + this.height * scaleY / 2.0);
+                    gl.glTexCoord2f(corner[2][0], corner[2][1]);
+                    gl.glVertex2d(x + this.width * scaleX / 2.0, y + this.height * scaleY / 2.0);
+                    gl.glTexCoord2f(corner[3][0], corner[3][1]);
+                    gl.glVertex2d(x + this.width * scaleX / 2.0, y - this.height * scaleY / 2.0);
+                    break;
                 }
                 gl.glEnd();
-        default:
-            break;
-        }   
+            } else {
+                switch (mode) {
+                case LINES:
+                    gl.glBegin(GL.GL_POLYGON);
+                    for (int i = 0; i < xList.size(); i++) {
+                        tmpx = this.xList.get(i);
+                        tmpy = this.yList.get(i);
+                        tmpnx = this.nx.get(i);
+                        tmpny = this.ny.get(i);
+                        gl.glTexCoord2d(tmpnx, tmpny);
+                        gl.glVertex2d(tmpx, tmpy);
+                    }
+                    gl.glEnd();
+                    break;
+                case LINES_3D:
+                    gl.glBegin(GL.GL_POLYGON);
+                    for (int i = 0; i < xList.size(); i++) {
+                        tmpx = this.xList.get(i);
+                        tmpy = this.yList.get(i);
+                        tmpz = this.zList.get(i);
+                        tmpnx = this.nx.get(i);
+                        tmpny = this.ny.get(i);
+                        gl.glTexCoord2d(tmpnx, tmpny);
+                        gl.glVertex3d(tmpx, tmpy, tmpz);
+                    }
+                    gl.glEnd();
+                default:
+                    break;
+                }
+            }
+            image.disableTexture();
         }
-        image.disableTexture();
         gl.glPopMatrix();
         gl.glEnable(GL.GL_DEPTH_TEST);
     }
-   
 
-	public double getX() {
-		return X;
-	}
+    public final double getWidth() {
+        return width;
+    }
 
-	public void setX(double x) {
-		X = x;
-	}
+    public final double getHeight() {
+        return height;
+    }
 
-	public double getY() {
-		return Y;
-	}
+    public final void setWidth(double width) {
+        this.width = width;
+    }
 
-	public void setY(double y) {
-		Y = y;
-	}
-	
-	public double getWidth(){
-		return Width;
-	}
-	
-	public double getHeight(){
-		return Height;
-	}
-	
-	public void setWidth(double width){
-		this.Width = width;
-	}
-	
-	public void setHeight(double height){
-		this.Height = height;
-	}
-	
-	public void set(double x, double y, double width, double height){
-		this.X = x;
-		this.Y = y;
-		this.Width = width;
-		this.Height = height;
-		
-	}
+    public final void setHeight(double height) {
+        this.height = height;
+    }
+
+    public final void set(double x, double y, double width, double height) {
+        this.x = x;
+        this.y = y;
+        this.width  = width;
+        this.height = height;
+    }
+
+    public final void setMode(ImageMode mode) {
+        image.setMode(mode);
+    }
     
+    public void getRGB(double x, double y){
+    	
+    }
+
+    public final void setCorner(double x1, double y1, double x2, double y2) {
+        this.x = (x1 + x2) / 2.0;
+        this.y = (y1 + y2) / 2.0;
+        this.width = Math.abs(x1 - x2);
+        this.height = Math.abs(y1 - y2);
+    }
+    
+	
+	public void rotation(TextureRotationMode mode){
+		float[][] tmp = (float[][])corner.clone();
+		switch (mode) {
+		case Half:
+			corner[0] = tmp[2];
+			corner[1] = tmp[3];
+			corner[2] = tmp[0];
+			corner[3] = tmp[1];
+			break;
+		case FrontRight:
+			corner[0] = tmp[3];
+			corner[1] = tmp[0];
+			corner[2] = tmp[1];
+			corner[3] = tmp[2];
+			break;
+		case BackRight:
+			corner[0] = tmp[1];
+			corner[1] = tmp[2];
+			corner[2] = tmp[3];
+			corner[3] = tmp[0];
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void flip(TextureFlipMode mode){
+		float[][] tmp = (float[][])corner.clone();
+		switch (mode) {
+		case Vertical:
+			corner[0] = tmp[1];
+			corner[1] = tmp[0];
+			corner[2] = tmp[3];
+			corner[3] = tmp[2];
+			break;
+		case Horizontal:
+			corner[0] = tmp[3];
+			corner[1] = tmp[2];
+			corner[2] = tmp[1];
+			corner[3] = tmp[0];
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void setTextureCorner(int index, double x,double y){
+		corner[index][0] = (float)x;
+		corner[index][1] = (float)y;
+	}
+	
+	public float getTextureCorner(int index1,int index2){
+		return corner[index1][index2];
+	}
+	
+
+	
+	public void enableMask(){
+		masking = true;
+	}
+	
+	public void disableMask(){
+		masking = false;
+	}
+	
+	
 }

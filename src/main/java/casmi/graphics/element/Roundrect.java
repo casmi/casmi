@@ -35,8 +35,6 @@ public class RoundRect extends Element implements Renderable {
         CORNER, CORNERS, RADIUS, CENTER
     };
  
-    private double x;
-    private double y;
     private double w;
     private double h;
     private double x1;
@@ -214,8 +212,6 @@ public class RoundRect extends Element implements Renderable {
         if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
             gl.glDisable(GL.GL_DEPTH_TEST);
         gl.glPushMatrix();
-        gl.glTranslated(x, y, 0);
-        gl.glRotated(this.rotate, 0, 0, 1.0);
         this.setTweenParameter(gl);
         if (this.fill) {
             getSceneFillColor().setup(gl);

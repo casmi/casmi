@@ -22,6 +22,8 @@ package casmi.graphics.element;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.matrix.Vertex;
 
 /**
@@ -33,8 +35,6 @@ import casmi.matrix.Vertex;
  */
 public class Ellipse extends Element implements Renderable {
 
-    private double x=0;
-    private double y=0;
     private double w;
     private double h;
     private double x1;
@@ -48,6 +48,9 @@ public class Ellipse extends Element implements Renderable {
     private double th2;
     private double th1_rad;
     private double th2_rad;
+    
+    private Color centerColor;
+    private Color edgeColor;
 
     
     /**
@@ -331,29 +334,33 @@ public class Ellipse extends Element implements Renderable {
             gl.glDisable(GL.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
-        gl.glTranslated(x, y, 0);
-        gl.glRotated(this.rotate, 0, 0, 1.0);
         this.setTweenParameter(gl);
         if (this.fill) {
-//            getSceneFillColor().setup(gl);
-            this.fillColor.setup(gl);
+        	getSceneFillColor().setup(gl);
+        	//this.fillColor.setup(gl);
             gl.glBegin(GL.GL_TRIANGLE_FAN);
+            if(isGradation()==true&&centerColor!=null)
+            	getSceneColor(this.centerColor).setup(gl);
             gl.glVertex2d(0, 0);
 
+            if(isGradation()==true&&centerColor!=null)
+            	getSceneColor(this.edgeColor).setup(gl);
+            
             for (th1 = 0.0; th1 <= 360.0; th1 = th1 + detailangle)
             {
-                th1_rad = th1 / 180.0 * Math.PI;
-
-                x1 = (w / 2.0) * Math.cos(th1_rad);
-                y1 = (h / 2.0) * Math.sin(th1_rad);
-                gl.glVertex2d(x1, y1);
+            		th1_rad = th1 / 180.0 * Math.PI;
+            		
+            		x1 = (w / 2.0) * Math.cos(th1_rad);
+            		y1 = (h / 2.0) * Math.sin(th1_rad);
+            		gl.glVertex2d(x1, y1);
+            	
             }
             gl.glEnd();
         }
 
         if (this.stroke) {
-//            getSceneStrokeColor().setup(gl);
-            this.strokeColor.setup(gl);
+            getSceneStrokeColor().setup(gl);
+           // this.strokeColor.setup(gl);
             gl.glLineWidth(this.strokeWidth);
             for (th1 = 0.0; th1 < 360.0; th1 = th1 + detailangle)
             {
@@ -393,6 +400,34 @@ public class Ellipse extends Element implements Renderable {
     public void setDetail(double detail) {
         this.detail = detail;
         this.detailangle = 360.0/detail;
+    }
+    
+    public void setCenterColor(ColorSet centercolor){
+    	if(centerColor == null)
+    			centerColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.centerColor = Color.color(centercolor);
+    }
+    
+    public void setEdgeColor(ColorSet edgecolor){
+    	if(centerColor == null)
+    			edgeColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.edgeColor = Color.color(edgecolor);
+    }
+    
+    public void setCenterColor(Color color){
+    	if(centerColor == null)
+    			centerColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.centerColor = color;
+    }
+    
+    public void setEdgeColor(Color color){
+    	if(centerColor == null)
+    			edgeColor = new Color(0,0,0);
+    	setGradation(true);
+    	this.edgeColor = color;
     }
 
 }
