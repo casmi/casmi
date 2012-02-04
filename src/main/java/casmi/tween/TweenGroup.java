@@ -8,9 +8,10 @@ public abstract class TweenGroup implements Groupable {
 	private long duration = 0;
 	private long delay = 0;
 	private int repeatCnt = 0;
-	private int intervalMillis = 0;
+	private long intervalMillis = 0;
 	private int iteration = 0;
 	private boolean reputation;
+	private int baseGroupNum;
 	
 
 	void reset() {
@@ -63,9 +64,28 @@ public abstract class TweenGroup implements Groupable {
 		this.duration = duration;
 	}
 	
+	
 	public TweenGroup repeat(int count, int delayMillis) {
 		setRepeatCnt(count);
 		setIntervalMillis(delayMillis);
+			baseGroupNum = this.getGroupables().size();
+			if(this instanceof TweenSerialGroup){
+				while(this.getRepeatCnt()>this.getIteration()){
+					for(int i = 0; i < baseGroupNum; i++){
+						if(this.getGroupables().get(i) instanceof Tween){
+							Tween t = ((Tween) this.getGroupables().get(i)).clone();
+							if(i==0)
+								t.addDelay(getIntervalMillis());
+							this.append(t);
+						}
+						else{
+						}
+					}
+					iteration++;
+				}
+			}
+		
+		
 		return this;
 	}
 
@@ -77,7 +97,7 @@ public abstract class TweenGroup implements Groupable {
 		this.repeatCnt = repeatCnt;
 	}
 
-	public int getIntervalMillis() {
+	public long getIntervalMillis() {
 		return intervalMillis;
 	}
 

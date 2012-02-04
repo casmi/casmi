@@ -41,8 +41,10 @@ public class TweenSerialGroup extends TweenGroup {
 	 */
 	public static TweenSerialGroup create(Groupable... objs) {
 		TweenSerialGroup group = new TweenSerialGroup();
-		for (Groupable o : objs)
+		
+		for (Groupable o : objs){
 			group.append(o);
+		}
 		return group;
 	}
 

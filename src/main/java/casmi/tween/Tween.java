@@ -202,6 +202,8 @@ public class Tween implements Groupable {
 	 * @param equation
 	 *            The easing equation used during the interpolation.
 	 */
+
+	
 	private Tween(Tweenable target, TweenType tweenType, int durationMillis,
 			TweenEquation equation) {
 		startValues = new ArrayList<Float>();
@@ -226,6 +228,17 @@ public class Tween implements Groupable {
 			this.currentValues = target
 					.getTweenValues(tweenType);
 		}
+	}
+	
+	/**
+	 * Clone a new Tween from scratch.
+	 */
+	public Tween clone(){
+		Tween t = Tween.to(this.target,this.tweenType,(int)this.durationMillis,this.equation);
+		t.startValues = this.startValues;
+		t.targetValues = this.targetValues;
+		t.currentValues = this.currentValues;	
+		return t;		
 	}
 
 	/**
@@ -822,5 +835,7 @@ public class Tween implements Groupable {
 		}
 
 	}
+
+	
 
 }
