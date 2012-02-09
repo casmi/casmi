@@ -45,7 +45,7 @@ Add following settings to your pom.xml
 <dependency>
     <groupId>casmi</groupId>
 	<artifactId>casmi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 </dependency>
 ```
 
