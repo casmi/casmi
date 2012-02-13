@@ -70,7 +70,6 @@ import casmi.io.ImageType;
 import casmi.io.MovieCodec;
 import casmi.timeline.Timeline;
 import casmi.timeline.TimelineRender;
-import casmi.tween.Groupable;
 import casmi.tween.Tween;
 import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;

@@ -25,6 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -48,9 +49,8 @@ public class Quad extends Element implements Renderable {
     private double x4;
     private double y4;
     private double z4;
-    
 
-    private Color cornerColor[] = new Color[4];
+    private Color[] cornerColor = new Color[4];
 
     /**
      * Creates a new Quad object using x,y-coordinate of corners.
@@ -106,7 +106,6 @@ public class Quad extends Element implements Renderable {
         this.x4 = (float)v4.x;
         this.y4 = (float)v4.y;
     	calcG();
-
     }
     
     /**
@@ -163,41 +162,40 @@ public class Quad extends Element implements Renderable {
         this.x4 = (float)v4.x;
         this.y4 = (float)v4.y;
     	calcG();
-
     }
     
-    public void setCorner(int number, double x, double y){
-    	if(number<=0){
-    		this.x1 = x;
-    		this.y1 = y;
-    	} else if(number==1){
-    		this.x2 = x;
-    		this.y2 = y;
-    	} else if(number==2){
-    		this.x3 = x;
-    		this.y3 = y;
-    	} else if(number>=3){
-    		this.x4 = x;
-    		this.y4 = y;
-    	}
-    	calcG();
+    public void setCorner(int number, double x, double y) {
+        if (number <= 0) {
+            this.x1 = x;
+            this.y1 = y;
+        } else if (number == 1) {
+            this.x2 = x;
+            this.y2 = y;
+        } else if (number == 2) {
+            this.x3 = x;
+            this.y3 = y;
+        } else if (number >= 3) {
+            this.x4 = x;
+            this.y4 = y;
+        }
+        calcG();
     }
     
-    public void setCorner(int number, double x, double y, double z){
-    	if(number<=0){
-    		this.x1 = x;
-    		this.y1 = y;
-    	} else if(number==1){
-    		this.x2 = x;
-    		this.y2 = y;
-    	} else if(number==2){
-    		this.x3 = x;
-    		this.y3 = y;
-    	} else if(number>=3){
-    		this.x4 = x;
-    		this.y4 = y;
-    	}
-    	calcG();
+    public void setCorner(int number, double x, double y, double z) {
+        if (number <= 0) {
+            this.x1 = x;
+            this.y1 = y;
+        } else if (number == 1) {
+            this.x2 = x;
+            this.y2 = y;
+        } else if (number == 2) {
+            this.x3 = x;
+            this.y3 = y;
+        } else if (number >= 3) {
+            this.x4 = x;
+            this.y4 = y;
+        }
+        calcG();
     }
     
     public void setConer(int number, Vertex v){
@@ -235,79 +233,88 @@ public class Quad extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
-        if(this.enableTexture==true){
-        	if (texture.reloadFlag) {
+        }
+        if (this.enableTexture) {
+            if (texture.reloadFlag) {
                 Graphics.reloadTextures();
                 texture.reloadFlag = false;
             }
-        	texture.enableTexture();
-        }
-        gl.glPushMatrix();
-        this.setTweenParameter(gl);
-        if (this.fill) {
-            getSceneFillColor().setup(gl);
-            gl.glBegin(GL.GL_QUADS);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[0]).setup(gl);
-            if(this.enableTexture==true)
-            	gl.glTexCoord2f(texture.getTextureCorner(0, 0), texture.getTextureCorner(0, 1));
-            gl.glVertex2d(x1-x, y1-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[1]).setup(gl);
-            if(this.enableTexture==true)
-            	gl.glTexCoord2f(texture.getTextureCorner(1, 0), texture.getTextureCorner(1, 1));
-            gl.glVertex2d(x2-x, y2-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[2]).setup(gl);
-            if(this.enableTexture==true)
-            	gl.glTexCoord2f(texture.getTextureCorner(2, 0), texture.getTextureCorner(2, 1));
-            gl.glVertex2d(x3-x, y3-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[3]).setup(gl);
-            if(this.enableTexture==true)
-            	gl.glTexCoord2f(texture.getTextureCorner(3, 0), texture.getTextureCorner(3, 1));
-            gl.glVertex2d(x4-x, y4-y);
-            
-            gl.glEnd();
+            texture.enableTexture();
         }
 
-        if (this.stroke) {
-            gl.glLineWidth(this.strokeWidth);
-            getSceneStrokeColor().setup(gl);
-            gl.glBegin(GL.GL_LINES);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[0]).setup(gl);
-            gl.glVertex2d(x1-x, y1-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[1]).setup(gl);
-            gl.glVertex2d(x2-x, y2-y);
-            gl.glEnd();
-            gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x2-x, y2-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[2]).setup(gl);
-            gl.glVertex2d(x3-x, y3-y);
-            gl.glEnd();
-            gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x3-x, y3-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[3]).setup(gl);
-            gl.glVertex2d(x4-x, y4-y);
-            gl.glEnd();
-            gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x4-x, y4-y);
-            if(isGradation()==true)
-            	getSceneColor(cornerColor[0]).setup(gl);
-            gl.glVertex2d(x1-x, y1-y);
-            gl.glEnd();
+        gl.glPushMatrix();
+        {
+            this.setTweenParameter(gl);
+            if (this.fill) {
+                getSceneFillColor().setup(gl);
+                gl.glBegin(GL.GL_QUADS);
+                {
+                    if (isGradation())
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    if (this.enableTexture)
+                        gl.glTexCoord2f(texture.getTextureCorner(0, 0), texture.getTextureCorner(0, 1));
+                    gl.glVertex2d(x1 - x, y1 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[1]).setup(gl);
+                    if (this.enableTexture)
+                        gl.glTexCoord2f(texture.getTextureCorner(1, 0), texture.getTextureCorner(1, 1));
+                    gl.glVertex2d(x2 - x, y2 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[2]).setup(gl);
+                    if (this.enableTexture)
+                        gl.glTexCoord2f(texture.getTextureCorner(2, 0), texture.getTextureCorner(2, 1));
+                    gl.glVertex2d(x3 - x, y3 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[3]).setup(gl);
+                    if (this.enableTexture)
+                        gl.glTexCoord2f(texture.getTextureCorner(3, 0), texture.getTextureCorner(3, 1));
+                    gl.glVertex2d(x4 - x, y4 - y);
+                }
+                gl.glEnd();
+            }
+
+            if (this.stroke) {
+                gl.glLineWidth(this.strokeWidth);
+                getSceneStrokeColor().setup(gl);
+                gl.glBegin(GL.GL_LINES);
+                {
+                    if (isGradation())
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex2d(x1 - x, y1 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[1]).setup(gl);
+                    gl.glVertex2d(x2 - x, y2 - y);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex2d(x2 - x, y2 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[2]).setup(gl);
+                    gl.glVertex2d(x3 - x, y3 - y);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex2d(x3 - x, y3 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[3]).setup(gl);
+                    gl.glVertex2d(x4 - x, y4 - y);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex2d(x4 - x, y4 - y);
+                    if (isGradation())
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex2d(x1 - x, y1 - y);
+                }
+                gl.glEnd();
+            }
         }
         gl.glPopMatrix();
-        if(this.enableTexture==true)
-        	texture.disableTexture();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.enableTexture)
+            texture.disableTexture();
+        
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
+        }
     }
     
     private void calcG(){
@@ -315,11 +322,13 @@ public class Quad extends Element implements Renderable {
     	y = (y1+y2+y3+y4)/4.0;
     }
     
-    public void setPosition(double x, double y){
+    @Override
+    public void setPosition(double x, double y) {
     	setPosition(x, y, this.z);
     }
     
-    public void setPosition(double x, double y, double z){
+    @Override
+    public void setPosition(double x, double y, double z) {
     	x1 = x1 + x - this.x;
     	y1 = y1 + y - this.y;
     	z1 = z1 + z - this.z;
@@ -335,25 +344,18 @@ public class Quad extends Element implements Renderable {
     	calcG();
     }
     
-    public void setCornerColor(int index,Color color){
-    	if(isGradation()==false){
-    		for(int i=0;i<4;i++){
-    			cornerColor[i] = new Color(0,0,0);
-    			cornerColor[i] = this.fillColor;
-    		}
-    		setGradation(true);
-    	}
-    	cornerColor[index] = color;
+    public void setCornerColor(int index, Color color) {
+        if (!isGradation()) {
+            for (int i = 0; i < 4; i++) {
+                cornerColor[i] = new RGBColor(0.0, 0.0, 0.0);
+                cornerColor[i] = this.fillColor;
+            }
+            setGradation(true);
+        }
+        cornerColor[index] = color;
     }
     
-    public void setCornerColor(int index,ColorSet colorset){
-    	if(isGradation()==false){
-    		for(int i=0;i<4;i++){
-    			cornerColor[i] = new Color(0,0,0);
-    			cornerColor[i] = this.fillColor;
-    		}
-    		setGradation(true);
-    	}
-		cornerColor[index] = Color.color(colorset);
+    public void setCornerColor(int index, ColorSet colorSet) {
+        setCornerColor(index, new RGBColor(colorSet));
 	}
 }

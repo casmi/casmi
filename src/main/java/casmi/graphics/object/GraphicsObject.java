@@ -3,6 +3,7 @@ package casmi.graphics.object;
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -24,20 +25,20 @@ import com.sun.opengl.util.BufferUtil;
 public class GraphicsObject extends Element implements ObjectRender {
 
 	private Graphics g;
-	private int tmpAs, tmpAf;
-	private ArrayList<Object> objectList;
-	private ArrayList<Light> lightList;
-	private ArrayList<Camera> cameraList;
-	private ArrayList<Perse> perseList;
-	private ArrayList<TweenManager> tmList;
-	private ArrayList<Integer> selectionList;
+	private double tmpAs, tmpAf;
+	private List<Object> objectList;
+	private List<Light> lightList;
+	private List<Camera> cameraList;
+	private List<Perse> perseList;
+	private List<TweenManager> tmList;
+	private List<Integer> selectionList;
 	private BackGround bg;
 
-	private enum matrixMode {
+	private enum MatrixMode {
 		APPLY, LOAD, NONE
 	};
 
-	private matrixMode mode = matrixMode.NONE;
+	private MatrixMode mode = MatrixMode.NONE;
 	private DoubleBuffer matrix;
 	private boolean selectionbuff = false;
 	private int selectionbufsize = 512;
@@ -170,23 +171,23 @@ public class GraphicsObject extends Element implements ObjectRender {
 	 */
 	public void applyMatrix(double matrix[]) {
 		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode = matrixMode.APPLY;
+		this.mode = MatrixMode.APPLY;
 	}
 
 	public void applyMatrix(DoubleBuffer matrix) {
 		this.matrix = matrix;
-		this.mode = matrixMode.APPLY;
+		this.mode = MatrixMode.APPLY;
 	}
 
 	public void loadMatrix(double matrix[]) {
 
 		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode = matrixMode.LOAD;
+		this.mode = MatrixMode.LOAD;
 	}
 
 	public void loadMatrix(DoubleBuffer matrix) {
 		this.matrix = matrix;
-		this.mode = matrixMode.LOAD;
+		this.mode = MatrixMode.LOAD;
 	}
 
 	public void setBackGroundColor(BackGround bg) {
@@ -245,7 +246,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	public void render(Graphics g) {
-		if (this.isvisible() == true) {
+		if (this.isVisible() == true) {
 			this.g = g;
 			drawTweenManager(g);
 			drawPerse(g, false);
@@ -265,7 +266,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public void bufRender(Graphics g, double mouseX, double mouseY,
 			boolean bool, int index) {
-		if (this.isvisible() == true) {
+		if (this.isVisible() == true) {
 			this.g = g;
 			drawTweenManager(g);
 			if (bool == false)
@@ -289,7 +290,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private int bufRender(Graphics g, double mouseX, double mouseY,
 			boolean bool, int index, int selectedIndex) {
 		int sIndex = -1;
-		if (this.isvisible() == true) {
+		if (this.isVisible() == true) {
 			this.g = g;
 			drawTweenManager(g);
 			if (bool == false)
@@ -313,43 +314,48 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	public void render(Element el) {
-		if (el.isvisible() == true) {
-			if (el.isMasked() == true)
+		if (el.isVisible()) {
+			if (el.isMasked()) {
 				el.getMask().render(g);
-			g.pushMatrix();
-			if (el.isTween() == true) {
-				tmpAs = (int) el.gettAS();
-				tmpAf = (int) el.gettAF();
-				el.settAF((int) (tmpAf * this.getSceneFillColor().getA() / 255.0));
-				el.settAS((int) (tmpAs * this.getSceneStrokeColor().getA() / 255.0));
-				g.render(el);
-				el.settAF(tmpAf);
-				el.settAS(tmpAs);
-			} else {
-				tmpAf = el.getFillColor().getA();
-				tmpAs = el.getStrokeColor().getA();
-				el.getFillColor()
-						.setA((int) (tmpAf * this.getSceneFillColor().getA() / 255.0));
-				el.getStrokeColor()
-						.setA((int) (tmpAs * this.getSceneStrokeColor().getA() / 255.0));
-				g.render(el);
-				el.getFillColor().setA(tmpAf);
-				el.getStrokeColor().setA(tmpAs);
 			}
+			
+			g.pushMatrix();
+			{
+			    if (el.isTween()) {
+			        tmpAs = el.gettAS();
+			        tmpAf = el.gettAF();
+			        el.settAF(tmpAf * this.getSceneFillColor().getAlpha());
+			        el.settAS(tmpAs * this.getSceneStrokeColor().getAlpha());
+			        g.render(el);
+			        el.settAF(tmpAf);
+			        el.settAS(tmpAs);
+			    } else {
+			        tmpAf = el.getFillColor().getAlpha();
+			        tmpAs = el.getStrokeColor().getAlpha();
+			        el.getFillColor().setAlpha(tmpAf * this.getSceneFillColor().getAlpha());
+			        el.getStrokeColor().setAlpha(tmpAs * this.getSceneStrokeColor().getAlpha());
+			        g.render(el);
+			        el.getFillColor().setAlpha(tmpAf);
+			        el.getStrokeColor().setAlpha(tmpAs);
+			    }
 
-			if (el.isMasked() == true)
-				g.getGL().glDisable(GL.GL_STENCIL_TEST);
+			    if (el.isMasked()) {
+			        g.getGL().glDisable(GL.GL_STENCIL_TEST);
+			    }
+			}
 			g.popMatrix();
 		}
 	}
 
-	private void drawTweenManager(Graphics g) {
-		for (TweenManager tm : tmList)
+	private final void drawTweenManager(Graphics g) {
+		for (TweenManager tm : tmList) {
 			g.render(tm);
+		}
 	}
 
-	private int drawObject(Graphics g, boolean selection, double mouseX,
-			double mouseY, int selectionIndex, int selectedIndex) {
+	private final int drawObject(Graphics g,
+	                             boolean selection, double mouseX, double mouseY,
+	                             int selectionIndex, int selectedIndex) {
 		int sIndex = -1;
 		for (Object obj : objectList) {
 			if (obj instanceof GraphicsObject) {
@@ -443,7 +449,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		}
 	}
 
-	private void drawCamera(Graphics g) {
+	private final void drawCamera(Graphics g) {
 		for (Camera camera : cameraList) {
 			if (camera instanceof Camera) {
 				Camera c = (Camera) camera;
@@ -452,7 +458,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		}
 	}
 
-	private void drawPerse(Graphics g, boolean selection) {
+	private final void drawPerse(Graphics g, boolean selection) {
 		for (Perse perse : perseList) {
 			if (perse instanceof Perspective) {
 				Perspective perspective = (Perspective) perse;
@@ -479,7 +485,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		}
 	}
 
-	private void drawLight(Graphics g) {
+	private final void drawLight(Graphics g) {
 		for (Light light : lightList)
 			light.render(g);
 	}
@@ -495,7 +501,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 		case NONE:
 			break;
 		}
-
 	}
 
 	public int getSize() {
@@ -530,12 +535,11 @@ public class GraphicsObject extends Element implements ObjectRender {
 		this.selectionbufsize = selectionbuffsize;
 	}
 
-	public ArrayList<Integer> getSelectionList() {
+	public List<Integer> getSelectionList() {
 		return selectionList;
 	}
 
 	public void setSelectionList(ArrayList<Integer> selectionList) {
 		this.selectionList = selectionList;
 	}
-
 }

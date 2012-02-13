@@ -34,12 +34,11 @@ import javax.media.opengl.glu.GLUquadric;
  */
 public class Cone extends Element implements Renderable {
 
-     private double base;
+    private double base;
     private double height;
 
     private int slices = 30;
     private int stacks = 30;
-
     
     /**
      * Creates a new Cone object using base and height.
@@ -50,11 +49,11 @@ public class Cone extends Element implements Renderable {
      *            The height of the Cone.
      */
     public Cone(double base, double height) {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
+        this.x = 0.0;
+        this.y = 0.0;
+        this.z = 0.0;
         this.base = base;
-        this.setHeight(height);
+        this.height = height;
     }
 
     /**
@@ -74,7 +73,7 @@ public class Cone extends Element implements Renderable {
         this.y = 0;
         this.z = 0;
         this.base = base;
-        this.setHeight(height);
+        this.height = height;
         this.slices = slices;
         this.stacks = stacks;
     }
@@ -98,7 +97,7 @@ public class Cone extends Element implements Renderable {
         this.y = y;
         this.z = z;
         this.base = base;
-        this.setHeight(height);
+        this.height = height;
     }
 
     /**
@@ -126,44 +125,43 @@ public class Cone extends Element implements Renderable {
         this.slices = slices;
         this.stacks = stacks;
         this.base = base;
-        this.setHeight(height);
+        this.height = height;
     }
-    
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-
-        if(this.fillColor.getA()<1.0||this.strokeColor.getA()<1.0)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
-        
-        gl.glPushMatrix();
-        this.setTweenParameter(gl);
-
-        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(1f, 1f);
-        
-        gl.glPushMatrix();
-        gl.glRotated(90, -1, 0, 0);
-        if (this.fill) {
-            getSceneFillColor().setup(gl);
-            drawSolidCone(glu, base, getHeight(), slices, stacks);
-        }
-        else if (this.stroke) {
-            getSceneStrokeColor().setup(gl);
-            drawWireCone(glu, base, getHeight(), slices, stacks);
         }
 
-        gl.glPopMatrix();
-        
-        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+        gl.glPushMatrix();
+        {
+            this.setTweenParameter(gl);
 
+            gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+            gl.glPolygonOffset(1f, 1f);
+
+            gl.glPushMatrix();
+            {
+                gl.glRotated(90.0, -1.0, 0.0, 0.0);
+                if (this.fill) {
+                    getSceneFillColor().setup(gl);
+                    drawSolidCone(glu, base, getHeight(), slices, stacks);
+                } else if (this.stroke) {
+                    getSceneStrokeColor().setup(gl);
+                    drawWireCone(glu, base, getHeight(), slices, stacks);
+                }
+            }
+            gl.glPopMatrix();
+
+            gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+        }
         gl.glPopMatrix();
-        
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
-
+        }
     }
-    
     
     private GLUquadric quadObj;
     
@@ -176,16 +174,14 @@ public class Cone extends Element implements Renderable {
       }
     }
     
-    private void drawWireCone(GLU glu, double base, double height,
-        int slices, int stacks) {
+    private void drawWireCone(GLU glu, double base, double height, int slices, int stacks) {
             quadObjInit(glu);
             glu.gluQuadricDrawStyle(quadObj, GLU.GLU_LINE);
             glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
             glu.gluCylinder(quadObj, base, 0.0, height, slices, stacks);
     }
 
-    private void drawSolidCone(GLU glu, double base, double height,
-         int slices, int stacks) {
+    private void drawSolidCone(GLU glu, double base, double height, int slices, int stacks) {
         quadObjInit(glu);
         glu.gluQuadricDrawStyle(quadObj, GLU.GLU_FILL);
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);

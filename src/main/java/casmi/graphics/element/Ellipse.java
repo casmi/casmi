@@ -24,6 +24,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -35,19 +36,12 @@ import casmi.matrix.Vertex;
  */
 public class Ellipse extends Element implements Renderable {
 
-    private double w;
-    private double h;
-    private double x1;
-    private double y1;
-    private double x2;
-    private double y2;
-    private double detail = 36;
-    private double detailangle = 10;
+    private double width;
+    private double height;
+    private double detailAngle = 10.0;
 
     private double th1;
     private double th2;
-    private double th1_rad;
-    private double th2_rad;
     
     private Color centerColor;
     private Color edgeColor;
@@ -60,16 +54,16 @@ public class Ellipse extends Element implements Renderable {
      *            The x-coordinate of the center of the Ellipse.
      * @param y
      *            The y-coordinate of the center of the Ellipse.
-     * @param w 
+     * @param width 
      *            The width of the Ellipse.
-     * @param h
+     * @param height
      *            The height of the Ellipse.
      */
-    public Ellipse(double x, double y, double w, double h) {
+    public Ellipse(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.width  = width;
+        this.height = height;
     }
     
     /**
@@ -77,32 +71,32 @@ public class Ellipse extends Element implements Renderable {
      * 
      * @param v
      *            The x,y-coordinate of the center of the Ellipse.
-     * @param w 
+     * @param width 
      *            The width of the Ellipse.
-     * @param h
+     * @param height
      *            The height of the Ellipse.
      */
-    public Ellipse(Vertex v, double w, double h) {
+    public Ellipse(Vertex v, double width, double height) {
         this.x = v.x;
         this.y = v.x;
-        this.w = w;
-        this.h = h;
+        this.width  = width;
+        this.height = height;
     }
     
     /**
      * Creates a new Ellipse object using width and height.
      * 
 
-     * @param w 
+     * @param width 
      *            The width of the Ellipse.
-     * @param h
+     * @param height
      *            The height of the Ellipse.
      */
-    public Ellipse(double w, double h) {
-        this.x = 0;
-        this.y = 0;
-        this.w = w;
-        this.h = h;
+    public Ellipse(double width, double height) {
+        this.x = 0.0;
+        this.y = 0.0;
+        this.width  = width;
+        this.height = height;
     }
 
     /**
@@ -112,14 +106,14 @@ public class Ellipse extends Element implements Renderable {
      *            The x-coordinate of the center of the Ellipse.
      * @param y
      *            The y-coordinate of the center of the Ellipse.
-     * @param r 
+     * @param radius 
      *            The radius of the Ellipse.
      */
-    public Ellipse(double x, double y, double r) {
+    public Ellipse(double x, double y, double radius) {
         this.x = x;
         this.y = y;
-        this.w = r*2;
-        this.h = r*2;
+        this.width  = radius * 2.0;
+        this.height = radius * 2.0;
     }
     
     /**
@@ -127,27 +121,27 @@ public class Ellipse extends Element implements Renderable {
      * 
      * @param v
      *            The x,y-coordinate of the center of the Ellipse.
-     * @param r 
+     * @param radius 
      *            The radius of the Ellipse.
      */
-    public Ellipse(Vertex v, double r) {
+    public Ellipse(Vertex v, double radius) {
         this.x = v.x;
         this.y = v.y;
-        this.w = r*2;
-        this.h = r*2;
+        this.width  = radius * 2.0;
+        this.height = radius * 2.0;
     }
     
     /**
      * Creates a new Ellipse object using radius.
      * 
-     * @param r 
+     * @param radius 
      *            The radius of the Ellipse.
      */
-    public Ellipse(double r) {
+    public Ellipse(double radius) {
         this.x = 0;
         this.y = 0;
-        this.w = r*2;
-        this.h = r*2;
+        this.width  = radius * 2.0;
+        this.height = radius * 2.0;
     }
     
     /**
@@ -157,16 +151,16 @@ public class Ellipse extends Element implements Renderable {
      *            The x-coordinate of the center of the Ellipse.
      * @param y
      *            The y-coordinate of the center of the Ellipse.
-     * @param w 
+     * @param width 
      *            The width of the Ellipse.
-     * @param h
+     * @param height
      *            The height of the Ellipse.
      */
-    public void set(double x, double y, double w, double h) {
+    public void set(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.width  = width;
+        this.height = height;
     }
     
     /**
@@ -174,16 +168,16 @@ public class Ellipse extends Element implements Renderable {
      * 
      * @param v
      *            The x,y-coordinate of the center of the Ellipse.
-     * @param w 
+     * @param width 
      *            The width of the Ellipse.
-     * @param h
+     * @param height
      *            The height of the Ellipse.
      */
-    public void set(Vertex v, double w, double h) {
+    public void set(Vertex v, double width, double height) {
         this.x = v.x;
         this.y = v.x;
-        this.w = w;
-        this.h = h;
+        this.width  = width;
+        this.height = height;
     }
 
     /**
@@ -193,14 +187,14 @@ public class Ellipse extends Element implements Renderable {
      *            The x-coordinate of the center of the Ellipse.
      * @param y
      *            The y-coordinate of the center of the Ellipse.
-     * @param r 
+     * @param radius 
      *            The radius of the Ellipse.
      */
-    public void set(double x, double y, double r) {
+    public void set(double x, double y, double radius) {
         this.x = x;
         this.y = y;
-        this.w = r*2;
-        this.h = r*2;
+        this.width  = radius * 2.0;
+        this.height = radius * 2.0;
     }
     
     /**
@@ -208,85 +202,45 @@ public class Ellipse extends Element implements Renderable {
      * 
      * @param v
      *            The x,y-coordinate of the center of the Ellipse.
-     * @param r 
+     * @param radius 
      *            The radius of the Ellipse.
      */
-    public void set(Vertex v, double r) {
+    public void set(Vertex v, double radius) {
         this.x = v.x;
         this.y = v.y;
-        this.w = r*2;
-        this.h = r*2;
-    }
-    
-    /**
-     * Sets x-coordinate.
-     * 
-     * @param x
-     *            The x-coordinate of the center of the Ellipse.
-     */
-    public void setX(double x){
-    	this.x = x;
-    }
-    
-    /**
-     * Sets y-coordinate.
-     * 
-     * @param y
-     *            The y-coordinate of the center of the Ellipse.
-     */
-    public void setY(double y){
-    	this.y = y;
+        this.width  = radius * 2.0;
+        this.height = radius * 2.0;
     }
     
     /**
      * Sets radius.
      * 
-     * @param r
+     * @param radius
      *            The radius of the Ellipse.
      */
-    public void setRadius(double r){
-    	this.w = r*2;
-    	this.h = r*2;
+    public void setRadius(double radius) {
+    	this.width  = radius * 2.0;
+    	this.height = radius * 2.0;
     }
     
     /**
      * Sets width.
      * 
-     * @param w
+     * @param width
      *            The width of the Ellipse.
      */
-    public void setWidth(double w){
-    	this.w = w;
+    public void setWidth(double width) {
+    	this.width = width;
     }
     
     /**
      * Sets height.
      * 
-     * @param h
+     * @param height
      *            The height of the Ellipse.
      */
-    public void setHeight(double h){
-    	this.h = h;
-    }
-    
-    /**
-     * Gets x-coordinate.
-     * 
-     * @return
-     *            The x-coordinate of the center of the Ellipse.
-     */
-    public double getX(){
-    	return this.x;
-    }
-    
-    /**
-     * Gets y-coordinate.
-     * 
-     * @return
-     *            The y-coordinate of the center of the Ellipse.
-     */
-    public double getY(){
-    	return this.y;
+    public void setHeight(double height) {
+    	this.height = height;
     }
     
     /**
@@ -295,8 +249,8 @@ public class Ellipse extends Element implements Renderable {
      * @return
      *            The radius of the Ellipse.
      */
-    public double getRadius(){
-    	return this.w/2;
+    public double getRadius() {
+    	return this.width / 2.0;
     }
     
     /**
@@ -305,8 +259,8 @@ public class Ellipse extends Element implements Renderable {
      * @return
      *            The width of the Ellipse.
      */
-    public double getWidth(){
-    	return this.w;
+    public double getWidth() {
+    	return this.width;
     }
     
     /**
@@ -315,80 +269,71 @@ public class Ellipse extends Element implements Renderable {
      * @return
      *            The height of the Ellipse.
      */
-    public double getHeight(){
-    	return this.h;
+    public double getHeight() {
+    	return this.height;
     }
     
-    public double getRotate(){
+    public double getRotate() {
     	return this.rotate;
     }
     
-    public void setRotate(double rotate){
+    public void setRotate(double rotate) {
     	this.rotate = rotate;
     }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-    	
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        
+        gl.glDisable(GL.GL_DEPTH_TEST);
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
-        if (this.fill) {
-        	getSceneFillColor().setup(gl);
-        	//this.fillColor.setup(gl);
-            gl.glBegin(GL.GL_TRIANGLE_FAN);
-            if(isGradation()==true&&centerColor!=null)
-            	getSceneColor(this.centerColor).setup(gl);
-            gl.glVertex2d(0, 0);
+        {
+            this.setTweenParameter(gl);
 
-            if(isGradation()==true&&centerColor!=null)
-            	getSceneColor(this.edgeColor).setup(gl);
-            
-            for (th1 = 0.0; th1 <= 360.0; th1 = th1 + detailangle)
-            {
-            		th1_rad = th1 / 180.0 * Math.PI;
-            		
-            		x1 = (w / 2.0) * Math.cos(th1_rad);
-            		y1 = (h / 2.0) * Math.sin(th1_rad);
-            		gl.glVertex2d(x1, y1);
-            	
-            }
-            gl.glEnd();
-        }
+            if (this.fill) {
+                getSceneFillColor().setup(gl);
+                gl.glBegin(GL.GL_TRIANGLE_FAN);
+                {
+                    if (isGradation() && centerColor != null)
+                        getSceneColor(this.centerColor).setup(gl);
+                    
+                    gl.glVertex2d(0, 0);
 
-        if (this.stroke) {
-            getSceneStrokeColor().setup(gl);
-           // this.strokeColor.setup(gl);
-            gl.glLineWidth(this.strokeWidth);
-            for (th1 = 0.0; th1 < 360.0; th1 = th1 + detailangle)
-            {
-                th2 = th1 + detailangle;
-                th1_rad = th1 / 180.0 * Math.PI;
-                th2_rad = th2 / 180.0 * Math.PI;
+                    if (isGradation() && centerColor != null)
+                        getSceneColor(this.edgeColor).setup(gl);
 
-                x1 = (w / 2.0) * Math.cos(th1_rad);
-                y1 = (h / 2.0) * Math.sin(th1_rad);
-                x2 = (w / 2.0) * Math.cos(th2_rad);
-                y2 = (h / 2.0) * Math.sin(th2_rad);
-
-                gl.glBegin(GL.GL_LINES);
-                gl.glVertex2d(x1, y1);
-                gl.glVertex2d(x2, y2);
+                    for (th1 = 0.0; th1 <= 360.0; th1 += detailAngle) {
+                        double th1Rad = th1 / 180.0 * Math.PI;
+                        double x1 = (this.width  / 2.0) * Math.cos(th1Rad);
+                        double y1 = (this.height / 2.0) * Math.sin(th1Rad);
+                        gl.glVertex2d(x1, y1);
+                    }
+                }
                 gl.glEnd();
+            }
+
+            if (this.stroke) {
+                getSceneStrokeColor().setup(gl);
+                gl.glLineWidth(this.strokeWidth);
+                for (th1 = 0.0; th1 < 360.0; th1 += detailAngle) {
+                    th2 = th1 + detailAngle;
+                    double th1Rad = th1 / 180.0 * Math.PI;
+                    double th2Rad = th2 / 180.0 * Math.PI;
+
+                    double x1 = (this.width  / 2.0) * Math.cos(th1Rad);
+                    double y1 = (this.height / 2.0) * Math.sin(th1Rad);
+                    double x2 = (this.width  / 2.0) * Math.cos(th2Rad);
+                    double y2 = (this.height / 2.0) * Math.sin(th2Rad);
+
+                    gl.glBegin(GL.GL_LINES);
+                    {
+                        gl.glVertex2d(x1, y1);
+                        gl.glVertex2d(x2, y2);
+                    }
+                    gl.glEnd();
+                }
             }
         }
         gl.glPopMatrix();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glEnable(GL.GL_DEPTH_TEST);
-    }
-
-    /**
-     * Returns the detail of this Ellipse.
-     */
-    public double getDetail() {
-        return detail;
+        gl.glEnable(GL.GL_DEPTH_TEST);
     }
 
     /**
@@ -398,36 +343,30 @@ public class Ellipse extends Element implements Renderable {
      *             The precision of the Ellipse.
      */
     public void setDetail(double detail) {
-        this.detail = detail;
-        this.detailangle = 360.0/detail;
+        this.detailAngle = 360.0 / detail;
     }
     
-    public void setCenterColor(ColorSet centercolor){
-    	if(centerColor == null)
-    			centerColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.centerColor = Color.color(centercolor);
+    public void setCenterColor(Color color) {
+        if(centerColor == null) {
+            centerColor = new RGBColor(0.0, 0.0, 0.0);
+        }
+        setGradation(true);
+        this.centerColor = color;
     }
     
-    public void setEdgeColor(ColorSet edgecolor){
-    	if(centerColor == null)
-    			edgeColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.edgeColor = Color.color(edgecolor);
-    }
-    
-    public void setCenterColor(Color color){
-    	if(centerColor == null)
-    			centerColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.centerColor = color;
-    }
-    
-    public void setEdgeColor(Color color){
-    	if(centerColor == null)
-    			edgeColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.edgeColor = color;
+    public void setCenterColor(ColorSet colorSet) {
+        setCenterColor(new RGBColor(colorSet));
     }
 
+    public void setEdgeColor(Color color) {
+        if(edgeColor == null) {
+            edgeColor = new RGBColor(0.0, 0.0, 0.0);
+        }
+        setGradation(true);
+        this.edgeColor = color;
+    }
+    
+    public void setEdgeColor(ColorSet colorSet) {
+        setEdgeColor(new RGBColor(colorSet));
+    }
 }

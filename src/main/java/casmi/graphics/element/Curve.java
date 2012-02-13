@@ -24,6 +24,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -43,9 +44,9 @@ public class Curve extends Element implements Renderable {
     
     private Color startColor;
     private Color endColor;
-    private Color gradationColor = new Color(0,0,0);
+    private Color gradationColor = new RGBColor(0.0, 0.0, 0.0);
 
-    public enum Xyz {
+    public enum XYZ {
         X, Y, Z
     };
 
@@ -366,10 +367,9 @@ public class Curve extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        
-
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
+        }
 
         gl.glPushMatrix();
         this.setTweenParameter(gl);
@@ -385,7 +385,7 @@ public class Curve extends Element implements Renderable {
                 if (i == detail - 1 && isGradation() && endColor != null)
                     getSceneColor(this.endColor).setup(gl);
                 if (i != 0 && i != (detail - 1) && isGradation() && endColor != null && startColor != null) {
-                    gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double)(detail - 1)));
+                    gradationColor = RGBColor.lerpColor(this.startColor, this.endColor, (i / (double)(detail - 1)));
                     getSceneColor(this.gradationColor).setup(gl);
                 }
                 gl.glVertex2d(
@@ -405,7 +405,7 @@ public class Curve extends Element implements Renderable {
                 if (i == detail - 1 && isGradation() && endColor != null)
                     getSceneColor(this.endColor).setup(gl);
                 if (i != 0 && i != (detail - 1) && isGradation() && endColor != null && startColor != null) {
-                    gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double)(detail - 1)));
+                    gradationColor = RGBColor.lerpColor(this.startColor, this.endColor, (i / (double)(detail - 1)));
                     getSceneColor(this.gradationColor).setup(gl);
                 }
                 gl.glVertex2d(
@@ -418,11 +418,11 @@ public class Curve extends Element implements Renderable {
         
         gl.glPopMatrix();
         
-        if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001)
             gl.glEnable(GL.GL_DEPTH_TEST);
     }
 
-    private double catmullRom(float p0, float p1, float p2, float p3, float t) {
+    private final double catmullRom(float p0, float p1, float p2, float p3, float t) {
         double v0 = (p2 - p0) * 0.5;
         double v1 = (p2 - p0) * 0.5;
         return (2 * p1 - 2 * p2 + v0 + v1) * t * t * t +
@@ -437,7 +437,7 @@ public class Curve extends Element implements Renderable {
      * @param t
      *           value between 0 and 1
      */
-    public double curvePoint(Xyz vec, float t) {
+    public double curvePoint(XYZ vec, float t) {
         double tmp = 0;
         switch (vec) {
         case X:
@@ -469,40 +469,29 @@ public class Curve extends Element implements Renderable {
         detail = d;
     }
     
-    private void set(){
+    private final void set() {
     	x = this.points[0];
     	y = this.points[1];
     	z = this.points[2];
     }
     
-    public void setAnchorColor(int index,ColorSet colorset){
-    	if(index==0){
-    	if(startColor == null)
-			startColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.startColor = Color.color(colorset);
-    	}
-    	if(index==1){
-        	if(endColor == null)
-    			endColor = new Color(0,0,0);
-        	setGradation(true);
-        	this.endColor = Color.color(colorset);
-        	}
+    public void setAnchorColor(int index, Color color) {
+        if (index == 0) {
+            if (startColor == null) {
+                startColor = new RGBColor(0.0, 0.0, 0.0);
+            }
+            setGradation(true);
+            this.startColor = color;
+        } else if (index == 1) {
+            if (endColor == null) {
+                endColor = new RGBColor(0.0, 0.0, 0.0);
+            }
+            setGradation(true);
+            this.endColor = color;
+        }
     }
     
-    public void setAnchorColor(int index,Color color){
-    	if(index==0){
-    	if(startColor == null)
-			startColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.startColor = color;
-    	}
-    	if(index==1){
-        	if(endColor == null)
-    			endColor = new Color(0,0,0);
-        	setGradation(true);
-        	this.endColor = color;
-        	}
+    public void setAnchorColor(int index, ColorSet colorSet) {
+        setAnchorColor(index, new RGBColor(colorSet));
     }
-
 }

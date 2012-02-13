@@ -24,6 +24,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -253,8 +254,9 @@ public class Line extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
+        }
 
         getSceneStrokeColor().setup(gl);
 
@@ -291,8 +293,9 @@ public class Line extends Element implements Renderable {
         
         gl.glPopMatrix();
         
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
+        }
     }
     
     private void calcG(){
@@ -301,43 +304,32 @@ public class Line extends Element implements Renderable {
     	z = (z1+z2)/2.0;
     }
     
-    private void setPoint(){
-    	this.x1 = x + dx[0];
-        this.x2 = x + dx[1];
-        this.y1 = y + dy[0];
-        this.y2 = y + dy[1];
-        this.z1 = z + dz[0];
-        this.z2 = z + dz[1];
-    }
+//    private void setPoint() {
+//    	this.x1 = x + dx[0];
+//        this.x2 = x + dx[1];
+//        this.y1 = y + dy[0];
+//        this.y2 = y + dy[1];
+//        this.z1 = z + dz[0];
+//        this.z2 = z + dz[1];
+//    }
     
-    public void setCornerColor(int index,Color color){
-    	if(index==0){
-    	if(startColor == null)
-			startColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.startColor = color;
-    	}
-    	if(index==1){
-        	if(endColor == null)
-    			endColor = new Color(0,0,0);
-        	setGradation(true);
-        	this.endColor = color;
-        	}
+    public void setCornerColor(int index, Color color) {
+        if (index == 0) {
+            if (startColor == null) {
+                startColor = new RGBColor(0.0, 0.0, 0.0);
+            }
+            setGradation(true);
+            this.startColor = color;
+        } else if (index == 1) {
+            if (endColor == null) {
+                endColor = new RGBColor(0.0, 0.0, 0.0);
+            }
+            setGradation(true);
+            this.endColor = color;
+        }
     }
-    
-    public void setCornerColor(int index,ColorSet colorset){
-    	if(index==0){
-    	if(startColor == null)
-			startColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.startColor = Color.color(colorset);
-    	}
-    	if(index==1){
-        	if(endColor == null)
-    			endColor = new Color(0,0,0);
-        	setGradation(true);
-        	this.endColor = Color.color(colorset);
-        	}
+
+    public void setCornerColor(int index, ColorSet colorSet) {
+        setCornerColor(index, new RGBColor(colorSet));
     }
-  
 }

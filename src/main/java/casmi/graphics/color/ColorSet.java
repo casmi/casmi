@@ -471,6 +471,15 @@ public enum ColorSet {
     /** (154, 205, 50). */
     YELLOW_GREEN;
     
+    /**
+     * Returns RGB values from ColorSet.
+     * 
+     * @param colorSet
+     *            The ColorSet.
+     * 
+     * @return
+     *            Array of RGB values from 0 to 255.
+     */
     static final int[] getRGB(ColorSet colorSet) {
         int[] ret = {0, 0, 0};
         

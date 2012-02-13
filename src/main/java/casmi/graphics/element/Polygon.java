@@ -27,6 +27,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -138,8 +139,9 @@ public class Polygon extends Element implements Renderable {
 
 	@Override
 	public void render(GL gl, GLU glu, int width, int height) {
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glDisable(GL.GL_DEPTH_TEST);
+		}
 
 		double tmpx, tmpy, tmpz;
 
@@ -215,9 +217,9 @@ public class Polygon extends Element implements Renderable {
 
 		gl.glPopMatrix();
 
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glEnable(GL.GL_DEPTH_TEST);
-
+		}
 	}
 
 	private void calcG() {
@@ -254,35 +256,26 @@ public class Polygon extends Element implements Renderable {
 	public void setCornerColor(int index, Color color) {
 		if (cornerColor == null) {
 			for (int i = 0; i < x.size(); i++) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
+				cornerColor.add(new RGBColor(this.fillColor.getRed(),
+				                             this.fillColor.getGreen(),
+				                             this.fillColor.getBlue(),
+				                             this.fillColor.getAlpha()));
 			}
 			setGradation(true);
 		}
 		if (cornerColor.size() < x.size()) {
 			while (cornerColor.size() != x.size()) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
+				cornerColor.add(new RGBColor(this.fillColor.getRed(),
+                                             this.fillColor.getGreen(),
+                                             this.fillColor.getBlue(),
+                                             this.fillColor.getAlpha()));
 			}
 		}
 		cornerColor.set(index, color);
 	}
 
-	public void setCornerColor(int index, ColorSet colorset) {
-		if (cornerColor == null) {
-			for (int i = 0; i < x.size(); i++) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
-			}
-			setGradation(true);
-		}
-		if (cornerColor.size() < x.size()) {
-			while (cornerColor.size() != x.size()) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
-			}
-		}
-		cornerColor.set(index, Color.color(colorset));
+	public void setCornerColor(int index, ColorSet colorSet) {
+	    setCornerColor(index, new RGBColor(colorSet));
 	}
 
 	public int getSize() {
@@ -292,5 +285,4 @@ public class Polygon extends Element implements Renderable {
 	public void setSize(int size) {
 		this.size = size;
 	}
-
 }

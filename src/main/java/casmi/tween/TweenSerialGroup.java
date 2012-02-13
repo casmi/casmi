@@ -19,7 +19,6 @@
 
 package casmi.tween;
 
-import java.util.ArrayList;
 
 /**
  * A TweenGroup can be used to create complex animations made of sequences and

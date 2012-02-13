@@ -132,8 +132,9 @@ public class Cylinder extends Element implements Renderable {
 
     public void render(GL gl, GLU glu, int width, int height) {
         
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
+        }
 
         gl.glPushMatrix();
         this.setTweenParameter(gl);
@@ -152,12 +153,13 @@ public class Cylinder extends Element implements Renderable {
 
         gl.glPopMatrix();
         
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() != 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
+        }
     }
     
-  private GLUquadric quadObj;
-    
+    private GLUquadric quadObj;
+  
     private void quadObjInit(GLU glu) {
       if (quadObj == null) {
         quadObj = glu.gluNewQuadric();

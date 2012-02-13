@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 import org.OpenNI.DepthMetaData;
 
-import casmi.graphics.color.Color;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Texture;
 import casmi.image.Image;
 
@@ -83,9 +83,9 @@ public class DepthMap {
                 short d = buf.get();
                 if (0 < d) {
                     int gray = (int)histogram[d];
-                    tex.getImage().setColor(new Color(gray), x, y);
+                    tex.getImage().setColor(new RGBColor(gray / 255.0), x, y);
                 } else {
-                    tex.getImage().setColor(new Color(0, 0), x, y);
+                    tex.getImage().setColor(new RGBColor(0.0, 0.0), x, y);
                 }
             }
         }

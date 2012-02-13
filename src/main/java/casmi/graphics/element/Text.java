@@ -39,7 +39,7 @@ import com.sun.opengl.util.j2d.TextRenderer;
  */
 public class Text extends Element implements Renderable {
 
-     private Font font;
+    private Font font;
     private String str;
     private String[] strArray;
     private FontRenderContext frc;
@@ -54,7 +54,6 @@ public class Text extends Element implements Renderable {
      * Creates a new Text object.
      */
     public Text() {
-        
         this(null);
     }
     
@@ -65,7 +64,6 @@ public class Text extends Element implements Renderable {
      *           The letters to be displayed.      
      */
     public Text(String text) {
-        
         this(text, new Font());
     }
     
@@ -78,7 +76,6 @@ public class Text extends Element implements Renderable {
      *           The font of text.                          
      */
     public Text(String text, Font font) {
-        
         this(text, font, 0, 0, 0);
     } 
     
@@ -93,7 +90,6 @@ public class Text extends Element implements Renderable {
      *           The y-coordinate of text.
      */
     public Text(String text, double x, double y) {
-        
         this(text, new Font(), x, y);
     }
     
@@ -110,7 +106,6 @@ public class Text extends Element implements Renderable {
      *           The y-coordinate of text.
      */
     public Text(String text, Font font, double x, double y) {
-
         this(text, font, x, y, 0);
     }
     
@@ -127,7 +122,6 @@ public class Text extends Element implements Renderable {
      *           The z-coordinate of text.
      */
     public Text(String text, double x, double y, double z) {
-        
         this(text, new Font(), x, y, z);
     }
     
@@ -146,7 +140,6 @@ public class Text extends Element implements Renderable {
      *           The z-coordinate of text.
      */
     public Text(String text, Font font, double x, double y, double z) {
-        
         this.x = x;
         this.y = y;
         this.z = z;
@@ -174,82 +167,72 @@ public class Text extends Element implements Renderable {
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         
-        if (strokeColor.getA() != 1) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        }
-        
+        gl.glDisable(GL.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
-        
         {
-        if(isSelection()==false){
-
-            this.setTextTweenParameter(gl);
-            textRenderer.begin3DRendering();
-            if (this.stroke == true) {
-                getSceneStrokeColor().calcColor();
-                textRenderer.setColor(getSceneStrokeColor().getNormalR(), getSceneStrokeColor().getNormalG(), getSceneStrokeColor().getNormalB(), getSceneStrokeColor().getNormalA());
-            } else if (this.fill == true) {
-                getSceneStrokeColor().calcColor();
-                textRenderer.setColor(getSceneFillColor().getNormalR(), getSceneFillColor().getNormalG(), getSceneFillColor().getNormalB(), getSceneFillColor().getNormalA());
-            }
-            double tmpX = 0; 
-            double tmpY = 0;
-            for (int i = 0; i < strArray.length; i++) {
-                switch (align) {
-                default:
-                case LEFT:
-                    break;
-                case CENTER:
-                    tmpX =  - getWidth(i) / 2.0;
-                    break;
-                case RIGHT:
-                    tmpX =  - getWidth(i);
+            if (!isSelection()) {
+                this.setTextTweenParameter(gl);
+                textRenderer.begin3DRendering();
+                if (stroke) {
+                    textRenderer.setColor((float)getSceneStrokeColor().getRed(),
+                                          (float)getSceneStrokeColor().getGreen(),
+                                          (float)getSceneStrokeColor().getBlue(),
+                                          (float)getSceneStrokeColor().getAlpha());
+                } else if (fill) {
+                    textRenderer.setColor((float)getSceneFillColor().getRed(),
+                                          (float)getSceneFillColor().getGreen(),
+                                          (float)getSceneFillColor().getBlue(),
+                                          (float)getSceneFillColor().getAlpha());
                 }
-                textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
-                
-                
-                
-            }
-            textRenderer.end3DRendering();
+                double tmpX = 0;
+                double tmpY = 0;
+                for (int i = 0; i < strArray.length; i++) {
+                    switch (align) {
+                    default:
+                    case LEFT:
+                        break;
+                    case CENTER:
+                        tmpX = -getWidth(i) / 2.0;
+                        break;
+                    case RIGHT:
+                        tmpX = -getWidth(i);
+                    }
+                    textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
 
-        }
-        else {
-        	this.setTextTweenParameter(gl);
-            double tmpX = 0; 
-            double tmpY = 0;
-        	
-            for (int i = 0; i < strArray.length; i++) {
-            	switch (align) {
-                default:
-                case LEFT:
-                    break;
-                case CENTER:
-                    tmpX =  - getWidth(i) / 2.0;
-                    break;
-                case RIGHT:
-                    tmpX =  - getWidth(i);
                 }
+                textRenderer.end3DRendering();
+            } else {
+                this.setTextTweenParameter(gl);
+                double tmpX = 0;
+                double tmpY = 0;
 
-        	 gl.glBegin(GL.GL_QUADS);
-             {
-                 gl.glVertex2d(tmpX, (tmpY - leading * i)-getDescent(i));
-                 gl.glVertex2d(tmpX, (tmpY - leading * i)+getAscent(i));
-                 gl.glVertex2d(tmpX+getWidth(i), (tmpY - leading * i)+getAscent(i));
-                 gl.glVertex2d(tmpX+getWidth(i), (tmpY - leading * i)-getDescent(i));
-             }
-             gl.glEnd();
+                for (int i = 0; i < strArray.length; i++) {
+                    switch (align) {
+                    default:
+                    case LEFT:
+                        break;
+                    case CENTER:
+                        tmpX = -getWidth(i) / 2.0;
+                        break;
+                    case RIGHT:
+                        tmpX = -getWidth(i);
+                    }
+
+                    gl.glBegin(GL.GL_QUADS);
+                    {
+                        gl.glVertex2d(tmpX, (tmpY - leading * i) - getDescent(i));
+                        gl.glVertex2d(tmpX, (tmpY - leading * i) + getAscent(i));
+                        gl.glVertex2d(tmpX + getWidth(i), (tmpY - leading * i) + getAscent(i));
+                        gl.glVertex2d(tmpX + getWidth(i), (tmpY - leading * i) - getDescent(i));
+                    }
+                    gl.glEnd();
+                }
             }
         }
-        
-        }
-        
         gl.glPopMatrix();
-        
 
-        if (strokeColor.getA() != 1) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
-        }
+        gl.glEnable(GL.GL_DEPTH_TEST);
     }
 
     /**

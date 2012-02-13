@@ -120,14 +120,14 @@ public class Timeline implements TimelineRender{
 	private void readTimelineCSV(String csvfile){
 		CSV csv;
 		String name;
-		double time;
+//		double time;
 		ClassLoader loader = ClassLoader.getSystemClassLoader();
 		try {
             csv = new CSV(csvfile);
         	String[] test;
         	while ((test = csv.readLine()) != null) {
         		name = test[0];
-        		time = Double.valueOf(test[3]).doubleValue();
+//        		time = Double.valueOf(test[3]).doubleValue();
         		Class<?> clazz;
         		Object obj;
         		try{

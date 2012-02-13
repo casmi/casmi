@@ -48,8 +48,8 @@ abstract public class Scene  {
 	private boolean selectionBuffer = false;
 	
 	private GraphicsObject rootObject = new GraphicsObject();
-	private static final int SELECTION_BUFSIZE = 512;
-    private int selectedIndex = 0;
+//	private static final int SELECTION_BUFSIZE = 512;
+//    private int selectedIndex = 0;
 	
 	abstract public void setup();
 

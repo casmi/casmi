@@ -26,7 +26,7 @@ import casmi.graphics.Graphics;
 
 public class Tween implements Groupable {
 
-	private Graphics g;
+//	private Graphics g;
 
 	/** If you need to repeat your tween for infinity, use this. */
 	public static final int INFINITY = -1;
@@ -671,7 +671,7 @@ public class Tween implements Groupable {
 	 */
 	final void render(Graphics g, long currentMillis) {
 		
-		this.g = g;
+//		this.g = g;
 
 		if (!isReady)
 			return;

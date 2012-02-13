@@ -30,6 +30,7 @@ import javax.media.opengl.glu.GLU;
  * 
  */
 public class Torus extends Element implements Renderable {
+    
     private double x;
     private double y;
     private double z;
@@ -129,26 +130,31 @@ public class Torus extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
+        }
+        
         gl.glPushMatrix();
-        gl.glTranslated(x, y, z);
-        this.setTweenParameter(gl);
+        {
+            gl.glTranslated(x, y, z);
+            this.setTweenParameter(gl);
 
-        if (this.fill) {
-            getSceneFillColor().setup(gl);
-            drawSolidTorus(glu, in, out, nside, rings);
+            if (this.fill) {
+                getSceneFillColor().setup(gl);
+                drawSolidTorus(glu, in, out, nside, rings);
+            }
+
+            if (this.stroke) {
+                getSceneStrokeColor().setup(gl);
+                this.strokeColor.setup(gl);
+                drawWireTorus(glu, in, out, nside, rings);
+            }
         }
-
-        if (this.stroke) {
-        	getSceneStrokeColor().setup(gl);
-            this.strokeColor.setup(gl);
-            drawWireTorus(glu, in, out, nside, rings);
-        }
-
         gl.glPopMatrix();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
+        }
     }
     
 

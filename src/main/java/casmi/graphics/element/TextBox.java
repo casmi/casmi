@@ -5,15 +5,16 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 
 import com.sun.opengl.util.j2d.TextRenderer;
 
 public class TextBox extends Element implements Renderable {
 
     private static final boolean DEFAULT_FILL         = false;
-    private static final Color   DEFAULT_FILL_COLOR   = Color.color(ColorSet.BLACK);
+    private static final Color   DEFAULT_FILL_COLOR   = new RGBColor(ColorSet.BLACK);
     private static final boolean DEFAULT_STROKE       = false;
-    private static final Color   DEFAULT_STROKE_COLOR = Color.color(ColorSet.WHITE);
+    private static final Color   DEFAULT_STROKE_COLOR = new RGBColor(ColorSet.WHITE);
     
     private Text text;
     private double x = 0.0;
@@ -56,7 +57,7 @@ public class TextBox extends Element implements Renderable {
         double x4 = x + this.width  / 2.0;
         double y4 = y + this.height / 2.0;
         
-        if (fillColor.getA() != 1 || strokeColor.getA() != 1) {
+        if (fillColor.getAlpha() < 0.001 || strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
         
@@ -109,20 +110,19 @@ public class TextBox extends Element implements Renderable {
         }
         gl.glPopMatrix();
         
-        if (fillColor.getA() != 1 || strokeColor.getA() != 1) {
+        if (fillColor.getAlpha() < 0.001 || strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
     }
     
-    private void init() {
-        
+    private final void init() {
         this.fill        = DEFAULT_FILL;
         this.fillColor   = DEFAULT_FILL_COLOR;
         this.stroke      = DEFAULT_STROKE;
         this.strokeColor = DEFAULT_STROKE_COLOR;
     }
     
-    private void format() {
+    private final void format() {
         
         String[] strs = text.getArrayText();
         TextRenderer tr = text.getRenderer();

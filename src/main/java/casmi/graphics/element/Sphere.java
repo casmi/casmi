@@ -50,75 +50,79 @@ public class Sphere extends Element implements Renderable {
         this.r = r;
     }
 
-
     public Sphere(double r, int slices, int stacks) {
         this.r = r;
         this.slices = slices;
         this.stacks = stacks;
     }
     
-    public void setRadius(double r){
+    public void setRadius(double r) {
     	this.r = r;
     }
     
-    public void setDetail(int slices, int stacks){
+    public void setDetail(int slices, int stacks) {
     	this.slices = slices;
     	this.stacks = stacks;
     }
     
-    public void setSlices(int slices){
+    public void setSlices(int slices) {
     	this.slices = slices;
     }
     
-    public void setStacks(int stacks){
+    public void setStacks(int stacks) {
     	this.stacks = stacks;
     }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-    	
-    	if (this.enableTexture==true){
-    	if (texture.reloadFlag) {
-            Graphics.reloadTextures();
-            texture.reloadFlag = false;
-        }}
-        
-        if( this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0 ) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        }
-        if(this.enableTexture==true)
-        	texture.enableTexture();
-        gl.glPushMatrix();
-        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(1f, 1f);
-        gl.glEnable(GL.GL_CULL_FACE);
-        this.setTweenParameter(gl);
-       
-        
-        if (this.fill) {
-            getSceneFillColor().setup(gl);
-            drawSolidSphere(glu,(float)r, slices, stacks);
-        }
-        
-        if (this.stroke) {
-        	getSceneStrokeColor().setup(gl);
-            drawWireSphere(glu, (float)r, slices, stacks);
+        if (this.enableTexture) {
+            if (texture.reloadFlag) {
+                Graphics.reloadTextures();
+                texture.reloadFlag = false;
+            }
         }
 
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+            gl.glDisable(GL.GL_DEPTH_TEST);
+        }
+        
+        if (this.enableTexture) {
+        	texture.enableTexture();
+        }
+        
+        gl.glPushMatrix();
+        {
+            gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+            gl.glPolygonOffset(1f, 1f);
+            gl.glEnable(GL.GL_CULL_FACE);
+            this.setTweenParameter(gl);
+
+            if (this.fill) {
+                getSceneFillColor().setup(gl);
+                drawSolidSphere(glu, (float)r, slices, stacks);
+            }
+
+            if (this.stroke) {
+                getSceneStrokeColor().setup(gl);
+                drawWireSphere(glu, (float)r, slices, stacks);
+            }
+        }
         gl.glPopMatrix();
         gl.glDisable(GL.GL_CULL_FACE);
         gl.glDisable(GL.GL_POLYGON_OFFSET_FILL); 
 
-        if(this.enableTexture==true)
+        if (this.enableTexture) {
         	texture.disableTexture();
-        if( this.fillColor.getA() < 1.0 || this.strokeColor.getA() < 1.0 ) {
+        }
+        
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
     }
     
     private GLUquadric quadObj;
     
-    private void quadObjInit(GLU glu) {
+    private final void quadObjInit(GLU glu) {
       if (quadObj == null) {
         quadObj = glu.gluNewQuadric();
       }
@@ -127,7 +131,7 @@ public class Sphere extends Element implements Renderable {
       }
     }
     
-    private void drawSolidSphere(GLU glu,float radius,int slices,int stacks){
+    private final void drawSolidSphere(GLU glu,float radius,int slices,int stacks) {
         quadObjInit(glu);
         glu.gluQuadricDrawStyle(quadObj, GLU.GLU_FILL);
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
@@ -135,7 +139,7 @@ public class Sphere extends Element implements Renderable {
         glu.gluSphere(quadObj, radius, slices, stacks);   
     }
     
-    private void drawWireSphere(GLU glu,float radius,int slices,int stacks){
+    private final void drawWireSphere(GLU glu,float radius,int slices,int stacks) {
         quadObjInit(glu);
         glu.gluQuadricDrawStyle(quadObj, GLU.GLU_LINE);
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);

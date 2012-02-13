@@ -27,6 +27,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -59,7 +60,7 @@ public class Lines extends Element implements Renderable {
 
 	private Color startColor;
 	private Color endColor;
-	private Color gradationColor = new Color(0, 0, 0);
+	private Color gradationColor = new RGBColor(0.0, 0.0, 0.0);
 
 	private boolean cornerGradation = false;
 
@@ -146,9 +147,9 @@ public class Lines extends Element implements Renderable {
 
 	@Override
 	public void render(GL gl, GLU glu, int width, int height) {
-
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glDisable(GL.GL_DEPTH_TEST);
+		}
 
 		getSceneStrokeColor().setup(gl);
 		double tmpx, tmpy, tmpz;
@@ -169,7 +170,7 @@ public class Lines extends Element implements Renderable {
 					if (i == x.size() - 1 && isGradation() && endColor != null)
 						getSceneColor(this.endColor).setup(gl);
 					if (i != 0 && i != (x.size() - 1) && isGradation() && endColor != null && startColor != null) {
-						gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double) (x.size() - 1)));
+						gradationColor = RGBColor.lerpColor(this.startColor, this.endColor, (i / (double) (x.size() - 1)));
 						getSceneColor(this.gradationColor).setup(gl);
 					}
 				} else {
@@ -192,7 +193,7 @@ public class Lines extends Element implements Renderable {
 					if (i == x.size() - 1 && isGradation() && endColor != null)
 						getSceneColor(this.endColor).setup(gl);
 					if (i != 0 && i != (x.size() - 1) && isGradation() && endColor != null && startColor != null) {
-						gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double) (x.size() - 1)));
+						gradationColor = RGBColor.lerpColor(this.startColor, this.endColor, (i / (double) (x.size() - 1)));
 						getSceneColor(this.gradationColor).setup(gl);
 					}
 				} else {
@@ -208,8 +209,9 @@ public class Lines extends Element implements Renderable {
 
 		gl.glPopMatrix();
 
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glEnable(GL.GL_DEPTH_TEST);
+		}
 	}
 
 	private void calcG() {
@@ -224,37 +226,37 @@ public class Lines extends Element implements Renderable {
 	}
 
 	public void setStartCornerColor(Color color) {
-		if (startColor == null)
-			startColor = new Color(0, 0, 0);
+		if (startColor == null) {
+			startColor = new RGBColor(0.0, 0.0, 0.0);
+		}
 		setGradation(true);
 		this.startColor = color;
 	}
 
-	public void setStartCornerColor(ColorSet colorset) {
-		setStartCornerColor(Color.color(colorset));
+	public void setStartCornerColor(ColorSet colorSet) {
+		setStartCornerColor(new RGBColor(colorSet));
 	}
 
 	public void setEndCornerColor(Color color) {
-		if (endColor == null)
-			endColor = new Color(0, 0, 0);
+		if (endColor == null) {
+			endColor = new RGBColor(0.0, 0.0, 0.0);
+		}
 		setGradation(true);
 		this.endColor = color;
 	}
 
-	public void setEndCornerColor(ColorSet colorset) {
-		setEndCornerColor(Color.color(colorset));
+	public void setEndCornerColor(ColorSet colorSet) {
+		setEndCornerColor(new RGBColor(colorSet));
 	}
 
 	public void setCornerColor(int index, Color color) {
-		if (cornerGradation == false) {
+		if (!cornerGradation) {
 			cornerGradation = true;
 		}
 		colors.set(index, color);
 	}
 
-	public void setCornerColor(int index, ColorSet colorset) {
-
-		setCornerColor(index, Color.color(colorset));
+	public void setCornerColor(int index, ColorSet colorSet) {
+		setCornerColor(index, new RGBColor(colorSet));
 	}
-
 }

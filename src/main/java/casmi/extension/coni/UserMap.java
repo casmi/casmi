@@ -24,6 +24,7 @@ import org.OpenNI.SceneMetaData;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Texture;
 import casmi.image.Image;
 
@@ -38,14 +39,14 @@ import casmi.image.Image;
 public class UserMap {
     
     private static final Color[] COLORS = {
-        new Color(ColorSet.RED),
-        new Color(ColorSet.BLUE),
-        new Color(ColorSet.CYAN),
-        new Color(ColorSet.GREEN),
-        new Color(ColorSet.MAGENTA),
-        new Color(ColorSet.PINK),
-        new Color(ColorSet.YELLOW),
-        new Color(ColorSet.WHITE)
+        new RGBColor(ColorSet.RED),
+        new RGBColor(ColorSet.BLUE),
+        new RGBColor(ColorSet.CYAN),
+        new RGBColor(ColorSet.GREEN),
+        new RGBColor(ColorSet.MAGENTA),
+        new RGBColor(ColorSet.PINK),
+        new RGBColor(ColorSet.YELLOW),
+        new RGBColor(ColorSet.WHITE)
     };
     
     private final SceneMetaData smd;
@@ -84,7 +85,7 @@ public class UserMap {
                 if (0 < u) {
                     tex.getImage().setColor(COLORS[u % COLORS.length], x, y);
                 } else {
-                    tex.getImage().setColor(new Color(0, 0), x, y);
+                    tex.getImage().setColor(new RGBColor(0.0, 0.0), x, y);
                 }
             }
         }
