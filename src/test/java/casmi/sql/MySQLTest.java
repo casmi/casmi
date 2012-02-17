@@ -12,9 +12,9 @@ import org.junit.Test;
 public class MySQLTest {
 
     private static final String HOST     = "localhost";
-    private static final String DATABASE = "casmi";
-    private static final String USER     = "test";
-    private static final String PASSWORD = "test";
+    private static final String DATABASE = "casmi_test";
+    private static final String USER     = "casmi_test";
+    private static final String PASSWORD = "casmi_test";
     
     private static MySQL mysql = null;
     

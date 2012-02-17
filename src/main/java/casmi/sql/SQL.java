@@ -206,9 +206,10 @@ abstract class SQL {
                 sb.append(select);
             }
             
-            if (!flag) {
-                if (sb.length() != 0) sb.insert(0, ',');
-                sb.insert(0, "id");
+            // if the entity has an automatic primary key("id") and not selected,
+            // append the key automatically.
+            if (!flag && Entity.isAutoPrimaryKey(type)) {
+                sb.insert(0, "id,");
             }
             
             sqlStr = sqlStr.replaceAll(":select", sb.toString());

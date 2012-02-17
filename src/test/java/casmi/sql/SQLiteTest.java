@@ -248,7 +248,7 @@ public class SQLiteTest {
         Alcohol[] alcohols = null;
         Alcohol   alcohol  = null;
         
-        // select
+        // select with a primary key
         try {
             alcohols = sqlite.all(Alcohol.class, new Query().select("name", "abv"));
         } catch (SQLException e) {
@@ -262,6 +262,22 @@ public class SQLiteTest {
             Assert.assertNotNull(a.getName());
             Assert.assertNotNull(a.getAbv());
             Assert.assertNull(a.origin);
+        }
+        
+        // select without a primary key
+        try {
+            alcohols = sqlite.all(Alcohol.class, new Query().select("abv", "origin"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail("Failed to find.");
+        }
+        Assert.assertNotNull(alcohols);
+        for (Alcohol a : alcohols) {
+            System.out.println(a);
+            
+            Assert.assertNull(a.getName());
+            Assert.assertNotNull(a.getAbv());
+            Assert.assertNotNull(a.origin);
         }
         
         // where

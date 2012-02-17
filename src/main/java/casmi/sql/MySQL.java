@@ -294,6 +294,12 @@ public class MySQL extends SQL {
         } else if (type ==     int.class ||
                    type == Integer.class) {
             return (T)(Integer)resultSet.getInt(field);
+        } else if (type ==   short.class ||
+                   type ==   Short.class) {
+            return (T)(Short)resultSet.getShort(field);
+        } else if (type ==    long.class ||
+                   type ==    Long.class) {
+            return (T)(Long)resultSet.getLong(field);
         } else if (type == double.class || 
                    type == Double.class) {
             return (T)(Double)resultSet.getDouble(field);
