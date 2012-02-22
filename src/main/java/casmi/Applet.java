@@ -29,6 +29,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -146,6 +148,8 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 	private int recordTime = 0;
 	private int recordSpan = 0;
 	
+	private double mouseWheelRotation = 0;
+	
 
 	/*
 	 * Set system property "java.library.path" programmatically. This static
@@ -181,6 +185,16 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 	abstract public void mouseEvent(casmi.MouseEvent e, MouseButton b);
 
 	abstract public void keyEvent(casmi.KeyEvent e);
+	
+	abstract public void mouseWheelEvent();
+	
+	class Wheel implements MouseWheelListener{
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {		
+			if((mouseWheelRotation = e.getWheelRotation())!=0)
+				mouseWheelEvent();
+		}	
+	}
 
 	class GLRedisplayTask extends TimerTask {
 		@Override
@@ -215,6 +229,8 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 		panel.addGLEventListener(listener);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
+		panel.addMouseWheelListener(new Wheel());
+		
 		if (!isFullScreen) {
 			panel.addKeyListener(this);
 		} else {
@@ -428,7 +444,8 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 		}
 		updateMouse();
 	}
-
+	
+	
 	private void updateMouse() {
 		preMouseX = mouseX;
 		preMouseY = mouseY;
@@ -655,6 +672,10 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 
 	public int getKeycode() {
 		return keycode;
+	}
+	
+	public double getMouseWheelRotation(){
+		return mouseWheelRotation;
 	}
 
 	public int getPreMouseX() {

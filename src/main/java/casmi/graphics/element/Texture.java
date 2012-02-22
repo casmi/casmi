@@ -46,7 +46,7 @@ public class Texture extends Element implements Renderable {
     public enum TextureFlipMode {Horizontal,Vertical};
     public enum TextureRotationMode {Half,FrontRight,BackRight};
 
-    protected final Image image;
+    protected Image image;
     private Image mask;
     private Image maskedImage;
     
@@ -127,6 +127,10 @@ public class Texture extends Element implements Renderable {
 			}
 		}
 		
+	}
+	
+	public void setTexture(Texture texture){
+		this.image = texture.image;
 	}
 
 
