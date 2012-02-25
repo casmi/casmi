@@ -62,7 +62,6 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
-import casmi.graphics.element.Element;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
@@ -105,7 +104,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	private Cursor cursormode[] = new Cursor[5];
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
-	AppletGLEventListener listener = null;
+	private AppletGLEventListener listener = null;
 
 	private Timer timer;
 
@@ -197,7 +196,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		this.caps = new GLCapabilities();
 		this.caps.setStencilBits(8);
 		this.panel = new GLJPanel(this.caps);
-		listener = new AppletGLEventListener(this, getWidth(), getHeight());
+		this.listener = new AppletGLEventListener(this, getWidth(), getHeight());
 		panel.addGLEventListener(listener);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
@@ -921,6 +920,10 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		frame.setTitle(title);
 		JOptionPane.showMessageDialog(frame, message);
 	}
+
+	public AppletGLEventListener getListener() {
+		return listener;
+	}
 }
 
 /**
@@ -939,7 +942,6 @@ interface GraphicsDrawable {
  * @author takashi
  * 
  */
-
 class AppletGLEventListener implements GLEventListener {
 
 	public int width;
@@ -949,7 +951,7 @@ class AppletGLEventListener implements GLEventListener {
 	GLUT glut;
 	private Graphics g = null;
 	private GraphicsDrawable d = null;
-
+	
 	public AppletGLEventListener(GraphicsDrawable drawable, int w, int h) {
 		this.width = w;
 		this.height = h;
@@ -969,24 +971,26 @@ class AppletGLEventListener implements GLEventListener {
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
-		gl.glViewport(0, 0, this.width, this.height);
+		synchronized (this) {
+			gl.glViewport(0, 0, this.width, this.height);
 
-		g.ortho();
-		gl.glClearStencil(0);
-		gl.glEnable(GL.GL_DEPTH_TEST);
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT
-				| GL.GL_STENCIL_BUFFER_BIT);
+			g.ortho();
+			gl.glClearStencil(0);
+			gl.glEnable(GL.GL_DEPTH_TEST);
+			gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT
+					| GL.GL_STENCIL_BUFFER_BIT);
 
-		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-		gl.glEnable(GL.GL_BLEND);
+			gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+			gl.glEnable(GL.GL_BLEND);
 
-		gl.glEnable(GL.GL_LINE_SMOOTH);
+			gl.glEnable(GL.GL_LINE_SMOOTH);
 
-		if (d != null) {
-			d.drawWithGraphics(g);
+			if (d != null) {
+				d.drawWithGraphics(g);
+			}
+
+			gl.glFlush();
 		}
-
-		gl.glFlush();
 	}
 
 	@Override
