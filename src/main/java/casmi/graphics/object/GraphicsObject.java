@@ -1,3 +1,22 @@
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package casmi.graphics.object;
 
 import java.nio.DoubleBuffer;
@@ -25,13 +44,16 @@ import com.sun.opengl.util.BufferUtil;
 public class GraphicsObject extends Element implements ObjectRender {
 
 	private Graphics g;
+	
 	private double tmpAs, tmpAf;
+	
 	private List<Object> objectList;
 	private List<Light> lightList;
 	private List<Camera> cameraList;
 	private List<Perse> perseList;
 	private List<TweenManager> tmList;
 	private List<Integer> selectionList;
+	
 	private BackGround bg;
 
 	private enum MatrixMode {
@@ -54,23 +76,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 		selectionList = new ArrayList<Integer>();
 	}
 
-	public int add(Object r) {
-//		if (getSize() == 0) {
-//			objectList.add(r);
-//		} else {
-//			for(Object object : objectList){
-//				if(r.equals(object) && (r instanceof Element)){
-//					Element e = (Element) r;
-//					Element ec = e.clone();
-//					objectList.add(ec);
-//					return 0;
-//				}
-//			}
-//			objectList.add(r);
-//		}
-		objectList.add(r);
-		return 0;
-
+	public void add(Object object) {
+		objectList.add(object);
 	}
 
 	public void addLight(Light r) {
@@ -245,42 +252,59 @@ public class GraphicsObject extends Element implements ObjectRender {
 		}
 	}
 
+	@Override
 	public void render(Graphics g) {
-		if (this.isVisible() == true) {
+		if (this.isVisible()) {
 			this.g = g;
+			
 			drawTweenManager(g);
+			
 			drawPerse(g, false);
+			
 			drawCamera(g);
+			
 			if (bg != null)
 				bg.render(g);
+			
 			drawLight(g);
+			
 			g.pushMatrix();
-			setMatrix(g);
-			this.setTweenParameter(g.getGL());
+			{
+			    setMatrix(g);
+			    this.setTweenParameter(g.getGL());
+			}
 			g.popMatrix();
+			
 			if (this instanceof Group) {
 				update(g);
 			}
 		}
 	}
 
-	public void bufRender(Graphics g, double mouseX, double mouseY,
-			boolean bool, int index) {
-		if (this.isVisible() == true) {
+	public void bufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
+		if (this.isVisible()) {
 			this.g = g;
+			
 			drawTweenManager(g);
-			if (bool == false)
-				drawPerse(g, bool);
+			
+			if (!bool)
+			    drawPerse(g, bool);
 
 			drawCamera(g);
+			
 			if (bg != null)
 				bg.render(g);
+			
 			drawLight(g);
+			
 			g.pushMatrix();
-			setMatrix(g);
-			this.setTweenParameter(g.getGL());
-			drawObject(g, bool, mouseX, mouseY, index, -1);
+			{
+			    setMatrix(g);
+			    this.setTweenParameter(g.getGL());
+			    drawObject(g, bool, mouseX, mouseY, index, -1);
+			}
 			g.popMatrix();
+			
 			if (this instanceof Group) {
 				update(g);
 			}
@@ -359,8 +383,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 		int sIndex = -1;
 		for (Object obj : objectList) {
 			if (obj instanceof GraphicsObject) {
-				GraphicsObject o = (GraphicsObject) obj;
-				if (selection == false) {
+				GraphicsObject o = (GraphicsObject)obj;
+				if (!selection) {
 					if (((Element) o).getMask() != null) {
 						((Element) o).getMask().render(g);
 					}

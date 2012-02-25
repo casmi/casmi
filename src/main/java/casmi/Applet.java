@@ -795,82 +795,55 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
    }
    
 
-   public void setRotation(double angle, double x,double y, double z){
+   public void setRotation(double angle, double x,double y, double z) {
 	   rootObject.setRotation(angle, x, y, z);
    }
-   
-   public GraphicsObject getRootObject(){
-	   return rootObject;
+    
+   public void addObject(Object r) {
+       rootObject.add(r);
+       
+       // NOTE: ???
+       if (rootObject instanceof TimelineRender) {
+           timeline = true;
+           rootTimelineRender = (TimelineRender)rootObject;
+           if (rootTimelineRender instanceof Timeline) {
+               rootTimeline = (Timeline)rootTimelineRender;
+               rootTimeline.setApplet(this);
+           }
+       }
    }
-    
-    public int addObject(Object r){
-    	if(rootObject.getSize()==0){
-    		rootObject.add(r);
-    	} else {
-    		for(int i = 0; i<rootObject.getSize(); i++){
-    			if(r.equals(rootObject.get(i))&&(r instanceof Element)){
-    				Element e = (Element)r;
-    				Element ec = e.clone();
-    				rootObject.add(ec);
-    				return 0;
-    			}
-    		}
-    		rootObject.add(r);
-    	}
-    	if(rootObject instanceof TimelineRender){
-    		timeline = true;
-    		rootTimelineRender = (TimelineRender) rootObject;
-    		if( rootTimelineRender instanceof Timeline){
-    			rootTimeline = (Timeline)rootTimelineRender;
-    			rootTimeline.setApplet(this);
-    		}
-    	}
-    	return 0;
+   
+   public void addObject(int index, Object r) {
+       rootObject.add(index, r);
+       
+       // NOTE: ???
+       if (rootObject instanceof TimelineRender) {
+           timeline = true;
+           rootTimelineRender = (TimelineRender) rootObject;
+           if( rootTimelineRender instanceof Timeline){
+               rootTimeline = (Timeline)rootTimelineRender;
+               rootTimeline.setApplet(this);
+           }
+       }
     }
-    
-    public void removeObject(int index){
+
+    public void removeObject(int index) {
     	rootObject.remove(index);
     }
     
-    public int addObject(int index, Object r){
-    	if(rootObject.getSize()==0){
-    		rootObject.add(index, r);
-    	} else {
-    		for(int i = 0; i<rootObject.getSize(); i++){
-    			if(r.equals(rootObject.get(i))&&(r instanceof Element)){
-    				Element e = (Element)r;
-    				Element ec = e.clone();
-    				rootObject.add(index, ec);
-    				return 0;
-    			}
-    		}
-    		rootObject.add(index, r);
-    	}
-    	if(rootObject instanceof TimelineRender){
-    		timeline = true;
-    		rootTimelineRender = (TimelineRender) rootObject;
-    		if( rootTimelineRender instanceof Timeline){
-    			rootTimeline = (Timeline)rootTimelineRender;
-    			rootTimeline.setApplet(this);
-    		}
-    	}
-    	return 0;
-    }
-    
-    public Object getObject(int index){
+    public Object getObject(int index) {
     	return rootObject.get(index);
     }
     
-    public void clearObject(){
+    public void clearObject() {
     	rootObject.clear();
     }
     
-    public void setPerspective(){
+    public void setPerspective() {
 		rootObject.addPerse(new Perspective());
 	}
 
-	public void setPerspective(double fov, double aspect, double zNear,
-			double zFar) {
+	public void setPerspective(double fov, double aspect, double zNear,	double zFar) {
 		rootObject.addPerse(new Perspective(fov, aspect, zNear, zFar));
 	}
 
