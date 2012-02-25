@@ -48,6 +48,8 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JApplet;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -90,9 +92,7 @@ import com.xuggle.mediatool.ToolFactory;
  * @author takashi
  * 
  */
-
-abstract public class Applet extends JApplet implements GraphicsDrawable,
-		MouseListener, MouseMotionListener, KeyListener {
+abstract public class Applet extends JApplet implements GraphicsDrawable, MouseListener, MouseMotionListener, KeyListener {
 
 	private int mouseX, mouseY;
 	private int preMouseX, preMouseY;
@@ -149,34 +149,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 	private int recordSpan = 0;
 	
 	private double mouseWheelRotation = 0;
-	
-
-	/*
-	 * Set system property "java.library.path" programmatically. This static
-	 * scope is required to load native libraries of JOGL. This is called
-	 * initially once.
-	 */
-	/*
-	 * static { String defaultPath = System.getProperty("java.library.path");
-	 * String newPath = "../../casmi/lib/native/"; newPath =
-	 * newPath.replaceAll("/", java.io.File.separator + java.io.File.separator);
-	 * 
-	 * OS os = SystemUtil.getOS(); switch (os) { case MAC: newPath += "mac";
-	 * break; case MAC_64: newPath += "mac"; break; case WIN: newPath += "win";
-	 * break; case WIN_64: newPath += "win_64"; break; case LINUX: newPath +=
-	 * "linux"; break; case LINUX_64: newPath += "linux_64"; break; default:
-	 * break; }
-	 * 
-	 * System.setProperty("java.library.path", defaultPath +
-	 * java.io.File.pathSeparatorChar + newPath);
-	 * 
-	 * try { Field fieldSysPath = ClassLoader.class
-	 * .getDeclaredField("sys_paths"); fieldSysPath.setAccessible(true);
-	 * fieldSysPath.set(null, null); } catch (Exception e) {
-	 * e.printStackTrace(); }
-	 * 
-	 * // System.out.println(System.getProperty("java.library.path")); }
-	 */
 
 	abstract public void setup();
 
@@ -971,6 +943,11 @@ abstract public class Applet extends JApplet implements GraphicsDrawable,
 		rootObject.setBackGroundColor(new BackGround(colorset));
 	}
 
+	public static void showAlert(String title, String message) {
+		JFrame frame = new JFrame();
+		frame.setTitle(title);
+		JOptionPane.showMessageDialog(frame, message);
+	}
 }
 
 /**
@@ -1056,5 +1033,4 @@ class AppletGLEventListener implements GLEventListener {
 		this.g.setWidth(w);
 		this.g.setHeight(h);
 	}
-
 }
