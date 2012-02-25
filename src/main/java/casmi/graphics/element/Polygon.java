@@ -146,7 +146,7 @@ public class Polygon extends Element implements Renderable {
 		double tmpx, tmpy, tmpz;
 
 		gl.glPushMatrix();
-		gl.glTranslated(X, Y, 0);
+//		gl.glTranslated(X, Y, 0);
 		gl.glRotated(rotate, 0, 0, 1.0);
 		this.setTweenParameter(gl);
 
