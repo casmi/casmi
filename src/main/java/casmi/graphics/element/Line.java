@@ -264,6 +264,10 @@ public class Line extends Element implements Renderable {
         this.setTweenParameter(gl);
      //   setPoint();
 
+        gl.glTranslated((this.x1 + this.x2) / 2.0, 
+        				(this.y1 + this.y2) / 2.0, 
+        				(this.z1 + this.z2) / 2.0);
+        
         switch (MODE) {
         case LINES:
             gl.glLineWidth(this.strokeWidth);
