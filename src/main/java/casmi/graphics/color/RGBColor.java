@@ -289,11 +289,10 @@ public class RGBColor implements Color {
     }
     
     public static RGBColor lerpColor(Color color1, Color color2, double amt) {
-        double red, green, blue, alpha;
-        red   = color2.getRed()   * amt + color1.getRed()   * (1.0 - amt);
-        green = color2.getGreen() * amt + color1.getGreen() * (1.0 - amt);
-        blue  = color2.getBlue()  * amt + color1.getBlue()  * (1.0 - amt);
-        alpha = color2.getAlpha() * amt + color1.getAlpha() * (1.0 - amt);
+        double red   = color2.getRed()   * amt + color1.getRed()   * (1.0 - amt);
+        double green = color2.getGreen() * amt + color1.getGreen() * (1.0 - amt);
+        double blue  = color2.getBlue()  * amt + color1.getBlue()  * (1.0 - amt);
+        double alpha = color2.getAlpha() * amt + color1.getAlpha() * (1.0 - amt);
         return new RGBColor(red, green, blue, alpha);
     }
     
@@ -321,6 +320,7 @@ public class RGBColor implements Color {
         this.red = red / 255.0;
     }
     
+    @Override
     public void setRed(double red) {
         this.red = red;
     }
@@ -340,6 +340,7 @@ public class RGBColor implements Color {
         this.green = green / 255.0;
     }
     
+    @Override
     public void setGreen(double green) {
         this.green = green;
     }
@@ -359,6 +360,7 @@ public class RGBColor implements Color {
         this.blue = blue / 255.0;
     }
     
+    @Override
     public void setBlue(double blue) {
         this.blue = blue;
     }
@@ -378,6 +380,7 @@ public class RGBColor implements Color {
         this.alpha = alpha / 255.0;
     }
     
+    @Override
     public void setAlpha(double alpha) {
         this.alpha = alpha;
     }
