@@ -21,6 +21,7 @@ package casmi.timeline;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -36,313 +37,300 @@ import casmi.parser.CSV;
  * @author Y. Ban
  * 
  */
+public class Timeline implements TimelineRender {
 
-public class Timeline implements TimelineRender{
-	
-	private int nowSceneID = 0,nextSceneID = 1;
-	private int nowDisolveID = 0,nextDisolveID =1;
-	private double preDhalf = 0.0, nextDhalf = 0.0;
-	private boolean endScene = false;
-	private boolean disolve = false,nextDisolve = false, preDisolve = false;
-	private long disolveStart,disolveNow;
-	private Applet baseApplet;
-	public enum DisolveMode {
-		CROSS, NORMAL
-	};
-		
-	class SceneTask extends TimerTask {
-		public void run(){
-			if(nextDisolve == false){
-				goNextScene();
-				 preDisolve = nextDisolve;
-				try{
-					if(dv.get(nowDisolveID).now==nowSceneID)
-						nextDisolve = true;
-				} catch (java.lang.IndexOutOfBoundsException e){
-					 	nextDisolve = false;
-				}
-			}
-			else{
-				if(disolve == false)
-					goDisolve();
-				else{
-					endDgoS();
-					 preDisolve = nextDisolve;
-				}
-			}
-		}
-	}
-	
-	class Disolve {
-		private int now, next;
-		private double time;
+    private int nowSceneID = 0, nextSceneID = 1;
+    private int nowDissolveID = 0, nextDissolveID = 1;
+    private double preDhalf = 0.0, nextDhalf = 0.0;
+    private boolean endScene = false;
+    private boolean dissolve = false, nextDissolve = false, preDissolve = false;
+    private long dissolveStart, dissolveNow;
+    private Applet baseApplet;
 
-		private DisolveMode mode = DisolveMode.CROSS;
-		
-		public Disolve(int now , int next, double time) {
-			this.now = now;
-			this.next = next;
-			this.setTime(time);
-		}
+    private List<Scene> sl;
+    private List<Dissolve> dv;
+    private Timer timer;
+    private TimerTask task = new SceneTask();
 
-		public double getTime() {
-			return time;
-		}
+    class SceneTask extends TimerTask {
 
-		public void setTime(double time) {
-			this.time = time;
-		}
-		
-		int getNow() {
-		    return now;
-		}
-		
-		int getNext() {
-		    return next;
-		}
-	}
-	
-	private ArrayList<Scene> sl;
-	private ArrayList<Disolve> dv;
-	private Timer timer;
-	private TimerTask task = new SceneTask();
-	
-	public Timeline(){
-        sl= new ArrayList<Scene>();
-        dv= new ArrayList<Disolve>();
-	}
-	
-	public Timeline(String csvfile){
-        sl= new ArrayList<Scene>();	
-        readTimelineCSV(csvfile);
-	}
-	
-	private void readTimelineCSV(String csvfile){
-		CSV csv;
-		String name;
+        @Override
+        public void run() {
+            if (!nextDissolve) {
+                goNextScene();
+                preDissolve = nextDissolve;
+                try {
+                    if (dv.get(nowDissolveID).now == nowSceneID)
+                        nextDissolve = true;
+                } catch (java.lang.IndexOutOfBoundsException e) {
+                    nextDissolve = false;
+                }
+            } else {
+                if (!dissolve) {
+                    goDissolve();
+                } else {
+                    endDgoS();
+                    preDissolve = nextDissolve;
+                }
+            }
+        }
+    }
+
+    class Dissolve {
+
+        private int now, next;
+        private double time;
+
+        private DissolveMode mode = DissolveMode.CROSS;
+
+        public Dissolve(int now, int next, double time) {
+            this.now = now;
+            this.next = next;
+            this.setTime(time);
+        }
+
+        public double getTime() {
+            return time;
+        }
+
+        public void setTime(double time) {
+            this.time = time;
+        }
+
+        int getNow() {
+            return now;
+        }
+
+        int getNext() {
+            return next;
+        }
+    }
+
+    public Timeline() {
+        sl = new ArrayList<Scene>();
+        dv = new ArrayList<Dissolve>();
+    }
+
+    public Timeline(String csvFile) {
+        sl = new ArrayList<Scene>();
+        readTimelineCSV(csvFile);
+    }
+
+    private final void readTimelineCSV(String csvfile) {
+        CSV csv;
+        String name;
 //		double time;
-		ClassLoader loader = ClassLoader.getSystemClassLoader();
-		try {
+        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        try {
             csv = new CSV(csvfile);
-        	String[] test;
-        	while ((test = csv.readLine()) != null) {
-        		name = test[0];
+            String[] test;
+            while ((test = csv.readLine()) != null) {
+                name = test[0];
 //        		time = Double.valueOf(test[3]).doubleValue();
-        		Class<?> clazz;
-        		Object obj;
-        		try{
-        			clazz = loader.loadClass(name);
-        			obj = clazz.newInstance();
-        			if(obj instanceof Scene){
-        				
-        			}
-        			
-        		} catch (ClassNotFoundException e){
-        			throw new RuntimeException(e);
-        		} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-        		
-            	//if(!sl.contains()){
-            		//sl.add(clazz);
-            	//}
+                Class<?> clazz;
+                Object obj;
+                try {
+                    clazz = loader.loadClass(name);
+                    obj = clazz.newInstance();
+                    if (obj instanceof Scene) {
+
+                    }
+
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+                // if(!sl.contains()){
+                // sl.add(clazz);
+                // }
             }
             csv.close();
         } catch (IOException e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
-	}
-	
+    }
 
-	
-	public void goNextScene(){
-		nowSceneID=nextSceneID;
-		nextSceneID++;
-		try{
-			sl.get(nextSceneID);
-		} catch (java.lang.IndexOutOfBoundsException e){
-			 nextSceneID = 0;
-		}		
-		setEndScene(true);
-		
-		
-	}
-	
-	private void endDgoS(){
-		
-		
-		preDhalf = dv.get(nowDisolveID).getTime()/2;
-		nextDhalf = dv.get(nextDisolveID).getTime()/2;
-		nowDisolveID = nextDisolveID;
-		nextDisolveID++;
-		disolve = false;
-		
-		try{
-			dv.get(nextDisolveID);
-		} catch (java.lang.IndexOutOfBoundsException e){
-			nextDisolveID = 0;
-		}
-		
-		goNextScene();
-	
-	}
-	
-	private void goDisolve(){
-		disolve = true;
-		setEndScene(true);
-	}
-	
-	public void setNextScene(int i){
-		nextSceneID = i;
-		try{
-			sl.get(nextSceneID);
-		} catch (java.lang.IndexOutOfBoundsException e){
-			 nextSceneID = nowSceneID;
-		}
-	}
-	
-	public void appendScene(Scene s){
-		this.sl.add(s);
-	}
-	
-	public void removeScene(int i){
-		this.sl.remove(i);
-	}
-	
-	public void appendDisolve(double time){
-		int nowID = this.sl.size()-1;
-		Disolve disolve;
-		disolve = new Disolve(nowID,nowID+1,time);
-		this.dv.add(disolve);
-	}
-	
-	public void appendDisolve(double time, DisolveMode mode){
-		int nowID = this.sl.size()-1;
-		Disolve disolve;
-		disolve = new Disolve(nowID,nowID+1,time);
-		disolve.mode = mode;
-		this.dv.add(disolve);
-	}
-	
-	public void setDisolve(int now, int next, double time){
-		Disolve disolve;
-		disolve = new Disolve(now,next,time);
-		this.dv.add(disolve);
-	}
-	
-	
-	public void startTimer(){
-		timer = new Timer(true);
-		long halfd;
-		try{
-			if(dv.get(nowSceneID).now==nowSceneID){
-				halfd = (long)dv.get(nowSceneID).getTime()/2;
-				timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()-halfd));
-				nextDisolve = true;}
-			else
-				timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
-		} catch (java.lang.IndexOutOfBoundsException e){
-			timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
-		}
-		
-		if(dv.size()==1){
-			nextDisolveID = nowDisolveID;
-		}
-		
-	}
-	 public void render(Graphics g) {
-		 if(endScene==true){
-			 endScene = false;
-			 task.cancel();
-			 task = null;
-			 
-			 if(task == null)
-				 task = new SceneTask();
-			 if(nextDisolve == false)
-				 timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
-			 else{
-				 if(disolve == true){
-					 timer.schedule(task, TimeUnit.SECONDS.toMillis((long)dv.get(nowDisolveID).getTime()));
-					 disolveStart = System.currentTimeMillis();
-					 
-				 }else{
-					 try{
-							if(dv.get(nowDisolveID).now==nowSceneID)
-								nextDisolve = true;
-							else{
-								nextDisolve = false;
-								}
-						} catch (java.lang.IndexOutOfBoundsException e){
-							 	nextDisolve = false;
-						}
-					 
-					 if(nextDisolve == false){
-						 timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime()-preDhalf)));
-					 } else if(preDisolve == false){
-						 timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime()-nextDhalf)));					
-					 } else{
-						  timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime()-preDhalf-nextDhalf)));						
-					 }
-				 }
-			 }
-		 }
-		 
-		 if(disolve == false)
-			 sl.get(nowSceneID).drawscene(g);
-		 else{
-			 disolveNow = System.currentTimeMillis();
-			 double tmp = (disolveNow-disolveStart)/(dv.get(nowDisolveID).getTime()*1000);
-			 
-			 switch (dv.get(nowDisolveID).mode) {
-			 	default:
-				case CROSS:
-					sl.get(nowSceneID).setSceneA((1.0-tmp),g);
-					sl.get(nowSceneID).drawscene(g);
-					sl.get(nextSceneID).setSceneA(tmp,g);
-					sl.get(nextSceneID).drawscene(g);
-					break;
-				case NORMAL:
-					if(tmp<=0.5){
-						sl.get(nowSceneID).setSceneA((1.0-tmp*2),g);
-						sl.get(nowSceneID).drawscene(g);
-					}
-					if(tmp>=0.5){
-						sl.get(nextSceneID).setSceneA(((tmp-0.5)*2),g);
-						sl.get(nextSceneID).drawscene(g);
-					}
-					break;
-				}
-			 
-			 
-			 
-			 
-		 }
-	 }
+    public void goNextScene() {
+        nowSceneID = nextSceneID;
+        nextSceneID++;
+        try {
+            sl.get(nextSceneID);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            nextSceneID = 0;
+        }
+        setEndScene(true);
+    }
 
-	public boolean isEndScene() {
-		return endScene;
-	}
-	
-	public Scene getScene(){
-		return sl.get(nowSceneID);
-	}
-	
-	public Scene getScene(int index){
-		return sl.get(index);
-	}
-	
-	public void setApplet(Applet a){
-		baseApplet = a;
-	}
-	
-	public Applet get(){
-		return baseApplet;
-	}
+    // TODO: Rename! Can't understand!
+    private final void endDgoS() {
+        preDhalf = dv.get(nowDissolveID).getTime() / 2;
+        nextDhalf = dv.get(nextDissolveID).getTime() / 2;
+        nowDissolveID = nextDissolveID;
+        nextDissolveID++;
+        dissolve = false;
 
-	public boolean setEndScene(boolean endScene) {
-		this.endScene = endScene;
-		return endScene;
-	}
+        try {
+            dv.get(nextDissolveID);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            nextDissolveID = 0;
+        }
+
+        goNextScene();
+
+    }
+
+    private final void goDissolve() {
+        dissolve = true;
+        setEndScene(true);
+    }
+
+    public void setNextScene(int i) {
+        nextSceneID = i;
+        try {
+            sl.get(nextSceneID);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            nextSceneID = nowSceneID;
+        }
+    }
+
+    public void appendScene(Scene s) {
+        this.sl.add(s);
+    }
+
+    public void removeScene(int i) {
+        this.sl.remove(i);
+    }
+
+    public void appendDissolve(double time) {
+        int nowID = this.sl.size() - 1;
+        Dissolve dissolve = new Dissolve(nowID, nowID + 1, time);
+        this.dv.add(dissolve);
+    }
+
+    public void appendDisolve(double time, DissolveMode mode) {
+        int nowID = this.sl.size() - 1;
+        Dissolve dissolve = new Dissolve(nowID, nowID + 1, time);
+        dissolve.mode = mode;
+        this.dv.add(dissolve);
+    }
+
+    public void setDisolve(int now, int next, double time) {
+        Dissolve dissolve;
+        dissolve = new Dissolve(now, next, time);
+        this.dv.add(dissolve);
+    }
+
+    public void startTimer() {
+        timer = new Timer(true);
+        long halfd;
+        try {
+            if (dv.get(nowSceneID).now == nowSceneID) {
+                halfd = (long)dv.get(nowSceneID).getTime() / 2;
+                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime() - halfd));
+                nextDissolve = true;
+            } else {
+                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
+            }
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
+        }
+
+        if (dv.size() == 1) {
+            nextDissolveID = nowDissolveID;
+        }
+    }
+
+    public void render(Graphics g) {
+        if (endScene) {
+            endScene = false;
+            task.cancel();
+            task = null;
+
+            if (task == null)
+                task = new SceneTask();
+
+            if (!nextDissolve) {
+                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
+            } else {
+                if (!dissolve) {
+                    timer.schedule(task, TimeUnit.SECONDS.toMillis((long)dv.get(nowDissolveID).getTime()));
+                    dissolveStart = System.currentTimeMillis();
+                } else {
+                    try {
+                        if (dv.get(nowDissolveID).now == nowSceneID) {
+                            nextDissolve = true;
+                        } else {
+                            nextDissolve = false;
+                        }
+                    } catch (java.lang.IndexOutOfBoundsException e) {
+                        nextDissolve = false;
+                    }
+
+                    if (!nextDissolve) {
+                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime() - preDhalf)));
+                    } else if (!preDissolve) {
+                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime() - nextDhalf)));
+                    } else {
+                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime() - preDhalf - nextDhalf)));
+                    }
+                }
+            }
+        }
+
+        if (!dissolve) {
+            sl.get(nowSceneID).drawscene(g);
+        } else {
+            dissolveNow = System.currentTimeMillis();
+            double tmp = (dissolveNow - dissolveStart) / (dv.get(nowDissolveID).getTime() * 1000);
+
+            switch (dv.get(nowDissolveID).mode) {
+            default:
+            case CROSS:
+                sl.get(nowSceneID).setSceneA((1.0 - tmp), g);
+                sl.get(nowSceneID).drawscene(g);
+                sl.get(nextSceneID).setSceneA(tmp, g);
+                sl.get(nextSceneID).drawscene(g);
+                break;
+            case NORMAL:
+                if (tmp <= 0.5) {
+                    sl.get(nowSceneID).setSceneA((1.0 - tmp * 2), g);
+                    sl.get(nowSceneID).drawscene(g);
+                }
+                if (tmp >= 0.5) {
+                    sl.get(nextSceneID).setSceneA(((tmp - 0.5) * 2), g);
+                    sl.get(nextSceneID).drawscene(g);
+                }
+                break;
+            }
+        }
+    }
+
+    public boolean isEndScene() {
+        return endScene;
+    }
+
+    public Scene getScene() {
+        return sl.get(nowSceneID);
+    }
+
+    public Scene getScene(int index) {
+        return sl.get(index);
+    }
+
+    public void setApplet(Applet a) {
+        baseApplet = a;
+    }
+
+    public Applet getApplet() {
+        return baseApplet;
+    }
+
+    public boolean setEndScene(boolean endScene) {
+        this.endScene = endScene;
+        return endScene;
+    }
 }

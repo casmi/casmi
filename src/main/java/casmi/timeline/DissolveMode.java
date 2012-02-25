@@ -17,23 +17,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graphics.group;
-
-import casmi.graphics.object.GraphicsObject;
+package casmi.timeline;
 
 /**
- * Group abstract class.
+ * Modes of dissolving in timeline.
  *  
- * @author Y. Ban.
+ * @author Y. Ban
  */
-abstract public class Group extends GraphicsObject {
-
-//	public Group() {
-//		super();
-//	}
-
-	abstract public void setup();
-	
-	@Override
-	abstract public void update();
+public enum DissolveMode {
+    
+    /** Normal dissolve. */
+    NORMAL,
+    
+    /** Cross dissolve. */
+    CROSS, 
 }
