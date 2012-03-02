@@ -19,6 +19,9 @@
 
 package casmi.exception;
 
+/**
+ * @author T. Takeuchi
+ */
 public class ParserException extends CasmiException {
 
 	public ParserException() {

@@ -27,6 +27,8 @@ import casmi.graphics.Graphics;
  * The Tweenable interface lets you interpolate any attribute from any object.
  * Just implement it as you want and let the engine do the interpolation for
  * you.
+ * 
+ * @author Y. Ban
  */
 public interface Tweenable {
 
@@ -37,5 +39,4 @@ public interface Tweenable {
 	void end(Graphics g, TweenType tweenType);
 	
 	void render(Graphics g, TweenType tweenType);
-	
 }

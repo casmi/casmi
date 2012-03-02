@@ -21,6 +21,9 @@ package casmi.util;
 
 import java.util.Random;
 
+/**
+ * @author Y. Ban
+ */
 public class Noise {
 
 	private static final float PRECISION = 0.5f;

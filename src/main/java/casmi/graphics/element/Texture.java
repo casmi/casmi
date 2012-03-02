@@ -65,7 +65,7 @@ public class Texture extends Element implements Renderable {
     private ArrayList<Double> nx;
     private ArrayList<Double> ny;
 
-    private Vertex tmpv = new Vertex();
+    private Vertex tmpV = new Vertex();
     
     protected boolean reloadFlag = false;    
 
@@ -154,24 +154,24 @@ public class Texture extends Element implements Renderable {
 
     public void addVertex(Vertex v, double nx, double ny) {
         mode = LINES_3D;
-        this.xList.add(v.x);
-        this.yList.add(v.y);
-        this.zList.add(v.z);
+        this.xList.add(v.getX());
+        this.yList.add(v.getY());
+        this.zList.add(v.getZ());
         this.nx.add(nx);
         this.ny.add(ny);
     }
 
     public Vertex getVertex(int i) {
-        tmpv.x = xList.get(i);
-        tmpv.y = yList.get(i);
-        tmpv.z = zList.get(i);
-        return tmpv;
+        tmpV.setX(xList.get(i));
+        tmpV.setY(yList.get(i));
+        tmpV.setZ(zList.get(i));
+        return tmpV;
     }
     
-    public Vertex getTextureVertex(int i){
-    	tmpv.x = nx.get(i);
-    	tmpv.y = ny.get(i);
-    	return tmpv;
+    public Vertex getTextureVertex(int i) {
+    	tmpV.setX(nx.get(i));
+    	tmpV.setY(ny.get(i));
+    	return tmpV;
     }
 
     public void removeVertex(int i) {
@@ -398,8 +398,6 @@ public class Texture extends Element implements Renderable {
 		return corner[index1][index2];
 	}
 	
-
-	
 	public void enableMask(){
 		masking = true;
 	}
@@ -407,6 +405,4 @@ public class Texture extends Element implements Renderable {
 	public void disableMask(){
 		masking = false;
 	}
-	
-	
 }

@@ -392,7 +392,7 @@ public class Graphics {
      */
 	public void ambientLight(float r, float g, float b, Vertex v) {
 		float ambient[] = { r, g, b, 255 };
-		float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
 		normalize(ambient);
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
@@ -426,9 +426,9 @@ public class Graphics {
             (float)color.getAlpha() 
         };
         float position[] = { 
-            (float)v.x, 
-            (float)v.y,
-            (float)v.z,
+            (float)v.getX(), 
+            (float)v.getY(),
+            (float)v.getZ(),
             1.0f 
         };
         gl.glEnable(GL.GL_LIGHTING);
@@ -467,7 +467,7 @@ public class Graphics {
      */
 	public void ambientLight(int i, float r, float g, float b, Vertex v) {
 		float ambient[] = { r, g, b, 255 };
-		float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
 		normalize(ambient);
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
@@ -500,7 +500,7 @@ public class Graphics {
             (float)color.getBlue(),
             (float)color.getAlpha() 
         };
-        float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+        float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
         gl.glEnable(GL.GL_LIGHTING);
         gl.glEnable(GL.GL_LIGHT0 + i);
         gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, position, 0);
@@ -534,7 +534,7 @@ public class Graphics {
             (float)color.getBlue(),
             (float)color.getAlpha() 
         };
-		float pos[] = { (float) v.x, (float) v.y, (float) v.z, 0 };
+		float pos[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 0.0f };
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
@@ -569,9 +569,9 @@ public class Graphics {
             (float)color.getAlpha() 
         };
 		float pos[] = { 
-		    (float)v.x,
-		    (float)v.y,
-		    (float)v.z,
+		    (float)v.getX(),
+		    (float)v.getY(),
+		    (float)v.getZ(),
 		    0.0f
 		};
 		gl.glEnable(GL.GL_LIGHTING);
@@ -591,10 +591,10 @@ public class Graphics {
             (float)color.getAlpha() 
         };
 		float pos[] = { 
-		    (float)v.x,
-		    (float)v.y,
-		    (float)v.z,
-		    0 
+		    (float)v.getX(),
+		    (float)v.getY(),
+		    (float)v.getZ(),
+		    0.0f
 		};
 		float direction[] = { nx, ny, nz };
 		float a[] = { angle };
@@ -707,7 +707,7 @@ public class Graphics {
      * */
 	public void vertex(Vertex v, float nx, float ny) {
 		gl.glTexCoord2f(nx, ny);
-		gl.glVertex3d(v.x, v.y, v.z);
+		gl.glVertex3d(v.getX(), v.getY(), v.getZ());
 	}
 	
 	/**

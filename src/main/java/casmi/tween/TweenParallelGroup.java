@@ -19,10 +19,11 @@
 
 package casmi.tween;
 
-
 /**
  * A TweenGroup can be used to create complex animations made of sequences and
  * parallel sets of Tweens.
+ *
+ * @author Y. Ban
  *
  * @see Tween
  * @see TweenManager

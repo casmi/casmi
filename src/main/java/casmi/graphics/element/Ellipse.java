@@ -45,7 +45,6 @@ public class Ellipse extends Element implements Renderable {
     
     private Color centerColor;
     private Color edgeColor;
-
     
     /**
      * Creates a new Ellipse object using x,y-coordinate, width and height.
@@ -77,8 +76,8 @@ public class Ellipse extends Element implements Renderable {
      *            The height of the Ellipse.
      */
     public Ellipse(Vertex v, double width, double height) {
-        this.x = v.x;
-        this.y = v.x;
+        this.x = v.getX();
+        this.y = v.getY();
         this.width  = width;
         this.height = height;
     }
@@ -125,8 +124,8 @@ public class Ellipse extends Element implements Renderable {
      *            The radius of the Ellipse.
      */
     public Ellipse(Vertex v, double radius) {
-        this.x = v.x;
-        this.y = v.y;
+        this.x = v.getX();
+        this.y = v.getY();
         this.width  = radius * 2.0;
         this.height = radius * 2.0;
     }
@@ -174,8 +173,8 @@ public class Ellipse extends Element implements Renderable {
      *            The height of the Ellipse.
      */
     public void set(Vertex v, double width, double height) {
-        this.x = v.x;
-        this.y = v.x;
+        this.x = v.getX();
+        this.y = v.getY();
         this.width  = width;
         this.height = height;
     }
@@ -206,8 +205,8 @@ public class Ellipse extends Element implements Renderable {
      *            The radius of the Ellipse.
      */
     public void set(Vertex v, double radius) {
-        this.x = v.x;
-        this.y = v.y;
+        this.x = v.getX();
+        this.y = v.getY();
         this.width  = radius * 2.0;
         this.height = radius * 2.0;
     }

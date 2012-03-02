@@ -19,6 +19,18 @@
 
 package casmi.tween;
 
+/**
+ * @author Y. Ban
+ */
 public enum TweenCallbackTypes {
-	START, END_OF_DELAY, ITERATION_COMPLETE, COMPLETE, KILL
+	
+    START,
+    
+    END_OF_DELAY,
+    
+    ITERATION_COMPLETE,
+    
+    COMPLETE,
+    
+    KILL
 }

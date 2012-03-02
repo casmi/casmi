@@ -38,8 +38,8 @@ import casmi.matrix.Vertex;
  */
 public class Polygon extends Element implements Renderable {
 
-	public static final int LINES = 1;
-	public static final int LINES_3D = 3;
+	public static final int LINES     = 1;
+	public static final int LINES_3D  = 3;
 	public static final int LINE_LOOP = 51;
 
 	private List<Double> x;
@@ -50,7 +50,7 @@ public class Polygon extends Element implements Renderable {
 	private double Y = 0;
 	private int size;
 
-	private Vertex tmpv = new Vertex(0, 0, 0);
+	private Vertex tmpV = new Vertex(0, 0, 0);
 
 	private ArrayList<Color> cornerColor;
 
@@ -98,19 +98,19 @@ public class Polygon extends Element implements Renderable {
 
 	public void vertex(Vertex v) {
 		MODE = LINES_3D;
-		this.x.add(v.x);
-		this.y.add(v.y);
-		this.z.add(v.z);
+		this.x.add(v.getX());
+		this.y.add(v.getY());
+		this.z.add(v.getZ());
 		setSize(this.x.size());
 		calcG();
 	}
 
 	public Vertex getVertex(int index) {
-		tmpv.x = x.get(index);
-		tmpv.y = y.get(index);
-		tmpv.z = z.get(index);
+		tmpV.setX(x.get(index));
+		tmpV.setY(y.get(index));
+		tmpV.setZ(z.get(index));
 		calcG();
-		return tmpv;
+		return tmpV;
 	}
 
 	public void removeVertex(int index) {

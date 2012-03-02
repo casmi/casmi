@@ -57,9 +57,7 @@ public class Line extends Element implements Renderable {
     /**
      * Creates a new Line object
      */
-    public Line() {
-
-    }
+    public Line() {}
     
     /**
      * Creates a new Line object using coordinates for the first and second point.
@@ -96,12 +94,12 @@ public class Line extends Element implements Renderable {
      */            
     public Line(Vertex v1, Vertex v2) {
         this.MODE = LINES_3D;
-        this.x1 = v1.x;
-        this.y1 = v1.y;
-        this.z1 = v1.z;
-        this.x2 = v2.x;
-        this.y2 = v2.y;
-        this.z2 = v2.z;
+        this.x1 = v1.getX();
+        this.y1 = v1.getY();
+        this.z1 = v1.getZ();
+        this.x2 = v2.getX();
+        this.y2 = v2.getY();
+        this.z2 = v2.getZ();
         calcG();
         dx[0] = x1 - x;
         dx[1] = x2 - x;
@@ -236,12 +234,12 @@ public class Line extends Element implements Renderable {
      */            
     public void set(Vertex v1, Vertex v2) {
         this.MODE = LINES;
-        this.x1 = v1.x;
-        this.y1 = v1.y;
-        this.z1 = v1.z;
-        this.x2 = v2.x;
-        this.y2 = v2.y;
-        this.z2 = v2.z;
+        this.x1 = v1.getX();
+        this.y1 = v1.getY();
+        this.z1 = v1.getZ();
+        this.x2 = v2.getX();
+        this.y2 = v2.getY();
+        this.z2 = v2.getZ();
         calcG();
         dx[0] = x1 - this.x;
         dx[1] = x2 - this.x;

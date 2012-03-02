@@ -24,8 +24,10 @@ package casmi.tween;
  * and directly use them in the Tween static methods by deriving from this
  * class.
  * 
+ * @author Y. Ban
  */
 public abstract class TweenEquation {
+    
 	/**
 	 * Computes the next value of the interpolation.
 	 * @param t Current time, in seconds.

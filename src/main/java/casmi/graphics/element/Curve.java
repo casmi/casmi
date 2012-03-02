@@ -175,18 +175,18 @@ public class Curve extends Element implements Renderable {
      *            The coordinates for the second ancor point.
      */
     public Curve(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
-        this.points[0] = (float)v1.x;
-        this.points[1] = (float)v1.y;
-        this.points[2] = (float)v1.z;
-        this.points[3] = (float)v2.x;
-        this.points[4] = (float)v2.y;
-        this.points[5] = (float)v2.z;
-        this.points[6] = (float)v3.x;
-        this.points[7] = (float)v3.y;
-        this.points[8] = (float)v3.z;
-        this.points[9] = (float)v4.x;
-        this.points[10] = (float)v4.y;
-        this.points[11] = (float)v4.z;
+        this.points[0]  = (float)v1.getX();
+        this.points[1]  = (float)v1.getY();
+        this.points[2]  = (float)v1.getZ();
+        this.points[3]  = (float)v2.getX();
+        this.points[4]  = (float)v2.getY();
+        this.points[5]  = (float)v2.getZ();
+        this.points[6]  = (float)v3.getX();
+        this.points[7]  = (float)v3.getY();
+        this.points[8]  = (float)v3.getZ();
+        this.points[9]  = (float)v4.getX();
+        this.points[10] = (float)v4.getY();
+        this.points[11] = (float)v4.getZ();
     	set();
     }
     
@@ -317,18 +317,18 @@ public class Curve extends Element implements Renderable {
      *            The coordinates for the second ancor point.
      */
     public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
-        this.points[0] = (float)v1.x;
-        this.points[1] = (float)v1.y;
-        this.points[2] = (float)v1.z;
-        this.points[3] = (float)v2.x;
-        this.points[4] = (float)v2.y;
-        this.points[5] = (float)v2.z;
-        this.points[6] = (float)v3.x;
-        this.points[7] = (float)v3.y;
-        this.points[8] = (float)v3.z;
-        this.points[9] = (float)v4.x;
-        this.points[10] = (float)v4.y;
-        this.points[11] = (float)v4.z;
+        this.points[0]  = (float)v1.getX();
+        this.points[1]  = (float)v1.getY();
+        this.points[2]  = (float)v1.getZ();
+        this.points[3]  = (float)v2.getX();
+        this.points[4]  = (float)v2.getY();
+        this.points[5]  = (float)v2.getZ();
+        this.points[6]  = (float)v3.getX();
+        this.points[7]  = (float)v3.getY();
+        this.points[8]  = (float)v3.getZ();
+        this.points[9]  = (float)v4.getX();
+        this.points[10] = (float)v4.getY();
+        this.points[11] = (float)v4.getZ();
     	set();
     }
     
@@ -354,14 +354,15 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
-    public void setNode(int number, Vertex v){
-    	if(number<=0)
+    public void setNode(int number, Vertex v) {
+    	if (number <= 0) {
     		number = 0;
-    	if(number>=3)
+    	} else if (3 <= number) {
     		number = 3;
-    	this.points[number*3] = (float)v.x;
-    	this.points[number*3+1] = (float)v.y;
-    	this.points[number*3+2] = (float)v.z;
+    	}
+    	this.points[number*3]   = (float)v.getX();
+    	this.points[number*3+1] = (float)v.getY();
+    	this.points[number*3+2] = (float)v.getZ();
     	set();
     }
 

@@ -38,8 +38,8 @@ import casmi.matrix.Vertex;
  */
 public class Lines extends Element implements Renderable {
 
-	public static final int LINES = 1;
-	public static final int LINES_3D = 3;
+	public static final int LINES     = 1;
+	public static final int LINES_3D  = 3;
 	public static final int LINE_LOOP = 51;
 
 	private List<Double> x;
@@ -50,7 +50,7 @@ public class Lines extends Element implements Renderable {
 	private double X = 0;
 	private double Y = 0;
 
-	private Vertex tmpv = new Vertex(0, 0, 0);
+	private Vertex tmpV = new Vertex(0, 0, 0);
 
 	public enum JoinMode {
 		CORNER, CORNERS, RADIUS, CENTER
@@ -107,20 +107,20 @@ public class Lines extends Element implements Renderable {
 
 	public void vertex(Vertex v) {
 		MODE = LINES_3D;
-		this.x.add(v.x);
-		this.y.add(v.y);
-		this.z.add(v.z);
+		this.x.add(v.getX());
+		this.y.add(v.getY());
+		this.z.add(v.getZ());
 		colors.add(this.strokeColor);
 		calcG();
 	}
 
 	public Vertex getVertex(int i) {
-		tmpv.x = x.get(i);
-		tmpv.y = y.get(i);
-		tmpv.z = z.get(i);
+		tmpV.setX(x.get(i));
+		tmpV.setY(y.get(i));
+		tmpV.setZ(z.get(i));
 
 		calcG();
-		return tmpv;
+		return tmpV;
 	}
 
 	public void removeVertex(int i) {

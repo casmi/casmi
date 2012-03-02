@@ -23,61 +23,16 @@ import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
-import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
 
-import casmi.util.OS;
-import casmi.util.SystemUtil;
-
+/**
+ * @author T. Aoki
+ */
 public class AppletRunner {
 
     static JFrame frame;
     static GraphicsDevice displayDevice;
-    
-    
-    // TODO need to refactoring
-    // following static initialization code is duplicated with Applet.java
-    static {
-        String defaultPath = System.getProperty("java.library.path");
-        String newPath = "../casmi/lib/native/";
-
-        OS os = SystemUtil.getOS();
-        switch (os) {
-        case MAC:
-            newPath += "mac";
-            break;
-        case MAC_64:
-            newPath += "mac";
-            break;
-        case WIN:
-            newPath += "win";
-            break;
-        case WIN_64:
-            newPath += "win_64";
-            break;
-        case LINUX:
-            newPath += "linux";
-            break;
-        case LINUX_64:
-            newPath += "linux_64";
-            break;
-        default:
-            break;
-        }
-
-        System.setProperty("java.library.path", defaultPath + java.io.File.pathSeparatorChar + newPath);
-
-        try {
-            Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
-            fieldSysPath.setAccessible(true);
-            fieldSysPath.set(null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // System.out.println(System.getProperty("java.library.path"));
-    }
 
     public static void run(String className, String title) {
 

@@ -26,6 +26,9 @@ import casmi.graphics.Graphics;
 import casmi.graphics.element.Renderable;
 import casmi.matrix.Vertex;
 
+/**
+ * @author Y. Ban
+ */
 public class TweenVertex extends Vertex implements Tweenable {
 	
 //	public static final int POSITION = 0;
