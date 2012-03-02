@@ -22,6 +22,7 @@ package casmi.graphics.object;
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.media.opengl.GL;
@@ -63,9 +64,11 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private MatrixMode mode = MatrixMode.NONE;
 	private DoubleBuffer matrix;
 	private boolean selectionbuff = false;
-	private int selectionbufsize = 512;
+	private int selectionbufsize = 1024*1024;
 	private int selectedIndex = -1;
 	private int s = 0;
+	private IntBuffer selectBuffer;
+	private int selectBuff[];
 
 	public GraphicsObject() {
 		objectList = new ArrayList<Object>();
@@ -74,6 +77,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 		perseList = new ArrayList<Perse>();
 		tmList = new ArrayList<TweenManager>();
 		selectionList = new ArrayList<Integer>();
+		selectBuffer = BufferUtil.newIntBuffer(selectionbufsize);
+		selectBuff =  new int[selectionbufsize];
 	}
 
 	public void add(Object object) {
@@ -204,8 +209,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 	public void selectionbufRender(Graphics g, double mouseX, double mouseY,
 			int index) {
 		if (selectionbuff == true || this.isSelectionbuffer() == true) {
-			int selectBuff[] = new int[selectionbufsize];
-			IntBuffer selectBuffer = BufferUtil.newIntBuffer(selectionbufsize);
+			//int selectBuff[] = new int[selectionbufsize];
+			//selectBuff = ;
+			Arrays.fill(selectBuff,0);
+			selectBuffer.position(0);
 			int hits;
 			int viewport[] = new int[4];
 

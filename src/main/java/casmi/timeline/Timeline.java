@@ -47,8 +47,8 @@ public class Timeline implements TimelineRender {
     private long dissolveStart, dissolveNow;
     private Applet baseApplet;
 
-    private List<Scene> sl;
-    private List<Dissolve> dv;
+    private List<Scene> sceneList;
+    private List<Dissolve> disolveList;
     private Timer timer;
     private TimerTask task = new SceneTask();
 
@@ -60,7 +60,7 @@ public class Timeline implements TimelineRender {
                 goNextScene();
                 preDissolve = nextDissolve;
                 try {
-                    if (dv.get(nowDissolveID).now == nowSceneID)
+                    if (disolveList.get(nowDissolveID).now == nowSceneID)
                         nextDissolve = true;
                 } catch (java.lang.IndexOutOfBoundsException e) {
                     nextDissolve = false;
@@ -69,7 +69,7 @@ public class Timeline implements TimelineRender {
                 if (!dissolve) {
                     goDissolve();
                 } else {
-                    endDgoS();
+                    endDisolve_goNextScene();
                     preDissolve = nextDissolve;
                 }
             }
@@ -107,12 +107,12 @@ public class Timeline implements TimelineRender {
     }
 
     public Timeline() {
-        sl = new ArrayList<Scene>();
-        dv = new ArrayList<Dissolve>();
+        sceneList = new ArrayList<Scene>();
+        disolveList = new ArrayList<Dissolve>();
     }
 
     public Timeline(String csvFile) {
-        sl = new ArrayList<Scene>();
+        sceneList = new ArrayList<Scene>();
         readTimelineCSV(csvFile);
     }
 
@@ -158,7 +158,7 @@ public class Timeline implements TimelineRender {
         nowSceneID = nextSceneID;
         nextSceneID++;
         try {
-            sl.get(nextSceneID);
+            sceneList.get(nextSceneID);
         } catch (java.lang.IndexOutOfBoundsException e) {
             nextSceneID = 0;
         }
@@ -166,15 +166,15 @@ public class Timeline implements TimelineRender {
     }
 
     // TODO: Rename! Can't understand!
-    private final void endDgoS() {
-        preDhalf = dv.get(nowDissolveID).getTime() / 2;
-        nextDhalf = dv.get(nextDissolveID).getTime() / 2;
+    private final void endDisolve_goNextScene() {
+        preDhalf = disolveList.get(nowDissolveID).getTime() / 2;
+        nextDhalf = disolveList.get(nextDissolveID).getTime() / 2;
         nowDissolveID = nextDissolveID;
         nextDissolveID++;
         dissolve = false;
 
         try {
-            dv.get(nextDissolveID);
+            disolveList.get(nextDissolveID);
         } catch (java.lang.IndexOutOfBoundsException e) {
             nextDissolveID = 0;
         }
@@ -191,55 +191,55 @@ public class Timeline implements TimelineRender {
     public void setNextScene(int i) {
         nextSceneID = i;
         try {
-            sl.get(nextSceneID);
+            sceneList.get(nextSceneID);
         } catch (java.lang.IndexOutOfBoundsException e) {
             nextSceneID = nowSceneID;
         }
     }
 
     public void appendScene(Scene s) {
-        this.sl.add(s);
+        this.sceneList.add(s);
     }
 
     public void removeScene(int i) {
-        this.sl.remove(i);
+        this.sceneList.remove(i);
     }
 
     public void appendDissolve(double time) {
-        int nowID = this.sl.size() - 1;
+        int nowID = this.sceneList.size() - 1;
         Dissolve dissolve = new Dissolve(nowID, nowID + 1, time);
-        this.dv.add(dissolve);
+        this.disolveList.add(dissolve);
     }
 
     public void appendDisolve(double time, DissolveMode mode) {
-        int nowID = this.sl.size() - 1;
+        int nowID = this.sceneList.size() - 1;
         Dissolve dissolve = new Dissolve(nowID, nowID + 1, time);
         dissolve.mode = mode;
-        this.dv.add(dissolve);
+        this.disolveList.add(dissolve);
     }
 
     public void setDisolve(int now, int next, double time) {
         Dissolve dissolve;
         dissolve = new Dissolve(now, next, time);
-        this.dv.add(dissolve);
+        this.disolveList.add(dissolve);
     }
 
     public void startTimer() {
         timer = new Timer(true);
         long halfd;
         try {
-            if (dv.get(nowSceneID).now == nowSceneID) {
-                halfd = (long)dv.get(nowSceneID).getTime() / 2;
-                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime() - halfd));
+            if (disolveList.get(nowSceneID).now == nowSceneID) {
+                halfd = (long)disolveList.get(nowSceneID).getTime() / 2;
+                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime() - halfd));
                 nextDissolve = true;
             } else {
-                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
+                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime()));
             }
         } catch (java.lang.IndexOutOfBoundsException e) {
-            timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
+            timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime()));
         }
 
-        if (dv.size() == 1) {
+        if (disolveList.size() == 1) {
             nextDissolveID = nowDissolveID;
         }
     }
@@ -254,14 +254,15 @@ public class Timeline implements TimelineRender {
                 task = new SceneTask();
 
             if (!nextDissolve) {
-                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sl.get(nowSceneID).getTime()));
+                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime()));
             } else {
                 if (!dissolve) {
-                    timer.schedule(task, TimeUnit.SECONDS.toMillis((long)dv.get(nowDissolveID).getTime()));
+                    timer.schedule(task, TimeUnit.SECONDS.toMillis((long)disolveList.get(nowDissolveID).getTime()));
                     dissolveStart = System.currentTimeMillis();
+                    System.out.println("testssss");
                 } else {
                     try {
-                        if (dv.get(nowDissolveID).now == nowSceneID) {
+                        if (disolveList.get(nowDissolveID).now == nowSceneID) {
                             nextDissolve = true;
                         } else {
                             nextDissolve = false;
@@ -271,38 +272,39 @@ public class Timeline implements TimelineRender {
                     }
 
                     if (!nextDissolve) {
-                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime() - preDhalf)));
+                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sceneList.get(nowSceneID).getTime() - preDhalf)));
                     } else if (!preDissolve) {
-                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime() - nextDhalf)));
+                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sceneList.get(nowSceneID).getTime() - nextDhalf)));
                     } else {
-                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sl.get(nowSceneID).getTime() - preDhalf - nextDhalf)));
+                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sceneList.get(nowSceneID).getTime() - preDhalf - nextDhalf)));
                     }
                 }
             }
         }
 
         if (!dissolve) {
-            sl.get(nowSceneID).drawscene(g);
+            sceneList.get(nowSceneID).drawscene(g);
         } else {
             dissolveNow = System.currentTimeMillis();
-            double tmp = (dissolveNow - dissolveStart) / (dv.get(nowDissolveID).getTime() * 1000);
+            double tmp = (dissolveNow - dissolveStart) / (disolveList.get(nowDissolveID).getTime() * 1000);
+            System.out.println("test :"+tmp+" dissolveNow :"+dissolveNow +" dissolveStart :"+dissolveStart+" dissolve:"+(disolveList.get(nowDissolveID).getTime() * 1000));
 
-            switch (dv.get(nowDissolveID).mode) {
+            switch (disolveList.get(nowDissolveID).mode) {
             default:
             case CROSS:
-                sl.get(nowSceneID).setSceneA((1.0 - tmp), g);
-                sl.get(nowSceneID).drawscene(g);
-                sl.get(nextSceneID).setSceneA(tmp, g);
-                sl.get(nextSceneID).drawscene(g);
+                sceneList.get(nowSceneID).setSceneA((1.0 - tmp), g);
+                sceneList.get(nowSceneID).drawscene(g);
+                sceneList.get(nextSceneID).setSceneA(tmp, g);
+                sceneList.get(nextSceneID).drawscene(g);
                 break;
             case NORMAL:
                 if (tmp <= 0.5) {
-                    sl.get(nowSceneID).setSceneA((1.0 - tmp * 2), g);
-                    sl.get(nowSceneID).drawscene(g);
+                    sceneList.get(nowSceneID).setSceneA((1.0 - tmp * 2), g);
+                    sceneList.get(nowSceneID).drawscene(g);
                 }
                 if (tmp >= 0.5) {
-                    sl.get(nextSceneID).setSceneA(((tmp - 0.5) * 2), g);
-                    sl.get(nextSceneID).drawscene(g);
+                    sceneList.get(nextSceneID).setSceneA(((tmp - 0.5) * 2), g);
+                    sceneList.get(nextSceneID).drawscene(g);
                 }
                 break;
             }
@@ -314,11 +316,11 @@ public class Timeline implements TimelineRender {
     }
 
     public Scene getScene() {
-        return sl.get(nowSceneID);
+        return sceneList.get(nowSceneID);
     }
 
     public Scene getScene(int index) {
-        return sl.get(index);
+        return sceneList.get(index);
     }
 
     public void setApplet(Applet a) {
