@@ -16,6 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package casmi.extension.cpop;
 
 import java.awt.event.ActionEvent;
@@ -37,7 +38,7 @@ import casmi.Applet;
  */
 public class CPopupMenu extends JPopupMenu {
 
-	private Applet target = null;
+	private final Applet target;
 
 	public CPopupMenu(Applet target) {
 		this.target = target;
@@ -51,6 +52,7 @@ public class CPopupMenu extends JPopupMenu {
 		show(target, x, y);
 	}
 
+	@Override
 	public void show() {
 		show(target, target.getMouseX(),
 				target.getHeight() - target.getMouseY());
@@ -58,13 +60,16 @@ public class CPopupMenu extends JPopupMenu {
 
 	public void addMenuItem(final String buttonName, final String methodName,
 			final Object... args) {
+	    
 		JMenuItem menuItem = new JMenuItem(buttonName);
+		
 		menuItem.addActionListener(new ActionListener() {
+		    
 			public void actionPerformed(ActionEvent event) {
 				Method method;
 				try {
 					int length = args.length;
-					Class[] c = new Class[length];
+					Class<?>[] c = new Class[length];
 					for (int i = 0; i < length; i++) {
 						c[i] = args[i].getClass();
 					}
@@ -74,9 +79,10 @@ public class CPopupMenu extends JPopupMenu {
 				} catch (NoSuchMethodException exception) {
 					throw new RuntimeException(exception);
 				}
-				Object ret = null;
+//				Object ret = null;
 				try {
-					ret = method.invoke(target, args);
+//					ret = method.invoke(target, args);
+					method.invoke(target, args);
 				} catch (IllegalArgumentException exception) {
 					throw new RuntimeException(exception);
 				} catch (IllegalAccessException exception) {
@@ -86,6 +92,7 @@ public class CPopupMenu extends JPopupMenu {
 				}
 			}
 		});
+		
 		add(menuItem);
 	}
 }

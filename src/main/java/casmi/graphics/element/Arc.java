@@ -193,8 +193,8 @@ public class Arc extends Element implements Renderable {
 	 */
 	public Arc(Vertex v, double r, double radStart, double radEnd,
 			double precision) {
-		this.x = v.x;
-		this.y = v.y;
+		this.x = v.getX();
+		this.y = v.getY();
 		this.w = r * 2;
 		this.h = r * 2;
 		this.radStart = radStart;
@@ -217,8 +217,8 @@ public class Arc extends Element implements Renderable {
 	 *            The end degree of the Arc.
 	 */
 	public Arc(Vertex v, double r, double radStart, double radEnd) {
-		this.x = v.x;
-		this.y = v.y;
+		this.x = v.getX();
+		this.y = v.getY();
 		this.w = r * 2;
 		this.h = r * 2;
 		this.radStart = radStart;

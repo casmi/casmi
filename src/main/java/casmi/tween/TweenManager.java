@@ -26,6 +26,8 @@ import casmi.graphics.Graphics;
 /**
  * A TweenManager let you pack many tweens together, and update them at once.
  * 
+ * @author Y. Ban
+ * 
  * @see Tween
  * @see TweenSerialGroup
  */

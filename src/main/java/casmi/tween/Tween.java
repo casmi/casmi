@@ -24,6 +24,9 @@ import java.util.List;
 
 import casmi.graphics.Graphics;
 
+/**
+ * @author Y. Ban
+ */
 public class Tween implements Groupable {
 
 //	private Graphics g;

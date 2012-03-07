@@ -97,14 +97,14 @@ public class Quad extends Element implements Renderable {
      *              The coordinates of the fourth corner.
      */
     public Quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
-        this.x1 = (float)v1.x;
-        this.y1 = (float)v1.y;
-        this.x2 = (float)v2.x;
-        this.y2 = (float)v2.y;
-        this.x3 = (float)v3.x;
-        this.y3 = (float)v3.y;
-        this.x4 = (float)v4.x;
-        this.y4 = (float)v4.y;
+        this.x1 = (float)v1.getX();
+        this.y1 = (float)v1.getY();
+        this.x2 = (float)v2.getX();
+        this.y2 = (float)v2.getY();
+        this.x3 = (float)v3.getX();
+        this.y3 = (float)v3.getY();
+        this.x4 = (float)v4.getX();
+        this.y4 = (float)v4.getY();
     	calcG();
     }
     
@@ -153,14 +153,14 @@ public class Quad extends Element implements Renderable {
      *              The coordinates of the fourth corner.
      */
     public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
-        this.x1 = (float)v1.x;
-        this.y1 = (float)v1.y;
-        this.x2 = (float)v2.x;
-        this.y2 = (float)v2.y;
-        this.x3 = (float)v3.x;
-        this.y3 = (float)v3.y;
-        this.x4 = (float)v4.x;
-        this.y4 = (float)v4.y;
+        this.x1 = (float)v1.getX();
+        this.y1 = (float)v1.getY();
+        this.x2 = (float)v2.getX();
+        this.y2 = (float)v2.getY();
+        this.x3 = (float)v3.getX();
+        this.y3 = (float)v3.getY();
+        this.x4 = (float)v4.getX();
+        this.y4 = (float)v4.getY();
     	calcG();
     }
     
@@ -198,36 +198,35 @@ public class Quad extends Element implements Renderable {
         calcG();
     }
     
-    public void setConer(int number, Vertex v){
-    	if(number<=0){
-    		this.x1 = v.x;
-    		this.y1 = v.y;
-    	} else if(number==1){
-    		this.x2 = v.x;
-    		this.y2 = v.y;
-    	} else if(number==2){
-    		this.x3 = v.x;
-    		this.y3 = v.y;
-    	} else if(number>=3){
-    		this.x4 = v.x;
-    		this.y4 = v.y;
+    public void setConer(int number, Vertex v) {
+    	if (number <= 0) {
+    		this.x1 = v.getX();
+    		this.y1 = v.getY();
+    	} else if (number == 1) {
+    		this.x2 = v.getX();
+    		this.y2 = v.getY();
+    	} else if (number == 2) {
+    		this.x3 = v.getX();
+    		this.y3 = v.getY();
+    	} else if(3 <= number) {
+    		this.x4 = v.getX();
+    		this.y4 = v.getY();
     	}
     	calcG();
-    	
     }
     
-    public Vertex getConer(int number){
-    	Vertex v = new Vertex(0,0,0);
+    public Vertex getConer(int number) {
+    	Vertex v = new Vertex(0, 0, 0);
     	
-    	if(number<=0){
-    		v.set(this.x1,this.y1);
-    	} else if(number==1){
-    		v.set(this.x2,this.y2);
-    	} else if(number==2){
-    		v.set(this.x3,this.y3);
-    	} else if(number>=3){
-    		v.set(this.x4,this.y4);
-    	}
+        if (number <= 0) {
+            v.set(this.x1, this.y1);
+        } else if (number == 1) {
+            v.set(this.x2, this.y2);
+        } else if (number == 2) {
+            v.set(this.x3, this.y3);
+        } else if (3 <= number) {
+            v.set(this.x4, this.y4);
+        }
     	return v;
     }
 

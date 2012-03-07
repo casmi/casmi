@@ -118,10 +118,10 @@ public class Bezier extends Element implements Renderable {
      *            The coordinates for the second ancor point.
      */
     public Bezier(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
-        this(v1.x, v1.y, v1.z,
-             v2.x, v2.y, v2.z,
-             v3.x, v3.y, v3.z,
-             v4.x, v4.y, v4.z);
+        this(v1.getX(), v1.getY(), v1.getZ(),
+             v2.getX(), v2.getY(), v2.getZ(),
+             v3.getX(), v3.getY(), v3.getZ(),
+             v4.getX(), v4.getY(), v4.getZ());
     }
     
     public void setNode(int number, double x, double y) {
@@ -129,10 +129,11 @@ public class Bezier extends Element implements Renderable {
     }
 
     public void setNode(int number, double x, double y, double z) {
-        if (number <= 0)
+        if (number <= 0) {
             number = 0;
-        if (number >= 3)
+        } else if (3 <= number) {
             number = 3;
+        }
         this.points[number * 3]     = x;
         this.points[number * 3 + 1] = y;
         this.points[number * 3 + 2] = z;
@@ -140,7 +141,7 @@ public class Bezier extends Element implements Renderable {
     }
 
     public void setNode(int number, Vertex v) {
-        setNode(number, v.x, v.y, v.z);
+        setNode(number, v.getX(), v.getY(), v.getZ());
     }
 
     @Override
