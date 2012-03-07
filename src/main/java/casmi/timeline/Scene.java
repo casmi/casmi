@@ -78,7 +78,8 @@ abstract public class Scene {
     }
 
     public void drawscene(Graphics g) {
-        g.render(rootObject);
+      //  g.render(rootObject);
+        rootObject.bufRender(g, 0, 0, false, 0);
         if (selectionBuffer) {}
         update(g);
     }

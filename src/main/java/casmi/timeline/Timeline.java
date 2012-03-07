@@ -258,8 +258,6 @@ public class Timeline implements TimelineRender {
             } else {
                 if (!dissolve) {
                     timer.schedule(task, TimeUnit.SECONDS.toMillis((long)disolveList.get(nowDissolveID).getTime()));
-                    dissolveStart = System.currentTimeMillis();
-                    System.out.println("testssss");
                 } else {
                     try {
                         if (disolveList.get(nowDissolveID).now == nowSceneID) {
@@ -284,11 +282,12 @@ public class Timeline implements TimelineRender {
 
         if (!dissolve) {
             sceneList.get(nowSceneID).drawscene(g);
+            dissolveStart = System.currentTimeMillis();
+            
         } else {
             dissolveNow = System.currentTimeMillis();
             double tmp = (dissolveNow - dissolveStart) / (disolveList.get(nowDissolveID).getTime() * 1000);
-            System.out.println("test :"+tmp+" dissolveNow :"+dissolveNow +" dissolveStart :"+dissolveStart+" dissolve:"+(disolveList.get(nowDissolveID).getTime() * 1000));
-
+         
             switch (disolveList.get(nowDissolveID).mode) {
             default:
             case CROSS:

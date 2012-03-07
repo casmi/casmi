@@ -232,6 +232,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public Color getSceneStrokeColor() {
+		//System.out.println("scenA is ... "+sceneA);
 		sceneStrokeColor = strokeColor.clone();
 		if (tween) {
 			sceneStrokeColor.setAlpha(gettAS() * sceneA);
@@ -242,6 +243,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public Color getSceneFillColor() {
+		//System.out.println("scenA is ... "+sceneA);
 	    sceneFillColor = fillColor.clone();
 		if (tween) {
 			sceneFillColor.setAlpha(gettAF() * sceneA);

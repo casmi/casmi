@@ -281,7 +281,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 			    this.setTweenParameter(g.getGL());
 			}
 			g.popMatrix();
-			
+
 			if (this instanceof Group) {
 				update(g);
 			}
@@ -429,7 +429,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
-				if (selection == false)
+				//if (selection == false)
 					tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;
