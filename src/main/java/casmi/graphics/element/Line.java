@@ -260,11 +260,7 @@ public class Line extends Element implements Renderable {
 
         gl.glPushMatrix();
         this.setTweenParameter(gl);
-     //   setPoint();
-
-        gl.glTranslated((this.x1 + this.x2) / 2.0, 
-        				(this.y1 + this.y2) / 2.0, 
-        				(this.z1 + this.z2) / 2.0);
+    
         
         switch (MODE) {
         case LINES:
@@ -333,5 +329,14 @@ public class Line extends Element implements Renderable {
 
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
+    }
+    
+    public Vertex getCorner(int index){
+    	Vertex v = new Vertex();
+    	if(index==0)
+    		v.set(x1, y1, z1);
+    	else
+    		v.set(x2, y2, z2);
+    	return v;
     }
 }
