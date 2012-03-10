@@ -70,6 +70,10 @@ public class Trackball {
 	    curQuat = addQuats(lastQuat, curQuat);
 	}
 	
+	public void reset() {
+	    curQuat = new Quaternion();
+	}
+	
 	public double[] getRotationMatrix() {
 	    return calcRotMatrix();
 	}

@@ -86,10 +86,9 @@ import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 
 /**
- * casmi Applet
+ * casmi Applet.
  * 
- * @author takashi
- * 
+ * @author takashi, Y. Ban, T. Takeuchi
  */
 abstract public class Applet extends JApplet implements GraphicsDrawable, MouseListener, MouseMotionListener, KeyListener {
 
@@ -101,7 +100,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 	private int width = 100, height = 100;
 
-	private Cursor cursormode[] = new Cursor[5];
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
 	private AppletGLEventListener listener = null;
@@ -159,15 +157,18 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	
 	abstract public void mouseWheelEvent();
 	
-	class Wheel implements MouseWheelListener{
+	class Wheel implements MouseWheelListener {
+	    
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {		
-			if((mouseWheelRotation = e.getWheelRotation())!=0)
+			if ((mouseWheelRotation = e.getWheelRotation()) != 0) {
 				mouseWheelEvent();
-		}	
+			}
+		}
 	}
 
 	class GLRedisplayTask extends TimerTask {
+	    
 		@Override
 		public void run() {
 			if (panel != null) { // TODO if no update, do not re-render
@@ -207,7 +208,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		} else {
 			AppletRunner.frame.addKeyListener(this);
 		}
-		initCursor();
 
 		add(panel);
 		setFocusable(false);
@@ -231,60 +231,54 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		}
 	}
 
-	private void initCursor() {
-		cursormode[0] = new Cursor(Cursor.DEFAULT_CURSOR);
-		cursormode[1] = new Cursor(Cursor.CROSSHAIR_CURSOR);
-		cursormode[2] = new Cursor(Cursor.HAND_CURSOR);
-		cursormode[3] = new Cursor(Cursor.TEXT_CURSOR);
-		cursormode[4] = new Cursor(Cursor.WAIT_CURSOR);
+	/**
+	 * Changes a cursor image.
+	 * 
+	 * @param cursorMode
+	 *            A cursor type. 
+	 */
+	public void setCursor(CursorMode cursorMode) {
+	    Cursor c = CursorMode.getAWTCursor(cursorMode);
+	    if (c.getType() == getCursor().getType()) return;
+		setCursor(c);   
+	}
+	
+	/**
+	 * @param cursorMode
+	 * @deprecated
+	 */
+	public void cursor(CursorMode cursorMode) {
+		setCursor(cursorMode);
 	}
 
-	public void cursor(CursorMode mode) {
-		Cursor c;
-		switch (mode) {
-		case DEFAULT:
-			c = cursormode[0];
-			break;
-		case CROSS:
-			c = cursormode[1];
-			break;
-		case HAND:
-			c = cursormode[2];
-			break;
-		case TEXT:
-			c = cursormode[3];
-			break;
-		case WAIT:
-			c = cursormode[4];
-			break;
-		default:
-			c = cursormode[0];
-			break;
-
-		}
-		setCursor(c);
-	}
-
+	/**
+	 * @deprecated
+	 */
 	public void noCursor() {
-		Cursor c = Toolkit.getDefaultToolkit().createCustomCursor(
-				new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB),
-				new Point(), "");
-		setCursor(c);
+		setCursor(CursorMode.NONE);
 	}
 
-	public void cursor(String string, int hotspotX, int hotspotY) {
+	public void setCursor(String path, int hotspotX, int hotspotY) throws IOException {
 		Image jimage;
-		try {
-			jimage = ImageIO.read(new java.io.File(string));
+		jimage = ImageIO.read(new java.io.File(path));
 
-			Point hotspot = new Point(hotspotX, hotspotY);
-			Toolkit tk = Toolkit.getDefaultToolkit();
-			Cursor cursor = tk.createCustomCursor(jimage, hotspot,
-					"Custom Cursor");
-			setCursor(cursor);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Point hotspot = new Point(hotspotX, hotspotY);
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Cursor cursor = tk.createCustomCursor(jimage, hotspot,
+		    "Custom Cursor");
+		setCursor(cursor);
+	}
+	
+	/**
+	 * @param path
+	 * @param hotspotX
+	 * @param hotspotY
+	 * @throws IOException
+	 * 
+	 * @deprecated
+	 */
+	public void cursor(String path, int hotspotX, int hotspotY) throws IOException {
+	    setCursor(path, hotspotX, hotspotY);
 	}
 
 	public void setFPS(double fps) {
@@ -351,7 +345,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		}
 		rootObject.mouseObject(casmi.MouseEvent.CLICKED);
 		mouseClicked = true;
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.CLICKED);
 		}
 	}
@@ -360,7 +354,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public void mouseEntered(MouseEvent e) {
 		mouseEvent(casmi.MouseEvent.ENTERED, casmi.MouseButton.LEFT);
 		mouseEntered = true;
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.ENTERED);
 		}
 	}
@@ -369,7 +363,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	public void mouseExited(MouseEvent e) {
 		mouseEvent(casmi.MouseEvent.EXITED, casmi.MouseButton.LEFT);
 		mouseEntered = false;
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.EXITED);
 		}
 	}
@@ -389,7 +383,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		}
 		rootObject.mouseObject(casmi.MouseEvent.RELEASED);
 		mouseReleased = true;
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.RELEASED);
 		}
 	}
@@ -399,7 +393,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.LEFT);
 		rootObject.mouseObject(casmi.MouseEvent.DRAGGED);
 		mouseDragged = true;
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.DRAGGED);
 		}
 		updateMouse();
@@ -410,7 +404,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		mouseEvent(casmi.MouseEvent.MOVED, casmi.MouseButton.LEFT);
 		rootObject.mouseObject(casmi.MouseEvent.MOVED);
 		mouseMoved = true;
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.MOVED);
 		}
 		updateMouse();
@@ -434,7 +428,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		this.key = e.getKeyChar();
 		this.keycode = e.getKeyCode();
 		keyEvent(casmi.KeyEvent.PRESSED);
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().keyEvent(casmi.KeyEvent.PRESSED);
 		}
 	}
@@ -442,8 +436,10 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keyReleased = true;
+		this.key = java.awt.event.KeyEvent.CHAR_UNDEFINED;
+		this.keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
 		keyEvent(casmi.KeyEvent.RELEASED);
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().keyEvent(casmi.KeyEvent.RELEASED);
 		}
 	}
@@ -453,7 +449,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		keyTyped = true;
 		this.key = e.getKeyChar();
 		keyEvent(casmi.KeyEvent.TYPED);
-		if (timeline == true) {
+		if (timeline) {
 			rootTimeline.getScene().keyEvent(casmi.KeyEvent.TYPED);
 		}
 	}
