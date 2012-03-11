@@ -28,20 +28,26 @@ import casmi.graphics.element.Element;
 /**
  * @author Y. Ban
  */
-public class Camera extends Element implements ObjectRender{
-	private double eyeX;
+public class Camera extends Element implements ObjectRender {
+	
+    private double eyeX;
 	private double eyeY;
 	private double eyeZ;
+	
 	private double centerX;
 	private double centerY;
 	private double centerZ;
+	
 	private double upX;
 	private double upY;
 	private double upZ;
+	
 	private boolean def = false;
 	
-	public Camera(double eyeX, double eyeY, double eyeZ, double centerX,
-			double centerY, double centerZ, double upX, double upY, double upZ) {
+	public Camera(double eyeX,    double eyeY,    double eyeZ, 
+	              double centerX, double centerY, double centerZ,
+	              double upX,     double upY,     double upZ) {
+	    
 		this.eyeX = eyeX;
 		this.eyeY = eyeY;
 		this.eyeZ = eyeZ;
@@ -53,29 +59,50 @@ public class Camera extends Element implements ObjectRender{
 		this.upZ = upZ;
     }
 	
-	public Camera(){
+	public Camera() {
 		def = true;
 	}
 	
-	public void set(double eyeX, double eyeY, double eyeZ, double centerX,
-			double centerY, double centerZ, double upX, double upY, double upZ) {
-		this.eyeX = eyeX;
-		this.eyeY = eyeY;
-		this.eyeZ = eyeZ;
-		this.centerX = centerX;
-		this.centerY = centerY;
-		this.centerZ = centerZ;
-		this.upX = upX;
-		this.upY = upY;
-		this.upZ = upZ;
-    }
-    
-	public void render(Graphics g){
-		if(def){
+	@Override
+	public void render(Graphics g) {
+		if (def) {
 			g.camera();
 		} else {
 			g.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
 		}
+	}
+	
+	public void set(double eyeX,    double eyeY,    double eyeZ, 
+	                double centerX,	double centerY, double centerZ,
+	                double upX,     double upY,     double upZ) {
+	    
+		this.eyeX = eyeX;
+		this.eyeY = eyeY;
+		this.eyeZ = eyeZ;
+		this.centerX = centerX;
+		this.centerY = centerY;
+		this.centerZ = centerZ;
+		this.upX = upX;
+		this.upY = upY;
+		this.upZ = upZ;
+    }
+	
+	public void setEye(double eyeX, double eyeY, double eyeZ) {
+	    this.eyeX = eyeX;
+	    this.eyeY = eyeY;
+	    this.eyeZ = eyeZ;
+	}
+	
+	public void setCenter(double centerX, double centerY, double centerZ) {
+	    this.centerX = centerX;
+	    this.centerY = centerY;
+	    this.centerZ = centerZ;
+	}
+	
+	public void setOrientation(double upX, double upY, double upZ) {
+	    this.upX = upX;
+	    this.upY = upY;
+	    this.upZ = upZ;
 	}
 	
 	public double getEyeX() {
@@ -129,5 +156,4 @@ public class Camera extends Element implements ObjectRender{
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
     }
-    
 }
