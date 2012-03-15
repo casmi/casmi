@@ -92,13 +92,13 @@ import com.xuggle.mediatool.ToolFactory;
  */
 abstract public class Applet extends JApplet implements GraphicsDrawable, MouseListener, MouseMotionListener, KeyListener {
 
-	private int mouseX, mouseY;
-	private int preMouseX, preMouseY;
+    private int width = 100, height = 100;
+    
+    private double fps = 30.0;
+
+    private Mouse mouse = new Mouse();
 	private char key;
 	private int keycode;
-	private double fps = 30.0;
-
-	private int width = 100, height = 100;
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -109,13 +109,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	private boolean isFullScreen = false;
 	private boolean isInitializing = true;
 
-	private boolean mousePressed = false;
-	private boolean mouseClicked = false;
-	private boolean mouseEntered = false;
-	private boolean mouseExited = false;
-	private boolean mouseReleased = false;
-	private boolean mouseDragged = false;
-	private boolean mouseMoved = false;
 	private boolean keyPressed = false;
 	private boolean keyReleased = false;
 	private boolean keyTyped = false;
@@ -129,7 +122,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	private TimelineRender rootTimelineRender;
 
 	private GraphicsObject rootObject;
-	private static final int SELECTION_BUFSIZE = 512;
+	private static final int SELECTION_BUFSIZE = 1024 * 1024;
 	// private int selectedIndex = 0;
 
 	// for capturing a window
@@ -145,8 +138,6 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	private int recordTime = 0;
 	private int recordSpan = 0;
 	
-	private double mouseWheelRotation = 0;
-
 	abstract public void setup();
 
 	abstract public void update();
@@ -160,8 +151,10 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	class Wheel implements MouseWheelListener {
 	    
 		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {		
-			if ((mouseWheelRotation = e.getWheelRotation()) != 0) {
+		public void mouseWheelMoved(MouseWheelEvent e) {
+		    int wheelRotation = e.getWheelRotation();
+		    mouse.setWheelRotation(wheelRotation);
+			if (wheelRotation != 0) {
 				mouseWheelEvent();
 			}
 		}
@@ -173,13 +166,15 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		public void run() {
 			if (panel != null) { // TODO if no update, do not re-render
 				panel.display();
-				mousePressed = false;
-				mouseClicked = false;
-				mouseEntered = false;
-				mouseExited = false;
-				mouseReleased = false;
-				mouseDragged = false;
-				mouseMoved = false;
+				
+				mouse.setPressed(false);
+				mouse.setClicked(false);
+				mouse.setEntered(false);
+				mouse.setExited(false);
+				mouse.setReleased(false);
+				mouse.setDragged(false);
+				mouse.setMoved(false);
+				
 				keyPressed = false;
 				keyReleased = false;
 				keyTyped = false;
@@ -229,6 +224,11 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		if (panel != null) {
 			panel.setSize(new Dimension(w, h));
 		}
+	}
+	
+	void setAppletSize(int w, int h) {
+	    this.width = w;
+	    this.height = h;
 	}
 
 	/**
@@ -312,26 +312,60 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		switch (e.getButton()) {
+		mouse.setPressed(true);
+	    
+	    switch (e.getButton()) {
 		case MouseEvent.BUTTON1:
+		    mouse.setButtonPressed(casmi.MouseButton.LEFT, true);
 			mouseEvent(casmi.MouseEvent.PRESSED, casmi.MouseButton.LEFT);
 			break;
 		case MouseEvent.BUTTON2:
+		    mouse.setButtonPressed(casmi.MouseButton.MIDDLE, true);
 			mouseEvent(casmi.MouseEvent.PRESSED, casmi.MouseButton.MIDDLE);
 			break;
 		case MouseEvent.BUTTON3:
+		    mouse.setButtonPressed(casmi.MouseButton.RIGHT, true);
 			mouseEvent(casmi.MouseEvent.PRESSED, casmi.MouseButton.RIGHT);
 			break;
 		}
-		rootObject.mouseObject(casmi.MouseEvent.PRESSED);
-		mousePressed = true;
-		if (timeline == true) {
+		
+		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.PRESSED);
+		
+		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.PRESSED);
+		}
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		mouse.setReleased(true);
+	    
+	    switch (e.getButton()) {
+		case MouseEvent.BUTTON1:
+		    mouse.setButtonPressed(casmi.MouseButton.LEFT, false);
+			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.LEFT);
+			break;
+		case MouseEvent.BUTTON2:
+		    mouse.setButtonPressed(casmi.MouseButton.MIDDLE, false);
+			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.MIDDLE);
+			break;
+		case MouseEvent.BUTTON3:
+		    mouse.setButtonPressed(casmi.MouseButton.RIGHT, true);
+			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.RIGHT);
+			break;
+		}
+		
+		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.RELEASED);
+		
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.RELEASED);
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+	    mouse.setClicked(true);
+	    
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:
 			mouseEvent(casmi.MouseEvent.CLICKED, casmi.MouseButton.LEFT);
@@ -343,8 +377,9 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 			mouseEvent(casmi.MouseEvent.CLICKED, casmi.MouseButton.RIGHT);
 			break;
 		}
-		rootObject.mouseObject(casmi.MouseEvent.CLICKED);
-		mouseClicked = true;
+		
+		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.CLICKED);
+		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.CLICKED);
 		}
@@ -353,7 +388,9 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		mouseEvent(casmi.MouseEvent.ENTERED, casmi.MouseButton.LEFT);
-		mouseEntered = true;
+		
+		mouse.setEntered(true);
+		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.ENTERED);
 		}
@@ -362,63 +399,65 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	@Override
 	public void mouseExited(MouseEvent e) {
 		mouseEvent(casmi.MouseEvent.EXITED, casmi.MouseButton.LEFT);
-		mouseEntered = false;
+		
+		mouse.setEntered(false);
+		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.EXITED);
 		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseDragged(MouseEvent e) {
+		mouse.setDragged(true);
+	    
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:
-			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.LEFT);
+		    mouse.setButtonPressed(casmi.MouseButton.LEFT, true);
+			mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.LEFT);
 			break;
 		case MouseEvent.BUTTON2:
-			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.MIDDLE);
+		    mouse.setButtonPressed(casmi.MouseButton.MIDDLE, true);
+			mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.MIDDLE);
 			break;
 		case MouseEvent.BUTTON3:
-			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.RIGHT);
+		    mouse.setButtonPressed(casmi.MouseButton.RIGHT, true);
+			mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.RIGHT);
 			break;
 		}
-		rootObject.mouseObject(casmi.MouseEvent.RELEASED);
-		mouseReleased = true;
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.RELEASED);
-		}
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.LEFT);
-		rootObject.mouseObject(casmi.MouseEvent.DRAGGED);
-		mouseDragged = true;
+		
+		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.DRAGGED);
+		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.DRAGGED);
 		}
+		
 		updateMouse();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		mouseEvent(casmi.MouseEvent.MOVED, casmi.MouseButton.LEFT);
-		rootObject.mouseObject(casmi.MouseEvent.MOVED);
-		mouseMoved = true;
+		mouse.setMoved(true);
+	    
+	    mouseEvent(casmi.MouseEvent.MOVED, casmi.MouseButton.LEFT);
+		
+		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.MOVED);
+		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.MOVED);
 		}
+		
 		updateMouse();
 	}
 	
-	
-	private void updateMouse() {
-		preMouseX = mouseX;
-		preMouseY = mouseY;
+	private final void updateMouse() {
+		mouse.setPrvX(mouse.getX());
+		mouse.setPrvY(mouse.getY());
 
 		Point p = getMousePosition(true);
 		if (p != null) {
-			mouseX = p.x;
-			mouseY = getHeight() - p.y;
+			mouse.setX(p.x);
+			mouse.setY(getHeight() - p.y);
 		}
 	}
 
@@ -641,52 +680,60 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		return keycode;
 	}
 	
-	public double getMouseWheelRotation(){
-		return mouseWheelRotation;
+	public int getMouseWheelRotation() {
+		return mouse.getWheelRotation();
+	}
+	
+	public Mouse getMouse() {
+	    return mouse;
 	}
 
 	public int getPreMouseX() {
-		return preMouseX;
+		return mouse.getPrvX();
 	}
 
 	public int getPreMouseY() {
-		return preMouseY;
+		return mouse.getPrvY();
 	}
 
 	public int getMouseX() {
-		return mouseX;
+		return mouse.getX();
 	}
 
 	public int getMouseY() {
-		return mouseY;
+		return mouse.getY();
 	}
 
 	public boolean isMousePressed() {
-		return mousePressed;
+		return mouse.isPressed();
+	}
+	
+	public boolean isMousePressed(casmi.MouseButton button) {
+	    return mouse.isButtonPressed(button);
 	}
 
 	public boolean isMouseClicked() {
-		return mouseClicked;
+		return mouse.isClicked();
 	}
 
 	public boolean isMouseEntered() {
-		return mouseEntered;
+		return mouse.isEntered();
 	}
 
 	public boolean isMouseExited() {
-		return mouseExited;
+		return mouse.isExited();
 	}
 
 	public boolean isMouseReleased() {
-		return mouseReleased;
+		return mouse.isReleased();
 	}
 
 	public boolean isMouseDragged() {
-		return mouseDragged;
+		return mouse.isDragged();
 	}
 
 	public boolean isMouseMoved() {
-		return mouseMoved;
+		return mouse.isMoved();
 	}
 
 	@Override
@@ -990,15 +1037,14 @@ class AppletGLEventListener implements GLEventListener {
 	}
 
 	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
-			int height) {
-		this.setSize(width, height);
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+//	    System.out.println(x + ", " + y + ", " + width + ", " + height);
+	    ((Applet)d).setAppletSize(width, height);    
+	    this.setSize(width, height);
 	}
 
 	@Override
-	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged,
-			boolean deviceChanged) {
-	}
+	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {}
 
 	public void setSize(int w, int h) {
 		this.width = w;

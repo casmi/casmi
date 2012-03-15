@@ -470,12 +470,13 @@ public class GraphicsObject extends Element implements ObjectRender {
 		return selectionIndex;
 	}
 
-	public void mouseObject(casmi.MouseEvent e) {
+	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
 		for (Object obj : objectList) {
 			if (obj instanceof Element) {
-				Element el = (Element) obj;
-				if (el.isMouseover() == true)
+				Element el = (Element)obj;
+				if (el.isMouseover()) {
 					el.callMouseClickCallback(e);
+				}
 			}
 		}
 	}
