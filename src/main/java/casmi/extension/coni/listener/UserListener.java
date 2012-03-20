@@ -20,6 +20,13 @@ package casmi.extension.coni.listener;
 
 import casmi.extension.coni.CONI;
 
+/**
+ * UserListener interface.
+ * <p>
+ * Implement if you want to use user tracking.
+ * 
+ * @author T. Takeuchi
+ */
 public interface UserListener {
 
     void newUser(CONI coni, int userID);
