@@ -81,12 +81,17 @@
 		<dependency>
 			<groupId>org.OpenNI</groupId>
 			<artifactId>OpenNI</artifactId>
-			<version>1.4.0.2</version>
+			<version>1.5.2.23</version>
 		</dependency>
 		<dependency>
 			<groupId>com.xuggle</groupId>
 			<artifactId>xuggle-xuggler</artifactId>
 			<version>3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.primesense</groupId>
+			<artifactId>NITE</artifactId>
+			<version>1.5.2.21</version>
 		</dependency>
 	</dependencies>
 
