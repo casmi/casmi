@@ -23,7 +23,9 @@ import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -71,18 +73,22 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private int selectBuff[];
 
 	public GraphicsObject() {
-		objectList = new ArrayList<Object>();
-		lightList = new ArrayList<Light>();
-		cameraList = new ArrayList<Camera>();
-		perseList = new ArrayList<Perse>();
-		tmList = new ArrayList<TweenManager>();
-		selectionList = new ArrayList<Integer>();
-		selectBuffer = BufferUtil.newIntBuffer(selectionbufsize);
-		selectBuff =  new int[selectionbufsize];
+	    objectList    = new CopyOnWriteArrayList<Object>();
+		lightList     = new CopyOnWriteArrayList<Light>();
+		cameraList    = new CopyOnWriteArrayList<Camera>();
+		perseList     = new CopyOnWriteArrayList<Perse>();
+		tmList        = new CopyOnWriteArrayList<TweenManager>();
+		selectionList = new CopyOnWriteArrayList<Integer>();
+		selectBuffer  = BufferUtil.newIntBuffer(selectionbufsize);
+		selectBuff    =  new int[selectionbufsize];
 	}
 
 	public void add(Object object) {
 		objectList.add(object);
+	}
+	
+	public void addAll(Collection<? extends Object> c) {
+	    objectList.addAll(c);
 	}
 
 	public void addLight(Light r) {
