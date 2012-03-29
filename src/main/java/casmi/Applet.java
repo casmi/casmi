@@ -24,9 +24,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -90,7 +88,8 @@ import com.xuggle.mediatool.ToolFactory;
  * 
  * @author takashi, Y. Ban, T. Takeuchi
  */
-abstract public class Applet extends JApplet implements GraphicsDrawable, MouseListener, MouseMotionListener, KeyListener {
+abstract public class Applet extends JApplet 
+implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
     private int width = 100, height = 100;
     
@@ -142,23 +141,11 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 
 	abstract public void update();
 
-	abstract public void mouseEvent(casmi.MouseEvent e, MouseButton b);
+	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
-	abstract public void keyEvent(casmi.KeyEvent e);
+	abstract public void keyEvent(KeyEvent e);
 	
-	abstract public void mouseWheelEvent();
-	
-	class Wheel implements MouseWheelListener {
-	    
-		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-		    int wheelRotation = e.getWheelRotation();
-		    mouse.setWheelRotation(wheelRotation);
-			if (wheelRotation != 0) {
-				mouseWheelEvent();
-			}
-		}
-	}
+	public void mouseWheelEvent() {};
 
 	class GLRedisplayTask extends TimerTask {
 	    
@@ -196,7 +183,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		panel.addGLEventListener(listener);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
-		panel.addMouseWheelListener(new Wheel());
+		panel.addMouseWheelListener(this);
 		
 		if (!isFullScreen) {
 			panel.addKeyListener(this);
@@ -259,13 +246,11 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	}
 
 	public void setCursor(String path, int hotspotX, int hotspotY) throws IOException {
-		Image jimage;
-		jimage = ImageIO.read(new java.io.File(path));
+		Image image = ImageIO.read(new java.io.File(path));
 
 		Point hotspot = new Point(hotspotX, hotspotY);
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		Cursor cursor = tk.createCustomCursor(jimage, hotspot,
-		    "Custom Cursor");
+		Cursor cursor = tk.createCustomCursor(image, hotspot, "Custom Cursor");
 		setCursor(cursor);
 	}
 	
@@ -305,150 +290,161 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 			AppletRunner.frame.setUndecorated(true);
 			AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
 			setSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
-					AppletRunner.displayDevice.getFullScreenWindow()
-							.getHeight());
+					AppletRunner.displayDevice.getFullScreenWindow().getHeight());
 		}
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(java.awt.event.MouseEvent e) {
 		mouse.setPressed(true);
 	    
 	    switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
-		    mouse.setButtonPressed(casmi.MouseButton.LEFT, true);
-			mouseEvent(casmi.MouseEvent.PRESSED, casmi.MouseButton.LEFT);
+		case java.awt.event.MouseEvent.BUTTON1:
+		    mouse.setButtonPressed(MouseButton.LEFT, true);
+			mouseEvent(MouseEvent.PRESSED, MouseButton.LEFT);
 			break;
-		case MouseEvent.BUTTON2:
-		    mouse.setButtonPressed(casmi.MouseButton.MIDDLE, true);
-			mouseEvent(casmi.MouseEvent.PRESSED, casmi.MouseButton.MIDDLE);
+		case java.awt.event.MouseEvent.BUTTON2:
+		    mouse.setButtonPressed(MouseButton.MIDDLE, true);
+			mouseEvent(MouseEvent.PRESSED, MouseButton.MIDDLE);
 			break;
-		case MouseEvent.BUTTON3:
-		    mouse.setButtonPressed(casmi.MouseButton.RIGHT, true);
-			mouseEvent(casmi.MouseEvent.PRESSED, casmi.MouseButton.RIGHT);
+		case java.awt.event.MouseEvent.BUTTON3:
+		    mouse.setButtonPressed(MouseButton.RIGHT, true);
+			mouseEvent(MouseEvent.PRESSED, MouseButton.RIGHT);
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.PRESSED);
+		rootObject.callMouseClickCallbackOfChildren(MouseEvent.PRESSED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.PRESSED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED);
 		}
 	}
 	
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(java.awt.event.MouseEvent e) {
 		mouse.setReleased(true);
 	    
 	    switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
-		    mouse.setButtonPressed(casmi.MouseButton.LEFT, false);
-			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.LEFT);
+		case java.awt.event.MouseEvent.BUTTON1:
+		    mouse.setButtonPressed(MouseButton.LEFT, false);
+			mouseEvent(MouseEvent.RELEASED, MouseButton.LEFT);
 			break;
-		case MouseEvent.BUTTON2:
-		    mouse.setButtonPressed(casmi.MouseButton.MIDDLE, false);
-			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.MIDDLE);
+		case java.awt.event.MouseEvent.BUTTON2:
+		    mouse.setButtonPressed(MouseButton.MIDDLE, false);
+			mouseEvent(MouseEvent.RELEASED, MouseButton.MIDDLE);
 			break;
-		case MouseEvent.BUTTON3:
-		    mouse.setButtonPressed(casmi.MouseButton.RIGHT, true);
-			mouseEvent(casmi.MouseEvent.RELEASED, casmi.MouseButton.RIGHT);
+		case java.awt.event.MouseEvent.BUTTON3:
+		    mouse.setButtonPressed(MouseButton.RIGHT, true);
+			mouseEvent(MouseEvent.RELEASED, MouseButton.RIGHT);
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.RELEASED);
+		rootObject.callMouseClickCallbackOfChildren(MouseEvent.RELEASED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.RELEASED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED);
 		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(java.awt.event.MouseEvent e) {
 	    mouse.setClicked(true);
 	    
 		switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
-			mouseEvent(casmi.MouseEvent.CLICKED, casmi.MouseButton.LEFT);
+		case java.awt.event.MouseEvent.BUTTON1:
+			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
 			break;
-		case MouseEvent.BUTTON2:
-			mouseEvent(casmi.MouseEvent.CLICKED, casmi.MouseButton.MIDDLE);
+		case java.awt.event.MouseEvent.BUTTON2:
+			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
 			break;
-		case MouseEvent.BUTTON3:
-			mouseEvent(casmi.MouseEvent.CLICKED, casmi.MouseButton.RIGHT);
+		case java.awt.event.MouseEvent.BUTTON3:
+			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.CLICKED);
+		rootObject.callMouseClickCallbackOfChildren(MouseEvent.CLICKED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.CLICKED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.CLICKED);
 		}
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		mouseEvent(casmi.MouseEvent.ENTERED, casmi.MouseButton.LEFT);
+	public void mouseEntered(java.awt.event.MouseEvent e) {
+		mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
 		
 		mouse.setEntered(true);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.ENTERED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED);
 		}
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		mouseEvent(casmi.MouseEvent.EXITED, casmi.MouseButton.LEFT);
+	public void mouseExited(java.awt.event.MouseEvent e) {
+		mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
 		
 		mouse.setEntered(false);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.EXITED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED);
 		}
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(java.awt.event.MouseEvent e) {
 		mouse.setDragged(true);
 	    
 		switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
-		    mouse.setButtonPressed(casmi.MouseButton.LEFT, true);
-			mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.LEFT);
+		case java.awt.event.MouseEvent.BUTTON1:
+		    mouse.setButtonPressed(MouseButton.LEFT, true);
+			mouseEvent(MouseEvent.DRAGGED, MouseButton.LEFT);
 			break;
-		case MouseEvent.BUTTON2:
-		    mouse.setButtonPressed(casmi.MouseButton.MIDDLE, true);
-			mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.MIDDLE);
+		case java.awt.event.MouseEvent.BUTTON2:
+		    mouse.setButtonPressed(MouseButton.MIDDLE, true);
+			mouseEvent(MouseEvent.DRAGGED, MouseButton.MIDDLE);
 			break;
-		case MouseEvent.BUTTON3:
-		    mouse.setButtonPressed(casmi.MouseButton.RIGHT, true);
-			mouseEvent(casmi.MouseEvent.DRAGGED, casmi.MouseButton.RIGHT);
+		case java.awt.event.MouseEvent.BUTTON3:
+		    mouse.setButtonPressed(MouseButton.RIGHT, true);
+			mouseEvent(MouseEvent.DRAGGED, MouseButton.RIGHT);
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.DRAGGED);
+		rootObject.callMouseClickCallbackOfChildren(MouseEvent.DRAGGED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.DRAGGED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED);
 		}
 		
 		updateMouse();
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(java.awt.event.MouseEvent e) {
 		mouse.setMoved(true);
 	    
-	    mouseEvent(casmi.MouseEvent.MOVED, casmi.MouseButton.LEFT);
+	    mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
 		
-		rootObject.callMouseClickCallbackOfChildren(casmi.MouseEvent.MOVED);
+		rootObject.callMouseClickCallbackOfChildren(MouseEvent.MOVED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(casmi.MouseEvent.MOVED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED);
 		}
 		
 		updateMouse();
 	}
+	
+	@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+		    int wheelRotation = e.getWheelRotation();
+		    
+		    mouse.setWheelRotation(wheelRotation);
+			
+		    if (wheelRotation != 0) {
+		        mouseEvent(MouseEvent.WHEEL_ROTATED, MouseButton.NONE);
+				mouseWheelEvent();
+			}
+		}
 	
 	private final void updateMouse() {
 		mouse.setPrvX(mouse.getX());
@@ -462,34 +458,34 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(java.awt.event.KeyEvent e) {
 		keyPressed = true;
 		this.key = e.getKeyChar();
 		this.keycode = e.getKeyCode();
-		keyEvent(casmi.KeyEvent.PRESSED);
+		keyEvent(KeyEvent.PRESSED);
 		if (timeline) {
-			rootTimeline.getScene().keyEvent(casmi.KeyEvent.PRESSED);
+			rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
 		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(java.awt.event.KeyEvent e) {
 		keyReleased = true;
 		this.key = java.awt.event.KeyEvent.CHAR_UNDEFINED;
 		this.keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
-		keyEvent(casmi.KeyEvent.RELEASED);
+		keyEvent(KeyEvent.RELEASED);
 		if (timeline) {
-			rootTimeline.getScene().keyEvent(casmi.KeyEvent.RELEASED);
+			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
 		}
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyTyped(java.awt.event.KeyEvent e) {
 		keyTyped = true;
 		this.key = e.getKeyChar();
-		keyEvent(casmi.KeyEvent.TYPED);
+		keyEvent(KeyEvent.TYPED);
 		if (timeline) {
-			rootTimeline.getScene().keyEvent(casmi.KeyEvent.TYPED);
+			rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
 		}
 	}
 
@@ -708,7 +704,7 @@ abstract public class Applet extends JApplet implements GraphicsDrawable, MouseL
 		return mouse.isPressed();
 	}
 	
-	public boolean isMousePressed(casmi.MouseButton button) {
+	public boolean isMousePressed(MouseButton button) {
 	    return mouse.isButtonPressed(button);
 	}
 
