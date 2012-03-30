@@ -145,6 +145,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	abstract public void keyEvent(KeyEvent e);
 	
+	/** @deprecated */
 	public void mouseWheelEvent() {};
 
 	class GLRedisplayTask extends TimerTask {
