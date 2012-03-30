@@ -25,19 +25,11 @@ import java.util.List;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
 
+/**
+ * 
+ * @author Y. Ban
+ */
 public class TweenElement implements Tweenable {
-//	public static final int POSITION = 0;
-//	public static final int POSITION_3D = 1;
-//	public static final int ROTATION_2D = 2;
-//	public static final int ROTATION_3D = 3;
-//	public static final int ALPHA = 4;
-//	public static final int ALPHA_STROKE = 10;
-//	public static final int ALPHA_FILL = 11;
-//	public static final int SCALE = 5;
-//	public static final int SCALE_3D = 6;
-//	public static final int SCALE_X = 7;
-//	public static final int SCALE_Y = 8;
-//	public static final int SCALE_Z = 9;
 	
 	private double positionX, positionY, positionZ;
 	private double rotationX, rotationY, rotationZ;
@@ -48,19 +40,18 @@ public class TweenElement implements Tweenable {
 	
 	private Element element;
 	
-	public TweenElement (Element e){
+	public TweenElement (Element e) {
 		this.element = e;
 		init();
 		reset();
 	}
 		
-	public Element getElement(){
+	public Element getElement() {
 		return element;
 	}
 
 	@Override
 	public List<Float> getTweenValues(TweenType tweenType) {
-
 		List<Float> result = new ArrayList<Float>();
 		
 		switch (tweenType) {
@@ -169,43 +160,41 @@ public class TweenElement implements Tweenable {
 	}
 	
 	@Override
-	public void end(Graphics g, TweenType tweenType){
-
+	public void end(Graphics g, TweenType tweenType) {
 		render(g,tweenType);
 	}
 	
 	@Override
-	public void render(Graphics g, TweenType tweenType){
+	public void render(Graphics g, TweenType tweenType) {
 		switch (tweenType) {
 		case POSITION:
-
 			element.setPosition(positionX, positionY);
 			break;
+			
 		case POSITION_3D:
-
 			element.setPosition(positionX, positionY, positionZ);
 			break;
+			
 		case ROTATION_2D:
-
 			element.setRotation(rotationZ);
 			break;
+			
 		case ROTATION_3D:
-
 			element.setRotation(rotationX, rotationY, rotationZ); 
 			break;
+			
 		case ALPHA:
 		case ALPHA_STROKE:
 		case ALPHA_FILL:
-
-			element.setStrokeColorAlpha((int)strokeAlpha);
-			element.setFillColorAlpha((int)fillAlpha);
+			element.setStrokeColorAlpha(strokeAlpha);
+			element.setFillColorAlpha(fillAlpha);
 			break;
+			
 		case SCALE:
 		case SCALE_3D:
 		case SCALE_X:
 		case SCALE_Y:
 		case SCALE_Z:
-
 			element.setScaleX(scaleX);
 			element.setScaleY(scaleY);
 			element.setScaleZ(scaleZ);
@@ -213,7 +202,7 @@ public class TweenElement implements Tweenable {
 		}
 	}
 	
-	private void init(){
+	private final void init() {
 		initialValues[0] = this.element.getX();
 		initialValues[1] = this.element.getY();
 		initialValues[2] = this.element.getZ();
@@ -223,12 +212,12 @@ public class TweenElement implements Tweenable {
 		initialValues[6] = this.element.getScaleX();
 		initialValues[7] = this.element.getScaleY();
 		initialValues[8] = this.element.getScaleZ();
-		initialValues[9] = this.element.getStrokeColor().getA();
-		initialValues[10] = this.element.getFillColor().getA();
+		initialValues[9] = this.element.getStrokeColor().getAlpha();
+		initialValues[10] = this.element.getFillColor().getAlpha();
 		this.element.setTween(true);
 	}
 	
-	public void reset(){
+	public void reset() {
 		positionX = initialValues[0];
 		positionY = initialValues[1];
 		positionZ = initialValues[2];
@@ -240,15 +229,11 @@ public class TweenElement implements Tweenable {
 		scaleZ= initialValues[8];
 		strokeAlpha = initialValues[9];
 		fillAlpha = initialValues[10];
-
 		
 		element.setPosition(positionX, positionY, positionZ);
 		element.setRotation(rotationX, rotationY, rotationZ);
 		element.setScale(scaleX, scaleY, scaleZ);
-		element.setStrokeColorAlpha((int)strokeAlpha);
-		element.setFillColorAlpha((int)fillAlpha);
-		
-
+		element.setStrokeColorAlpha(strokeAlpha);
+		element.setFillColorAlpha(fillAlpha);
 	}
-	
 }

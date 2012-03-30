@@ -24,6 +24,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 
 /**
  * Rect class.
@@ -32,7 +33,7 @@ import casmi.graphics.color.ColorSet;
  * @author Y. Ban
  * 
  */
-public class Rect extends Element implements Renderable{
+public class Rect extends Element implements Renderable {
 
     private double w;
     private double h;
@@ -44,12 +45,11 @@ public class Rect extends Element implements Renderable{
     private double y3;
     private double x4;
     private double y4;
-    
 
     private Color startColor;
     private Color endColor;
-    private Color gradationColor = new Color(0,0,0);
-    private GradationMode mode = GradationMode.Horizontal;
+    private Color gradationColor = new RGBColor(0.0, 0.0, 0.0);
+    private GradationMode mode = GradationMode.HORIZONTAL;
 
     /**
      * Creates a new Rect object using width and height.
@@ -79,152 +79,146 @@ public class Rect extends Element implements Renderable{
      * @param h 
      *              The height of the rectangle.                          
      */
-    public void set(double w, double h){
+    public void set(double w, double h) {
     	this.w = w;
     	this.h = h;
     }
     
-    public void setWidth(double w){
+    public void setWidth(double w) {
     	this.w = w;
     }
     
-    public void setHeight(double h){
+    public void setHeight(double h) {
     	this.h = h;
     }
     
-    public double getWidth(){
+    public double getWidth() {
     	return this.w;
     }
     
-    public double getHeight(){
+    public double getHeight() {
     	return this.h;
     }
     
-    public double getX(){
-    	return this.x;
-    }
-    
-    public double getY(){
-    	return this.y;
-    }
-    
+//    public double getX(){
+//    	return this.x;
+//    }
+//    
+//    public double getY(){
+//    	return this.y;
+//    }
 
-    private void calcRect() {
-        this.x1 = 0 - w / 2;
-        this.y1 = 0 + h / 2;
-        this.x2 = 0 - w / 2;
-        this.y2 = 0 - h / 2;
-        this.x3 = 0 + w / 2;
-        this.y3 = 0 - h / 2;
-        this.x4 = 0 + w / 2;
-        this.y4 = 0 + h / 2;
+    private final void calcRect() {
+        this.x1 = - w / 2;
+        this.y1 =   h / 2;
+        this.x2 = - w / 2;
+        this.y2 = - h / 2;
+        this.x3 =   w / 2;
+        this.y3 = - h / 2;
+        this.x4 =   w / 2;
+        this.y4 =   h / 2;
     }
     
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         calcRect();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glDisable(GL.GL_DEPTH_TEST);
+        
+        gl.glDisable(GL.GL_DEPTH_TEST);
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
-        if (this.fill) {
-            getSceneFillColor().setup(gl);
-            gl.glBegin(GL.GL_QUADS);
-            if(isGradation()==false){
-            gl.glVertex2d(x1, y1);
-            gl.glVertex2d(x2, y2);
-            gl.glVertex2d(x3, y3);
-            gl.glVertex2d(x4, y4);
-            } else {
-            	this.gradationColor.setR((this.startColor.getR()+this.endColor.getR())/2);
-            	this.gradationColor.setG((this.startColor.getG()+this.endColor.getG())/2);
-            	this.gradationColor.setB((this.startColor.getB()+this.endColor.getB())/2);
-            	this.gradationColor.setA((this.startColor.getA()+this.endColor.getA())/2);
-            	switch(mode){
-            	case Horizontal:
-            		getSceneColor(this.startColor).setup(gl);
+        {
+            this.setTweenParameter(gl);
+            
+            if (this.fill) {
+                getSceneFillColor().setup(gl);
+                gl.glBegin(GL.GL_QUADS);
+                if (!isGradation()) {
                     gl.glVertex2d(x1, y1);
                     gl.glVertex2d(x2, y2);
-            		getSceneColor(this.endColor).setup(gl);
                     gl.glVertex2d(x3, y3);
                     gl.glVertex2d(x4, y4);
-                    break;
-            	case Vertical:
-            		getSceneColor(this.startColor).setup(gl);
-                    gl.glVertex2d(x1, y1);
-            		getSceneColor(this.endColor).setup(gl);
-                    gl.glVertex2d(x2, y2);
-                    gl.glVertex2d(x3, y3);
-            		getSceneColor(this.startColor).setup(gl);
-                    gl.glVertex2d(x4, y4);
-                    break;
-            	case LeftSideways:
-            		getSceneColor(this.startColor).setup(gl);
-                    gl.glVertex2d(x1, y1);
-            		getSceneColor(this.gradationColor).setup(gl);
-                    gl.glVertex2d(x2, y2);
-            		getSceneColor(this.endColor).setup(gl);
-                    gl.glVertex2d(x3, y3);
-            		getSceneColor(this.gradationColor).setup(gl);
-                    gl.glVertex2d(x4, y4);
-            		break;
-            	case RightSideways:
-            		getSceneColor(this.gradationColor).setup(gl);
-                    gl.glVertex2d(x1, y1);
-            		getSceneColor(this.endColor).setup(gl);
-                    gl.glVertex2d(x2, y2);
-            		getSceneColor(this.gradationColor).setup(gl);
-                    gl.glVertex2d(x3, y3);
-            		getSceneColor(this.startColor).setup(gl);
-                    gl.glVertex2d(x4, y4);
-            		break;
-            		
-            	}
-            }
-            gl.glEnd();
-        }
+                } else {
+                    this.gradationColor.setRed((this.startColor.getRed()     + this.endColor.getRed())   / 2);
+                    this.gradationColor.setGreen((this.startColor.getGreen() + this.endColor.getGreen()) / 2);
+                    this.gradationColor.setBlue((this.startColor.getBlue()   + this.endColor.getBlue())  / 2);
+                    this.gradationColor.setAlpha((this.startColor.getAlpha() + this.endColor.getAlpha()) / 2);
+                    switch (mode) {
+                    case HORIZONTAL:
+                        getSceneColor(this.startColor).setup(gl);
+                        gl.glVertex2d(x1, y1);
+                        gl.glVertex2d(x2, y2);
+                        getSceneColor(this.endColor).setup(gl);
+                        gl.glVertex2d(x3, y3);
+                        gl.glVertex2d(x4, y4);
+                        break;
+                    case VERTICAL:
+                        getSceneColor(this.startColor).setup(gl);
+                        gl.glVertex2d(x1, y1);
+                        getSceneColor(this.endColor).setup(gl);
+                        gl.glVertex2d(x2, y2);
+                        gl.glVertex2d(x3, y3);
+                        getSceneColor(this.startColor).setup(gl);
+                        gl.glVertex2d(x4, y4);
+                        break;
+                    case LEFT_SIDEWAYS:
+                        getSceneColor(this.startColor).setup(gl);
+                        gl.glVertex2d(x1, y1);
+                        getSceneColor(this.gradationColor).setup(gl);
+                        gl.glVertex2d(x2, y2);
+                        getSceneColor(this.endColor).setup(gl);
+                        gl.glVertex2d(x3, y3);
+                        getSceneColor(this.gradationColor).setup(gl);
+                        gl.glVertex2d(x4, y4);
+                        break;
+                    case RIGHT_SIDEWAYS:
+                        getSceneColor(this.gradationColor).setup(gl);
+                        gl.glVertex2d(x1, y1);
+                        getSceneColor(this.endColor).setup(gl);
+                        gl.glVertex2d(x2, y2);
+                        getSceneColor(this.gradationColor).setup(gl);
+                        gl.glVertex2d(x3, y3);
+                        getSceneColor(this.startColor).setup(gl);
+                        gl.glVertex2d(x4, y4);
+                        break;
 
-        if (this.stroke) {
-            gl.glLineWidth(this.strokeWidth);
-            getSceneStrokeColor().setup(gl);
-            gl.glBegin(GL.GL_LINE_STRIP);
-            gl.glVertex2d(x1, y1);
-            gl.glVertex2d(x2, y2);
-            gl.glVertex2d(x3, y3);
-            gl.glVertex2d(x4, y4);
-            gl.glVertex2d(x1, y1);
-            gl.glEnd();
+                    }
+                }
+                gl.glEnd();
+            }
+
+            if (this.stroke) {
+                gl.glLineWidth(this.strokeWidth);
+                getSceneStrokeColor().setup(gl);
+                gl.glBegin(GL.GL_LINE_STRIP);
+                gl.glVertex2d(x1, y1);
+                gl.glVertex2d(x2, y2);
+                gl.glVertex2d(x3, y3);
+                gl.glVertex2d(x4, y4);
+                gl.glVertex2d(x1, y1);
+                gl.glEnd();
+            }
         }
-        
         gl.glPopMatrix();
         
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glEnable(GL.GL_DEPTH_TEST);
     }
     
-    public void setGradationColor(GradationMode mode, Color color1, Color color2){
-		if(startColor==null||endColor==null){
-			startColor = new Color(0,0,0);
-			endColor = new Color(0,0,0);
-		}
-		startColor = color1;
-		endColor = color2;
-		this.mode = mode;
+    public void setGradationColor(GradationMode mode, Color color1, Color color2) {
+        setGradation(true);
+        if (startColor == null || endColor == null) {
+            startColor = new RGBColor(0.0, 0.0, 0.0);
+            endColor   = new RGBColor(0.0, 0.0, 0.0);
+        }
+        startColor = color1;
+        endColor   = color2;
+        this.mode  = mode;
 	}
 	
-	public void setGradationColor(GradationMode mode, ColorSet colorset1, ColorSet colorset2){
-		setGradation(true);
-		if(startColor==null||endColor==null){
-			startColor = new Color(0,0,0);
-			endColor = new Color(0,0,0);
-		}
-		startColor = Color.color(colorset1);
-		endColor = Color.color(colorset2);
-		this.mode = mode;
+	public void setGradationColor(GradationMode mode, ColorSet colorSet1, ColorSet colorSet2){
+	    setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
 	}
 	
-	public void setGradationMode(GradationMode mode){
+	public void setGradationMode(GradationMode mode) {
 		this.mode = mode;
 	}
 }

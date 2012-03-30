@@ -22,7 +22,7 @@ import java.nio.ShortBuffer;
 
 import org.OpenNI.IRMetaData;
 
-import casmi.graphics.color.Color;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Texture;
 import casmi.image.Image;
 
@@ -76,7 +76,7 @@ public class IRMap {
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
                 int ir = (int)buf.get();
-                tex.getImage().setColor(new Color(ir), x, y);
+                tex.getImage().setColor(new RGBColor(ir / 255.0), x, y);
             }
         }
         

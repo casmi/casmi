@@ -45,11 +45,10 @@ public class RoundRect extends Element implements Renderable {
     private double y3;
     private double x4;
     private double y4;
-    private double r = 1;
+    private double r = 1.0;
     private double precision = 20.0;
  
     private ShapeMode MODE = ShapeMode.CENTER;
- 
  
     private Arc arc[] = new Arc[4];
     
@@ -136,14 +135,14 @@ public class RoundRect extends Element implements Renderable {
         initArc();
     }
  
-    private void setArc(){
+    private final void setArc() {
         arc[0].set(x1 + r, y1 - r,r, 90, 180, precision);
         arc[1].set(x2 + r, y2 + r,r, 180, 270, precision);
         arc[2].set(x3 - r, y3 + r,r, 270, 360, precision);
         arc[3].set(x4 - r, y4 - r,r, 0, 90, precision);
     }
     
-    private void initArc(){
+    private final void initArc() {
         arc[0] = new Arc(x1 + r, y1 - r,r, 90, 180, precision);
         arc[1] = new Arc(x2 + r, y2 + r,r, 180, 270, precision);
         arc[2] = new Arc(x3 - r, y3 + r,r, 270, 360, precision);
@@ -154,7 +153,7 @@ public class RoundRect extends Element implements Renderable {
         this.MODE = mode;
     }
     
-    private void setRect(){
+    private final void setRect() {
     	  switch (MODE) {
           case CORNER:
               this.x1 = 0.0;
@@ -196,26 +195,27 @@ public class RoundRect extends Element implements Renderable {
               this.x4 = 0.0 + w;
               this.y4 = 0.0 + h;
               break;
- 
           }
     }
  
-    private void calcRect() {
+    private final void calcRect() {
     	setRect();
         setArc();
- 
     }
  
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         calcRect();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
             gl.glDisable(GL.GL_DEPTH_TEST);
+        }
+
         gl.glPushMatrix();
         this.setTweenParameter(gl);
         if (this.fill) {
             getSceneFillColor().setup(gl);
-            //this.fillColor.setup(gl);
+            // this.fillColor.setup(gl);
             gl.glBegin(GL.GL_QUADS);
             gl.glVertex2d(x1 + r, y1);
             gl.glVertex2d(x2 + r, y2);
@@ -233,109 +233,117 @@ public class RoundRect extends Element implements Renderable {
             gl.glVertex2d(x3 - r, y2 + r);
             gl.glVertex2d(x3, y3 + r);
             gl.glVertex2d(x4, y4 - r);
-            
-         /*   gl.glVertex2d(x1, y1 + r);
-            gl.glVertex2d(x2, y2 - r);
-            gl.glVertex2d(x3, y3 - r);
-            gl.glVertex2d(x4, y4 + r);
+
+            /*
+             * gl.glVertex2d(x1, y1 + r);
+             * gl.glVertex2d(x2, y2 - r);
+             * gl.glVertex2d(x3, y3 - r);
+             * gl.glVertex2d(x4, y4 + r);
+             * gl.glEnd();
+             * gl.glBegin(GL.GL_QUADS);
+             * gl.glVertex2d(x1 - r, y1);
+             * gl.glVertex2d(x2 - r, y2);
+             * gl.glVertex2d(x2, y3);
+             * gl.glVertex2d(x1, y4);
+             * gl.glEnd();
+             * gl.glBegin(GL.GL_QUADS);
+             * gl.glVertex2d(x4, y1);
+             * gl.glVertex2d(x3, y2);
+             * gl.glVertex2d(x3 + r, y3);
+             * gl.glVertex2d(x4 + r, y4);
+             */
+
             gl.glEnd();
-            gl.glBegin(GL.GL_QUADS);
-            gl.glVertex2d(x1 - r, y1);
-            gl.glVertex2d(x2 - r, y2);
-            gl.glVertex2d(x2, y3);
-            gl.glVertex2d(x1, y4);
-            gl.glEnd();
-            gl.glBegin(GL.GL_QUADS);
-            gl.glVertex2d(x4, y1);
-            gl.glVertex2d(x3, y2);
-            gl.glVertex2d(x3 + r, y3);
-            gl.glVertex2d(x4 + r, y4); */
-            
-            gl.glEnd();
- 
- 
+
             for (int i = 0; i < 4; i++) {
                 arc[i].setStroke(false);
                 arc[i].setFill(true);
                 arc[i].setFillColor(this.fillColor);
-                arc[i].render(gl, glu, width, height);}            
+                arc[i].render(gl, glu, width, height);
             }
-        
-        if(this.stroke){
+        }
+
+        if (this.stroke) {
             gl.glLineWidth(this.strokeWidth);
-           // this.strokeColor.setup(gl);
+            // this.strokeColor.setup(gl);
             getSceneStrokeColor().setup(gl);
             gl.glBegin(GL.GL_LINES);
-            gl.glVertex2d(x1, y1-r);
-            gl.glVertex2d(x2, y2+r);
-            gl.glVertex2d(x2+r, y2);
-            gl.glVertex2d(x3-r, y3);
-            gl.glVertex2d(x3, y3+r);
-            gl.glVertex2d(x4, y4-r);
-            gl.glVertex2d(x4-r, y4);
-            gl.glVertex2d(x1+r, y1);
-            
-          /*  gl.glVertex2d(x1-r,y1);
-            gl.glVertex2d(x2-r, y2);
-            gl.glVertex2d(x2, y2-r);
-            gl.glVertex2d(x3, y3-r);
-            gl.glVertex2d(x3+r, y3);
-            gl.glVertex2d(x4+r, y4);
-            gl.glVertex2d(x4, y4+r);
-            gl.glVertex2d(x1, y1+r); */
-            
+            gl.glVertex2d(x1, y1 - r);
+            gl.glVertex2d(x2, y2 + r);
+            gl.glVertex2d(x2 + r, y2);
+            gl.glVertex2d(x3 - r, y3);
+            gl.glVertex2d(x3, y3 + r);
+            gl.glVertex2d(x4, y4 - r);
+            gl.glVertex2d(x4 - r, y4);
+            gl.glVertex2d(x1 + r, y1);
+
+            /*
+             * gl.glVertex2d(x1-r,y1);
+             * gl.glVertex2d(x2-r, y2);
+             * gl.glVertex2d(x2, y2-r);
+             * gl.glVertex2d(x3, y3-r);
+             * gl.glVertex2d(x3+r, y3);
+             * gl.glVertex2d(x4+r, y4);
+             * gl.glVertex2d(x4, y4+r);
+             * gl.glVertex2d(x1, y1+r);
+             */
+
             gl.glEnd();
             for (int i = 0; i < 4; i++) {
                 arc[i].setFill(false);
                 arc[i].setStroke(true);
                 arc[i].setStrokeWidth(this.strokeWidth);
                 arc[i].setStrokeColor(this.strokeColor);
-                arc[i].render(gl, glu, width, height);}            
+                arc[i].render(gl, glu, width, height);
             }
-        gl.glPopMatrix();
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
-            gl.glEnable(GL.GL_DEPTH_TEST);
-        
         }
+        gl.glPopMatrix();
+
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+            gl.glEnable(GL.GL_DEPTH_TEST);
+        }
+    }
     
-    public void setRotate(double angle){
+    public void setRotate(double angle) {
     	this.rotate = angle;
     }
     
-    public double getRotate(){
+    public double getRotate() {
     	return this.rotate;
     }
     
-    public double getWidth(){
+    public double getWidth() {
     	return this.w;
     }
     
-    public double getHeight(){
+    public double getHeight() {
     	return this.h;
     }
     
-    public double getX(){
+    @Override
+    public double getX() {
     	return this.x;
     }
     
-    public double getY(){
+    @Override
+    public double getY() {
     	return this.y;
     }
     
-    public void setWidth(double w){
-    	this.w = w;
+    public void setWidth(double w) {
+        this.w = w;
     }
-    
-    public void setHeight(double h){
-    	this.h = h;
+
+    public void setHeight(double h) {
+        this.h = h;
     }
-    
-    public void setX(double x){
-    	this.x = x;
+
+    public void setX(double x) {
+        this.x = x;
     }
-    
-    public void setY(double y){
-    	this.y = y;
+
+    public void setY(double y) {
+        this.y = y;
     }
     
     
@@ -344,22 +352,19 @@ public class RoundRect extends Element implements Renderable {
     	this.y = y;
     }
     
-    public void setRadius(double radius){
-    	this.r = radius;
+    public void setRadius(double radius) {
+        this.r = radius;
+    }
+
+    public double getRadius() {
+        return this.r;
+    }
+
+    public double getPrecision() {
+        return this.precision;
     }
     
-    public double getRadius(){
-    	return this.r;
+    public void setPrecision(double precision) {
+        this.precision = precision;
     }
-    
-    public double getPrecision(){
-    	return this.precision;
-    }
-    
-    public void setPrecision(double precision){
-    	this.precision = precision;
-    }
-    
- 
- 
 }

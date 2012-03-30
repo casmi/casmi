@@ -19,9 +19,12 @@
   
 package casmi.timeline;
 
-
 import casmi.graphics.Graphics;
 
+/**
+ * @author Y. Ban
+ */
 public interface TimelineRender {
+
     void render(Graphics g);
 }

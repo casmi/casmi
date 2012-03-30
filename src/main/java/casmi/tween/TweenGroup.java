@@ -1,17 +1,39 @@
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package casmi.tween;
 
 import java.util.ArrayList;
 
+/**
+ * @author Y. Ban
+ */
 public abstract class TweenGroup implements Groupable {
 
 	private final ArrayList<Groupable> groupables = new ArrayList<Groupable>(0);
 	private long duration = 0;
 	private long delay = 0;
 	private int repeatCnt = 0;
-	private int intervalMillis = 0;
+	private long intervalMillis = 0;
 	private int iteration = 0;
 	private boolean reputation;
-	
+	private int baseGroupNum;
 
 	void reset() {
 		getGroupables().clear();
@@ -63,9 +85,28 @@ public abstract class TweenGroup implements Groupable {
 		this.duration = duration;
 	}
 	
+	
 	public TweenGroup repeat(int count, int delayMillis) {
 		setRepeatCnt(count);
 		setIntervalMillis(delayMillis);
+			baseGroupNum = this.getGroupables().size();
+			if(this instanceof TweenSerialGroup){
+				while(this.getRepeatCnt()>this.getIteration()){
+					for(int i = 0; i < baseGroupNum; i++){
+						if(this.getGroupables().get(i) instanceof Tween){
+							Tween t = ((Tween) this.getGroupables().get(i)).clone();
+							if(i==0)
+								t.addDelay(getIntervalMillis());
+							this.append(t);
+						}
+						else{
+						}
+					}
+					iteration++;
+				}
+			}
+		
+		
 		return this;
 	}
 
@@ -77,7 +118,7 @@ public abstract class TweenGroup implements Groupable {
 		this.repeatCnt = repeatCnt;
 	}
 
-	public int getIntervalMillis() {
+	public long getIntervalMillis() {
 		return intervalMillis;
 	}
 

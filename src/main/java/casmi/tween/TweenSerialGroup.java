@@ -19,11 +19,11 @@
 
 package casmi.tween;
 
-import java.util.ArrayList;
-
 /**
  * A TweenGroup can be used to create complex animations made of sequences and
  * parallel sets of Tweens.
+ * 
+ * @author Y. Ban
  * 
  * @see Tween
  * @see TweenManager
@@ -41,8 +41,10 @@ public class TweenSerialGroup extends TweenGroup {
 	 */
 	public static TweenSerialGroup create(Groupable... objs) {
 		TweenSerialGroup group = new TweenSerialGroup();
-		for (Groupable o : objs)
+		
+		for (Groupable o : objs){
 			group.append(o);
+		}
 		return group;
 	}
 

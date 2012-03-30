@@ -19,6 +19,9 @@
 
 package casmi.util;
 
+/**
+ * @author Y. Ban
+ */
 public class Random {
 
 	private static java.util.Random r = null;

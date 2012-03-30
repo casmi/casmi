@@ -24,9 +24,12 @@ import java.util.List;
 
 import casmi.graphics.Graphics;
 
+/**
+ * @author Y. Ban
+ */
 public class Tween implements Groupable {
 
-	private Graphics g;
+//	private Graphics g;
 
 	/** If you need to repeat your tween for infinity, use this. */
 	public static final int INFINITY = -1;
@@ -202,6 +205,8 @@ public class Tween implements Groupable {
 	 * @param equation
 	 *            The easing equation used during the interpolation.
 	 */
+
+	
 	private Tween(Tweenable target, TweenType tweenType, int durationMillis,
 			TweenEquation equation) {
 		startValues = new ArrayList<Float>();
@@ -226,6 +231,17 @@ public class Tween implements Groupable {
 			this.currentValues = target
 					.getTweenValues(tweenType);
 		}
+	}
+	
+	/**
+	 * Clone a new Tween from scratch.
+	 */
+	public Tween clone(){
+		Tween t = Tween.to(this.target,this.tweenType,(int)this.durationMillis,this.equation);
+		t.startValues = this.startValues;
+		t.targetValues = this.targetValues;
+		t.currentValues = this.currentValues;	
+		return t;		
 	}
 
 	/**
@@ -658,7 +674,7 @@ public class Tween implements Groupable {
 	 */
 	final void render(Graphics g, long currentMillis) {
 		
-		this.g = g;
+//		this.g = g;
 
 		if (!isReady)
 			return;
@@ -822,5 +838,7 @@ public class Tween implements Groupable {
 		}
 
 	}
+
+	
 
 }

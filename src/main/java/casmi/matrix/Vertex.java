@@ -19,9 +19,14 @@
  
 package casmi.matrix;
 
+/**
+ * @author Y. Ban
+ */
 public class Vertex {
 
-    public double x, y, z;
+    private double x = 0.0;
+    private double y = 0.0;
+    private double z = 0.0;
 
     public Vertex() {
         this.x = 0.0;

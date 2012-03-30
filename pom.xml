@@ -4,7 +4,7 @@
 
 	<groupId>casmi</groupId>
 	<artifactId>casmi</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>casmi</name>
@@ -81,12 +81,17 @@
 		<dependency>
 			<groupId>org.OpenNI</groupId>
 			<artifactId>OpenNI</artifactId>
-			<version>1.4.0.2</version>
+			<version>1.5.2.23</version>
 		</dependency>
 		<dependency>
 			<groupId>com.xuggle</groupId>
 			<artifactId>xuggle-xuggler</artifactId>
 			<version>3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.primesense</groupId>
+			<artifactId>NITE</artifactId>
+			<version>1.5.2.21</version>
 		</dependency>
 	</dependencies>
 
@@ -95,6 +100,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>

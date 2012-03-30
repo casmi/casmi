@@ -1,3 +1,22 @@
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package casmi.image;
 
 import java.awt.Graphics2D;
@@ -11,6 +30,7 @@ import javax.imageio.ImageIO;
 
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
+import casmi.graphics.color.RGBColor;
 
 import com.sun.opengl.util.texture.Texture;
 import com.sun.opengl.util.texture.TextureIO;
@@ -20,7 +40,6 @@ import com.sun.opengl.util.texture.TextureIO;
  * Wrap javax.imageio.ImageIO and make it easy to use.
  * 
  * @author Y. Ban
- * 
  */
 public class Image {
     
@@ -183,10 +202,10 @@ public class Image {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
         
-        return new Color(pixels[idx] >> 16 & 0x000000ff, 
-                         pixels[idx] >> 8  & 0x000000ff,
-                         pixels[idx]       & 0x000000ff,
-                         pixels[idx] >> 24);
+        return new RGBColor((pixels[idx] >> 16 & 0x000000ff) / 255.0, 
+                            (pixels[idx] >> 8  & 0x000000ff) / 255.0,
+                            (pixels[idx]       & 0x000000ff) / 255.0,
+                            (pixels[idx] >> 24)              / 255.0);
     }
     
     public final double getR(int x, int y) {
@@ -226,10 +245,14 @@ public class Image {
     
     public final void setColor(Color color, int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
-        pixels[x + y * width] = color.getA() << 24 | 
-                                color.getR() << 16 |
-                                color.getG() << 8  |
-                                color.getB();
+        int red   = (int)(color.getRed()   * 255.0);
+        int green = (int)(color.getGreen() * 255.0);
+        int blue  = (int)(color.getBlue()  * 255.0);
+        int alpha = (int)(color.getAlpha() * 255.0);
+        pixels[x + y * width] = alpha << 24 | 
+                                red   << 16 |
+                                green << 8  |
+                                blue;
     }
     
     public final void setA(double alpha, int x, int y){
@@ -250,10 +273,14 @@ public class Image {
             for (int x = 0; x < width; x++) {
                 int idx = x + y * width;
                 if (colors.length <= idx) break;
-                pixels[idx] = colors[idx].getA() << 24 | 
-                              colors[idx].getR() << 16 |
-                              colors[idx].getG() << 8  |
-                              colors[idx].getB();
+                int red   = (int)(colors[idx].getRed()   * 255.0);
+                int green = (int)(colors[idx].getGreen() * 255.0);
+                int blue  = (int)(colors[idx].getBlue()  * 255.0);
+                int alpha = (int)(colors[idx].getAlpha() * 255.0);
+                pixels[idx] = alpha << 24 | 
+                              red   << 16 |
+                              green << 8  |
+                              blue;
             }
         }
     }
@@ -278,7 +305,7 @@ public class Image {
         return height;
     }
     
-    public BufferedImage getIm(){
-    	return img;
-    }
+//    public BufferedImage getIm(){
+//    	return img;
+//    }
 }

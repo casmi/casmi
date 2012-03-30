@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import org.OpenNI.ImageMetaData;
 
 import casmi.graphics.color.Color;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Texture;
 import casmi.image.Image;
 
@@ -50,7 +51,7 @@ public class ImageMap {
         int r = buf.get() & 0xff;
         int g = buf.get() & 0xff;
         int b = buf.get() & 0xff;
-        return new Color(r, g, b);
+        return new RGBColor(r / 255.0, g / 255.0, b / 255.0);
     }
     
     public Color[] getColorArray() {
@@ -62,7 +63,7 @@ public class ImageMap {
                 int r = buf.get() & 0xff;
                 int g = buf.get() & 0xff;
                 int b = buf.get() & 0xff;
-                c[x + y * getWidth()] = new Color(r, g, b);
+                c[x + y * getWidth()] = new RGBColor(r / 255.0, g / 255.0, b / 255.0);
             }
         }
         return c;

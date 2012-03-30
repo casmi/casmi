@@ -206,9 +206,10 @@ abstract class SQL {
                 sb.append(select);
             }
             
-            if (!flag) {
-                if (sb.length() != 0) sb.insert(0, ',');
-                sb.insert(0, "id");
+            // if the entity has an automatic primary key("id") and not selected,
+            // append the key automatically.
+            if (!flag && Entity.isAutoPrimaryKey(type)) {
+                sb.insert(0, "id,");
             }
             
             sqlStr = sqlStr.replaceAll(":select", sb.toString());
@@ -259,30 +260,34 @@ abstract class SQL {
     
     // TODO: this method is correct only if a primary key is not specified.
     public <T extends Entity> T find(Class<T> type, int id) throws SQLException {
-        
-        return all(type, new Query().where("id=" + id))[0];
+        T[] entities = all(type, new Query().where("id=" + id));
+        if (entities.length == 0) return null;
+        return entities[0];
     }
     
     // TODO: this method is correct only if a primary key is not specified.
-    public <T extends Entity> T find(Class<T> type, int id, Query query) 
-        throws SQLException {
-
+    public <T extends Entity> T find(Class<T> type, int id, Query query) throws SQLException {
         query.andWhere("id=" + id);
-        return all(type, query)[0];
+        T[] entities = all(type, query);
+        if (entities.length == 0) return null;
+        return entities[0];
     }
     
     public <T extends Entity> T first(Class<T> type) throws SQLException {
-        
-        return all(type, new Query().limit(1))[0];
+        T[] entities = all(type, new Query().limit(1));
+        if (entities.length == 0) return null;
+        return entities[0];
     }
     
     public <T extends Entity> T first(Class<T> type, Query query) throws SQLException {
-        
-        return all(type, query.limit(1))[0];
+        T[] entities = all(type, query.limit(1));
+        if (entities.length == 0) return null;
+        return entities[0];
     }
     
     public <T extends Entity> T last(Class<T> type) throws SQLException {
         T[] entities = all(type, new Query().order(Entity.getPrimaryKeyField(type)).desc(true).limit(1));
+        if (entities.length == 0) return null;
         return entities[entities.length - 1];
     }
     
@@ -291,6 +296,7 @@ abstract class SQL {
             query.order(Entity.getPrimaryKeyField(type));
         }
         T[] entities = all(type, query.desc(true).limit(1));
+        if (entities.length == 0) return null;
         return entities[entities.length - 1];
     }
     
@@ -318,6 +324,8 @@ abstract class SQL {
         rs.close();
         statement.close();
 
+        if (list.isEmpty()) return (T[])Array.newInstance(type, 0);
+        
         return list.toArray((T[])Array.newInstance(type, list.size()));
     }
     

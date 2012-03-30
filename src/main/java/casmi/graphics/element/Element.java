@@ -20,12 +20,13 @@
 package casmi.graphics.element;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL;
 
 import casmi.graphics.color.Color;
-import casmi.graphics.color.ColorMode;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.material.Material;
 import casmi.graphics.object.Mask;
 import casmi.matrix.Vertex;
@@ -38,47 +39,49 @@ import casmi.matrix.Vertex;
  */
 abstract public class Element implements Cloneable, Renderable {
 
-	private int sR = 0;
-	private int sG = 0;
-	private int sB = 0;
-	private int sA = 255;
-	private int fR = 255;
-	private int fG = 255;
-	private int fB = 255;
-	private int fA = 255;
+	private double strokeRed   = 0.0;
+	private double strokeGreen = 0.0;
+	private double strokeBlue  = 0.0;
+	private double strokeAlpha = 1.0;
+	
+	private double fillRed   = 1.0;
+	private double fillGreen = 1.0;
+	private double fillBlue  = 1.0;
+	private double fillAlpha = 1.0;
+	
 	private double sceneA = 1.0;
+	
 	protected Texture texture;
 	private Mask mask;
 
-	protected double x = 0;
-	protected double y = 0;
-	protected double z = 0;
-	protected double rotateX = 0, rotateY = 0;
+	protected double x = 0.0;
+	protected double y = 0.0;
+	protected double z = 0.0;
+	protected double rotateX = 0.0, rotateY = 0.0;
 	protected double scaleX = 1.0;
 	protected double scaleY = 1.0;
 	protected double scaleZ = 1.0;
 
-	protected double rotate = 0;
+	protected double rotate = 0.0;
 	protected double tAS;
 	protected double tAF;
 
-	protected Color strokeColor = new Color(sR, sG, sB, sA);
-	protected Color fillColor = new Color(fR, fG, fB, fA);
-	protected Color scenestrokeColor = new Color(sR, sG, sB,
-			(int) (sA * sceneA));
-	protected Color scenefillColor = new Color(fR, fG, fB, (int) (fA * sceneA));
-	protected Material material = new Material();
+	protected Color strokeColor      = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha);
+	protected Color fillColor        = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha);
+	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha * sceneA);
+	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha * sceneA);
+	protected Material material      = new Material();
 
 	protected boolean stroke = true;
-	protected boolean fill = true;
-	protected boolean tween = false;
+	protected boolean fill   = true;
+	protected boolean tween  = false;
 
-	protected float strokeWidth = 1;
+	protected float strokeWidth = 1.0f;
 
 	private ArrayList<MouseEventCallback> mouseEventCallbacks;
-	private boolean mouseover = false;
-	private boolean premouseover = false;
-	private boolean selectionbuffer = false;
+	private boolean mouseOver       = false;
+	private boolean preMouseOver    = false;
+	private boolean selectionBuffer = false;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -115,16 +118,16 @@ abstract public class Element implements Cloneable, Renderable {
 	/**
 	 * Sets the color of this Element's stroke.
 	 * 
-	 * @param strokeColor
+	 * @param color
 	 *            The color of the Element's stroke.
 	 */
-	public void setStrokeColor(Color strokeColor) {
-		this.strokeColor = strokeColor;
-		this.tAS = strokeColor.getA();
+	public void setStrokeColor(Color color) {
+		this.strokeColor = color;
+		this.tAS = color.getAlpha();
 	}
 	
-	public void setStrokeColorAlpha(int alpha) {
-		this.strokeColor.setA(alpha);
+	public void setStrokeColorAlpha(double alpha) {
+		this.strokeColor.setAlpha(alpha);
 		this.tAS = alpha;
 	}
 
@@ -134,14 +137,13 @@ abstract public class Element implements Cloneable, Renderable {
 	 * @param strokeColor
 	 *            The color of the Element's stroke.
 	 */
-	public void setStrokeColor(ColorSet strokeColor) {
-		this.strokeColor = Color.color(strokeColor);
+	public void setStrokeColor(ColorSet colorSet) {
+		strokeColor = new RGBColor(colorSet);
 	}
 
-	public void setStrokeColor(ColorSet strokeColor, int alpha) {
-		this.strokeColor = Color.color(strokeColor);
-		this.strokeColor.setA(alpha);
-		this.tAS = alpha;
+	public void setStrokeColor(ColorSet colorSet, double alpha) {
+	    strokeColor = new RGBColor(colorSet);
+	    this.tAS = alpha;
 	}
 
 	/**
@@ -156,32 +158,31 @@ abstract public class Element implements Cloneable, Renderable {
 	/**
 	 * Sets the color of this Element's fill.
 	 * 
-	 * @param fillColor
+	 * @param color
 	 *            The color of the Element's fill.
 	 */
-	public void setFillColor(Color fillColor) {
-		this.fillColor = fillColor;
-		this.tAF = fillColor.getA();
+	public void setFillColor(Color color) {
+		this.fillColor = color;
+		this.tAF = color.getAlpha();
 	}
 	
-	public void setFillColorAlpha(int alpha) {
-		this.fillColor.setA(alpha);
+	public void setFillColorAlpha(double alpha) {
+		this.fillColor.setAlpha(alpha);
 		this.tAF = alpha;
 	}
 
 	/**
 	 * Sets the color of this Element's fill.
 	 * 
-	 * @param fillColor
+	 * @param colorSet
 	 *            The color of the Element's fill.
 	 */
-	public void setFillColor(ColorSet fillColor) {
-		this.fillColor = Color.color(fillColor);
+	public void setFillColor(ColorSet colorSet) {
+		this.fillColor = new RGBColor(colorSet);
 	}
 	
-	public void setFillColor(ColorSet fillColor, int alpha) {
-		this.fillColor = Color.color(fillColor);
-		this.fillColor.setA(alpha);
+	public void setFillColor(ColorSet colorSet, double alpha) {
+		this.fillColor = new RGBColor(colorSet, alpha);
 		this.tAF = alpha;
 	}
 
@@ -211,11 +212,6 @@ abstract public class Element implements Cloneable, Renderable {
 		this.fill = fill;
 	}
 
-	public void colorMode(ColorMode colorMode) {
-		this.fillColor.setColorMode(colorMode);
-		this.strokeColor.setColorMode(colorMode);
-	}
-
 	/**
 	 * Sets Material to this Element
 	 * 
@@ -227,8 +223,8 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public void setSceneAlpha(double alpha) {
-		this.strokeColor.setA((int) alpha);
-		this.fillColor.setA((int) alpha);
+		this.strokeColor.setAlpha(alpha);
+		this.fillColor.setAlpha(alpha);
 	}
 
 	public void setAlpha(double alpha) {
@@ -236,33 +232,35 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public Color getSceneStrokeColor() {
-		Color.copyColor(this.strokeColor, this.scenestrokeColor);
-		if (tween == true) {
-			this.scenestrokeColor.setA((int) (gettAS() * sceneA));
-		} else
-			this.scenestrokeColor
-					.setA((int) (this.strokeColor.getA() * sceneA));
-		return this.scenestrokeColor;
+		//System.out.println("scenA is ... "+sceneA);
+		sceneStrokeColor = strokeColor.clone();
+		if (tween) {
+			sceneStrokeColor.setAlpha(gettAS() * sceneA);
+		} else {
+			sceneStrokeColor.setAlpha(strokeColor.getAlpha() * sceneA);
+		}
+		return sceneStrokeColor;
 	}
 
 	public Color getSceneFillColor() {
-		Color.copyColor(this.fillColor, this.scenefillColor);
-		if (tween == true) {
-			this.scenefillColor.setA((int) (gettAF() * sceneA));
-
-		} else
-			this.scenefillColor.setA((int) (this.fillColor.getA() * sceneA));
-		return this.scenefillColor;
+		//System.out.println("scenA is ... "+sceneA);
+	    sceneFillColor = fillColor.clone();
+		if (tween) {
+			sceneFillColor.setAlpha(gettAF() * sceneA);
+		} else {
+			this.sceneFillColor.setAlpha(fillColor.getAlpha() * sceneA);
+		}
+		return this.sceneFillColor;
 	}
 
-	public Color getSceneColor(Color c) {
-		Color.copyColor(c, this.scenefillColor);
-		if (tween == true) {
-			this.scenefillColor.setA((int) (gettAF() * sceneA));
-
-		} else
-			this.scenefillColor.setA((int) (c.getA() * sceneA));
-		return this.scenefillColor;
+	public Color getSceneColor(Color color) {
+	    sceneFillColor = color.clone();
+		if (tween) {
+			sceneFillColor.setAlpha(gettAF() * sceneA);
+		} else {
+			sceneFillColor.setAlpha(color.getAlpha() * sceneA);
+		}
+		return sceneFillColor;
 	}
 
 	public void setTween(boolean tween) {
@@ -274,23 +272,19 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	protected void setTweenParameter(GL gl) {
-
 			gl.glTranslated(x, y, z);
 			gl.glScaled(scaleX, scaleY, scaleZ);
 			gl.glRotated(rotate, 0.0, 0.0, 1.0);
 			gl.glRotated(rotateX, 1.0, 0.0, 0.0);
 			gl.glRotated(rotateY, 0.0, 1.0, 0.0);
-
 	}
 
 	protected void setTextTweenParameter(GL gl) {
-
 			gl.glTranslated(x, y, z);
 			gl.glScaled(scaleX, scaleY, scaleZ);
 			gl.glRotated(rotate, 0.0, 0.0, 1.0);
 			gl.glRotated(rotateX, 1.0, 0.0, 0.0);
 			gl.glRotated(rotateY, 0.0, 1.0, 0.0);
-
 	}
 
 	public double gettAS() {
@@ -450,11 +444,8 @@ abstract public class Element implements Cloneable, Renderable {
 		mouseEventCallbacks.add(callback);
 	}
 
-	public ArrayList<MouseEventCallback> getMouseOverCallback() {
-		if (mouseEventCallbacks == null)
-			return null;
-		else
-			return mouseEventCallbacks;
+	public List<MouseEventCallback> getMouseOverCallback() {
+	    return mouseEventCallbacks;
 	}
 
 	public void callMouseOverCallback(boolean b) {
@@ -463,16 +454,13 @@ abstract public class Element implements Cloneable, Renderable {
 				MouseOverCallback mOver = (MouseOverCallback) mouseEventCallbacks
 						.get(i);
 				if (b == true) {
-					if (mouseover == false) {
-						mOver.run(
-								MouseEventCallback.MouseOverTypes.ENTERED, this);
+					if (mouseOver == false) {
+						mOver.run(MouseEventCallback.MouseOverTypes.ENTERED, this);
 					}
-					mOver.run(
-							MouseEventCallback.MouseOverTypes.EXISTED, this);
-					mouseover = true;
+					mOver.run(MouseEventCallback.MouseOverTypes.EXISTED, this);
+					mouseOver = true;
 				} else {
-					mOver.run(
-							MouseEventCallback.MouseOverTypes.EXITED, this);
+					mOver.run(MouseEventCallback.MouseOverTypes.EXITED, this);
 				}
 			}
 		}
@@ -511,35 +499,34 @@ abstract public class Element implements Cloneable, Renderable {
 			ce.printStackTrace();
 		}
 		return null;
-
 	}
 
 	public boolean isMouseover() {
-		return mouseover;
+		return mouseOver;
 	}
 
 	public void setMouseover(boolean bool) {
-		mouseover = bool;
+		mouseOver = bool;
 	}
 
 	public boolean isPreMouseover() {
-		return premouseover;
+		return preMouseOver;
 	}
 
 	public void setPreMouseover(boolean bool) {
-		premouseover = bool;
+		preMouseOver = bool;
 	}
 
 	public void visible() {
 		visible = true;
 	}
 
-	public boolean isvisible() {
-		return visible;
-	}
-
 	public void hidden() {
-		visible = false;
+        visible = false;
+    }
+	
+	public boolean isVisible() {
+		return visible;
 	}
 
 	public boolean isGradation() {
@@ -551,26 +538,22 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public boolean isSelectionbuffer() {
-		return selectionbuffer;
+		return selectionBuffer;
 	}
 
 	public void setSelectionbuffer(boolean selectionbuffer) {
-		this.selectionbuffer = selectionbuffer;
+		this.selectionBuffer = selectionbuffer;
 	}
 
 	public Mask getMask() {
 		return mask;
 	}
 
-	public boolean isMasked() {
-		if (mask == null)
-			return false;
-		else
-			return true;
-	}
-
 	public void setMask(Mask mask) {
 		this.mask = mask;
 	}
-
+	
+	public boolean isMasked() {
+        return mask != null;
+    }
 }

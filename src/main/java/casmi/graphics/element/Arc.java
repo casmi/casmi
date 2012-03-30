@@ -24,6 +24,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -192,8 +193,8 @@ public class Arc extends Element implements Renderable {
 	 */
 	public Arc(Vertex v, double r, double radStart, double radEnd,
 			double precision) {
-		this.x = v.x;
-		this.y = v.y;
+		this.x = v.getX();
+		this.y = v.getY();
 		this.w = r * 2;
 		this.h = r * 2;
 		this.radStart = radStart;
@@ -216,8 +217,8 @@ public class Arc extends Element implements Renderable {
 	 *            The end degree of the Arc.
 	 */
 	public Arc(Vertex v, double r, double radStart, double radEnd) {
-		this.x = v.x;
-		this.y = v.y;
+		this.x = v.getX();
+		this.y = v.getY();
 		this.w = r * 2;
 		this.h = r * 2;
 		this.radStart = radStart;
@@ -279,13 +280,13 @@ public class Arc extends Element implements Renderable {
 
 	@Override
 	public void render(GL gl, GLU glu, int width, int height) {
-
 		if (precision <= 0.0) {
 			precision = 5.0;
 		}
 
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() != 1.0 || this.strokeColor.getAlpha() != 1.0) {
 			gl.glDisable(GL.GL_DEPTH_TEST);
+		}
 
 		gl.glPushMatrix();
 		this.setTweenParameter(gl);
@@ -334,8 +335,9 @@ public class Arc extends Element implements Renderable {
 
 		gl.glPopMatrix();
 
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() != 1.0 || this.strokeColor.getAlpha() != 1.0) {
 			gl.glEnable(GL.GL_DEPTH_TEST);
+		}
 	}
 
 	/**
@@ -457,32 +459,33 @@ public class Arc extends Element implements Renderable {
 		return this.w / 2;
 	}
 
-	public void setCenterColor(ColorSet centercolor) {
-		if (centerColor == null)
-			centerColor = new Color(0, 0, 0);
-		setGradation(true);
-		this.centerColor = Color.color(centercolor);
-	}
-
-	public void setEdgeColor(ColorSet edgecolor) {
-		if (centerColor == null)
-			edgeColor = new Color(0, 0, 0);
-		setGradation(true);
-		this.edgeColor = Color.color(edgecolor);
-	}
-
 	public void setCenterColor(Color color) {
-		if (centerColor == null)
-			centerColor = new Color(0, 0, 0);
+        if (centerColor == null) {
+            centerColor = new RGBColor(0.0, 0.0, 0.0);
+        }
+        setGradation(true);
+        this.centerColor = color;
+    }
+	
+	public void setCenterColor(ColorSet colorSet) {
+		if (this.centerColor == null) {
+			this.centerColor = new RGBColor(0.0, 0.0, 0.0);
+		}
 		setGradation(true);
-		this.centerColor = color;
+		this.centerColor = RGBColor.color(colorSet);
 	}
 
 	public void setEdgeColor(Color color) {
-		if (centerColor == null)
-			edgeColor = new Color(0, 0, 0);
+        if (edgeColor == null)
+            edgeColor = new RGBColor(0.0, 0.0, 0.0);
+        setGradation(true);
+        this.edgeColor = color;
+    }
+	
+	public void setEdgeColor(ColorSet colorSet) {
+		if (edgeColor == null)
+			edgeColor = new RGBColor(0.0, 0.0, 0.0);
 		setGradation(true);
-		this.edgeColor = color;
+		this.edgeColor = RGBColor.color(colorSet);
 	}
-
 }

@@ -20,6 +20,11 @@ package casmi.extension.coni.listener;
 
 import casmi.extension.coni.CONI;
 
+/**
+ * PoseDetectionListener interface.
+ * 
+ * @author T. Takeuchi
+ */
 public interface PoseDetectionListener {
     
     void outOfPose(CONI coni);

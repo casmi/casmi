@@ -43,10 +43,7 @@ public class Texture extends Element implements Renderable {
     public static final int LINES_3D  = 3;
     public static final int LINE_LOOP = 51;
     
-    public enum TextureFlipMode {Horizontal,Vertical};
-    public enum TextureRotationMode {Half,FrontRight,BackRight};
-
-    protected final Image image;
+    protected Image image;
     private Image mask;
     private Image maskedImage;
     
@@ -65,7 +62,7 @@ public class Texture extends Element implements Renderable {
     private ArrayList<Double> nx;
     private ArrayList<Double> ny;
 
-    private Vertex tmpv = new Vertex();
+    private Vertex tmpV = new Vertex();
     
     protected boolean reloadFlag = false;    
 
@@ -128,6 +125,10 @@ public class Texture extends Element implements Renderable {
 		}
 		
 	}
+	
+	public void setTexture(Texture texture){
+		this.image = texture.image;
+	}
 
 
 
@@ -150,24 +151,24 @@ public class Texture extends Element implements Renderable {
 
     public void addVertex(Vertex v, double nx, double ny) {
         mode = LINES_3D;
-        this.xList.add(v.x);
-        this.yList.add(v.y);
-        this.zList.add(v.z);
+        this.xList.add(v.getX());
+        this.yList.add(v.getY());
+        this.zList.add(v.getZ());
         this.nx.add(nx);
         this.ny.add(ny);
     }
 
     public Vertex getVertex(int i) {
-        tmpv.x = xList.get(i);
-        tmpv.y = yList.get(i);
-        tmpv.z = zList.get(i);
-        return tmpv;
+        tmpV.setX(xList.get(i));
+        tmpV.setY(yList.get(i));
+        tmpV.setZ(zList.get(i));
+        return tmpV;
     }
     
-    public Vertex getTextureVertex(int i){
-    	tmpv.x = nx.get(i);
-    	tmpv.y = ny.get(i);
-    	return tmpv;
+    public Vertex getTextureVertex(int i) {
+    	tmpV.setX(nx.get(i));
+    	tmpV.setY(ny.get(i));
+    	return tmpV;
     }
 
     public void removeVertex(int i) {
@@ -342,19 +343,19 @@ public class Texture extends Element implements Renderable {
 	public void rotation(TextureRotationMode mode){
 		float[][] tmp = (float[][])corner.clone();
 		switch (mode) {
-		case Half:
+		case HALF:
 			corner[0] = tmp[2];
 			corner[1] = tmp[3];
 			corner[2] = tmp[0];
 			corner[3] = tmp[1];
 			break;
-		case FrontRight:
+		case FRONT_RIGHT:
 			corner[0] = tmp[3];
 			corner[1] = tmp[0];
 			corner[2] = tmp[1];
 			corner[3] = tmp[2];
 			break;
-		case BackRight:
+		case BACK_RIGHT:
 			corner[0] = tmp[1];
 			corner[1] = tmp[2];
 			corner[2] = tmp[3];
@@ -368,13 +369,13 @@ public class Texture extends Element implements Renderable {
 	public void flip(TextureFlipMode mode){
 		float[][] tmp = (float[][])corner.clone();
 		switch (mode) {
-		case Vertical:
+		case VERTICAL:
 			corner[0] = tmp[1];
 			corner[1] = tmp[0];
 			corner[2] = tmp[3];
 			corner[3] = tmp[2];
 			break;
-		case Horizontal:
+		case HORIZONTAL:
 			corner[0] = tmp[3];
 			corner[1] = tmp[2];
 			corner[2] = tmp[1];
@@ -394,8 +395,6 @@ public class Texture extends Element implements Renderable {
 		return corner[index1][index2];
 	}
 	
-
-	
 	public void enableMask(){
 		masking = true;
 	}
@@ -403,6 +402,4 @@ public class Texture extends Element implements Renderable {
 	public void disableMask(){
 		masking = false;
 	}
-	
-	
 }

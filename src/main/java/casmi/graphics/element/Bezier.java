@@ -24,6 +24,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -35,15 +36,15 @@ import casmi.matrix.Vertex;
  */
 public class Bezier extends Element implements Renderable {
 
-    private float points[] = {
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    private double points[] = {
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
     };
 
     private int detail = 30;
     
     private Color startColor;
     private Color endColor;
-    private Color gradationColor = new Color(0,0,0);
+    private Color gradationColor = new RGBColor(0.0, 0.0, 0.0);
 
     /**
      * Creates a new Bezier object using coordinates for the anchor and control points.
@@ -57,48 +58,14 @@ public class Bezier extends Element implements Renderable {
      * @param x4,y4
      *            The coordinates for the second ancor point.
      */
-    public Bezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
-        this.points[0] = x1;
-        this.points[1] = y1;
-        this.points[2] = 0;
-        this.points[3] = x2;
-        this.points[4] = y2;
-        this.points[5] = 0;
-        this.points[6] = x3;
-        this.points[7] = y3;
-        this.points[8] = 0;
-        this.points[9] = x4;
-        this.points[10] = y4;
-        this.points[11] = 0;
-        set();
-    }
-
-    /**
-     * Creates a new Bezier object using coordinates for the anchor and control points.
-     * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     * @param x3,y3
-     *            The coordinates for the second control point.
-     * @param x4,y4
-     *            The coordinates for the second ancor point.
-     */
-    public Bezier(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
-        this.points[0] = (float)x1;
-        this.points[1] = (float)y1;
-        this.points[2] = 0;
-        this.points[3] = (float)x2;
-        this.points[4] = (float)y2;
-        this.points[5] = 0;
-        this.points[6] = (float)x3;
-        this.points[7] = (float)y3;
-        this.points[8] = 0;
-        this.points[9] = (float)x4;
-        this.points[10] = (float)y4;
-        this.points[11] = 0;
-        set();
+    public Bezier(double x1, double y1, 
+                  double x2, double y2,
+                  double x3, double y3,
+                  double x4, double y4) {
+        this(x1, y1, 0.0,
+             x2, y2, 0.0,
+             x3, y3, 0.0,
+             x4, y4, 0.0);
     }
 
     /**
@@ -113,48 +80,29 @@ public class Bezier extends Element implements Renderable {
      * @param x4,y4,z4
      *            The coordinates for the second ancor point.
      */
-    public Bezier(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) {
-        this.points[0] = x1;
-        this.points[1] = y1;
-        this.points[2] = z1;
-        this.points[3] = x2;
-        this.points[4] = y2;
-        this.points[5] = z2;
-        this.points[6] = x3;
-        this.points[7] = y3;
-        this.points[8] = z3;
-        this.points[9] = x4;
+    public Bezier(double x1, double y1, double z1, 
+                  double x2, double y2, double z2,
+                  double x3, double y3, double z3,
+                  double x4, double y4, double z4) {
+        this.points[0]  = x1;
+        this.points[1]  = y1;
+        this.points[2]  = z1;
+        this.points[3]  = x2;
+        this.points[4]  = y2;
+        this.points[5]  = z2;
+        this.points[6]  = x3;
+        this.points[7]  = y3;
+        this.points[8]  = z3;
+        this.points[9]  = x4;
         this.points[10] = y4;
         this.points[11] = z4;
         set();
     }
-
-    /**
-     * Creates a new Bezier object using coordinates for the anchor and control points.
-     * 
-     * @param x1,y1,z1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2,z2
-     *            The coordinates for the first control point.
-     * @param x3,y3,z3
-     *            The coordinates for the second control point.
-     * @param x4,y4,z4
-     *            The coordinates for the second ancor point.
-     */
-    public Bezier(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4) {
-        this.points[0] = (float)x1;
-        this.points[1] = (float)y1;
-        this.points[2] = (float)z1;
-        this.points[3] = (float)x2;
-        this.points[4] = (float)y2;
-        this.points[5] = (float)z2;
-        this.points[6] = (float)x3;
-        this.points[7] = (float)y3;
-        this.points[8] = (float)z3;
-        this.points[9] = (float)x4;
-        this.points[10] = (float)y4;
-        this.points[11] = (float)z4;
-        set();
+    
+    private final void set() {
+        x = this.points[0];
+        y = this.points[1];
+        z = this.points[2];
     }
     
     /**
@@ -170,126 +118,96 @@ public class Bezier extends Element implements Renderable {
      *            The coordinates for the second ancor point.
      */
     public Bezier(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
-        this.points[0] = (float)v1.x;
-        this.points[1] = (float)v1.y;
-        this.points[2] = (float)v1.z;
-        this.points[3] = (float)v2.x;
-        this.points[4] = (float)v2.y;
-        this.points[5] = (float)v2.z;
-        this.points[6] = (float)v3.x;
-        this.points[7] = (float)v3.y;
-        this.points[8] = (float)v3.z;
-        this.points[9] = (float)v4.x;
-        this.points[10] = (float)v4.y;
-        this.points[11] = (float)v4.z;
+        this(v1.getX(), v1.getY(), v1.getZ(),
+             v2.getX(), v2.getY(), v2.getZ(),
+             v3.getX(), v3.getY(), v3.getZ(),
+             v4.getX(), v4.getY(), v4.getZ());
+    }
+    
+    public void setNode(int number, double x, double y) {
+        setNode(number, x, y, 0.0);
+    }
+
+    public void setNode(int number, double x, double y, double z) {
+        if (number <= 0) {
+            number = 0;
+        } else if (3 <= number) {
+            number = 3;
+        }
+        this.points[number * 3]     = x;
+        this.points[number * 3 + 1] = y;
+        this.points[number * 3 + 2] = z;
         set();
     }
-    
-    public void setNode(int number, double x, double y){
-    	if(number<=0)
-    		number = 0;
-    	if(number>=3)
-    		number = 3;
-    	this.points[number*3] = (float)x;
-    	this.points[number*3+1] = (float)y;
-    	this.points[number*3+2] = 0;
-    	set();
-    }
-    
-    public void setNode(int number, double x, double y, double z){
-    	if(number<=0)
-    		number = 0;
-    	if(number>=3)
-    		number = 3;
-    	this.points[number*3] = (float)x;
-    	this.points[number*3+1] = (float)y;
-    	this.points[number*3+2] = (float)z;
-    	set();
-    }
-    
-    public void setNode(int number, Vertex v){
-    	if(number<=0)
-    		number = 0;
-    	if(number>=3)
-    		number = 3;
-    	this.points[number*3] = (float)v.x;
-    	this.points[number*3+1] = (float)v.y;
-    	this.points[number*3+2] = (float)v.z;
-    	set();
+
+    public void setNode(int number, Vertex v) {
+        setNode(number, v.getX(), v.getY(), v.getZ());
     }
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() != 1.0 || this.strokeColor.getAlpha() != 1.0) {
             gl.glDisable(GL.GL_DEPTH_TEST);
+        }
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
-        gl.glTranslated(-this.points[0],-this.points[1], -this.points[2]);
-        if (this.fill) {
+        {
+            this.setTweenParameter(gl);
+            gl.glTranslated(-this.points[0], -this.points[1], -this.points[2]);
+            
+            if (this.fill) {
+                getSceneFillColor().setup(gl);
 
-            getSceneFillColor().setup(gl);
+                gl.glMap1d(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
+                gl.glEnable(GL.GL_MAP1_VERTEX_3);
+                gl.glBegin(GL.GL_TRIANGLE_FAN);
 
-            gl.glMap1f(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.FloatBuffer.wrap(points));
-            gl.glEnable(GL.GL_MAP1_VERTEX_3);
-            gl.glBegin(GL.GL_TRIANGLE_FAN);
-
-            for (int i = 0; i <= detail; i++){
-                if (i == 0 && isGradation() == true && startColor != null)
-                    getSceneColor(this.startColor).setup(gl);
-                if (i == detail && isGradation() == true && endColor != null)
-                    getSceneColor(this.endColor).setup(gl);
-                if (i != 0 && i != detail && isGradation() && endColor != null && startColor != null) {
-                    gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double)detail));
-                    getSceneColor(this.gradationColor).setup(gl);
+                for (int i = 0; i <= detail; i++) {
+                    if (i == 0 && isGradation() == true && startColor != null)
+                        getSceneColor(this.startColor).setup(gl);
+                    if (i == detail && isGradation() == true && endColor != null)
+                        getSceneColor(this.endColor).setup(gl);
+                    if (i != 0 && i != detail && isGradation() && endColor != null && startColor != null) {
+                        gradationColor = RGBColor.lerpColor(this.startColor, this.endColor, (i / (double)detail));
+                        getSceneColor(this.gradationColor).setup(gl);
+                    }
+                    gl.glEvalCoord1f((float)(i / (float)detail));
                 }
-                gl.glEvalCoord1f((float)(i / (float)detail));
+
+                gl.glEnd();
+                gl.glDisable(GL.GL_MAP1_VERTEX_3);
             }
 
-            gl.glEnd();
-            gl.glDisable(GL.GL_MAP1_VERTEX_3);
-        }
+            if (this.stroke) {
+                getSceneStrokeColor().setup(gl);
 
-        if (this.stroke) {
+                gl.glMap1d(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
+                gl.glEnable(GL.GL_MAP1_VERTEX_3);
+                gl.glBegin(GL.GL_LINE_STRIP);
 
-            getSceneStrokeColor().setup(gl);
-
-            gl.glMap1f(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.FloatBuffer.wrap(points));
-            gl.glEnable(GL.GL_MAP1_VERTEX_3);
-            gl.glBegin(GL.GL_LINE_STRIP);
-
-            for (int i = 0; i <= detail; i++) {
-                if (i == 0 && isGradation()&& startColor != null)
-                    getSceneColor(this.startColor).setup(gl);
-                if (i == detail && isGradation() && endColor != null)
-                    getSceneColor(this.endColor).setup(gl);
-                if (i != 0 && i != detail && isGradation() && endColor != null && startColor != null) {
-                    gradationColor = Color.lerpColor(this.startColor, this.endColor, (i / (double)detail));
-                    getSceneColor(this.gradationColor).setup(gl);
+                for (int i = 0; i <= detail; i++) {
+                    if (i == 0 && isGradation() && startColor != null)
+                        getSceneColor(this.startColor).setup(gl);
+                    if (i == detail && isGradation() && endColor != null)
+                        getSceneColor(this.endColor).setup(gl);
+                    if (i != 0 && i != detail && isGradation() && endColor != null && startColor != null) {
+                        gradationColor = RGBColor.lerpColor(this.startColor, this.endColor, (i / (double)detail));
+                        getSceneColor(this.gradationColor).setup(gl);
+                    }
+                    gl.glEvalCoord1f((float)(i / (float)detail));
                 }
-                gl.glEvalCoord1f((float)(i / (float)detail));
+                gl.glEnd();
+                gl.glDisable(GL.GL_MAP1_VERTEX_3);
             }
-            gl.glEnd();
-            gl.glDisable(GL.GL_MAP1_VERTEX_3);
-        }
 
-        gl.glTranslated(this.points[0],this.points[1], this.points[2]);
+            gl.glTranslated(this.points[0], this.points[1], this.points[2]);
+        }
         gl.glPopMatrix();
         
-        if(this.fillColor.getA()!=1||this.strokeColor.getA()!=1)
+        if (this.fillColor.getAlpha() != 1.0 || this.strokeColor.getAlpha() != 1.0) {
             gl.glEnable(GL.GL_DEPTH_TEST);
-
+        }
     }
-
-//    public void bezierPoint(float t) {
-//        float tmp = 0;
-//        gl.glMap1f(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.FloatBuffer.wrap(points));
-//        gl.glEnable(GL.GL_MAP1_VERTEX_3);
-//        gl.glEvalCoord1f(t);
-//        gl.glDisable(GL.GL_MAP1_VERTEX_3);
-//    }
-
     
     /**
      * Returns the detail of this Bezier.
@@ -308,40 +226,23 @@ public class Bezier extends Element implements Renderable {
         detail = d;
     }
     
-    private void set(){
-    	x = this.points[0];
-    	y = this.points[1];
-    	z = this.points[2];
+    public void setAnchorColor(int index, Color color) {
+        if (index == 0) {
+            if (startColor == null) {
+                startColor = new RGBColor(0.0, 0.0, 0.0);
+            }
+            setGradation(true);
+            this.startColor = color;
+        } else if (index == 1) {
+            if (endColor == null) {
+                endColor = new RGBColor(0.0, 0.0, 0.0);
+            }
+            setGradation(true);
+            this.endColor = color;
+        }
     }
     
-    public void setAnchorColor(int index,ColorSet colorset){
-    	if(index==0){
-    	if(startColor == null)
-			startColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.startColor = Color.color(colorset);
-    	}
-    	if(index==1){
-        	if(endColor == null)
-    			endColor = new Color(0,0,0);
-        	setGradation(true);
-        	this.endColor = Color.color(colorset);
-        	}
+    public void setAnchorColor(int index, ColorSet colorSet) {
+        setAnchorColor(index, new RGBColor(colorSet));
     }
-    
-    public void setAnchorColor(int index,Color color){
-    	if(index==0){
-    	if(startColor == null)
-			startColor = new Color(0,0,0);
-    	setGradation(true);
-    	this.startColor = color;
-    	}
-    	if(index==1){
-        	if(endColor == null)
-    			endColor = new Color(0,0,0);
-        	setGradation(true);
-        	this.endColor = color;
-		}
-	}
-
 }

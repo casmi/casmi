@@ -22,7 +22,14 @@ package casmi.graphics.element;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+/**
+ * Renderable interface for graphics object.
+ * 
+ * @author Y. Ban
+ */
 public interface Renderable {
+    
     void render(GL gl, GLU glu, int width, int height);
+    
     void setAlpha(double alpha);
 }

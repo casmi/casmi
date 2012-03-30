@@ -21,6 +21,13 @@ package casmi.extension.coni.listener;
 import casmi.extension.coni.CONI;
 import casmi.extension.coni.CalibrationStatus;
 
+/**
+ * SkeletonListener interface.
+ * <p>
+ * Implement if you want to use skeleton tracking.
+ * 
+ * @author T. Takeuchi
+ */
 public interface SkeletonListener {
     
     void calibrationComplete(CONI coni, int userID, CalibrationStatus status);

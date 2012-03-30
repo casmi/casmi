@@ -28,6 +28,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Renderable;
 import casmi.graphics.group.GroupRender;
 import casmi.graphics.object.ObjectRender;
@@ -46,8 +47,8 @@ import com.sun.opengl.util.GLUT;
  */
 public class Graphics {
 
-	private GL gl;
-	private GLU glu;
+	private GL   gl;
+	private GLU  glu;
 	private GLUT glut;
 
 	private int width;
@@ -56,29 +57,28 @@ public class Graphics {
 
 	private static List<Image> textureImages = new CopyOnWriteArrayList<Image>();
 
-	public void render(Renderable r) {
-		r.setAlpha(sceneAlpha);
-		if(r instanceof GroupRender){
-			GroupRender gr = (GroupRender)r;
-			gr.render(this);
-		} else if(r instanceof ObjectRender){
-			ObjectRender or = (ObjectRender)r;
-			or.render(this);
-		}
-		else{
-		r.render(this.gl, this.glu, this.width, this.height);
-		}
+    public void render(Renderable r) {
+        r.setAlpha(sceneAlpha);
+        if (r instanceof GroupRender) {
+            GroupRender gr = (GroupRender)r;
+            gr.render(this);
+        } else if (r instanceof ObjectRender) {
+            ObjectRender or = (ObjectRender)r;
+            or.render(this);
+        } else {
+            r.render(this.gl, this.glu, this.width, this.height);
+        }
 	}
 	
-/*public void render(ObjectRender or, boolean b){
-		or.render(this,b);
-	}
-	*/
-	public void render(TimelineRender tr){
+//	public void render(ObjectRender or, boolean b){
+//		or.render(this,b);
+//	}
+	
+	public void render(TimelineRender tr) {
 		tr.render(this);
 	}
 	
-	public void render(TweenManager tm){
+	public void render(TweenManager tm) {
 		tm.render(this);
 	}
 	
@@ -188,39 +188,42 @@ public class Graphics {
 	/**
      *Sets the background to a RGB or HSB and alpha value.
      *
-     * @param c 
+     * @param color 
      *            The RGB or HSB value of the background.
      */
-	public void background(Color c) {
-	    c.calcColor();
-	    gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), (float) (c.getNormalA()*sceneAlpha));
+	public void background(Color color) {
+	    gl.glClearColor((float)color.getRed(), 
+	                    (float)color.getGreen(),
+	                    (float)color.getBlue(),
+	                    (float)(color.getAlpha() * sceneAlpha));
 	}
 	
-	public void background(ColorSet colorset){
-		Color c = Color.color(colorset);
-		 c.calcColor();
-		 gl.glClearColor(c.getNormalR(), c.getNormalG(), c.getNormalB(), (float) (c.getNormalA()*sceneAlpha));
-		
+	public void background(ColorSet colorset) {
+		Color color = RGBColor.color(colorset);
+		background(color);
 	}
 	
 	
-	public void setcolor(Color c){
-		c.calcColor();
-		gl.glColor4d(c.getNormalR(), c.getNormalG(), c.getNormalB(), c.getNormalA()*sceneAlpha);
+	public void setcolor(Color color) {
+		gl.glColor4d(color.getRed(),
+		             color.getGreen(),
+		             color.getBlue(),
+		             color.getAlpha() * sceneAlpha);
 	}
 	
-	public void setcolor(float gray){
-		//System.out.println(sceneAlpha);
-		gl.glColor4d(gray/255.0f, gray/255.0f, gray/255.0f, 1.0*sceneAlpha);
+	public void setcolor(float gray) {
+		gl.glColor4d(gray / 255.0, gray / 255.0, gray / 255.0, sceneAlpha);
 	}
 	
-	public void setcolor(int x, int y, int z, int a){
-		Color c = new Color(x, y, z, a);
-		c.calcColor();
-		gl.glColor4d(c.getNormalR(), c.getNormalG(), c.getNormalB(), c.getNormalA()*sceneAlpha);
+	public void setcolor(int x, int y, int z, int a) {
+		Color color = new RGBColor(x / 255.0, y / 255.0, z / 255.0, a / 255.0);
+		gl.glColor4d(color.getRed(),
+		             color.getGreen(),
+		             color.getBlue(),
+		             color.getAlpha() * sceneAlpha);
 	}
 	
-	public void setcolor(int x, int y, int z){
+	public void setcolor(int x, int y, int z) {
 		setcolor(x, y, z, 255);
 	}
 	
@@ -389,7 +392,7 @@ public class Graphics {
      */
 	public void ambientLight(float r, float g, float b, Vertex v) {
 		float ambient[] = { r, g, b, 255 };
-		float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
 		normalize(ambient);
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
@@ -400,10 +403,13 @@ public class Graphics {
 	/**
      * Sets the color value of the ambientLight
      */
-	public void ambientLight(Color c) {
-		c.calcColor();
-		float ambient[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
+	public void ambientLight(Color color) {
+		float ambient[] = {
+		    (float)color.getRed(),
+		    (float)color.getGreen(),
+		    (float)color.getBlue(),
+		    (float)color.getAlpha() 
+		};
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
@@ -412,11 +418,19 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the ambientLight
      */
-	public void ambientLight(Color c, Vertex v) {
-        c.calcColor();
-        float ambient[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-                c.getNormalA() };
-        float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+	public void ambientLight(Color color, Vertex v) {
+	    float ambient[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
+        float position[] = { 
+            (float)v.getX(), 
+            (float)v.getY(),
+            (float)v.getZ(),
+            1.0f 
+        };
         gl.glEnable(GL.GL_LIGHTING);
         gl.glEnable(GL.GL_LIGHT0);
         gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position, 0);
@@ -453,7 +467,7 @@ public class Graphics {
      */
 	public void ambientLight(int i, float r, float g, float b, Vertex v) {
 		float ambient[] = { r, g, b, 255 };
-		float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
 		normalize(ambient);
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
@@ -464,10 +478,13 @@ public class Graphics {
 	/**
      * Sets the color value of the No.i ambientLight
      */
-	public void ambientLight(int i, Color c) {
-		c.calcColor();
-		float ambient[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
+	public void ambientLight(int i, Color color) {
+	    float ambient[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_AMBIENT, ambient, 0);
@@ -476,11 +493,14 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i ambientLight
      */
-	public void ambientLight(int i, Color c, Vertex v) {
-        c.calcColor();
-        float ambient[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-                c.getNormalA() };
-        float position[] = { (float) v.x, (float) v.y, (float) v.z, 1.0f };
+	public void ambientLight(int i, Color color, Vertex v) {
+	    float ambient[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
+        float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
         gl.glEnable(GL.GL_LIGHTING);
         gl.glEnable(GL.GL_LIGHT0 + i);
         gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, position, 0);
@@ -490,74 +510,98 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i directionalLight
      */
-	public void directionalLight(int i, Color c, float x, float y, float z) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
+	public void directionalLight(int i, Color color, float x, float y, float z) {
+		float directionalColor[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
 		float pos[] = { x, y, z, 0 };
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, color, 0);
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, directionalColor, 0);
 	}
 
 	/**
      * Sets the color value and the position of the No.i directionalLight
      */
-	public void directionalLight(int i, Color c, Vertex v) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
-		float pos[] = { (float) v.x, (float) v.y, (float) v.z, 0 };
+	public void directionalLight(int i, Color color, Vertex v) {
+	    float directionalColor[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
+		float pos[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 0.0f };
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, color, 0);
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, directionalColor, 0);
 	}
 
 	/**
      * Sets the color value and the position of the No.i pointLight
      */
-	public void pointLight(int i, Color c, float x, float y, float z) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
+	public void pointLight(int i, Color color, float x, float y, float z) {
+	    float pointColor[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
 		float pos[] = { x, y, z, 0 };
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, color, 0);
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, pointColor, 0);
 	}
 
 	/**
      * Sets the color value and the position of the No.i pointLight
      */
-	public void pointLight(int i, Color c, Vertex v) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
-		float pos[] = { (float) v.x, (float) v.y, (float) v.z, 0 };
+	public void pointLight(int i, Color color, Vertex v) {
+	    float pointColor[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
+		float pos[] = { 
+		    (float)v.getX(),
+		    (float)v.getY(),
+		    (float)v.getZ(),
+		    0.0f
+		};
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, color, 0);
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, pointColor, 0);
 	}
 
 	/**
      * Sets the color value, position, direction and the angle of the spotlight cone of the No.i spotLight
      */
-	public void spotLight(int i, Color c, Vertex v, float nx, float ny,
-			float nz, float angle) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
-		float pos[] = { (float) v.x, (float) v.y, (float) v.z, 0 };
+	public void spotLight(int i, Color color, Vertex v, float nx, float ny,	float nz, float angle) {
+	    float spotColor[] = {
+            (float)color.getRed(),
+            (float)color.getGreen(),
+            (float)color.getBlue(),
+            (float)color.getAlpha() 
+        };
+		float pos[] = { 
+		    (float)v.getX(),
+		    (float)v.getY(),
+		    (float)v.getZ(),
+		    0.0f
+		};
 		float direction[] = { nx, ny, nz };
 		float a[] = { angle };
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0 + i);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, color, 0);
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, spotColor, 0);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPOT_DIRECTION, direction, 0);
 		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPOT_CUTOFF, a, 0);
 	}
@@ -579,30 +623,36 @@ public class Graphics {
 	/**
 	 * Sets the specular color for No.i light. 
 	 */
-	public void lightSpecular(int i, Color c) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPECULAR, color, 0);
+	public void lightSpecular(int i, Color color) {
+		float[] tmpColor = { 
+		    (float)color.getRed(), 
+		    (float)color.getGreen(), 
+		    (float)color.getBlue(),
+		    (float)color.getAlpha()
+		};
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPECULAR, tmpColor, 0);
 	}
 
 	/**
      * Sets the diffuse color for No.i light. 
      */
-	public void lightDiffuse(int i, Color c) {
-		c.calcColor();
-		float color[] = { c.getNormalR(), c.getNormalG(), c.getNormalB(),
-				c.getNormalA() };
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, color, 0);
+	public void lightDiffuse(int i, Color color) {
+	    float[] tmpColor = { 
+            (float)color.getRed(), 
+            (float)color.getGreen(), 
+            (float)color.getBlue(),
+            (float)color.getAlpha()
+        };
+		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, tmpColor, 0);
 	}
 
 	/**
 	 * Returns the array normalized from 0-255 to 0-1.0.
 	 */
-	public float[] normalize(float in[]) {
-		float out[] = new float[in.length];
+	public float[] normalize(float[] in) {
+		float[] out = new float[in.length];
 		for (int i = 0; i < in.length; i++) {
-			out[i] = (float) (in[i] / 255.0f);
+			out[i] = (float)(in[i] / 255.0f);
 		}
 		return out;
 	}
@@ -657,7 +707,7 @@ public class Graphics {
      * */
 	public void vertex(Vertex v, float nx, float ny) {
 		gl.glTexCoord2f(nx, ny);
-		gl.glVertex3d(v.x, v.y, v.z);
+		gl.glVertex3d(v.getX(), v.getY(), v.getZ());
 	}
 	
 	/**

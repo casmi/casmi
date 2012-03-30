@@ -66,10 +66,10 @@ class StatementGenerator {
         TYPE_TABLE.put(key1(SQLType.MYSQL_5,           null),     "NULL");
         TYPE_TABLE.put(key1(SQLType.MYSQL_5,      int.class),      "INT");
         TYPE_TABLE.put(key1(SQLType.MYSQL_5,  Integer.class),      "INT");
-        TYPE_TABLE.put(key1(SQLType.MYSQL_5,    short.class),      "INT");
-        TYPE_TABLE.put(key1(SQLType.MYSQL_5,    Short.class),      "INT");
-        TYPE_TABLE.put(key1(SQLType.MYSQL_5,     long.class),      "INT");
-        TYPE_TABLE.put(key1(SQLType.MYSQL_5,     Long.class),      "INT");
+        TYPE_TABLE.put(key1(SQLType.MYSQL_5,    short.class), "SMALLINT");
+        TYPE_TABLE.put(key1(SQLType.MYSQL_5,    Short.class), "SMALLINT");
+        TYPE_TABLE.put(key1(SQLType.MYSQL_5,     long.class),   "BIGINT");
+        TYPE_TABLE.put(key1(SQLType.MYSQL_5,     Long.class),   "BIGINT");
         TYPE_TABLE.put(key1(SQLType.MYSQL_5,    float.class),    "FLOAT");
         TYPE_TABLE.put(key1(SQLType.MYSQL_5,    Float.class),    "FLOAT");
         TYPE_TABLE.put(key1(SQLType.MYSQL_5,   double.class),   "DOUBLE");

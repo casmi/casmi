@@ -16,18 +16,20 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
-package casmi.graphics.color;
 
-public enum ColorMode {
+package casmi.graphics.element;
+
+/**
+ * Enum for texture rotation modes. 
+ * 
+ * @author T. Takeuchi
+ */
+public enum TextureRotationMode {
+
+    HALF,
     
-    RGB,
+    FRONT_RIGHT,
     
-    ARGB,
+    BACK_RIGHT,
     
-    HSB,
-    
-    ALPHA,
-    
-    CMYK
 }

@@ -25,6 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -35,7 +36,7 @@ import casmi.matrix.Vertex;
  */
 public class Triangle extends Element implements Renderable {
 
-	public static final int TRIANGLE = 0;
+	public static final int TRIANGLE    = 0;
 	public static final int TRIANGLE_3D = 4;
 
 	private double x1;
@@ -91,15 +92,15 @@ public class Triangle extends Element implements Renderable {
 	 */
 	public Triangle(Vertex v1, Vertex v2, Vertex v3) {
 		this.MODE = TRIANGLE_3D;
-		this.x1 = v1.x;
-		this.y1 = v1.y;
-		this.z1 = v1.z;
-		this.x2 = v2.x;
-		this.y2 = v2.y;
-		this.z1 = v2.z;
-		this.x3 = v3.x;
-		this.y3 = v3.y;
-		this.z1 = v3.z;
+		this.x1 = v1.getX();
+		this.y1 = v1.getY();
+		this.z1 = v1.getZ();
+		this.x2 = v2.getX();
+		this.y2 = v2.getY();
+		this.z1 = v2.getZ();
+		this.x3 = v3.getX();
+		this.y3 = v3.getY();
+		this.z1 = v3.getZ();
 		calcG();
 	}
 
@@ -180,15 +181,15 @@ public class Triangle extends Element implements Renderable {
 	 */
 	public void set(Vertex v1, Vertex v2, Vertex v3) {
 		this.MODE = TRIANGLE_3D;
-		this.x1 = v1.x;
-		this.y1 = v1.y;
-		this.z1 = v1.z;
-		this.x2 = v2.x;
-		this.y2 = v2.y;
-		this.z1 = v2.z;
-		this.x3 = v3.x;
-		this.y3 = v3.y;
-		this.z1 = v3.z;
+		this.x1 = v1.getX();
+		this.y1 = v1.getY();
+		this.z1 = v1.getZ();
+		this.x2 = v2.getX();
+		this.y2 = v2.getY();
+		this.z1 = v2.getZ();
+		this.x3 = v3.getX();
+		this.y3 = v3.getY();
+		this.z1 = v3.getZ();
 		calcG();
 	}
 
@@ -262,17 +263,17 @@ public class Triangle extends Element implements Renderable {
 
 	public void setConer(int number, Vertex v) {
 		if (number <= 0) {
-			this.x1 = v.x;
-			this.y1 = v.y;
-			this.z1 = v.z;
+			this.x1 = v.getX();
+			this.y1 = v.getY();
+			this.z1 = v.getZ();
 		} else if (number == 1) {
-			this.x2 = v.x;
-			this.y2 = v.y;
-			this.z2 = v.z;
-		} else if (number >= 2) {
-			this.x3 = v.x;
-			this.y3 = v.y;
-			this.z3 = v.z;
+			this.x2 = v.getX();
+			this.y2 = v.getY();
+			this.z2 = v.getZ();
+		} else if (2 <= number) {
+			this.x3 = v.getX();
+			this.y3 = v.getY();
+			this.z3 = v.getZ();
 		}
 		calcG();
 	}
@@ -292,136 +293,142 @@ public class Triangle extends Element implements Renderable {
 
 	@Override
 	public void render(GL gl, GLU glu, int width, int height) {
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glDisable(GL.GL_DEPTH_TEST);
-		if (this.enableTexture == true) {
+		}
+		
+		if (this.enableTexture) {
 			if (texture.reloadFlag) {
-				Graphics.reloadTextures();
-				texture.reloadFlag = false;
-			}
-			texture.enableTexture();
-		}
-		gl.glPushMatrix();
-		this.setTweenParameter(gl);
-		switch (MODE) {
-		case TRIANGLE:
+                Graphics.reloadTextures();
+                texture.reloadFlag = false;
+            }
+            texture.enableTexture();
+        }
 
-			if (this.fill) {
-				getSceneFillColor().setup(gl);
-				gl.glBegin(GL.GL_TRIANGLE_FAN);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[0]).setup(gl);
-				if (this.enableTexture == true)
-					gl.glTexCoord2f(texture.getTextureCorner(0, 0),
-							texture.getTextureCorner(0, 1));
-				gl.glVertex2d(x1 - x, y1 - y);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[1]).setup(gl);
-				if (this.enableTexture == true)
-					gl.glTexCoord2f(texture.getTextureCorner(1, 0),
-							texture.getTextureCorner(1, 1));
-				gl.glVertex2d(x2 - x, y2 - y);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[2]).setup(gl);
-				if (this.enableTexture == true)
-					gl.glTexCoord2f(texture.getTextureCorner(2, 0),
-							texture.getTextureCorner(2, 1));
-				gl.glVertex2d(x3 - x, y3 - y);
-				gl.glEnd();
-			}
+        gl.glPushMatrix();
+        {
+            this.setTweenParameter(gl);
+            switch (MODE) {
+            case TRIANGLE:
+                if (this.fill) {
+                    getSceneFillColor().setup(gl);
+                    gl.glBegin(GL.GL_TRIANGLE_FAN);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    if (this.enableTexture == true)
+                        gl.glTexCoord2f(texture.getTextureCorner(0, 0),
+                            texture.getTextureCorner(0, 1));
+                    gl.glVertex2d(x1 - x, y1 - y);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[1]).setup(gl);
+                    if (this.enableTexture == true)
+                        gl.glTexCoord2f(texture.getTextureCorner(1, 0),
+                            texture.getTextureCorner(1, 1));
+                    gl.glVertex2d(x2 - x, y2 - y);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[2]).setup(gl);
+                    if (this.enableTexture == true)
+                        gl.glTexCoord2f(texture.getTextureCorner(2, 0),
+                            texture.getTextureCorner(2, 1));
+                    gl.glVertex2d(x3 - x, y3 - y);
+                    gl.glEnd();
+                }
 
-			if (this.stroke) {
-				gl.glLineWidth(this.strokeWidth);
-				getSceneStrokeColor().setup(gl);
-				gl.glBegin(GL.GL_LINES);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[0]).setup(gl);
-				gl.glVertex2d(x1 - x, y1 - y);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[1]).setup(gl);
-				gl.glVertex2d(x2 - x, y2 - y);
-				gl.glEnd();
-				gl.glBegin(GL.GL_LINES);
-				gl.glVertex2d(x2 - x, y2 - y);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[2]).setup(gl);
-				gl.glVertex2d(x3 - x, y3 - y);
-				gl.glEnd();
-				gl.glBegin(GL.GL_LINES);
-				gl.glVertex2d(x1 - x, y1 - y);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[0]).setup(gl);
-				gl.glVertex2d(x3 - x, y3 - y);
-				gl.glEnd();
-			}
+                if (this.stroke) {
+                    gl.glLineWidth(this.strokeWidth);
+                    getSceneStrokeColor().setup(gl);
+                    gl.glBegin(GL.GL_LINES);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex2d(x1 - x, y1 - y);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[1]).setup(gl);
+                    gl.glVertex2d(x2 - x, y2 - y);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex2d(x2 - x, y2 - y);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[2]).setup(gl);
+                    gl.glVertex2d(x3 - x, y3 - y);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex2d(x1 - x, y1 - y);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex2d(x3 - x, y3 - y);
+                    gl.glEnd();
+                }
+                break;
 
-			break;
+            case TRIANGLE_3D:
+                if (this.fill) {
+                    this.fillColor.setup(gl);
+                    gl.glBegin(GL.GL_TRIANGLE_FAN);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex3d(x1 - x, y1 - y, z1);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[1]).setup(gl);
+                    gl.glVertex3d(x2 - x, y2 - y, z2);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[2]).setup(gl);
+                    gl.glVertex3d(x3 - x, y3 - y, z3);
+                    gl.glEnd();
+                }
 
-		case TRIANGLE_3D:
-
-			if (this.fill) {
-				this.fillColor.setup(gl);
-				gl.glBegin(GL.GL_TRIANGLE_FAN);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[0]).setup(gl);
-				gl.glVertex3d(x1 - x, y1 - y, z1);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[1]).setup(gl);
-				gl.glVertex3d(x2 - x, y2 - y, z2);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[2]).setup(gl);
-				gl.glVertex3d(x3 - x, y3 - y, z3);
-				gl.glEnd();
-			}
-
-			if (this.stroke) {
-				gl.glLineWidth(this.strokeWidth);
-				this.strokeColor.setup(gl);
-				gl.glBegin(GL.GL_LINES);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[0]).setup(gl);
-				gl.glVertex3d(x1 - x, y1 - y, z1);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[1]).setup(gl);
-				gl.glVertex3d(x2 - x, y2 - y, z2);
-				gl.glEnd();
-				gl.glBegin(GL.GL_LINES);
-				gl.glVertex3d(x2 - x, y2 - y, z2);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[2]).setup(gl);
-				gl.glVertex3d(x3 - x, y3 - y, z3);
-				gl.glEnd();
-				gl.glBegin(GL.GL_LINES);
-				gl.glVertex3d(x1 - x, y1 - y, z1);
-				if (isGradation() == true)
-					getSceneColor(cornerColor[0]).setup(gl);
-				gl.glVertex3d(x3 - x, y3 - y, z3);
-				gl.glEnd();
-			}
-
-			break;
-		default:
-			// do nothing
-			break;
-		}
+                if (this.stroke) {
+                    gl.glLineWidth(this.strokeWidth);
+                    this.strokeColor.setup(gl);
+                    gl.glBegin(GL.GL_LINES);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex3d(x1 - x, y1 - y, z1);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[1]).setup(gl);
+                    gl.glVertex3d(x2 - x, y2 - y, z2);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex3d(x2 - x, y2 - y, z2);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[2]).setup(gl);
+                    gl.glVertex3d(x3 - x, y3 - y, z3);
+                    gl.glEnd();
+                    gl.glBegin(GL.GL_LINES);
+                    gl.glVertex3d(x1 - x, y1 - y, z1);
+                    if (isGradation() == true)
+                        getSceneColor(cornerColor[0]).setup(gl);
+                    gl.glVertex3d(x3 - x, y3 - y, z3);
+                    gl.glEnd();
+                }
+                break;
+            default:
+                // do nothing
+                break;
+            }
+        }
 		gl.glPopMatrix();
 
-		if (this.enableTexture == true)
+		if (this.enableTexture) {
 			texture.disableTexture();
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		}
+		
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glEnable(GL.GL_DEPTH_TEST);
+		}
 	}
 
-	private void calcG() {
+	private final void calcG() {
 		x = (x1 + x2 + x3) / 3.0;
 		y = (y1 + y2 + y3) / 3.0;
 		z = (z1 + z2 + z3) / 3.0;
 	}
 
+	@Override
 	public void setPosition(double x, double y) {
 		setPosition(x, y, this.z);
 	}
 
+	@Override
 	public void setPosition(double x, double y, double z) {
 		x1 = x1 + x - this.x;
 		y1 = y1 + y - this.y;
@@ -436,9 +443,9 @@ public class Triangle extends Element implements Renderable {
 	}
 
 	public void setCornerColor(int index, Color color) {
-		if (isGradation() == false) {
+		if (!isGradation()) {
 			for (int i = 0; i < 3; i++) {
-				cornerColor[i] = new Color(0, 0, 0);
+				cornerColor[i] = new RGBColor(0.0, 0.0, 0.0);
 				cornerColor[i] = this.fillColor;
 			}
 			setGradation(true);
@@ -446,15 +453,7 @@ public class Triangle extends Element implements Renderable {
 		cornerColor[index] = color;
 	}
 
-	public void setCornerColor(int index, ColorSet colorset) {
-		if (isGradation() == false) {
-			for (int i = 0; i < 3; i++) {
-				cornerColor[i] = new Color(0, 0, 0);
-				cornerColor[i] = this.fillColor;
-			}
-			setGradation(true);
-		}
-		cornerColor[index] = Color.color(colorset);
+	public void setCornerColor(int index, ColorSet colorSet) {
+	    setCornerColor(index, new RGBColor(colorSet));
 	}
-
 }

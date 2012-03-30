@@ -439,27 +439,30 @@ abstract public class Entity {
         Field f;
 
         // primary key
-        try {
-            f = this.type.getDeclaredField(primaryKey.getName());
+        if (!autoPrimaryKey) {
+            try {
+                f = this.type.getDeclaredField(primaryKey.getName());
 
-            if (Modifier.isPublic(f.getModifiers())) {
-                f.set(this, primaryKey.getValue());
-            } else {
-                PropertyDescriptor pd = new PropertyDescriptor(f.getName(), this.type);
-                Method m = pd.getWriteMethod();
-                m.invoke(this, primaryKey.getValue());
+                if (Modifier.isPublic(f.getModifiers())) {
+                    f.set(this, primaryKey.getValue());
+                } else {
+                    PropertyDescriptor pd = new PropertyDescriptor(f.getName(), this.type);
+                    Method m = pd.getWriteMethod();
+                    m.invoke(this, primaryKey.getValue());
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IntrospectionException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
-        } catch (SecurityException e1) {
-            e1.printStackTrace();
-        } catch (NoSuchFieldException e1) {
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IntrospectionException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
         }
 
         // other fields
@@ -569,8 +572,21 @@ abstract public class Entity {
     }
 
     public String getTablename() {
-        
         return tablename;
+    }
+    
+    static final <T extends Entity> boolean isAutoPrimaryKey(Class<T> type) {
+        boolean autoPrimaryKey = true;
+        
+        for (Field f : type.getDeclaredFields()) {
+            if (f.getAnnotation(Ignore.class)     == null &&
+                f.getAnnotation(PrimaryKey.class) != null) {
+                autoPrimaryKey = false;
+                break;
+            }
+        }
+
+        return autoPrimaryKey;
     }
     
     static final <T extends Entity> String getPrimaryKeyField(Class<T> type) {

@@ -27,6 +27,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
@@ -37,8 +38,8 @@ import casmi.matrix.Vertex;
  */
 public class Polygon extends Element implements Renderable {
 
-	public static final int LINES = 1;
-	public static final int LINES_3D = 3;
+	public static final int LINES     = 1;
+	public static final int LINES_3D  = 3;
 	public static final int LINE_LOOP = 51;
 
 	private List<Double> x;
@@ -49,7 +50,7 @@ public class Polygon extends Element implements Renderable {
 	private double Y = 0;
 	private int size;
 
-	private Vertex tmpv = new Vertex(0, 0, 0);
+	private Vertex tmpV = new Vertex(0, 0, 0);
 
 	private ArrayList<Color> cornerColor;
 
@@ -97,19 +98,19 @@ public class Polygon extends Element implements Renderable {
 
 	public void vertex(Vertex v) {
 		MODE = LINES_3D;
-		this.x.add(v.x);
-		this.y.add(v.y);
-		this.z.add(v.z);
+		this.x.add(v.getX());
+		this.y.add(v.getY());
+		this.z.add(v.getZ());
 		setSize(this.x.size());
 		calcG();
 	}
 
 	public Vertex getVertex(int index) {
-		tmpv.x = x.get(index);
-		tmpv.y = y.get(index);
-		tmpv.z = z.get(index);
+		tmpV.setX(x.get(index));
+		tmpV.setY(y.get(index));
+		tmpV.setZ(z.get(index));
 		calcG();
-		return tmpv;
+		return tmpV;
 	}
 
 	public void removeVertex(int index) {
@@ -138,13 +139,14 @@ public class Polygon extends Element implements Renderable {
 
 	@Override
 	public void render(GL gl, GLU glu, int width, int height) {
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glDisable(GL.GL_DEPTH_TEST);
+		}
 
 		double tmpx, tmpy, tmpz;
 
 		gl.glPushMatrix();
-		gl.glTranslated(X, Y, 0);
+//		gl.glTranslated(X, Y, 0);
 		gl.glRotated(rotate, 0, 0, 1.0);
 		this.setTweenParameter(gl);
 
@@ -215,9 +217,9 @@ public class Polygon extends Element implements Renderable {
 
 		gl.glPopMatrix();
 
-		if (this.fillColor.getA() != 1 || this.strokeColor.getA() != 1)
+		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
 			gl.glEnable(GL.GL_DEPTH_TEST);
-
+		}
 	}
 
 	private void calcG() {
@@ -254,35 +256,26 @@ public class Polygon extends Element implements Renderable {
 	public void setCornerColor(int index, Color color) {
 		if (cornerColor == null) {
 			for (int i = 0; i < x.size(); i++) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
+				cornerColor.add(new RGBColor(this.fillColor.getRed(),
+				                             this.fillColor.getGreen(),
+				                             this.fillColor.getBlue(),
+				                             this.fillColor.getAlpha()));
 			}
 			setGradation(true);
 		}
 		if (cornerColor.size() < x.size()) {
 			while (cornerColor.size() != x.size()) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
+				cornerColor.add(new RGBColor(this.fillColor.getRed(),
+                                             this.fillColor.getGreen(),
+                                             this.fillColor.getBlue(),
+                                             this.fillColor.getAlpha()));
 			}
 		}
 		cornerColor.set(index, color);
 	}
 
-	public void setCornerColor(int index, ColorSet colorset) {
-		if (cornerColor == null) {
-			for (int i = 0; i < x.size(); i++) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
-			}
-			setGradation(true);
-		}
-		if (cornerColor.size() < x.size()) {
-			while (cornerColor.size() != x.size()) {
-				cornerColor.add(new Color(this.fillColor.getR(), this.fillColor
-						.getG(), this.fillColor.getB(), this.fillColor.getA()));
-			}
-		}
-		cornerColor.set(index, Color.color(colorset));
+	public void setCornerColor(int index, ColorSet colorSet) {
+	    setCornerColor(index, new RGBColor(colorSet));
 	}
 
 	public int getSize() {
@@ -292,5 +285,4 @@ public class Polygon extends Element implements Renderable {
 	public void setSize(int size) {
 		this.size = size;
 	}
-
 }

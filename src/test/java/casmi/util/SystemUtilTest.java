@@ -21,6 +21,9 @@ package casmi.util;
 
 import org.junit.Test;
 
+/**
+ * @author T. Takeuchi
+ */
 public class SystemUtilTest {
 
     @Test
