@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
@@ -75,6 +76,31 @@ public class FileUtil {
             throw new IOException("Failed to delete the src file '" + src + "' after copying.");
         }
     }
+    
+    public static void createFileFromInputStream(File dest, InputStream inputStream) throws IOException {  
+        byte[] buffer = new byte[1024];  
+        int length = 0;
+        FileOutputStream fos = null;
+        
+        try {  
+            fos = new FileOutputStream(dest);  
+  
+            while (0 <= (length = inputStream.read(buffer))) {  
+                fos.write(buffer, 0, length);  
+            }  
+  
+            fos.close();  
+            fos = null;  
+        } finally {  
+            if (fos != null) {  
+                try {  
+                    fos.close();  
+                } catch (IOException e) {
+                    // Ignore.
+                }  
+            }  
+        }  
+    }  
 
     /**
      * Copies a file to a new location preserving the file date.
