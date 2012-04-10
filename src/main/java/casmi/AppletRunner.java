@@ -19,6 +19,7 @@
 
 package casmi;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -64,9 +65,9 @@ public class AppletRunner {
         
         frame.setResizable(true);
 
-        frame.setLayout(null);
+        frame.setLayout(new BorderLayout());
 
-        frame.add(applet);
+        frame.add(applet, BorderLayout.CENTER);
         
         applet.init();
 

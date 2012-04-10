@@ -43,9 +43,6 @@ public class Texture extends Element implements Renderable {
     public static final int LINES_3D  = 3;
     public static final int LINE_LOOP = 51;
     
-    public enum TextureFlipMode {Horizontal,Vertical};
-    public enum TextureRotationMode {Half,FrontRight,BackRight};
-
     protected Image image;
     private Image mask;
     private Image maskedImage;
@@ -346,19 +343,19 @@ public class Texture extends Element implements Renderable {
 	public void rotation(TextureRotationMode mode){
 		float[][] tmp = (float[][])corner.clone();
 		switch (mode) {
-		case Half:
+		case HALF:
 			corner[0] = tmp[2];
 			corner[1] = tmp[3];
 			corner[2] = tmp[0];
 			corner[3] = tmp[1];
 			break;
-		case FrontRight:
+		case FRONT_RIGHT:
 			corner[0] = tmp[3];
 			corner[1] = tmp[0];
 			corner[2] = tmp[1];
 			corner[3] = tmp[2];
 			break;
-		case BackRight:
+		case BACK_RIGHT:
 			corner[0] = tmp[1];
 			corner[1] = tmp[2];
 			corner[2] = tmp[3];
@@ -372,13 +369,13 @@ public class Texture extends Element implements Renderable {
 	public void flip(TextureFlipMode mode){
 		float[][] tmp = (float[][])corner.clone();
 		switch (mode) {
-		case Vertical:
+		case VERTICAL:
 			corner[0] = tmp[1];
 			corner[1] = tmp[0];
 			corner[2] = tmp[3];
 			corner[3] = tmp[2];
 			break;
-		case Horizontal:
+		case HORIZONTAL:
 			corner[0] = tmp[3];
 			corner[1] = tmp[2];
 			corner[2] = tmp[1];

@@ -32,7 +32,8 @@ abstract public class Group extends GraphicsObject {
 //		super();
 //	}
 
-	abstract public void setup();
+//	abstract public void setup();
+    public void setup() {};
 	
 	@Override
 	abstract public void update();

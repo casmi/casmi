@@ -34,8 +34,8 @@ public class Trackball {
     
     private static int count = 0;
 	
-	private double width, height;
-    
+	private int width, height;
+	
     class Quaternion {
         
         double x = 0.0, y = 0.0, z = 0.0;
@@ -53,19 +53,24 @@ public class Trackball {
     
     private Quaternion curQuat = new Quaternion();
     
-	public Trackball(double width, double height) {
+	public Trackball(int width, int height) {
+	    if (width <= 0 || height <= 0) {
+	        throw new IllegalArgumentException("Width and height must be more than zero.");
+	    }
+	    
 	    this.width  = width;
 	    this.height = height;
 	}
 	
-	public void update(double mouseX, double mouseY, double prvMouseX, double prvMouseY) {
-	    mouseX = (2.0 * mouseX - width)  / width;
-	    mouseY = (2.0 * mouseY - height) / height;
+	public void update(int mouseX, int mouseY, int prvMouseX, int prvMouseY) {
+	    double normalizedMouseX = (2.0 * mouseX - width)  / width;
+	    double normalizedMouseY = (2.0 * mouseY - height) / height;
 	    
-	    prvMouseX = (2.0 * prvMouseX - width)  / width;
-	    prvMouseY = (2.0 * prvMouseY - height) / height;
+	    double normalizedPrvMouseX = (2.0 * prvMouseX - width)  / width;
+	    double normalizedPrvMouseY = (2.0 * prvMouseY - height) / height;
 
-	    Quaternion lastQuat = calcQuat(prvMouseX, prvMouseY, mouseX, mouseY);
+	    Quaternion lastQuat = calcQuat(normalizedPrvMouseX, normalizedPrvMouseY, 
+	                                   normalizedMouseX, normalizedMouseY);
 	    
 	    curQuat = addQuats(lastQuat, curQuat);
 	}
@@ -79,25 +84,29 @@ public class Trackball {
 	}
 	
 	public void rotate(GraphicsObject obj) {
+	    rotate(obj, obj.getX(), obj.getY(), obj.getZ());
+	}
+	
+	public void rotate(GraphicsObject obj, double baseX, double baseY, double baseZ) {
 	    double[] rotMat = calcRotMatrix();
 	    
-	    double[] transMat1 = {
+	    double[] mat1 = {
 	        1.0, 0.0, 0.0, 0.0,
 	        0.0, 1.0, 0.0, 0.0,
 	        0.0, 0.0, 1.0, 0.0,
-	        -obj.getX(), -obj.getY(), -obj.getZ(), 1.0
+	        -baseX, -baseY, -baseZ, 1.0
 	    };
 	    
-	    double[] transMat2 = {
+	    double[] mat2 = {
 	        1.0, 0.0, 0.0, 0.0,
 	        0.0, 1.0, 0.0, 0.0,
 	        0.0, 0.0, 1.0, 0.0,
-	        obj.getX(), obj.getY(), obj.getZ(), 1.0
+	        baseX, baseY, baseZ, 1.0
 	    };
 	    
-	    double[] mat = multMatrix(transMat1, multMatrix(rotMat, transMat2)); 
+	    double[] mat = multMatrix(mat1, multMatrix(rotMat, mat2)); 
 
-	    obj.applyMatrix(mat);
+	    obj.applyMatrix(mat);	    
 	}
 	
 	private final Quaternion calcQuat(double x1, double y1, double x2, double y2) {
@@ -212,7 +221,7 @@ public class Trackball {
 	    return rotMatrix;
 	}
 	
-	public void setSize(double width, double height) {
+	public void setSize(int width, int height) {
 	    this.width  = width;
 	    this.height = height;
 	}

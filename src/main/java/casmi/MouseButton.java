@@ -24,9 +24,13 @@ package casmi;
  */
 public enum MouseButton {
     
+    NONE,
+    
 	LEFT,
 	
 	MIDDLE,
 	
-	RIGHT
+	RIGHT,
+	
+	UNKNOWN,
 }

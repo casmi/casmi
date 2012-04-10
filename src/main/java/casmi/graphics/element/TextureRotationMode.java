@@ -16,23 +16,20 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package casmi.extension.coni.listener;
 
-import casmi.extension.coni.CONI;
-import casmi.extension.coni.CalibrationStatus;
+package casmi.graphics.element;
 
 /**
- * SkeletonListener interface.
- * <p>
- * Implement if you want to use skeleton tracking.
+ * Enum for texture rotation modes. 
  * 
  * @author T. Takeuchi
  */
-public interface SkeletonListener {
+public enum TextureRotationMode {
+
+    HALF,
     
-    void calibrationComplete(CONI coni, int userID, CalibrationStatus status);
+    FRONT_RIGHT,
     
-    void calibrationInProgress(CONI coni);
+    BACK_RIGHT,
     
-    void calibrationStart(CONI coni, int userID);
 }

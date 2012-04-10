@@ -36,5 +36,7 @@ public enum MouseEvent {
     
     DRAGGED,
     
-    MOVED
+    MOVED,
+    
+    WHEEL_ROTATED
 }
