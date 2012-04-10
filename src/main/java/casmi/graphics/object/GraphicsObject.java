@@ -215,8 +215,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 	public void selectionbufRender(Graphics g, double mouseX, double mouseY,
 			int index) {
 		if (selectionbuff == true || this.isSelectionbuffer() == true) {
-			//int selectBuff[] = new int[selectionbufsize];
-			//selectBuff = ;
 			Arrays.fill(selectBuff,0);
 			selectBuffer.position(0);
 			int hits;
@@ -401,6 +399,9 @@ public class GraphicsObject extends Element implements ObjectRender {
 					if (((Element) o).getMask() != null) {
 						((Element) o).getMask().render(g);
 					}
+					if (o.getMouseOverCallback() != null) {
+						selectionbuff = true;
+					}
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
 					if (((Element) o).getMask() != null)
 						g.getGL().glDisable(GL.GL_STENCIL_TEST);
@@ -435,8 +436,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
-				//if (selection == false)
-					tr.render(g);
+				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;
 				if (selection == false)
@@ -575,6 +575,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public List<Integer> getSelectionList() {
 		return selectionList;
+	}
+	
+	public void clearSelectionList() {
+		selectionList.clear();
 	}
 
 	public void setSelectionList(ArrayList<Integer> selectionList) {

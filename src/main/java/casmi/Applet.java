@@ -745,8 +745,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	
     private final void drawObjects(Graphics g) {
-    	//g.render(rootObject);
-    	//rootObject.selectionbufRender(g, getMouseX(), getMouseY());
+    	rootObject.clearSelectionList();
     	rootObject.bufRender(g, getMouseX(), getMouseY(),false,0);
     	rootObject.selectionbufRender(g, getMouseX(), getMouseY(), 0);
     	update(g);
