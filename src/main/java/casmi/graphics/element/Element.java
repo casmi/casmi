@@ -27,6 +27,7 @@ import javax.media.opengl.GL;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
 import casmi.graphics.object.Mask;
 import casmi.matrix.Vertex;
@@ -442,6 +443,18 @@ abstract public class Element implements Cloneable, Renderable {
 			mouseEventCallbacks = new ArrayList<MouseEventCallback>(3);
 		}
 		mouseEventCallbacks.add(callback);
+		
+///////////////////////////////////		
+		if(this instanceof Group){
+			Group g = (Group)this;
+			for (Object obj : g.getObjectList()) {
+				if(obj instanceof Element)
+					((Element) obj).addMouseEventCallback(callback);
+				if(obj instanceof Group)
+					((Group) obj).addMouseEventCallback(callback);
+			}
+					
+		}
 	}
 
 	public List<MouseEventCallback> getMouseOverCallback() {

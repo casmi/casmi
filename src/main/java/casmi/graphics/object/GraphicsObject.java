@@ -422,14 +422,14 @@ public class GraphicsObject extends Element implements ObjectRender {
 							}
 						}
 
-						if (s > 0) {
-							o.callMouseOverCallback(true);
-						} else {
-							o.setMouseover(false);
-						}
-						if (o.isMouseover() == false
-								&& o.isPreMouseover() == true)
-							o.callMouseOverCallback(false);
+//						if (s > 0) {
+//							o.callMouseOverCallback(true);
+//						} else {
+//							o.setMouseover(false);
+//						}
+//						if (o.isMouseover() == false
+//								&& o.isPreMouseover() == true)
+//							o.callMouseOverCallback(false);
 					}
 
 				}
@@ -551,6 +551,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public void update() {
 
+	}
+	
+	public List<Object> getObjectList() {
+		return objectList;
 	}
 
 	@Override
