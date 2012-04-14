@@ -401,14 +401,12 @@ public class GraphicsObject extends Element implements ObjectRender {
 					}
 					if (o.getMouseOverCallback() != null) {
 						selectionbuff = true;
-						System.out.println("pickup");
 					}
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
 					if (((Element) o).getMask() != null)
 						g.getGL().glDisable(GL.GL_STENCIL_TEST);
 				} else {
 					sIndex = selectionIndex;
-					//System.out.println("test"+sIndex);
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
 //stuck selectionID of elements in a group

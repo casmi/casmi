@@ -83,6 +83,8 @@ abstract public class Element implements Cloneable, Renderable {
 	private boolean mouseOver       = false;
 	private boolean preMouseOver    = false;
 	private boolean selectionBuffer = false;
+	
+	private boolean depthTest = true;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -569,4 +571,23 @@ abstract public class Element implements Cloneable, Renderable {
 	public boolean isMasked() {
         return mask != null;
     }
+
+	public boolean isDepthTest() {
+		return depthTest;
+	}
+
+	public void setDepthTest(boolean depthTest) {
+		this.depthTest = depthTest;
+		
+		if(this instanceof Group){
+			Group g = (Group)this;
+			for (Object obj : g.getObjectList()) {
+				if(obj instanceof Element)
+					((Element) obj).setDepthTest(depthTest);
+				if(obj instanceof Group)
+					((Group) obj).setDepthTest(depthTest);
+			}
+					
+		}
+	}
 }

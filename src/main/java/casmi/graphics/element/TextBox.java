@@ -57,7 +57,7 @@ public class TextBox extends Element implements Renderable {
         double x4 = x + this.width  / 2.0;
         double y4 = y + this.height / 2.0;
         
-        if (fillColor.getAlpha() < 0.001 || strokeColor.getAlpha() < 0.001) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
         
@@ -110,7 +110,7 @@ public class TextBox extends Element implements Renderable {
         }
         gl.glPopMatrix();
         
-        if (fillColor.getAlpha() < 0.001 || strokeColor.getAlpha() < 0.001) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
     }

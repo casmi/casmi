@@ -82,7 +82,7 @@ public class Sphere extends Element implements Renderable {
             }
         }
 
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false){
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
         
@@ -115,7 +115,7 @@ public class Sphere extends Element implements Renderable {
         	texture.disableTexture();
         }
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
     }

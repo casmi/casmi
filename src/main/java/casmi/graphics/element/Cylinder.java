@@ -132,7 +132,7 @@ public class Cylinder extends Element implements Renderable {
 
     public void render(GL gl, GLU glu, int width, int height) {
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
 
@@ -153,7 +153,7 @@ public class Cylinder extends Element implements Renderable {
 
         gl.glPopMatrix();
         
-        if (this.fillColor.getAlpha() != 0.001 || this.strokeColor.getAlpha() < 0.001) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
     }
