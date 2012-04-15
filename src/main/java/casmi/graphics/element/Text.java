@@ -166,7 +166,7 @@ public class Text extends Element implements Renderable {
     
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+    	if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
     		gl.glDisable(GL.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
@@ -231,7 +231,7 @@ public class Text extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+        if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
         	gl.glEnable(GL.GL_DEPTH_TEST);
     }
 

@@ -122,8 +122,8 @@ public class Rect extends Element implements Renderable {
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         calcRect();
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-        	gl.glDisable(GL.GL_DEPTH_TEST);
+        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+          	gl.glDisable(GL.GL_DEPTH_TEST);
 
         gl.glPushMatrix();
         {
@@ -199,7 +199,7 @@ public class Rect extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
         	gl.glEnable(GL.GL_DEPTH_TEST);
     }
     
