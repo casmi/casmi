@@ -215,6 +215,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 	public void selectionbufRender(Graphics g, double mouseX, double mouseY,
 			int index) {
 		if (selectionbuff == true || this.isSelectionbuffer() == true) {
+			
+			
 			Arrays.fill(selectBuff,0);
 			selectBuffer.position(0);
 			int hits;
@@ -403,6 +405,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 						selectionbuff = true;
 					}
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
+					if(o.isSelectionbuff()==true)
+						selectionbuff = true;
 					if (((Element) o).getMask() != null)
 						g.getGL().glDisable(GL.GL_STENCIL_TEST);
 				} else {
@@ -447,6 +451,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 				if (selection == false) {
 					if (e.getMouseOverCallback() != null) {
 						selectionbuff = true;
+						
 					}
 					this.render((Element) obj);
 				} else {
