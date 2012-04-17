@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +61,8 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.element.Element;
+import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
@@ -810,7 +813,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
     
    public void addObject(Object r) {
-       rootObject.add(r);
+	   if(r instanceof Element || r instanceof Group)
+		   rootObject.add(r);
        
        // NOTE: ???
        if (rootObject instanceof TimelineRender) {
@@ -823,8 +827,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
        }
    }
    
+   public void addObject(List<Object> objects) {
+	   for(Object obj : objects){
+		   if(obj instanceof Element || obj instanceof Group)
+			   rootObject.add(obj);
+	   }
+   }
+   
    public void addObject(int index, Object r) {
-       rootObject.add(index, r);
+	   if(r instanceof Element || r instanceof Group)
+		   rootObject.add(index, r);
        
        // NOTE: ???
        if (rootObject instanceof TimelineRender) {

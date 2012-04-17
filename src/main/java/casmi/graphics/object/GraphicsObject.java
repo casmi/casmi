@@ -84,7 +84,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	public void add(Object object) {
-		objectList.add(object);
+		   if(object instanceof Element || object instanceof Group)
+			   	objectList.add(object);
 	}
 	
 	public void addAll(Collection<? extends Object> c) {

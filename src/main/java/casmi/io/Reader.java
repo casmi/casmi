@@ -22,6 +22,8 @@ package casmi.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +83,10 @@ public class Reader extends java.io.BufferedReader {
     public Reader(String pathname) throws FileNotFoundException {
 
         this(new java.io.FileReader(new File(pathname)));
+    }
+    
+    public Reader(URL pathurl) throws FileNotFoundException, URISyntaxException {
+    	this(new java.io.FileReader(new File(pathurl.toURI())));
     }
 
     public void close() {
