@@ -483,6 +483,11 @@ public class CONI {
         
         try {
             context.waitAnyUpdateAll();
+            
+            if (imageMap != null) imageMap.update();
+            if (depthMap != null) depthMap.update();
+            if (irMap    != null) irMap.update();
+            if (userMap  != null) userMap.update();
         } catch (StatusException e) {
             throw new CONIException(e);
         }

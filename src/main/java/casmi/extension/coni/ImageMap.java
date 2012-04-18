@@ -45,6 +45,16 @@ public class ImageMap {
         tex = new Texture(new Image(getWidth(), getHeight()));
     }
     
+    final void update() {
+        updateTexture();
+    }
+    
+    private final void updateTexture() {
+        Color[] colors = getColorArray();
+        tex.getImage().setColors(colors);
+        tex.getImage().reloadTexture();
+    }
+    
     public Color getColor(int x, int y) {
         ByteBuffer buf = imd.getData().createByteBuffer();
         buf.position((x + y * getWidth()) * 3);
@@ -77,9 +87,6 @@ public class ImageMap {
      * @see casmi.graphics.element.Texture
      */
     public Texture getTexture() {
-        Color[] colors = getColorArray();
-        tex.getImage().setColors(colors);
-        tex.getImage().reloadTexture();
         return tex;
     }
     

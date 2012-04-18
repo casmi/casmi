@@ -44,6 +44,24 @@ public class IRMap {
         tex = new Texture(new Image(getWidth(), getHeight()));
     }
     
+    final void update() {
+        updateTexture();
+    }
+    
+    private final void updateTexture() {
+        ShortBuffer buf = irmd.getData().createShortBuffer();
+        buf.rewind();
+        
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                int ir = (int)buf.get();
+                tex.getImage().setColor(new RGBColor(ir / 255.0), x, y);
+            }
+        }
+        
+        tex.getImage().reloadTexture();
+    }
+    
     public int getUser(int x, int y) {
         ShortBuffer buf = irmd.getData().createShortBuffer();
         buf.position((x + y * getWidth()) * 3);
@@ -70,17 +88,6 @@ public class IRMap {
      * @see casmi.graphics.element.Texture
      */
     public Texture getTexture() {
-        ShortBuffer buf = irmd.getData().createShortBuffer();
-        buf.rewind();
-        
-        for (int y = 0; y < getHeight(); y++) {
-            for (int x = 0; x < getWidth(); x++) {
-                int ir = (int)buf.get();
-                tex.getImage().setColor(new RGBColor(ir / 255.0), x, y);
-            }
-        }
-        
-        tex.getImage().reloadTexture();
         return tex;
     }
     
