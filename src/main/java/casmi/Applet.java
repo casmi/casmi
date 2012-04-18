@@ -178,7 +178,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject = new GraphicsObject();
 		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
 		this.setup();
-
+		rootObject.setDepthTest(false);
 		// JOGL setup
 		this.caps = new GLCapabilities();
 		this.caps.setStencilBits(8);
@@ -276,6 +276,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	public double getFPS() {
 		return fps;
+	}
+	
+	public void setDepthTest(boolean depthTest){
+		rootObject.setDepthTest(depthTest);
+	}
+	
+	public boolean isDepthTest(){
+		return rootObject.isDepthTest();
 	}
 
 	public boolean isFullScreen() {
