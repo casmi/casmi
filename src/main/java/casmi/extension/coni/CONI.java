@@ -713,6 +713,34 @@ public class CONI {
         }
     }
     
+    public void addGesture(Gesture... gestures) {
+        if (!gestureEnabled) {
+            throw new CONIRuntimeException("must enable gesture previously");
+        }
+        
+        try {
+            for (Gesture g : gestures) {
+                gestureGenerator.addGesture(Gesture.toString(g));
+            }
+        } catch (StatusException e) {
+            throw new CONIRuntimeException();
+        }
+    }
+    
+    public void removeGesture(Gesture... gestures) {
+        if (!gestureEnabled) {
+            throw new CONIRuntimeException("must enable gesture previously");
+        }
+        
+        try {
+            for (Gesture g : gestures) {
+                gestureGenerator.removeGesture(Gesture.toString(g));
+            }
+        } catch (StatusException e) {
+            throw new CONIRuntimeException();
+        }
+    }
+    
     public void startHandTracking(Vertex position) throws CONIException {
         if (!handEnabled) {
             throw new CONIRuntimeException("must enable hand previously");
@@ -755,7 +783,7 @@ public class CONI {
         }
         
         try {
-            poseDetectionCap.StartPoseDetection(skeletonCap.getSkeletonCalibrationPose(), userID);
+            poseDetectionCap.startPoseDetection(skeletonCap.getSkeletonCalibrationPose(), userID);
         } catch (StatusException e) {
             throw new CONIRuntimeException(e);
         }
@@ -767,7 +795,7 @@ public class CONI {
         }
         
         try {
-            poseDetectionCap.StopPoseDetection(userID);
+            poseDetectionCap.stopPoseDetection(userID);
         } catch (StatusException e) {
             throw new CONIRuntimeException(e);
         }
