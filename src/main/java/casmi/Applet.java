@@ -735,8 +735,13 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		return keyboard.getKey();
 	}
 
+	/**	@deprecated */
 	public int getKeycode() {
 		return keyboard.getKeyCode();
+	}
+	
+	public int getKeyCode() {
+	    return keyboard.getKeyCode();
 	}
 	
 	public boolean isKeyPressed() {
