@@ -96,7 +96,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     private int width = 100, height = 100;
     
+    // FPS.
     private double fps = 30.0;
+    private double workingFPS = fps;
+    private int frame = 0;
+    private long baseTime = 0;
 
     // Mouse and keyboard instances.
     private Mouse mouse = new Mouse();
@@ -200,7 +204,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
-
 		
 		isInitializing = false;
 	}
@@ -271,10 +274,20 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	public void setFPS(double fps) {
 		this.fps = fps;
+		
+		if (!isInitializing) {
+		    timer.cancel();
+		    timer = new Timer();
+		    timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
+		}
 	}
 
 	public double getFPS() {
 		return fps;
+	}
+	
+	public double getWorkingFPS() {
+	    return workingFPS;
 	}
 	
 	public void setDepthTest(boolean depthTest){
@@ -608,6 +621,18 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void drawWithGraphics(Graphics g) {
 		this.drawObjects(g);
 
+		// Calculate real fps.
+		{
+		    frame++;
+		    long now = System.currentTimeMillis();
+		    long elapse = now - baseTime;
+		    if (1000 < elapse) {
+		        workingFPS = (double)frame * 1000.0 / (double)elapse;
+		        baseTime = now;
+		        frame = 0;
+		    }
+		}
+		
 		// capture image
 		if (saveImageFlag) {
 			saveImageFlag = false;
