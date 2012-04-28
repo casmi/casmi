@@ -172,6 +172,15 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			}
 		}
 	}
+	
+	public void end(){
+		System.out.println("test");
+	}
+	
+	@Override
+	public void destroy(){
+		end();
+	}
 
 	@Override
 	public void init() {
@@ -1038,7 +1047,7 @@ class AppletGLEventListener implements GLEventListener {
 			gl.glEnable(GL.GL_DEPTH_TEST);
 			gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT
 					| GL.GL_STENCIL_BUFFER_BIT);
-
+			//gl.glDepthMask(false);
 			gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL.GL_BLEND);
 

@@ -26,9 +26,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Iterator;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+
+
 
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
@@ -71,6 +74,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private int s = 0;
 	private IntBuffer selectBuffer;
 	private int selectBuff[];
+	
+	private boolean removeObject;
 
 	public GraphicsObject() {
 	    objectList    = new CopyOnWriteArrayList<Object>();
@@ -256,6 +261,15 @@ public class GraphicsObject extends Element implements ObjectRender {
 			g.getGL().glMatrixMode(GL.GL_MODELVIEW);
 
 		}
+		if(removeObject){
+			Iterator<Object> itr = objectList.iterator();
+			while(itr.hasNext()){
+				Object obj = itr.next();
+				if(obj instanceof Element )
+					if(((Element) obj).isRemove())
+					objectList.remove(obj);
+			}
+		}
 	}
 
 	private void processHits(int hits, int buffer[]) {
@@ -299,6 +313,14 @@ public class GraphicsObject extends Element implements ObjectRender {
 		if (this.isVisible()) {
 			this.g = g;
 			
+			if(removeObject){
+				for(Object obj : objectList){
+					if(obj instanceof Element && ((Element) obj).isRemove())
+						objectList.remove(obj);
+				}
+				removeObject = false;
+			}
+			
 			drawTweenManager(g);
 			
 			if (!bool)
@@ -322,6 +344,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 			if (this instanceof Group) {
 				update(g);
 			}
+			
+			
 		}
 	}
 
@@ -399,6 +423,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 			if (obj instanceof GraphicsObject) {
 				GraphicsObject o = (GraphicsObject)obj;
 				if (!selection) {
+					if(o.isRemove())
+						removeObject = true;
 					if (((Element) o).getMask() != null) {
 						((Element) o).getMask().render(g);
 					}
@@ -445,11 +471,13 @@ public class GraphicsObject extends Element implements ObjectRender {
 				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;
-				if (selection == false)
+				if (!selection)
 					tm.render(g);
 			} else {
 				Element e = (Element) obj;
-				if (selection == false) {
+				if (!selection) {
+					if (e.isRemove())
+						removeObject = true;
 					if (e.getMouseOverCallback() != null) {
 						selectionbuff = true;
 						

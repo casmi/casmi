@@ -19,6 +19,8 @@
  
 package casmi.matrix;
 
+import java.util.Vector;
+
 /**
  * @author Y. Ban
  */
@@ -79,5 +81,45 @@ public class Vertex {
     public void set(double x, double y){
     	this.x = x;
     	this.y = y;
+    }
+    
+    public Vertex mult(Vertex a) {
+    	Vertex result;
+    	result = new Vertex(a.x*this.x,a.y*this.y);
+    	return result;
+    }
+    
+    public Vertex par(Vertex a) {
+    	Vertex result;
+    	result = new Vertex(this.x/a.x,this.y/a.y);
+    	return result;
+    }
+    
+    public Vertex mult(double b) {
+    	Vertex result;
+    	result = new Vertex(this.x*b,this.y*b);
+    	return result; 	
+    }
+    
+    public Vertex par(double a) {
+    	Vertex result;
+    	result = new Vertex(this.x/a,this.y/a);
+    	return result;
+    }
+    
+    public Vertex add(double num) {
+    	Vertex result;
+    	result = new Vertex(this.x+num, this.y+num);
+    	return result;
+    }
+    
+    public Vertex add(Vertex v) {
+    	Vertex result;
+    	result = new Vertex(this.x+v.x,this.y+v.y);
+    	return result;
+    }
+    
+    public double lengthSquared() {
+    	return this.x*this.x+this.y*this.y;
     }
 }

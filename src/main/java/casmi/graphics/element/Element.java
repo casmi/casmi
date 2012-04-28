@@ -86,6 +86,7 @@ abstract public class Element implements Cloneable, Renderable {
 	private boolean selectionBuffer = false;
 	
 	private boolean depthTest = true;
+	private boolean removeElement = false;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -590,5 +591,13 @@ abstract public class Element implements Cloneable, Renderable {
 			}
 					
 		}
+	}
+
+	public void remove() {
+		this.removeElement = true;
+	}
+	
+	public boolean isRemove() {
+		return this.removeElement;
 	}
 }
