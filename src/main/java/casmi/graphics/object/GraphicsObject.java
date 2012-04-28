@@ -71,7 +71,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private boolean selectionbuff = false;
 	private int selectionbufsize = 1024*1024;
 	private int selectedIndex = -1;
-	private int s = 0;
 	private IntBuffer selectBuffer;
 	private int selectBuff[];
 	
@@ -418,7 +417,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private final int drawObject(Graphics g,
 	                             boolean selection, double mouseX, double mouseY,
 	                             int selectionIndex, int selectedIndex) {
-		int sIndex = -1;
 		for (Object obj : objectList) {
 			if (obj instanceof GraphicsObject) {
 				GraphicsObject o = (GraphicsObject)obj;
@@ -437,7 +435,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 					if (((Element) o).getMask() != null)
 						g.getGL().glDisable(GL.GL_STENCIL_TEST);
 				} else {
-					sIndex = selectionIndex;
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
 //stuck selectionID of elements in a group
@@ -507,7 +504,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 				e.setPreMouseover(e.isMouseover());
 			}
 		}
-		sIndex = selectionIndex;
 		return selectionIndex;
 	}
 

@@ -198,7 +198,12 @@ public class Text extends Element implements Renderable {
                     case RIGHT:
                         tmpX = -getWidth(i);
                     }
-                    textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
+                    
+                    try {
+                        textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        // ignore
+                    }
 
                 }
                 textRenderer.end3DRendering();

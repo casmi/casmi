@@ -52,7 +52,6 @@ public class Image {
     protected ImageMode mode = DEFAULT_IMAGE_MODE;
 
     private BufferedImage img;
-    private BufferedImage preimg;
     
     public Image(int width, int height) {
         this.width  = width;
@@ -67,7 +66,7 @@ public class Image {
         java.io.File imgLoc = new java.io.File(path);
         
         try {
-           preimg = ImageIO.read(imgLoc);
+           BufferedImage preimg = ImageIO.read(imgLoc);
            img =  convertBytetoInt(preimg);
         } catch (IOException e) {
            e.printStackTrace();
@@ -81,7 +80,7 @@ public class Image {
     
     public Image(URL url) {
         try {
-            preimg = ImageIO.read(url);
+            BufferedImage preimg = ImageIO.read(url);
             img =  convertBytetoInt(preimg);
          } catch (IOException e) {
             e.printStackTrace();

@@ -96,11 +96,15 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     private int width = 100, height = 100;
     
+    // FPS.
     private double fps = 30.0;
+    private double workingFPS = fps;
+    private int frame = 0;
+    private long baseTime = 0;
 
+    // Mouse and keyboard instances.
     private Mouse mouse = new Mouse();
-	private char key;
-	private int keycode;
+    private Keyboard keyboard = new Keyboard();
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -110,10 +114,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	private boolean isFullScreen = false;
 	private boolean isInitializing = true;
-
-	private boolean keyPressed = false;
-	private boolean keyReleased = false;
-	private boolean keyTyped = false;
 
 	private boolean runAsApplication = false;
 
@@ -140,6 +140,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private int recordTime = 0;
 	private int recordSpan = 0;
 	
+	// Abstract methods.
+	// -------------------------------------------------------------------------
 	abstract public void setup();
 
 	abstract public void update();
@@ -147,6 +149,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
 	abstract public void keyEvent(KeyEvent e);
+	// -------------------------------------------------------------------------
 	
 	/** @deprecated */
 	public void mouseWheelEvent() {};
@@ -166,9 +169,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 				mouse.setDragged(false);
 				mouse.setMoved(false);
 				
-				keyPressed = false;
-				keyReleased = false;
-				keyTyped = false;
+				keyboard.setPressed(false);
+				keyboard.setReleased(false);
+				keyboard.setTyped(false);
 			}
 		}
 	}
@@ -210,7 +213,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
-
 		
 		isInitializing = false;
 	}
@@ -281,10 +283,20 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	public void setFPS(double fps) {
 		this.fps = fps;
+		
+		if (!isInitializing) {
+		    timer.cancel();
+		    timer = new Timer();
+		    timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
+		}
 	}
 
 	public double getFPS() {
 		return fps;
+	}
+	
+	public double getWorkingFPS() {
+	    return workingFPS;
 	}
 	
 	public void setDepthTest(boolean depthTest){
@@ -480,9 +492,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void keyPressed(java.awt.event.KeyEvent e) {
-		keyPressed = true;
-		this.key = e.getKeyChar();
-		this.keycode = e.getKeyCode();
+		keyboard.setPressed(true);
+		keyboard.setKey(e.getKeyChar());
+		keyboard.setKeyCode(e.getKeyCode());
+		
 		keyEvent(KeyEvent.PRESSED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
@@ -491,9 +504,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void keyReleased(java.awt.event.KeyEvent e) {
-		keyReleased = true;
-		this.key = java.awt.event.KeyEvent.CHAR_UNDEFINED;
-		this.keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
+	    keyboard.setReleased(true);
+	    keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+	    keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
+	    
 		keyEvent(KeyEvent.RELEASED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
@@ -502,24 +516,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void keyTyped(java.awt.event.KeyEvent e) {
-		keyTyped = true;
-		this.key = e.getKeyChar();
+	    keyboard.setTyped(true);
+	    keyboard.setKey(e.getKeyChar());
+	    keyboard.setKeyCode(e.getKeyCode());
+	    
 		keyEvent(KeyEvent.TYPED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
 		}
-	}
-
-	public boolean isKeyPressed() {
-		return keyPressed;
-	}
-
-	public boolean isKeyReleased() {
-		return keyReleased;
-	}
-
-	public boolean isKeyTyped() {
-		return keyTyped;
 	}
 
 	// -------------------------------------------------------------------------
@@ -626,6 +630,18 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void drawWithGraphics(Graphics g) {
 		this.drawObjects(g);
 
+		// Calculate real fps.
+		{
+		    frame++;
+		    long now = System.currentTimeMillis();
+		    long elapse = now - baseTime;
+		    if (1000 < elapse) {
+		        workingFPS = (double)frame * 1000.0 / (double)elapse;
+		        baseTime = now;
+		        frame = 0;
+		    }
+		}
+		
 		// capture image
 		if (saveImageFlag) {
 			saveImageFlag = false;
@@ -688,14 +704,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void setRunAsApplication(boolean runAsApplication) {
 		this.runAsApplication = runAsApplication;
 	}
-
-	public char getKey() {
-		return key;
-	}
-
-	public int getKeycode() {
-		return keycode;
-	}
 	
 	public int getMouseWheelRotation() {
 		return mouse.getWheelRotation();
@@ -751,6 +759,35 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	public boolean isMouseMoved() {
 		return mouse.isMoved();
+	}
+	
+	public Keyboard getKeyboard() {
+	    return keyboard;
+	}
+	
+	public char getKey() {
+		return keyboard.getKey();
+	}
+
+	/**	@deprecated */
+	public int getKeycode() {
+		return keyboard.getKeyCode();
+	}
+	
+	public int getKeyCode() {
+	    return keyboard.getKeyCode();
+	}
+	
+	public boolean isKeyPressed() {
+		return keyboard.isPressed();
+	}
+
+	public boolean isKeyReleased() {
+		return keyboard.isReleased();
+	}
+
+	public boolean isKeyTyped() {
+		return keyboard.isTyped();
 	}
 
 	@Override
