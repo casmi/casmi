@@ -73,6 +73,7 @@ abstract public class Element implements Cloneable, Renderable {
 	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha * sceneA);
 	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha * sceneA);
 	protected Material material      = new Material();
+	protected boolean ismaterial = false;
 
 	protected boolean stroke = true;
 	protected boolean fill   = true;
@@ -225,6 +226,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setMaterial(Material m) {
 		this.material = m;
+		this.ismaterial = true;
 	}
 
 	public void setSceneAlpha(double alpha) {

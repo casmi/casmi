@@ -36,19 +36,26 @@ import casmi.matrix.Vertex;
  */
 public class Light extends Element implements ObjectRender {
 	
-    public enum LightMode {
-        AMBIENT, DIRECTION, POINT, SPOT
-    }
-    
 	private Vertex dv;
 	private int index;
 	private Vertex v;
 	private Color color;
 	private double angle = 30.0;
-	private LightMode lightMode = LightMode.AMBIENT;
+	private LightMode lightMode = LightMode.NONE;
+	
+    private float shininess[] = {1.0f};
+    private float ambient[] = {0,0,0,1.0f};
+    private float diffuse[] = {0,0,0,1.0f};
+    private float specular[] = {0,0,0,1.0f};
+    private float emissive[] = {0,0,0,1.0f};
+    private Boolean Sh = false;
+    private Boolean Am = false;
+    private Boolean Di = false;
+    private Boolean Sp = false;
+    private Boolean Em = false;
 	
 	public Light() {
-	    this(LightMode.AMBIENT);
+	    this(LightMode.NONE);
     }
 	
 	public Light(LightMode lightMode) {
@@ -89,6 +96,20 @@ public class Light extends Element implements ObjectRender {
 	@Override
 	public void render(Graphics g) {
 		v.set(x, y, z);
+
+		float pos[] = {(float) v.getX(),(float) v.getY(),(float) v.getZ(), 1.0f};
+		g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_POSITION, pos, 0);
+		if(Am==true)
+			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_AMBIENT, ambient, 0);
+		if(Di==true)
+			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_DIFFUSE, diffuse, 0);
+		if(Sp==true)
+			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_SPECULAR,specular, 0);
+		if(Em==true)
+			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_EMISSION,emissive, 0);
+		if(Sh==true)
+			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_SHININESS,shininess, 0);
+		
 		switch(lightMode){
 		case AMBIENT:
 			g.ambientLight(index, color, v);
@@ -102,6 +123,9 @@ public class Light extends Element implements ObjectRender {
 		case SPOT:
 			g.spotLight(index, color, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
 			break;
+		case NONE:
+			break;
+			
 		}
 	}
 	
@@ -139,5 +163,50 @@ public class Light extends Element implements ObjectRender {
 
 	public void setAngle(double angle) {
 		this.angle = angle;
+	}
+
+	public float[] getShininess() {
+		return shininess;
+	}
+
+	public void setShininess(float shininess[]) {
+		this.shininess = shininess;
+		Sh = true;
+	}
+
+	public float[] getAmbient() {
+		return ambient;
+	}
+
+	public void setAmbient(float ambient[]) {
+		this.ambient = ambient;
+		Am = true;
+	}
+
+	public float[] getDiffuse() {
+		return diffuse;
+	}
+
+	public void setDiffuse(float diffuse[]) {
+		this.diffuse = diffuse;
+		Di = true;
+	}
+
+	public float[] getSpecular() {
+		return specular;
+	}
+
+	public void setSpecular(float specular[]) {
+		this.specular = specular;
+		Sp = true;
+	}
+
+	public float[] getEmissive() {
+		return emissive;
+	}
+
+	public void setEmissive(float emissive[]) {
+		this.emissive = emissive;
+		Em = true;
 	}
 }

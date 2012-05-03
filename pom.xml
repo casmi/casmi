@@ -93,6 +93,26 @@
 			<artifactId>NITE</artifactId>
 			<version>1.5.2.21</version>
 		</dependency>
+		<dependency>
+			<groupId>tritonus</groupId>
+			<artifactId>tritonus_aos</artifactId>
+			<version>0.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>tritonus</groupId>
+			<artifactId>tritonus_share</artifactId>
+			<version>0.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>javazoom</groupId>
+			<artifactId>mp3spi</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javazoom</groupId>
+			<artifactId>jl</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

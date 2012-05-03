@@ -7,9 +7,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/user/Documents/casmi/lib/native/mp3spi1.9.4.jar"/>
-	<classpathentry kind="lib" path="/Users/user/Documents/casmi/lib/native/tritonus_aos.jar"/>
-	<classpathentry kind="lib" path="/Users/user/Documents/casmi/lib/native/tritonus_share.jar"/>
-	<classpathentry kind="lib" path="/Users/user/Documents/casmi/lib/native/jl1.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
