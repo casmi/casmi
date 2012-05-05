@@ -1,27 +1,23 @@
 /*
- *  Copyright (c) 2007 - 2008 by Damien Di Fede <ddf@compartmental.net>
+ 
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as published
- *   by the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the Free Software
- *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-// This Chebyshev Filter implementation has been ported from the BASIC 
-// implementation outlined in Chapter 20 of The Scientist and Engineer's
-// Guide to Signal Processing, which can be found at:
-//
-//     http://www.dspguide.com/ch20.htm
-
 package casmi.sound.effects;
 
 import casmi.sound.Sound;

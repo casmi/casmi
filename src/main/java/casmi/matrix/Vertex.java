@@ -19,8 +19,6 @@
  
 package casmi.matrix;
 
-import java.util.Vector;
-
 /**
  * @author Y. Ban
  */

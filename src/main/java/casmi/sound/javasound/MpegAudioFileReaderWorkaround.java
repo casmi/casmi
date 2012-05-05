@@ -42,7 +42,7 @@ import javazoom.spi.mpeg.sampled.file.tag.IcyInputStream;
  */
 final class MpegAudioFileReaderWorkaround extends MpegAudioFileReader
 {
-	MpegAudioFileReaderWorkaround(JSMinim sys)
+	MpegAudioFileReaderWorkaround(JSCasmi sys)
   {
     super(sys);
   }

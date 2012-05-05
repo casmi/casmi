@@ -1,4 +1,30 @@
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package casmi.matrix;
+
+/**
+* 2D Matrix class. 
+* 
+* @author Y. Ban
+* 
+*/
 
 import java.text.NumberFormat;
 
@@ -116,8 +142,8 @@ public class Matrix2D implements Matrix{
 
 	  // Implementation roughly based on AffineTransform.
 	  public void rotate(double angle) {
-	    double s = sin(angle);
-	    double c = cos(angle);
+	    double s = Math.sin(angle);
+	    double c = Math.cos(angle);
 
 	    double temp1 = m00;
 	    double temp2 = m01;
@@ -167,12 +193,12 @@ public class Matrix2D implements Matrix{
 
 
 	  public void shearX(double angle) {
-	    apply(1, 0, 1,  tan(angle), 0, 0);
+	    apply(1, 0, 1,  Math.tan(angle), 0, 0);
 	  }
 
 
 	  public void shearY(double angle) {
-	    apply(1, 0, 1,  0, tan(angle), 0);
+	    apply(1, 0, 1,  0, Math.tan(angle), 0);
 	  }
 
 
@@ -270,13 +296,11 @@ public class Matrix2D implements Matrix{
 	  /**
 	   * Multiply the x and y coordinates of a Vertex against this matrix.
 	   */
-	  public Vertex mult(Vertex source, Vertex target) {
-	    if (target == null) {
-	      target = new Vertex();
-	    }
-	    target.setX(m00*source.getX() + m01*source.getY() + m02);
-	    target.setY(m10*source.getX() + m11*source.getY() + m12);
-	    return target;
+	  public Vertex mult(Vertex source) {
+	    Vertex result = new Vertex();
+	    result.setX(m00*source.getX() + m01*source.getY() + m02);
+	    result.setY(m10*source.getX() + m11*source.getY() + m12);
+	    return result;
 	  }
 
 
@@ -363,8 +387,8 @@ public class Matrix2D implements Matrix{
 
 
 	  public void print() {
-	    int big = (int) abs(max(max(abs(m00), abs(m01), abs(m02)),
-	                            max(abs(m10), abs(m11), abs(m12))));
+	    int big = (int) Math.abs(Math.max(max(Math.abs(m00), Math.abs(m01), Math.abs(m02)),
+	                            max(Math.abs(m10), Math.abs(m11), Math.abs(m12))));
 
 	    int digits = 1;
 	    if (Double.isNaN(big) || Double.isInfinite(big)) {  // avoid infinite loop
@@ -435,26 +459,5 @@ public class Matrix2D implements Matrix{
 	private final String nfs(double num, int left, int right) {
 		    return (num < 0) ? nf(num, left, right) :  (' ' + nf(num, left, right));
 		  }
-	  
-	  private final double max(double a, double b) {
-	    return (a > b) ? a : b;
-	  }
-
-	  private final double abs(double a) {
-	    return (a < 0) ? -a : a;
-	  }
-
-	  private final double sin(double angle) {
-	    return (double)Math.sin(angle);
-	  }
-
-	  private final double cos(double angle) {
-	    return (double)Math.cos(angle);
-	  }
-
-	  private final double tan(double angle) {
-	    return (double)Math.tan(angle);
-	  }
-
 
 }

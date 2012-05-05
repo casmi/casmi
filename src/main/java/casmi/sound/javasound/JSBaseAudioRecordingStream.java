@@ -1,21 +1,22 @@
-/*
- *  Copyright (c) 2007 - 2008 by Damien Di Fede <ddf@compartmental.net>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as published
- *   by the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details.
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the Free Software
- *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
 
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package casmi.sound.javasound;
 
 import java.io.IOException;
@@ -79,11 +80,12 @@ abstract class JSBaseAudioRecordingStream implements Runnable,
 	private FloatSampleBuffer	  buffer;
 	private int						      bufferSize;
 	private boolean				      finished;
+	private boolean                   end;
 	private float[]				      silence;
   
-  protected JSMinim           system;
+  protected JSCasmi           system;
 
-	JSBaseAudioRecordingStream(JSMinim sys, AudioInputStream stream, SourceDataLine sdl,
+	JSBaseAudioRecordingStream(JSCasmi sys, AudioInputStream stream, SourceDataLine sdl,
 			int bufferSize, int msLen)
 	{
 		format = sdl.getFormat();
@@ -93,6 +95,7 @@ abstract class JSBaseAudioRecordingStream implements Runnable,
     system = sys;
 		system.debug("FloatSampleBuffer has " + buffer.getSampleCount()	+ " samples.");
 		finished = false;
+		end = false;
 		line = sdl;
 
 		ais = stream;
@@ -140,6 +143,7 @@ abstract class JSBaseAudioRecordingStream implements Runnable,
         broadcast();
         // take a nap
         Thread.yield();
+
 			}
       else
       {
@@ -152,12 +156,21 @@ abstract class JSBaseAudioRecordingStream implements Runnable,
         sleep(30000);
         system.debug("Done waiting!");
       }
-		} // while ( !finished )
-    
+		} 
+		end = true;
 		// flush the line before we close it. because it's polite.
 		line.flush();
 		line.close();
 		line = null;
+	}
+	
+	@Override
+	public boolean isFinished(){
+		if(loop && end){
+			end = false;
+			return true;
+		}
+		return end;
 	}
 
 	private void sleep(int millis)
@@ -227,6 +240,8 @@ abstract class JSBaseAudioRecordingStream implements Runnable,
 			}
 			else if (loop)
 			{
+
+				end = true;
 				setMillisecondPosition(loopBegin);
 				readBytesWrap(rawBytes.length - toLoopEnd, toLoopEnd);
 				if (numLoops != Sound.LOOP_CONTINUOUSLY)

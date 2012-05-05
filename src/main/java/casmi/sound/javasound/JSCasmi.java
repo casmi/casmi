@@ -1,25 +1,25 @@
-/*
- *  Copyright (c) 2007 - 2008 by Damien Di Fede <ddf@compartmental.net>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as published
- *   by the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details.
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the Free Software
- *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
 
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package casmi.sound.javasound;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,7 +47,6 @@ import org.tritonus.share.sampled.AudioUtils;
 import org.tritonus.share.sampled.FloatSampleBuffer;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
-import casmi.Applet;
 
 import casmi.sound.AudioMetaData;
 import casmi.sound.AudioSample;
@@ -57,25 +56,25 @@ import casmi.sound.spi.AudioRecording;
 import casmi.sound.spi.AudioRecordingStream;
 import casmi.sound.spi.AudioStream;
 import casmi.sound.spi.AudioSynthesizer;
-import casmi.sound.spi.MinimServiceProvider;
+import casmi.sound.spi.CasmiSoundServiceProvider;
 import casmi.sound.spi.SampleRecorder;
 
 /**
- * JSMinim is an implementation of the {@link MinimServiceProvider} interface that use
+ * JSMinim is an implementation of the {@link CasmiSoundServiceProvider} interface that use
  * Javasound to provide all audio functionality. That's about all you really need to know about it.
  * 
  * @author Damien Di Fede
  *
  */
 
-public class JSMinim implements MinimServiceProvider
+public class JSCasmi implements CasmiSoundServiceProvider
 {
 	private boolean debug;
   private Mixer   inputMixer;
   private Mixer   outputMixer;
   private String sketchPath;
 
-	public JSMinim()
+	public JSCasmi()
 	{
 		debug = false;
     inputMixer = null;
@@ -216,13 +215,12 @@ public class JSMinim implements MinimServiceProvider
 			int bufferSize)
 	{
 		AudioRecordingStream mstream = null;
-		AudioInputStream ais = getAudioInputStream(filename);
-		if(ais==null)
-		debug("Reading from " + ais.getClass().toString());
-		if (ais != null)
+		if(getAudioInputStream(filename)==null)
+		debug("Reading from " + getAudioInputStream(filename).getClass().toString());
+		if (getAudioInputStream(filename) != null)
 		{
-			debug("File format is: " + ais.getFormat().toString());
-			AudioFormat format = ais.getFormat();
+			debug("File format is: " + getAudioInputStream(filename).getFormat().toString());
+			AudioFormat format = getAudioInputStream(filename).getFormat();
 			// special handling for mp3 files because
 			// they need to be converted to PCM
 			if (format instanceof MpegAudioFormat)
@@ -234,13 +232,13 @@ public class JSMinim implements MinimServiceProvider
 													baseFormat.getChannels() * 2,
 													baseFormat.getSampleRate(), false);
 				// converts the stream to PCM audio from mp3 audio
-				AudioInputStream decAis = getAudioInputStream(format, ais);
+				AudioInputStream decAis = getAudioInputStream(format, getAudioInputStream(filename));
 				// source data line is for sending the file audio out to the
 				// speakers
 				SourceDataLine line = getSourceDataLine(format, bufferSize);
 				if (decAis != null && line != null)
 				{
-					Map props = getID3Tags(filename);
+					Map<String, Object> props = getID3Tags(filename);
 					long lengthInMillis = -1;
 					if (props.containsKey("duration"))
 					{
@@ -251,7 +249,7 @@ public class JSMinim implements MinimServiceProvider
 		            }
 					}
 					MP3MetaData meta = new MP3MetaData(filename, lengthInMillis, props);
-					mstream = new JSMPEGAudioRecordingStream(this, meta, ais,	decAis, line, bufferSize);
+					mstream = new JSMPEGAudioRecordingStream(this, meta, getAudioInputStream(filename),	decAis, line, bufferSize);
 				}
 			} // format instanceof MpegAudioFormat
 			else
@@ -261,19 +259,19 @@ public class JSMinim implements MinimServiceProvider
 				SourceDataLine line = getSourceDataLine(format, bufferSize);
 				if (line != null)
 				{
-					long length = AudioUtils.frames2Millis(ais.getFrameLength(), format);
+					long length = AudioUtils.frames2Millis(getAudioInputStream(filename).getFrameLength(), format);
 					BasicMetaData meta = new BasicMetaData(filename, length);
-					mstream = new JSPCMAudioRecordingStream(this, meta, ais, line, bufferSize);
+					mstream = new JSPCMAudioRecordingStream(this, meta, getAudioInputStream(filename), line, bufferSize);
 				}
 			} // else
 		} // ais != null
 		return mstream;
 	}
 
-	private Map getID3Tags(String filename)
+	private Map<String, Object> getID3Tags(String filename)
 	{
 		debug("Getting the properties.");
-		Map props = new HashMap();
+		Map<String, Object> props = new HashMap<String, Object>();
 		try
 		{
 			MpegAudioFileReader reader = new MpegAudioFileReader(this);
@@ -307,10 +305,6 @@ public class JSMinim implements MinimServiceProvider
 			error("Couldn't access " + filename + ": " + e.getMessage());
 		}
 		return props;
-	}
-	
-	private InputStream createInput(String filename){
-		return new ByteArrayInputStream(filename.getBytes());
 	}
 
 	public AudioStream getAudioStream(int type, int bufferSize,
@@ -348,7 +342,7 @@ public class JSMinim implements MinimServiceProvider
 				// converts the stream to PCM audio from mp3 audio
 				ais = getAudioInputStream(format, ais);
 				// get a map of properties so we can find out how long it is
-				Map props = getID3Tags(filename);
+				Map<String, Object> props = getID3Tags(filename);
 				// there is a property called mp3.length.bytes, but that is
 				// the length in bytes of the mp3 file, which will of course
 				// be much shorter than the decoded version. so we use the
@@ -470,7 +464,7 @@ public class JSMinim implements MinimServiceProvider
 					error("Error obtaining Javasound Clip: " + e.getMessage());
 					return null;
 				}
-				Map props = getID3Tags(filename);
+				Map<String, Object> props = getID3Tags(filename);
 				long lengthInMillis = -1;
 				if (props.containsKey("duration"))
 				{
@@ -512,7 +506,7 @@ public class JSMinim implements MinimServiceProvider
 				// converts the stream to PCM audio from mp3 audio
 				ais = getAudioInputStream(format, ais);
 				//	 get a map of properties so we can find out how long it is
-				Map props = getID3Tags(filename);
+				Map<String, Object> props = getID3Tags(filename);
 				// there is a property called mp3.length.bytes, but that is
 				// the length in bytes of the mp3 file, which will of course
 				// be much shorter than the decoded version. so we use the

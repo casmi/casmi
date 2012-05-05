@@ -150,6 +150,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
+	public void setGLParam(GL gl){
+		
+	}
 	
 	/** @deprecated */
 	public void mouseWheelEvent() {};
@@ -628,6 +631,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
+		this.setGLParam(g.getGL());
 		this.drawObjects(g);
 
 		// Calculate real fps.

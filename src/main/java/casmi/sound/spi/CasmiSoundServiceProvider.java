@@ -37,7 +37,7 @@ import casmi.sound.Recordable;
  *
  */
 
-public interface MinimServiceProvider
+public interface CasmiSoundServiceProvider
 {
   /**
    * Called inside the Minim constructor. Implementations should load any libraries and 

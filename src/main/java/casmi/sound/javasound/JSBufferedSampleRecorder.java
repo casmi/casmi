@@ -1,21 +1,22 @@
-/*
- *  Copyright (c) 2007 by Damien Di Fede <ddf@compartmental.net>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as published
- *   by the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details.
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the Free Software
- *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
 
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package casmi.sound.javasound;
 
 import java.io.ByteArrayInputStream;
@@ -52,7 +53,7 @@ import casmi.sound.spi.SampleRecorder;
  */
 final class JSBufferedSampleRecorder implements SampleRecorder
 {
-  private ArrayList buffers;
+  private ArrayList<FloatBuffer> buffers;
   private FloatBuffer left;
   private FloatBuffer right;
   private boolean recording;
@@ -60,7 +61,7 @@ final class JSBufferedSampleRecorder implements SampleRecorder
   private AudioFileFormat.Type type;
   private AudioFormat format;
   
-  private JSMinim system;
+  private JSCasmi system;
 
   /**
    * Constructs a JSBufferedSampleRecorder that expects audio in the given AudioFormat and 
@@ -69,7 +70,7 @@ final class JSBufferedSampleRecorder implements SampleRecorder
    * @param format the AudioFormat you want to record in
    * @param name the name of the file to save to (not including the extension)
    */
-  JSBufferedSampleRecorder(JSMinim sys,
+  JSBufferedSampleRecorder(JSCasmi sys,
                            String fileName, 
                            AudioFileFormat.Type fileType, 
                            AudioFormat fileFormat,
@@ -78,7 +79,7 @@ final class JSBufferedSampleRecorder implements SampleRecorder
     name = fileName;
     type = fileType;
     format = fileFormat;
-    buffers = new ArrayList(20);
+    buffers = new ArrayList<FloatBuffer>(20);
     left = FloatBuffer.allocate(bufferSize*10);
     if ( format.getChannels() == Sound.STEREO )
     {

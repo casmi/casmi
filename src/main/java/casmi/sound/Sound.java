@@ -1,34 +1,34 @@
 package casmi.sound;
 
 /*
- *  Copyright (c) 2007 - 2008 by Damien Di Fede <ddf@compartmental.net>
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as published
- *   by the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the Free Software
- *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.Mixer;
 
 import casmi.Applet;
-import casmi.sound.javasound.JSMinim;
+import casmi.sound.javasound.JSCasmi;
 import casmi.sound.spi.AudioRecording;
 import casmi.sound.spi.AudioRecordingStream;
 import casmi.sound.spi.AudioStream;
 import casmi.sound.spi.AudioSynthesizer;
-import casmi.sound.spi.MinimServiceProvider;
+import casmi.sound.spi.CasmiSoundServiceProvider;
 import casmi.sound.spi.SampleRecorder;
 
 /**
@@ -74,7 +74,7 @@ public class Sound
 
   private static boolean DEBUG = false;
   
-  private MinimServiceProvider mimp = null;
+  private CasmiSoundServiceProvider mimp = null;
   //private PApplet app;
  
   /**
@@ -86,7 +86,7 @@ public class Sound
   public Sound() 
   {
     //app = parent;
-    mimp = new JSMinim();
+    mimp = new JSCasmi();
   }
   
   /**
@@ -97,7 +97,7 @@ public class Sound
    * @param msp
    *              the MinimServiceProvider that will be used for returning audio resources
    */
-  public Sound(Applet parent, MinimServiceProvider msp)
+  public Sound(Applet parent, CasmiSoundServiceProvider msp)
   {
     //app = parent;
     mimp = msp;
@@ -192,9 +192,9 @@ public class Sound
    */
   public void setInputMixer(Mixer mixer)
   {
-    if ( mimp instanceof JSMinim )
+    if ( mimp instanceof JSCasmi )
     {
-      ((JSMinim)mimp).setInputMixer(mixer);
+      ((JSCasmi)mimp).setInputMixer(mixer);
     }
   }
   
@@ -208,9 +208,9 @@ public class Sound
    */
   public void setOutputMixer(Mixer mixer)
   {
-    if ( mimp instanceof JSMinim)
+    if ( mimp instanceof JSCasmi)
     {
-      ((JSMinim)mimp).setOutputMixer(mixer);
+      ((JSCasmi)mimp).setOutputMixer(mixer);
     }
   }
 

@@ -142,4 +142,8 @@ class JSAudioRecordingClip implements AudioRecording
   {
     // don't need to do anything here
   }
+ @Override
+  public boolean isFinished() {
+	return playing;
+ }
 }

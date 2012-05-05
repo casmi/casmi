@@ -116,4 +116,6 @@ public interface AudioRecording extends AudioResource
 	 * @return the MetaData of the recording
 	 */
 	AudioMetaData getMetaData();
+	
+	boolean isFinished();
 }

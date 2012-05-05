@@ -1,4 +1,30 @@
+/*
+ *   casmi
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package casmi.matrix;
+
+/**
+* 3D Matrix class. 
+* 
+* @author Y. Ban
+* 
+*/
 
 import java.text.NumberFormat;
 
@@ -183,22 +209,22 @@ public class Matrix3D implements Matrix{
 
 
 	  public void rotateX(double angle) {
-	    double c = cos(angle);
-	    double s = sin(angle);
+	    double c = Math.cos(angle);
+	    double s = Math.sin(angle);
 	    apply(1, 0, 0, 0,  0, c, -s, 0,  0, s, c, 0,  0, 0, 0, 1);
 	  }
 
 
 	  public void rotateY(double angle) {
-	    double c = cos(angle);
-	    double s = sin(angle);
+	    double c = Math.cos(angle);
+	    double s = Math.sin(angle);
 	    apply(c, 0, s, 0,  0, 1, 0, 0,  -s, 0, c, 0,  0, 0, 0, 1);
 	  }
 
 
 	  public void rotateZ(double angle) {
-	    double c = cos(angle);
-	    double s = sin(angle);
+	    double c = Math.cos(angle);
+	    double s = Math.sin(angle);
 	    apply(c, -s, 0, 0,  s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
 	  }
 
@@ -206,8 +232,8 @@ public class Matrix3D implements Matrix{
 	  public void rotate(double angle, double v0, double v1, double v2) {
 	    // TODO should make sure this vector is normalized
 
-	    double c = cos(angle);
-	    double s = sin(angle);
+	    double c = Math.cos(angle);
+	    double s = Math.sin(angle);
 	    double t = 1.0f - c;
 
 	    apply((t*v0*v0) + c, (t*v0*v1) - (s*v2), (t*v0*v2) + (s*v1), 0,
@@ -385,36 +411,17 @@ public class Matrix3D implements Matrix{
 	  //////////////////////////////////////////////////////////////
 
 
-	  public Vertex mult(Vertex source, Vertex target) {
-	    if (target == null) {
-	      target = new Vertex();
-	    }
-	    target.setX(m00*source.getX() + m01*source.getY() + m02*source.getZ() + m03);
-	    target.setY(m10*source.getX() + m11*source.getY() + m12*source.getZ() + m13);
-	    target.setZ(m20*source.getX() + m21*source.getY() + m22*source.getZ() + m23);
-//	    double tw = m30*source.x + m31*source.y + m32*source.z + m33;
-//	    if (tw != 0 && tw != 1) {
-//	      target.div(tw);
-//	    }
-	    return target;
+	  public Vertex mult(Vertex source) {
+	    
+	    Vertex result = new Vertex();
+	    result.setX(m00*source.getX() + m01*source.getY() + m02*source.getZ() + m03);
+	    result.setY(m10*source.getX() + m11*source.getY() + m12*source.getZ() + m13);
+	    result.setZ(m20*source.getX() + m21*source.getY() + m22*source.getZ() + m23);
+
+	    return result;
 	  }
 
 
-	  /*
-	  public Vertex cmult(Vertex source, Vertex target) {
-	    if (target == null) {
-	      target = new Vertex();
-	    }
-	    target.x = m00*source.x + m10*source.y + m20*source.z + m30;
-	    target.y = m01*source.x + m11*source.y + m21*source.z + m31;
-	    target.z = m02*source.x + m12*source.y + m22*source.z + m32;
-	    double tw = m03*source.x + m13*source.y + m23*source.z + m33;
-	    if (tw != 0 && tw != 1) {
-	      target.div(tw);
-	    }
-	    return target;
-	  }
-	  */
 
 
 	  /**
@@ -628,22 +635,22 @@ public class Matrix3D implements Matrix{
 
 
 	  public void invRotateX(double angle) {
-	    double c = cos(-angle);
-	    double s = sin(-angle);
+	    double c = Math.cos(-angle);
+	    double s = Math.sin(-angle);
 	    preApply(1, 0, 0, 0,  0, c, -s, 0,  0, s, c, 0,  0, 0, 0, 1);
 	  }
 
 
 	  public void invRotateY(double angle) {
-	    double c = cos(-angle);
-	    double s = sin(-angle);
+	    double c = Math.cos(-angle);
+	    double s = Math.sin(-angle);
 	    preApply(c, 0, s, 0,  0, 1, 0, 0,  -s, 0, c, 0,  0, 0, 0, 1);
 	  }
 
 
 	  public void invRotateZ(double angle) {
-	    double c = cos(-angle);
-	    double s = sin(-angle);
+	    double c = Math.cos(-angle);
+	    double s = Math.sin(-angle);
 	    preApply(c, -s, 0, 0,  s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
 	  }
 
@@ -651,8 +658,8 @@ public class Matrix3D implements Matrix{
 	  public void invRotate(double angle, double v0, double v1, double v2) {
 	    //TODO should make sure this vector is normalized
 
-	    double c = cos(-angle);
-	    double s = sin(-angle);
+	    double c = Math.cos(-angle);
+	    double s = Math.sin(-angle);
 	    double t = 1.0f - c;
 
 	    preApply((t*v0*v0) + c, (t*v0*v1) - (s*v2), (t*v0*v2) + (s*v1), 0,
@@ -696,14 +703,14 @@ public class Matrix3D implements Matrix{
 	                       m20 + " " + m21 + " " + m22 + " " + m23 + "\n" +
 	                       m30 + " " + m31 + " " + m32 + " " + m33 + "\n");
 	    */
-	    int big = (int) Math.abs(max(max(max(max(abs(m00), abs(m01)),
-	                                         max(abs(m02), abs(m03))),
-	                                     max(max(abs(m10), abs(m11)),
-	                                         max(abs(m12), abs(m13)))),
-	                                 max(max(max(abs(m20), abs(m21)),
-	                                         max(abs(m22), abs(m23))),
-	                                     max(max(abs(m30), abs(m31)),
-	                                         max(abs(m32), abs(m33))))));
+	    int big = (int) Math.abs(Math.max(Math.max(Math.max(Math.max(Math.abs(m00), Math.abs(m01)),
+	                                         Math.max(Math.abs(m02), Math.abs(m03))),
+	                                     Math.max(Math.max(Math.abs(m10), Math.abs(m11)),
+	                                         Math.max(Math.abs(m12), Math.abs(m13)))),
+	                                 Math.max(Math.max(Math.max(Math.abs(m20), Math.abs(m21)),
+	                                         Math.max(Math.abs(m22), Math.abs(m23))),
+	                                     Math.max(Math.max(Math.abs(m30), Math.abs(m31)),
+	                                         Math.max(Math.abs(m32), Math.abs(m33))))));
 
 	    int digits = 1;
 	    if (Double.isNaN(big) || Double.isInfinite(big)) {  // avoid infinite loop
@@ -768,20 +775,5 @@ public class Matrix3D implements Matrix{
 		  }
 
 
-	  private final double max(double a, double b) {
-	    return (a > b) ? a : b;
-	  }
-
-	  private final double abs(double a) {
-	    return (a < 0) ? -a : a;
-	  }
-
-	  private final double sin(double angle) {
-	    return (double) Math.sin(angle);
-	  }
-
-	  private final double cos(double angle) {
-	    return (double) Math.cos(angle);
-	  }
 
 }
