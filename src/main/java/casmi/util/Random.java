@@ -29,6 +29,14 @@ public class Random {
 	private static java.util.Random r = null;
 	
 	public static final int random(int max) {
+		
+		if (max == 0)
+			return 0;
+
+		if (r == null)
+			r = new java.util.Random();
+		
+		
 		return r.nextInt(max);
 	}
 	

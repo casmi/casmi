@@ -124,6 +124,21 @@ public class Bezier extends Element implements Renderable {
              v4.getX(), v4.getY(), v4.getZ());
     }
     
+    public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    	this.points[0]  = v1.getX();
+        this.points[1]  = v1.getY();
+        this.points[2]  = v1.getZ();
+        this.points[3]  = v2.getX();
+        this.points[4]  = v2.getY();
+        this.points[5]  = v2.getZ();
+        this.points[6]  = v3.getX();
+        this.points[7]  = v3.getY();
+        this.points[8]  = v3.getZ();
+        this.points[9]  = v4.getX();
+        this.points[10] = v4.getY();
+        this.points[11] = v4.getZ();
+    }
+    
     public void setNode(int number, double x, double y) {
         setNode(number, x, y, 0.0);
     }
@@ -180,6 +195,7 @@ public class Bezier extends Element implements Renderable {
 
             if (this.stroke) {
                 getSceneStrokeColor().setup(gl);
+                gl.glLineWidth(this.strokeWidth);
 
                 gl.glMap1d(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
                 gl.glEnable(GL.GL_MAP1_VERTEX_3);

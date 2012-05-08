@@ -321,6 +321,11 @@ abstract public class Element implements Cloneable, Renderable {
 	public double getZ() {
 		return this.z;
 	}
+	
+	public Vertex getPosition() {
+		Vertex v = new Vertex(x,y,z);
+		return v;
+	}
 
 	public void setX(double x) {
 		this.x = x;

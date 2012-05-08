@@ -399,6 +399,7 @@ public class Curve extends Element implements Renderable {
         
         if (this.stroke) {
         	getSceneStrokeColor().setup(gl);
+            gl.glLineWidth(this.strokeWidth);
             gl.glBegin(GL.GL_LINE_STRIP);
             for (int i = 0; i < detail; i++) {
                 if (i == 0 && isGradation() && startColor != null)
