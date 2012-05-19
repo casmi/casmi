@@ -1077,6 +1077,7 @@ class AppletGLEventListener implements GLEventListener {
 
 		g.init();
 	}
+	
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
@@ -1101,6 +1102,8 @@ class AppletGLEventListener implements GLEventListener {
 			gl.glFlush();
 		}
 	}
+	
+
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
