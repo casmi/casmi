@@ -100,13 +100,6 @@ public class Rect extends Element implements Renderable {
     	return this.h;
     }
     
-//    public double getX(){
-//    	return this.x;
-//    }
-//    
-//    public double getY(){
-//    	return this.y;
-//    }
 
     private final void calcRect() {
         this.x1 = - w / 2;

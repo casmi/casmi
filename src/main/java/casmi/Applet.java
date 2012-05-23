@@ -871,9 +871,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
     
    public void addObject(Object r) {
-	   if(r instanceof Element || r instanceof Group)
+	   if(r instanceof Element || r instanceof Group || r instanceof TimelineRender)
 		   rootObject.add(r);
        
+	   
        // NOTE: ???
        if (rootObject instanceof TimelineRender) {
            timeline = true;

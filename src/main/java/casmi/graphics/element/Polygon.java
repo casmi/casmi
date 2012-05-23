@@ -42,12 +42,12 @@ public class Polygon extends Element implements Renderable {
 	public static final int LINES_3D  = 3;
 	public static final int LINE_LOOP = 51;
 
-	private List<Double> x;
-	private List<Double> y;
-	private List<Double> z;
+	private List<Double> cornerX;
+	private List<Double> cornerY;
+	private List<Double> cornerZ;
 
-	private double X = 0;
-	private double Y = 0;
+	private double centerX = 0;
+	private double centerY = 0;
 	private int size;
 
 	private Vertex tmpV = new Vertex(0, 0, 0);
@@ -57,83 +57,85 @@ public class Polygon extends Element implements Renderable {
 	private int MODE;
 
 	public Polygon() {
-		x = new ArrayList<Double>();
-		y = new ArrayList<Double>();
-		z = new ArrayList<Double>();
+		cornerX = new ArrayList<Double>();
+		cornerY = new ArrayList<Double>();
+		cornerZ = new ArrayList<Double>();
 	}
 
 	public void vertex(float x, float y) {
 		MODE = LINES;
-		this.x.add((double) x);
-		this.y.add((double) y);
-		setSize(this.x.size());
+		this.cornerX.add((double) x);
+		this.cornerY.add((double) y);
+		this.cornerZ.add( 0d);
+		setSize(this.cornerX.size());
 		calcG();
 	}
 
 	public void vertex(float x, float y, float z) {
 		MODE = LINES_3D;
-		this.x.add((double) x);
-		this.y.add((double) y);
-		this.z.add((double) z);
-		setSize(this.x.size());
+		this.cornerX.add((double) x);
+		this.cornerY.add((double) y);
+		this.cornerZ.add((double) z);
+		setSize(this.cornerX.size());
 		calcG();
 	}
 
 	public void vertex(double x, double y) {
 		MODE = LINES;
-		this.x.add(x);
-		this.y.add(y);
-		setSize(this.x.size());
+		this.cornerX.add(x);
+		this.cornerY.add(y);
+		this.cornerZ.add(0d);
+		setSize(this.cornerX.size());
 		calcG();
 	}
 
 	public void vertex(double x, double y, double z) {
 		MODE = LINES_3D;
-		this.x.add(x);
-		this.y.add(y);
-		this.z.add(z);
-		setSize(this.x.size());
+		this.cornerX.add(x);
+		this.cornerY.add(y);
+		this.cornerZ.add(z);
+		setSize(this.cornerX.size());
 		calcG();
 	}
 
 	public void vertex(Vertex v) {
 		MODE = LINES_3D;
-		this.x.add(v.getX());
-		this.y.add(v.getY());
-		this.z.add(v.getZ());
-		setSize(this.x.size());
+		this.cornerX.add(v.getX());
+		this.cornerY.add(v.getY());
+		this.cornerZ.add(v.getZ());
+		setSize(this.cornerX.size());
 		calcG();
 	}
 
 	public Vertex getVertex(int index) {
-		tmpV.setX(x.get(index));
-		tmpV.setY(y.get(index));
-		tmpV.setZ(z.get(index));
+		tmpV.setX(cornerX.get(index));
+		tmpV.setY(cornerY.get(index));
+		tmpV.setZ(cornerZ.get(index));
 		calcG();
 		return tmpV;
 	}
 
 	public void removeVertex(int index) {
-		this.x.remove(index);
-		this.y.remove(index);
-		this.z.remove(index);
+		this.cornerX.remove(index);
+		this.cornerY.remove(index);
+		this.cornerZ.remove(index);
 		if (isGradation() == true)
 			this.cornerColor.remove(index);
-		setSize(this.x.size());
+		setSize(this.cornerX.size());
 		calcG();
 	}
 
 	public void setVertex(int i, double x, double y) {
-		this.x.set(i, x);
-		this.y.set(i, y);
-		this.z.set(i, 0d);
+		this.cornerX.set(i, x);
+		this.cornerY.set(i, y);
+		this.cornerZ.set(i, 0d);
 		calcG();
 	}
 
 	public void setVertex(int i, double x, double y, double z) {
-		this.x.set(i, x);
-		this.y.set(i, y);
-		this.z.set(i, z);
+		this.cornerX.set(i, x);
+		this.cornerY.set(i, y);
+		this.cornerZ.set(i, z);
 		calcG();
 	}
 
@@ -147,7 +149,7 @@ public class Polygon extends Element implements Renderable {
 
 		gl.glPushMatrix();
 //		gl.glTranslated(X, Y, 0);
-		gl.glRotated(rotate, 0, 0, 1.0);
+//		gl.glRotated(rotate, 0, 0, 1.0);
 		this.setTweenParameter(gl);
 
 		switch (MODE) {
@@ -156,9 +158,10 @@ public class Polygon extends Element implements Renderable {
 				getSceneFillColor().setup(gl);
 				gl.glBegin(GL.GL_POLYGON);
 				for (int i = 0; i < this.size; i++) {
-					tmpx = (Double) this.x.get(i);
-					tmpy = (Double) this.y.get(i);
-					gl.glVertex2d(tmpx - X, tmpy - Y);
+					tmpx = (Double) this.cornerX.get(i);
+					tmpy = (Double) this.cornerY.get(i);
+					gl.glVertex2d(tmpx - this.x, tmpy - this.y);
+					
 				}
 				gl.glEnd();
 			}
@@ -168,13 +171,13 @@ public class Polygon extends Element implements Renderable {
 				getSceneStrokeColor().setup(gl);
 				gl.glBegin(GL.GL_LINE_STRIP);
 				for (int i = 0; i < this.size; i++) {
-					tmpx = (Double) this.x.get(i);
-					tmpy = (Double) this.y.get(i);
-					gl.glVertex2d(tmpx - X, tmpy - Y);
+					tmpx = (Double) this.cornerX.get(i);
+					tmpy = (Double) this.cornerY.get(i);
+					gl.glVertex2d(tmpx - this.x, tmpy - this.y);
 				}
-				tmpx = (Double) this.x.get(0);
-				tmpy = (Double) this.y.get(0);
-				gl.glVertex2d(tmpx - X, tmpy - Y);
+				tmpx = (Double) this.cornerX.get(0);
+				tmpy = (Double) this.cornerY.get(0);
+				gl.glVertex2d(tmpx - this.x, tmpy - this.y);
 				gl.glEnd();
 			}
 			break;
@@ -183,12 +186,12 @@ public class Polygon extends Element implements Renderable {
 				this.fillColor.setup(gl);
 				gl.glBegin(GL.GL_POLYGON);
 				for (int i = 0; i < this.size; i++) {
-					tmpx = (Double) this.x.get(i);
-					tmpy = (Double) this.y.get(i);
-					tmpz = (Double) this.z.get(i);
+					tmpx = (Double) this.cornerX.get(i);
+					tmpy = (Double) this.cornerY.get(i);
+					tmpz = (Double) this.cornerZ.get(i);
 					if (isGradation() == true)
 						getSceneColor(this.cornerColor.get(i)).setup(gl);
-					gl.glVertex3d(tmpx - X, tmpy - Y, tmpz);
+					gl.glVertex3d(tmpx - this.x, tmpy - this.y, tmpz - this.z);
 				}
 				gl.glEnd();
 			}
@@ -197,16 +200,15 @@ public class Polygon extends Element implements Renderable {
 				gl.glLineWidth(this.strokeWidth);
 				this.strokeColor.setup(gl);
 				gl.glBegin(GL.GL_LINE_STRIP);
-				for (int i = 0; i < x.size(); i++) {
-					tmpx = (Double) this.x.get(i);
-					tmpy = (Double) this.y.get(i);
-					tmpz = (Double) this.z.get(i);
-					gl.glVertex3d(tmpx - X, tmpy - Y, tmpz);
+				for (int i = 0; i < cornerX.size(); i++) {
+					tmpx = (Double) this.cornerX.get(i);
+					tmpy = (Double) this.cornerY.get(i);
+					tmpz = (Double) this.cornerZ.get(i);
+					gl.glVertex3d(tmpx - this.x, tmpy - this.y, tmpz - this.z);
 				}
-				tmpx = (Double) this.x.get(0);
-				tmpy = (Double) this.y.get(0);
-				tmpz = (Double) this.z.get(0);
-				gl.glVertex3d(tmpx - X, tmpy - Y, tmpz);
+				tmpx = (Double) this.cornerX.get(0);
+				tmpy = (Double) this.cornerY.get(0);
+				tmpz = (Double) this.cornerZ.get(0);
 				gl.glEnd();
 			}
 			break;
@@ -223,39 +225,58 @@ public class Polygon extends Element implements Renderable {
 	}
 
 	private void calcG() {
-		X = Y = 0;
-		for (int i = 0; i < x.size(); i++) {
-			X += x.get(i);
-			Y += y.get(i);
+		double cenX = 0, cenY = 0, cenZ = 0;
+		
+		for (int i = 0; i < cornerX.size(); i++) {
+			cenX += cornerX.get(i);
+			cenY += cornerY.get(i);
+			cenZ += cornerZ.get(i);
 		}
-		X /= x.size();
-		Y /= y.size();
+		this.x = cenX/cornerX.size();
+		this.y = cenY/cornerX.size();
+		this.z = cenZ/cornerX.size();
 	}
 
 	public double getX() {
-		return this.X;
+		return this.centerX;
 	}
 
 	public double getY() {
-		return this.Y;
+		return this.centerY;
 	}
 
 	public void setX(double x) {
-		this.X = x;
+		this.centerX = x;
 	}
 
 	public void setY(double y) {
-		this.Y = y;
+		this.centerY = y;
 	}
 
 	public void setXY(double x, double y) {
-		this.X = x;
-		this.Y = y;
+		this.centerX = x;
+		this.centerY = y;
 	}
+    
+    @Override
+    public void setPosition(double x, double y) {
+    	setPosition(x, y, this.z);
+    }
+    
+    @Override
+    public void setPosition(double x, double y, double z) {
+
+		for (int i = 0; i < cornerX.size(); i++) {
+			cornerX.set(i, cornerX.get(i) + x - this.x);
+			cornerY.set(i, cornerY.get(i) + y - this.y);
+			cornerZ.set(i, cornerZ.get(i) + z - this.z);
+		}
+    	calcG();
+    }
 
 	public void setCornerColor(int index, Color color) {
 		if (cornerColor == null) {
-			for (int i = 0; i < x.size(); i++) {
+			for (int i = 0; i < cornerX.size(); i++) {
 				cornerColor.add(new RGBColor(this.fillColor.getRed(),
 				                             this.fillColor.getGreen(),
 				                             this.fillColor.getBlue(),
@@ -263,8 +284,8 @@ public class Polygon extends Element implements Renderable {
 			}
 			setGradation(true);
 		}
-		if (cornerColor.size() < x.size()) {
-			while (cornerColor.size() != x.size()) {
+		if (cornerColor.size() < cornerX.size()) {
+			while (cornerColor.size() != cornerX.size()) {
 				cornerColor.add(new RGBColor(this.fillColor.getRed(),
                                              this.fillColor.getGreen(),
                                              this.fillColor.getBlue(),

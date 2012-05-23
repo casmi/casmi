@@ -88,7 +88,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	public void add(Object object) {
-		   if(object instanceof Element || object instanceof Group)
+		   if(object instanceof Element || object instanceof Group || object instanceof TimelineRender)
 			   	objectList.add(object);
 	}
 	
@@ -465,6 +465,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
+				System.out.println("test");
 				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;

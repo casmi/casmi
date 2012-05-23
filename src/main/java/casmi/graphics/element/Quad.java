@@ -317,8 +317,8 @@ public class Quad extends Element implements Renderable {
     }
     
     private void calcG(){
-    	x = (x1+x2+x3+x4)/4.0;
-    	y = (y1+y2+y3+y4)/4.0;
+    	this.x = (x1+x2+x3+x4)/4.0;
+    	this.y = (y1+y2+y3+y4)/4.0;
     }
     
     @Override
