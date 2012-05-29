@@ -147,7 +147,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	abstract public void update();
 	
 	public void exit() {}
-	// TODO: abstract public void exit();
+	// TODO: will use abstract method from next version 
+	// abstract public void exit();
 
 	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
