@@ -145,17 +145,18 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	abstract public void setup();
 
 	abstract public void update();
+	
+	public void exit() {}
+	// TODO: abstract public void exit();
 
 	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
-	public void setGLParam(GL gl){
+	
+	public void setGLParam(GL gl) {
 		
 	}
-	
-	/** @deprecated */
-	public void mouseWheelEvent() {};
 
 	class GLRedisplayTask extends TimerTask {
 	    
@@ -177,15 +178,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 				keyboard.setTyped(false);
 			}
 		}
-	}
-	
-	public void end(){
-		System.out.println("test");
-	}
-	
-	@Override
-	public void destroy(){
-		end();
 	}
 
 	@Override
@@ -216,6 +208,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    
+		    @Override
+		    public void run() {
+		        exit();
+            }
+        });
 		
 		isInitializing = false;
 	}
@@ -470,17 +470,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		updateMouse();
 	}
 	
-	@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-		    int wheelRotation = e.getWheelRotation();
-		    
-		    mouse.setWheelRotation(wheelRotation);
-			
-		    if (wheelRotation != 0) {
-		        mouseEvent(MouseEvent.WHEEL_ROTATED, MouseButton.NONE);
-				mouseWheelEvent();
-			}
-		}
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int wheelRotation = e.getWheelRotation();
+
+        mouse.setWheelRotation(wheelRotation);
+
+        if (wheelRotation != 0) {
+            mouseEvent(MouseEvent.WHEEL_ROTATED, MouseButton.NONE);
+        }
+    }
 	
 	private final void updateMouse() {
 		mouse.setPrvX(mouse.getX());
@@ -1079,7 +1078,6 @@ class AppletGLEventListener implements GLEventListener {
 		g.init();
 	}
 	
-
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		synchronized (this) {
@@ -1103,8 +1101,6 @@ class AppletGLEventListener implements GLEventListener {
 			gl.glFlush();
 		}
 	}
-	
-
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
