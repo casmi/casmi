@@ -221,6 +221,12 @@ public class TweenManager {
 		for (Tween t : tweens) {
 			t.render(g, currentMillis);
 		}
+		//TODO delete completed tweens
+		for (Tween t : tweens) {
+			if (t.isFinished()){
+				tweens.remove(t);
+				break;}
+		}
 
 	}
 }

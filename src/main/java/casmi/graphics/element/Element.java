@@ -27,7 +27,9 @@ import javax.media.opengl.GL;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
+import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.Mask;
 import casmi.matrix.Vertex;
 
@@ -71,6 +73,7 @@ abstract public class Element implements Cloneable, Renderable {
 	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha * sceneA);
 	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha * sceneA);
 	protected Material material      = new Material();
+	protected boolean ismaterial = false;
 
 	protected boolean stroke = true;
 	protected boolean fill   = true;
@@ -82,6 +85,9 @@ abstract public class Element implements Cloneable, Renderable {
 	private boolean mouseOver       = false;
 	private boolean preMouseOver    = false;
 	private boolean selectionBuffer = false;
+	
+	private boolean depthTest = true;
+	private boolean removeElement = false;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -220,6 +226,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setMaterial(Material m) {
 		this.material = m;
+		this.ismaterial = true;
 	}
 
 	public void setSceneAlpha(double alpha) {
@@ -243,7 +250,6 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public Color getSceneFillColor() {
-		//System.out.println("scenA is ... "+sceneA);
 	    sceneFillColor = fillColor.clone();
 		if (tween) {
 			sceneFillColor.setAlpha(gettAF() * sceneA);
@@ -313,6 +319,11 @@ abstract public class Element implements Cloneable, Renderable {
 
 	public double getZ() {
 		return this.z;
+	}
+	
+	public Vertex getPosition() {
+		Vertex v = new Vertex(x,y,z);
+		return v;
 	}
 
 	public void setX(double x) {
@@ -442,6 +453,18 @@ abstract public class Element implements Cloneable, Renderable {
 			mouseEventCallbacks = new ArrayList<MouseEventCallback>(3);
 		}
 		mouseEventCallbacks.add(callback);
+		
+///////////////////////////////////		
+		if(this instanceof GraphicsObject){
+			GraphicsObject g = (GraphicsObject)this;
+			for (Object obj : g.getObjectList()) {
+				if(obj instanceof Element)
+					((Element) obj).addMouseEventCallback(callback);
+				if(obj instanceof Group)
+					((Group) obj).addMouseEventCallback(callback);
+			}
+					
+		}
 	}
 
 	public List<MouseEventCallback> getMouseOverCallback() {
@@ -556,4 +579,31 @@ abstract public class Element implements Cloneable, Renderable {
 	public boolean isMasked() {
         return mask != null;
     }
+
+	public boolean isDepthTest() {
+		return depthTest;
+	}
+
+	public void setDepthTest(boolean depthTest) {
+		this.depthTest = depthTest;
+		
+		if(this instanceof GraphicsObject){
+			GraphicsObject g = (GraphicsObject)this;
+			for (Object obj : g.getObjectList()) {
+				if(obj instanceof Element)
+					((Element) obj).setDepthTest(depthTest);
+				if(obj instanceof Group)
+					((Group) obj).setDepthTest(depthTest);
+			}
+					
+		}
+	}
+
+	public void remove() {
+		this.removeElement = true;
+	}
+	
+	public boolean isRemove() {
+		return this.removeElement;
+	}
 }

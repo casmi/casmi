@@ -57,7 +57,9 @@ public class Perspective extends Element implements ObjectRender,Perse {
 	@Override
 	public void render(Graphics g) {
 		if (def) {
-			g.perspective();
+			double cameraZ = ((g.getHeight() / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
+			g.perspective(Math.PI / 3.0, (double) g.getWidth()
+					/ (double) g.getHeight(), cameraZ / 10.0, cameraZ * 10.0);
 		} else {
 			g.perspective(fov, aspect, zNear, zFar);
 		}

@@ -183,7 +183,7 @@ public class Line extends Element implements Renderable {
         dz[1] = z2 - 0;
     }
     
-    public void set(boolean index, double x, double y){
+    public void set(boolean index, double x, double y) {
     	this.MODE = LINES;
     	if(index == true){
     		this.x1 = x;
@@ -252,58 +252,67 @@ public class Line extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
 
         getSceneStrokeColor().setup(gl);
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
-     //   setPoint();
 
-        gl.glTranslated((this.x1 + this.x2) / 2.0, 
-        				(this.y1 + this.y2) / 2.0, 
-        				(this.z1 + this.z2) / 2.0);
-        
-        switch (MODE) {
-        case LINES:
-            gl.glLineWidth(this.strokeWidth);
-            gl.glBegin(GL.GL_LINES);
-            if(isGradation()==true&&startColor!=null)
-            	getSceneColor(startColor).setup(gl);
-            gl.glVertex2d(this.dx[0], this.dy[0]);
-            if(isGradation()==true&&endColor!=null)
-            	getSceneColor(endColor).setup(gl);
-            gl.glVertex2d(this.dx[1], this.dy[1]);
-            gl.glEnd();
-            break;
-        case LINES_3D:
-            gl.glLineWidth(this.strokeWidth);
-            gl.glBegin(GL.GL_LINES);
-            if(isGradation()==true&&startColor!=null)
-            	getSceneColor(startColor).setup(gl);
-            gl.glVertex3d(this.dx[0], this.dy[0], this.dz[0]);
-            if(isGradation()==true&&endColor!=null)
-            	getSceneColor(endColor).setup(gl);
-            gl.glVertex3d(this.dx[1], this.dy[1], this.dz[1]);
-            gl.glEnd();
-            break;
-        default:
-            break;
+        {
+            this.setTweenParameter(gl);
+
+//            gl.glTranslated(x, y, z);
+
+            switch (MODE) {
+            case LINES:
+                gl.glLineWidth(this.strokeWidth);
+                gl.glBegin(GL.GL_LINES);
+                {
+                    if (isGradation() && startColor != null)
+                        getSceneColor(startColor).setup(gl);
+                    
+                    gl.glVertex2d(this.dx[0], this.dy[0]);
+                    
+                    if (isGradation() && endColor != null)
+                        getSceneColor(endColor).setup(gl);
+                    
+                    gl.glVertex2d(this.dx[1], this.dy[1]);
+                }
+                gl.glEnd();
+                break;
+            case LINES_3D:
+                gl.glLineWidth(this.strokeWidth);
+                gl.glBegin(GL.GL_LINES);
+                {
+                    if (isGradation() && startColor != null)
+                        getSceneColor(startColor).setup(gl);
+                    
+                    gl.glVertex3d(this.dx[0], this.dy[0], this.dz[0]);
+                    
+                    if (isGradation() && endColor != null)
+                        getSceneColor(endColor).setup(gl);
+                    
+                    gl.glVertex3d(this.dx[1], this.dy[1], this.dz[1]);
+                }
+                gl.glEnd();
+                break;
+            default:
+                break;
+            }
         }
-        
         gl.glPopMatrix();
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glEnable(GL.GL_DEPTH_TEST);
         }
     }
     
-    private void calcG(){
-    	x = (x1+x2)/2.0;
-    	y = (y1+y2)/2.0;
-    	z = (z1+z2)/2.0;
+    private final void calcG() {
+        x = (x1 + x2) / 2.0;
+        y = (y1 + y2) / 2.0;
+        z = (z1 + z2) / 2.0;
     }
     
 //    private void setPoint() {
@@ -333,5 +342,14 @@ public class Line extends Element implements Renderable {
 
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
+    }
+    
+    public Vertex getCorner(int index){
+    	Vertex v = new Vertex();
+    	if(index==0)
+    		v.set(x1, y1, z1);
+    	else
+    		v.set(x2, y2, z2);
+    	return v;
     }
 }

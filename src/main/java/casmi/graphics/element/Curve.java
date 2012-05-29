@@ -368,7 +368,7 @@ public class Curve extends Element implements Renderable {
 
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001) {
+    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glDisable(GL.GL_DEPTH_TEST);
         }
 
@@ -399,6 +399,7 @@ public class Curve extends Element implements Renderable {
         
         if (this.stroke) {
         	getSceneStrokeColor().setup(gl);
+            gl.glLineWidth(this.strokeWidth);
             gl.glBegin(GL.GL_LINE_STRIP);
             for (int i = 0; i < detail; i++) {
                 if (i == 0 && isGradation() && startColor != null)
@@ -419,7 +420,7 @@ public class Curve extends Element implements Renderable {
         
         gl.glPopMatrix();
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
             gl.glEnable(GL.GL_DEPTH_TEST);
     }
 

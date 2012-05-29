@@ -47,6 +47,31 @@ public class DepthMap {
         tex = new Texture(new Image(getWidth(), getHeight()));
     }
     
+    final void update() {
+        updateTexture();
+    }
+    
+    private final void updateTexture() {
+        calcHist();
+        
+        ShortBuffer buf = dmd.getData().createShortBuffer();
+        buf.rewind();
+        
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                short d = buf.get();
+                if (0 < d) {
+                    int gray = (int)histogram[d];
+                    tex.getImage().setColor(new RGBColor(gray / 255.0), x, y);
+                } else {
+                    tex.getImage().setColor(new RGBColor(0.0, 0.0), x, y);
+                }
+            }
+        }
+        
+        tex.getImage().reloadTexture();
+    }
+    
     public int getDepth(int x, int y) {
         ShortBuffer buf = dmd.getData().createShortBuffer();
         buf.position((x + y * getWidth()) * 3);
@@ -73,24 +98,6 @@ public class DepthMap {
      * @see casmi.graphics.element.Texture
      */
     public Texture getTexture() {
-        calcHist();
-        
-        ShortBuffer buf = dmd.getData().createShortBuffer();
-        buf.rewind();
-        
-        for (int y = 0; y < getHeight(); y++) {
-            for (int x = 0; x < getWidth(); x++) {
-                short d = buf.get();
-                if (0 < d) {
-                    int gray = (int)histogram[d];
-                    tex.getImage().setColor(new RGBColor(gray / 255.0), x, y);
-                } else {
-                    tex.getImage().setColor(new RGBColor(0.0, 0.0), x, y);
-                }
-            }
-        }
-        
-        tex.getImage().reloadTexture();
         return tex;
     }
     

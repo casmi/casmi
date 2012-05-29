@@ -57,6 +57,28 @@ public class UserMap {
         tex = new Texture(new Image(getWidth(), getHeight()));
     }
     
+    final void update() { 
+        updateTexture();
+    }
+    
+    private final void updateTexture() {
+        ShortBuffer buf = smd.getData().createShortBuffer();
+        buf.rewind();
+        
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                short u = buf.get();
+                if (0 < u) {
+                    tex.getImage().setColor(COLORS[u % COLORS.length], x, y);
+                } else {
+                    tex.getImage().setColor(new RGBColor(0.0, 0.0), x, y);
+                }
+            }
+        }
+        
+        tex.getImage().reloadTexture();
+    }
+    
     public final int getUser(int x, int y) {
         ShortBuffer buf = smd.getData().createShortBuffer();
         buf.position(x + y * getWidth());
@@ -76,21 +98,6 @@ public class UserMap {
     }
     
     public final Texture getTexture() {
-        ShortBuffer buf = smd.getData().createShortBuffer();
-        buf.rewind();
-        
-        for (int y = 0; y < getHeight(); y++) {
-            for (int x = 0; x < getWidth(); x++) {
-                short u = buf.get();
-                if (0 < u) {
-                    tex.getImage().setColor(COLORS[u % COLORS.length], x, y);
-                } else {
-                    tex.getImage().setColor(new RGBColor(0.0, 0.0), x, y);
-                }
-            }
-        }
-        
-        tex.getImage().reloadTexture();
         return tex;
     }
     

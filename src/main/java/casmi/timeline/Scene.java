@@ -25,6 +25,7 @@ import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
+import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
@@ -78,7 +79,6 @@ abstract public class Scene {
     }
 
     public void drawscene(Graphics g) {
-      //  g.render(rootObject);
         rootObject.bufRender(g, 0, 0, false, 0);
         if (selectionBuffer) {}
         update(g);
@@ -263,5 +263,19 @@ abstract public class Scene {
     public void mouseEvent(casmi.MouseEvent e) {
 
     }
+    
+    public GraphicsObject getObjects(){
+    	return rootObject;
+    }
+
+	public void setDepthTest(boolean b) {
+		for(Object obj : rootObject.getObjectList()){
+			if(obj instanceof Element)
+				((Element) obj).setDepthTest(b);
+			if(obj instanceof Group)
+				((Group) obj).setDepthTest(b);
+		}
+		
+	}
 
 }

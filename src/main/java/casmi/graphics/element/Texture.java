@@ -228,8 +228,8 @@ public class Texture extends Element implements Renderable {
             Graphics.reloadTextures();
             reloadFlag = false;
         }
-        
-        gl.glDisable(GL.GL_DEPTH_TEST);
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+        	gl.glDisable(GL.GL_DEPTH_TEST);
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
@@ -298,7 +298,8 @@ public class Texture extends Element implements Renderable {
             image.disableTexture();
         }
         gl.glPopMatrix();
-        gl.glEnable(GL.GL_DEPTH_TEST);
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+        	gl.glEnable(GL.GL_DEPTH_TEST);
     }
 
     public final double getWidth() {

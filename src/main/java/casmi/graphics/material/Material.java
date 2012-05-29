@@ -31,10 +31,10 @@ import javax.media.opengl.GL;
 public class Material {
     
     private float shininess[] = {1.0f};
-    private float ambient[] = {0,0,0,255};
-    private float diffuse[] = {0,0,0,255};
-    private float specular[] = {0,0,0,255};
-    private float emissive[] = {0,0,0,255};
+    private float ambient[] = {0,0,0,1.0f};
+    private float diffuse[] = {0,0,0,1.0f};
+    private float specular[] = {0,0,0,1.0f};
+    private float emissive[] = {0,0,0,1.0f};
     private Boolean Sh = false;
     private Boolean Am = false;
     private Boolean Di = false;
@@ -196,13 +196,13 @@ public class Material {
         if(Sh==true)
             gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SHININESS, shininess,0);
         if(Am==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_AMBIENT, normalize(ambient),0);
+            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_AMBIENT, ambient,0);
         if(Di==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_DIFFUSE, normalize(diffuse),0);
+            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_DIFFUSE, diffuse,0);
         if(Sp==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SPECULAR, normalize(specular),0);
+            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SPECULAR, specular,0);
         if(Em==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_EMISSION, normalize(emissive),0);
+            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_EMISSION, emissive,0);
     }
 
 }

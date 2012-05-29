@@ -21,7 +21,7 @@ package casmi.sql;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.DriverManager;
 import java.sql.ParameterMetaData;
@@ -119,15 +119,8 @@ public class SQLite extends SQL {
      * @throws IOException
      */
     public static void createDatabase(File dbFile) throws IOException {
-
-        URL url = SQLite.class.getResource("template.sqlite3");
-
-        if (url == null) {
-            throw new IOException("Template file does not found.");
-        }
-
-        File src = new File(url.getPath());
-        FileUtil.copyFile(src, dbFile);
+        InputStream is = SQLite.class.getResourceAsStream("template.sqlite3");
+        FileUtil.createFileFromInputStream(dbFile, is);
     }
     
     /**

@@ -100,13 +100,6 @@ public class Rect extends Element implements Renderable {
     	return this.h;
     }
     
-//    public double getX(){
-//    	return this.x;
-//    }
-//    
-//    public double getY(){
-//    	return this.y;
-//    }
 
     private final void calcRect() {
         this.x1 = - w / 2;
@@ -122,8 +115,8 @@ public class Rect extends Element implements Renderable {
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
         calcRect();
-        
-        gl.glDisable(GL.GL_DEPTH_TEST);
+        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+          	gl.glDisable(GL.GL_DEPTH_TEST);
 
         gl.glPushMatrix();
         {
@@ -199,8 +192,8 @@ public class Rect extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-        
-        gl.glEnable(GL.GL_DEPTH_TEST);
+        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+        	gl.glEnable(GL.GL_DEPTH_TEST);
     }
     
     public void setGradationColor(GradationMode mode, Color color1, Color color2) {

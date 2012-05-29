@@ -19,12 +19,35 @@
 
 package casmi.util;
 
+import casmi.matrix.Vertex;
+
 /**
  * @author Y. Ban
  */
 public class Random {
 
 	private static java.util.Random r = null;
+	
+	public static final int random(int max) {
+		
+		if (max == 0)
+			return 0;
+
+		if (r == null)
+			r = new java.util.Random();
+		
+		
+		return r.nextInt(max);
+	}
+	
+	public static final int random(int min, int max) {
+		if (min >= max)
+			return min;
+
+		int diff = max - min;
+
+		return random(diff) + min;
+	}
 
 	public static final float random(float max) {
 
@@ -51,5 +74,15 @@ public class Random {
 			r = new java.util.Random();
 
 		r.setSeed(seed);
+	}
+	
+	/**
+	 * returns a random Vertex that represents a point on the unit circle
+	 * 
+	 * @return vertex
+	 */
+	public static final Vertex randVertex2d() {
+		float theta = random((float)(Math.PI*2.0));
+		return new Vertex(Math.cos(theta),Math.sin(theta));
 	}
 }

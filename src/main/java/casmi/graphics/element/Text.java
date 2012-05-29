@@ -166,8 +166,8 @@ public class Text extends Element implements Renderable {
     
     @Override
     public void render(GL gl, GLU glu, int width, int height) {
-        
-        gl.glDisable(GL.GL_DEPTH_TEST);
+    	if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
+    		gl.glDisable(GL.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
         {
@@ -198,7 +198,12 @@ public class Text extends Element implements Renderable {
                     case RIGHT:
                         tmpX = -getWidth(i);
                     }
-                    textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
+                    
+                    try {
+                        textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        // ignore
+                    }
 
                 }
                 textRenderer.end3DRendering();
@@ -231,8 +236,8 @@ public class Text extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-
-        gl.glEnable(GL.GL_DEPTH_TEST);
+        if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
+        	gl.glEnable(GL.GL_DEPTH_TEST);
     }
 
     /**

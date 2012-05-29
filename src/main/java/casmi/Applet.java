@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +61,8 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
+import casmi.graphics.element.Element;
+import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
@@ -93,11 +96,15 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     private int width = 100, height = 100;
     
+    // FPS.
     private double fps = 30.0;
+    private double workingFPS = fps;
+    private int frame = 0;
+    private long baseTime = 0;
 
+    // Mouse and keyboard instances.
     private Mouse mouse = new Mouse();
-	private char key;
-	private int keycode;
+    private Keyboard keyboard = new Keyboard();
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -107,10 +114,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	private boolean isFullScreen = false;
 	private boolean isInitializing = true;
-
-	private boolean keyPressed = false;
-	private boolean keyReleased = false;
-	private boolean keyTyped = false;
 
 	private boolean runAsApplication = false;
 
@@ -137,16 +140,24 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private int recordTime = 0;
 	private int recordSpan = 0;
 	
+	// Abstract methods.
+	// -------------------------------------------------------------------------
 	abstract public void setup();
 
 	abstract public void update();
+	
+	public void exit() {}
+	// TODO: will use abstract method from next version 
+	// abstract public void exit();
 
 	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
 	abstract public void keyEvent(KeyEvent e);
+	// -------------------------------------------------------------------------
 	
-	/** @deprecated */
-	public void mouseWheelEvent() {};
+	public void setGLParam(GL gl) {
+		
+	}
 
 	class GLRedisplayTask extends TimerTask {
 	    
@@ -163,9 +174,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 				mouse.setDragged(false);
 				mouse.setMoved(false);
 				
-				keyPressed = false;
-				keyReleased = false;
-				keyTyped = false;
+				keyboard.setPressed(false);
+				keyboard.setReleased(false);
+				keyboard.setTyped(false);
 			}
 		}
 	}
@@ -175,7 +186,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject = new GraphicsObject();
 		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
 		this.setup();
-
+		rootObject.setDepthTest(false);
 		// JOGL setup
 		this.caps = new GLCapabilities();
 		this.caps.setStencilBits(8);
@@ -198,7 +209,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
-
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    
+		    @Override
+		    public void run() {
+		        exit();
+            }
+        });
 		
 		isInitializing = false;
 	}
@@ -269,10 +287,28 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	public void setFPS(double fps) {
 		this.fps = fps;
+		
+		if (!isInitializing) {
+		    timer.cancel();
+		    timer = new Timer();
+		    timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
+		}
 	}
 
 	public double getFPS() {
 		return fps;
+	}
+	
+	public double getWorkingFPS() {
+	    return workingFPS;
+	}
+	
+	public void setDepthTest(boolean depthTest){
+		rootObject.setDepthTest(depthTest);
+	}
+	
+	public boolean isDepthTest(){
+		return rootObject.isDepthTest();
 	}
 
 	public boolean isFullScreen() {
@@ -435,17 +471,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		updateMouse();
 	}
 	
-	@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-		    int wheelRotation = e.getWheelRotation();
-		    
-		    mouse.setWheelRotation(wheelRotation);
-			
-		    if (wheelRotation != 0) {
-		        mouseEvent(MouseEvent.WHEEL_ROTATED, MouseButton.NONE);
-				mouseWheelEvent();
-			}
-		}
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int wheelRotation = e.getWheelRotation();
+
+        mouse.setWheelRotation(wheelRotation);
+
+        if (wheelRotation != 0) {
+            mouseEvent(MouseEvent.WHEEL_ROTATED, MouseButton.NONE);
+        }
+    }
 	
 	private final void updateMouse() {
 		mouse.setPrvX(mouse.getX());
@@ -460,9 +495,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void keyPressed(java.awt.event.KeyEvent e) {
-		keyPressed = true;
-		this.key = e.getKeyChar();
-		this.keycode = e.getKeyCode();
+		keyboard.setPressed(true);
+		keyboard.setKey(e.getKeyChar());
+		keyboard.setKeyCode(e.getKeyCode());
+		
 		keyEvent(KeyEvent.PRESSED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
@@ -471,9 +507,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void keyReleased(java.awt.event.KeyEvent e) {
-		keyReleased = true;
-		this.key = java.awt.event.KeyEvent.CHAR_UNDEFINED;
-		this.keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
+	    keyboard.setReleased(true);
+	    keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+	    keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
+	    
 		keyEvent(KeyEvent.RELEASED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
@@ -482,24 +519,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void keyTyped(java.awt.event.KeyEvent e) {
-		keyTyped = true;
-		this.key = e.getKeyChar();
+	    keyboard.setTyped(true);
+	    keyboard.setKey(e.getKeyChar());
+	    keyboard.setKeyCode(e.getKeyCode());
+	    
 		keyEvent(KeyEvent.TYPED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
 		}
-	}
-
-	public boolean isKeyPressed() {
-		return keyPressed;
-	}
-
-	public boolean isKeyReleased() {
-		return keyReleased;
-	}
-
-	public boolean isKeyTyped() {
-		return keyTyped;
 	}
 
 	// -------------------------------------------------------------------------
@@ -604,8 +631,21 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
+		this.setGLParam(g.getGL());
 		this.drawObjects(g);
 
+		// Calculate real fps.
+		{
+		    frame++;
+		    long now = System.currentTimeMillis();
+		    long elapse = now - baseTime;
+		    if (1000 < elapse) {
+		        workingFPS = (double)frame * 1000.0 / (double)elapse;
+		        baseTime = now;
+		        frame = 0;
+		    }
+		}
+		
 		// capture image
 		if (saveImageFlag) {
 			saveImageFlag = false;
@@ -668,14 +708,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void setRunAsApplication(boolean runAsApplication) {
 		this.runAsApplication = runAsApplication;
 	}
-
-	public char getKey() {
-		return key;
-	}
-
-	public int getKeycode() {
-		return keycode;
-	}
 	
 	public int getMouseWheelRotation() {
 		return mouse.getWheelRotation();
@@ -732,6 +764,35 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public boolean isMouseMoved() {
 		return mouse.isMoved();
 	}
+	
+	public Keyboard getKeyboard() {
+	    return keyboard;
+	}
+	
+	public char getKey() {
+		return keyboard.getKey();
+	}
+
+	/**	@deprecated */
+	public int getKeycode() {
+		return keyboard.getKeyCode();
+	}
+	
+	public int getKeyCode() {
+	    return keyboard.getKeyCode();
+	}
+	
+	public boolean isKeyPressed() {
+		return keyboard.isPressed();
+	}
+
+	public boolean isKeyReleased() {
+		return keyboard.isReleased();
+	}
+
+	public boolean isKeyTyped() {
+		return keyboard.isTyped();
+	}
 
 	@Override
 	public int getWidth() {
@@ -745,8 +806,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	
     private final void drawObjects(Graphics g) {
-    	//g.render(rootObject);
-    	//rootObject.selectionbufRender(g, getMouseX(), getMouseY());
+    	rootObject.clearSelectionList();
     	rootObject.bufRender(g, getMouseX(), getMouseY(),false,0);
     	rootObject.selectionbufRender(g, getMouseX(), getMouseY(), 0);
     	update(g);
@@ -811,8 +871,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
     
    public void addObject(Object r) {
-       rootObject.add(r);
+	   if(r instanceof Element || r instanceof Group || r instanceof TimelineRender)
+		   rootObject.add(r);
        
+	   
        // NOTE: ???
        if (rootObject instanceof TimelineRender) {
            timeline = true;
@@ -824,8 +886,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
        }
    }
    
+   public void addObject(List<Object> objects) {
+	   for(Object obj : objects){
+		   if(obj instanceof Element || obj instanceof Group)
+			   rootObject.add(obj);
+	   }
+   }
+   
    public void addObject(int index, Object r) {
-       rootObject.add(index, r);
+	   if(r instanceof Element || r instanceof Group)
+		   rootObject.add(index, r);
        
        // NOTE: ???
        if (rootObject instanceof TimelineRender) {
@@ -1008,7 +1078,7 @@ class AppletGLEventListener implements GLEventListener {
 
 		g.init();
 	}
-
+	
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		synchronized (this) {
@@ -1019,7 +1089,7 @@ class AppletGLEventListener implements GLEventListener {
 			gl.glEnable(GL.GL_DEPTH_TEST);
 			gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT
 					| GL.GL_STENCIL_BUFFER_BIT);
-
+			//gl.glDepthMask(false);
 			gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL.GL_BLEND);
 

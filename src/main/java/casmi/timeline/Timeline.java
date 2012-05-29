@@ -291,6 +291,7 @@ public class Timeline implements TimelineRender {
             switch (disolveList.get(nowDissolveID).mode) {
             default:
             case CROSS:
+            	sceneList.get(nowSceneID).setDepthTest(false);
                 sceneList.get(nowSceneID).setSceneA((1.0 - tmp), g);
                 sceneList.get(nowSceneID).drawscene(g);
                 sceneList.get(nextSceneID).setSceneA(tmp, g);

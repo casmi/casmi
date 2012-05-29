@@ -26,9 +26,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Iterator;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+
+
 
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
@@ -68,9 +71,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private boolean selectionbuff = false;
 	private int selectionbufsize = 1024*1024;
 	private int selectedIndex = -1;
-	private int s = 0;
 	private IntBuffer selectBuffer;
 	private int selectBuff[];
+	
+	private boolean removeObject;
 
 	public GraphicsObject() {
 	    objectList    = new CopyOnWriteArrayList<Object>();
@@ -84,7 +88,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	public void add(Object object) {
-		objectList.add(object);
+		   if(object instanceof Element || object instanceof Group || object instanceof TimelineRender)
+			   	objectList.add(object);
 	}
 	
 	public void addAll(Collection<? extends Object> c) {
@@ -215,8 +220,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 	public void selectionbufRender(Graphics g, double mouseX, double mouseY,
 			int index) {
 		if (selectionbuff == true || this.isSelectionbuffer() == true) {
-			//int selectBuff[] = new int[selectionbufsize];
-			//selectBuff = ;
+			
+			
 			Arrays.fill(selectBuff,0);
 			selectBuffer.position(0);
 			int hits;
@@ -254,6 +259,15 @@ public class GraphicsObject extends Element implements ObjectRender {
 			processHits(hits, selectBuff);
 			g.getGL().glMatrixMode(GL.GL_MODELVIEW);
 
+		}
+		if(removeObject){
+			Iterator<Object> itr = objectList.iterator();
+			while(itr.hasNext()){
+				Object obj = itr.next();
+				if(obj instanceof Element )
+					if(((Element) obj).isRemove())
+					objectList.remove(obj);
+			}
 		}
 	}
 
@@ -298,6 +312,14 @@ public class GraphicsObject extends Element implements ObjectRender {
 		if (this.isVisible()) {
 			this.g = g;
 			
+			if(removeObject){
+				for(Object obj : objectList){
+					if(obj instanceof Element && ((Element) obj).isRemove())
+						objectList.remove(obj);
+				}
+				removeObject = false;
+			}
+			
 			drawTweenManager(g);
 			
 			if (!bool)
@@ -321,6 +343,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 			if (this instanceof Group) {
 				update(g);
 			}
+			
+			
 		}
 	}
 
@@ -393,59 +417,68 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private final int drawObject(Graphics g,
 	                             boolean selection, double mouseX, double mouseY,
 	                             int selectionIndex, int selectedIndex) {
-		int sIndex = -1;
 		for (Object obj : objectList) {
 			if (obj instanceof GraphicsObject) {
 				GraphicsObject o = (GraphicsObject)obj;
 				if (!selection) {
+					if(o.isRemove())
+						removeObject = true;
 					if (((Element) o).getMask() != null) {
 						((Element) o).getMask().render(g);
 					}
+					if (o.getMouseOverCallback() != null) {
+						selectionbuff = true;
+					}
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
+					if(o.isSelectionbuff()==true)
+						selectionbuff = true;
 					if (((Element) o).getMask() != null)
 						g.getGL().glDisable(GL.GL_STENCIL_TEST);
 				} else {
-					sIndex = selectionIndex;
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
-					for (int j = sIndex; j < selectionIndex; j++) {
-						o.getSelectionList().add(j);
-
-					}
+//stuck selectionID of elements in a group
+//					for (int j = sIndex; j < selectionIndex; j++) {
+//						o.getSelectionList().add(j);
+//
+//					}
 					if (o.getMouseOverCallback() != null) {
 
-						s = 0;
-						for (int j = 0; j < o.getSelectionList().size(); j++) {
-							if (o.getSelectionList().get(j) == selectedIndex) {
-								s += 1;
-							}
-						}
+//						s = 0;
+//						for (int j = 0; j < o.getSelectionList().size(); j++) {
+//							if (o.getSelectionList().get(j) == selectedIndex) {
+//								s += 1;
+//							}
+//						}
 
-						if (s > 0) {
-							o.callMouseOverCallback(true);
-						} else {
-							o.setMouseover(false);
-						}
-						if (o.isMouseover() == false
-								&& o.isPreMouseover() == true)
-							o.callMouseOverCallback(false);
+//						if (s > 0) {
+//							o.callMouseOverCallback(true);
+//						} else {
+//							o.setMouseover(false);
+//						}
+//						if (o.isMouseover() == false
+//								&& o.isPreMouseover() == true)
+//							o.callMouseOverCallback(false);
 					}
 
 				}
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
-				//if (selection == false)
-					tr.render(g);
+				System.out.println("test");
+				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;
-				if (selection == false)
+				if (!selection)
 					tm.render(g);
 			} else {
 				Element e = (Element) obj;
-				if (selection == false) {
+				if (!selection) {
+					if (e.isRemove())
+						removeObject = true;
 					if (e.getMouseOverCallback() != null) {
 						selectionbuff = true;
+						
 					}
 					this.render((Element) obj);
 				} else {
@@ -472,7 +505,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 				e.setPreMouseover(e.isMouseover());
 			}
 		}
-		sIndex = selectionIndex;
 		return selectionIndex;
 	}
 
@@ -552,6 +584,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 	public void update() {
 
 	}
+	
+	public List<Object> getObjectList() {
+		return objectList;
+	}
 
 	@Override
 	public void render(GL gl, GLU glu, int width, int height) {
@@ -575,6 +611,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public List<Integer> getSelectionList() {
 		return selectionList;
+	}
+	
+	public void clearSelectionList() {
+		selectionList.clear();
 	}
 
 	public void setSelectionList(ArrayList<Integer> selectionList) {
