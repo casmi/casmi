@@ -1,7 +1,7 @@
 /*
  *   casmi
  *   http://casmi.github.com/
- *   Copyright (C) 2011, Xcoo, Inc.
+ *   Copyright (C) 2012, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,8 @@
 
 package casmi.sound;
 
-import minim.sound.AudioMetaData;
-import minim.sound.spi.AudioRecordingStream;
+import ddf.minim.AudioMetaData;
+import ddf.minim.spi.AudioRecordingStream;
 
 /**
  * Audio player class.
@@ -29,7 +29,7 @@ import minim.sound.spi.AudioRecordingStream;
  */
 public class AudioPlayer {
 
-    minim.sound.AudioPlayer audioPlayer;
+    ddf.minim.AudioPlayer audioPlayer;
 
     /**
      * Constructs an <code>AudioPlayer</code> that plays <code>recording</code>.
@@ -42,10 +42,10 @@ public class AudioPlayer {
      *     the <code>AudioRecording</code> to play
      */
     public AudioPlayer(AudioRecordingStream recording) {
-        audioPlayer = new minim.sound.AudioPlayer(recording);
+        audioPlayer = new ddf.minim.AudioPlayer(recording);
     }
 
-    public AudioPlayer(minim.sound.AudioPlayer audioPlayer) {
+    public AudioPlayer(ddf.minim.AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
     }
 
@@ -122,11 +122,11 @@ public class AudioPlayer {
         return audioPlayer.bufferSize();
     }
 
-    public minim.sound.AudioBuffer left() {
+    public ddf.minim.AudioBuffer left() {
         return audioPlayer.left;
     }
 
-    public minim.sound.AudioBuffer right() {
+    public ddf.minim.AudioBuffer right() {
         return audioPlayer.right;
     }
 
