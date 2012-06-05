@@ -1,7 +1,7 @@
 /*
  *   casmi
  *   http://casmi.github.com/
- *   Copyright (C) 2011, Xcoo, Inc.
+ *   Copyright (C) 2012, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,18 +19,18 @@
 
 package casmi.sound;
 
-import javax.sound.sampled.Mixer;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.Mixer;
 
-import minim.sound.spi.CasmiSoundServiceProvider;
-import minim.sound.AudioInput;
-import minim.sound.AudioOutput;
-import minim.sound.AudioRecorder;
-import minim.sound.AudioSample;
-import minim.sound.AudioSnippet;
-import minim.sound.Recordable;
-
-import casmi.sound.AudioPlayer;
+import ddf.minim.AudioEffect;
+import ddf.minim.AudioInput;
+import ddf.minim.AudioOutput;
+import ddf.minim.AudioRecorder;
+import ddf.minim.AudioSample;
+import ddf.minim.AudioSignal;
+import ddf.minim.AudioSnippet;
+import ddf.minim.Recordable;
+import ddf.minim.spi.CasmiSoundServiceProvider;
 
 /**
  * Sound class.
@@ -39,14 +39,14 @@ import casmi.sound.AudioPlayer;
  */
 public class Sound {
 
-    minim.sound.Sound sound;
+    ddf.minim.Sound sound;
 
     public Sound() {
-        sound = new minim.sound.Sound();
+        sound = new ddf.minim.Sound();
     }
 
     public Sound(CasmiSoundServiceProvider msp) {
-        sound = new minim.sound.Sound(msp);
+        sound = new ddf.minim.Sound(msp);
     }
 
     /**
@@ -58,7 +58,7 @@ public class Sound {
      *     the error message to report
      */
     public static void error(String s) {
-        minim.sound.Sound.error(s);
+        ddf.minim.Sound.error(s);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Sound {
      * @see #debugOn()
      */
     public static void debug(String s) {
-        minim.sound.Sound.debug(s);
+        ddf.minim.Sound.debug(s);
     }
 
     /**
@@ -255,7 +255,7 @@ public class Sound {
      * @return an <code>AudioPlayer</code> with a sample buffer of the requested size
      */
     public AudioPlayer loadFile(String filename, int bufferSize) {
-        minim.sound.AudioPlayer minimAudioPlayer = sound.loadFile(filename, bufferSize);
+        ddf.minim.AudioPlayer minimAudioPlayer = sound.loadFile(filename, bufferSize);
         AudioPlayer audioplayer = new AudioPlayer(minimAudioPlayer);
         return audioplayer;
     }
