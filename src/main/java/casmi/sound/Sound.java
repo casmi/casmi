@@ -30,7 +30,7 @@ import ddf.minim.AudioSample;
 import ddf.minim.AudioSignal;
 import ddf.minim.AudioSnippet;
 import ddf.minim.Recordable;
-import ddf.minim.spi.CasmiSoundServiceProvider;
+import ddf.minim.spi.MinimServiceProvider;
 
 /**
  * Sound class.
@@ -45,7 +45,7 @@ public class Sound {
         sound = new ddf.minim.Sound();
     }
 
-    public Sound(CasmiSoundServiceProvider msp) {
+    public Sound(MinimServiceProvider msp) {
         sound = new ddf.minim.Sound(msp);
     }
 
