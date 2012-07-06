@@ -19,7 +19,7 @@
 
 package casmi.graphics.color;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * HSB color class.
@@ -423,7 +423,7 @@ public class HSBColor implements Color {
     }
     
     @Override
-    public void setup(GL gl) {
+    public void setup(GL2 gl) {
         double[] rgb = HSBColor.getRGB(this.hue, this.saturation, this.brightness);
         gl.glColor4d(rgb[0], rgb[1], rgb[2], alpha);
     }

@@ -22,7 +22,7 @@ package casmi.graphics.element;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -140,9 +140,9 @@ public class Polygon extends Element implements Renderable {
 	}
 
 	@Override
-	public void render(GL gl, GLU glu, int width, int height) {
+	public void render(GL2 gl, GLU glu, int width, int height) {
 		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-			gl.glDisable(GL.GL_DEPTH_TEST);
+			gl.glDisable(GL2.GL_DEPTH_TEST);
 		}
 
 		double tmpx, tmpy, tmpz;
@@ -156,7 +156,7 @@ public class Polygon extends Element implements Renderable {
 		case LINES:
 			if (this.fill) {
 				getSceneFillColor().setup(gl);
-				gl.glBegin(GL.GL_POLYGON);
+				gl.glBegin(GL2.GL_POLYGON);
 				for (int i = 0; i < this.size; i++) {
 					tmpx = (Double) this.cornerX.get(i);
 					tmpy = (Double) this.cornerY.get(i);
@@ -169,7 +169,7 @@ public class Polygon extends Element implements Renderable {
 			if (this.stroke) {
 				gl.glLineWidth(this.strokeWidth);
 				getSceneStrokeColor().setup(gl);
-				gl.glBegin(GL.GL_LINE_STRIP);
+				gl.glBegin(GL2.GL_LINE_STRIP);
 				for (int i = 0; i < this.size; i++) {
 					tmpx = (Double) this.cornerX.get(i);
 					tmpy = (Double) this.cornerY.get(i);
@@ -184,7 +184,7 @@ public class Polygon extends Element implements Renderable {
 		case LINES_3D:
 			if (this.fill) {
 				this.fillColor.setup(gl);
-				gl.glBegin(GL.GL_POLYGON);
+				gl.glBegin(GL2.GL_POLYGON);
 				for (int i = 0; i < this.size; i++) {
 					tmpx = (Double) this.cornerX.get(i);
 					tmpy = (Double) this.cornerY.get(i);
@@ -199,7 +199,7 @@ public class Polygon extends Element implements Renderable {
 			if (this.stroke) {
 				gl.glLineWidth(this.strokeWidth);
 				this.strokeColor.setup(gl);
-				gl.glBegin(GL.GL_LINE_STRIP);
+				gl.glBegin(GL2.GL_LINE_STRIP);
 				for (int i = 0; i < cornerX.size(); i++) {
 					tmpx = (Double) this.cornerX.get(i);
 					tmpy = (Double) this.cornerY.get(i);
@@ -220,7 +220,7 @@ public class Polygon extends Element implements Renderable {
 		gl.glPopMatrix();
 
 		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-			gl.glEnable(GL.GL_DEPTH_TEST);
+			gl.glEnable(GL2.GL_DEPTH_TEST);
 		}
 	}
 

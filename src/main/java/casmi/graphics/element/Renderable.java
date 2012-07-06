@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 /**
@@ -29,7 +29,7 @@ import javax.media.opengl.glu.GLU;
  */
 public interface Renderable {
     
-    void render(GL gl, GLU glu, int width, int height);
+    void render(GL2 gl, GLU glu, int width, int height);
     
     void setAlpha(double alpha);
 }

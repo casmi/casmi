@@ -19,7 +19,7 @@
   
 package casmi.graphics.material;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * Material class.
@@ -192,17 +192,17 @@ public class Material {
     }
     
     
-    public void setup(GL gl) {
+    public void setup(GL2 gl) {
         if(Sh==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SHININESS, shininess,0);
+            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininess,0);
         if(Am==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_AMBIENT, ambient,0);
+            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, ambient,0);
         if(Di==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_DIFFUSE, diffuse,0);
+            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, diffuse,0);
         if(Sp==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_SPECULAR, specular,0);
+            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, specular,0);
         if(Em==true)
-            gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_EMISSION, emissive,0);
+            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, emissive,0);
     }
 
 }

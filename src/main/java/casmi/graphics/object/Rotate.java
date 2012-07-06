@@ -19,7 +19,7 @@
 
 package casmi.graphics.object;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
@@ -78,5 +78,5 @@ public class Rotate extends Element implements ObjectRender {
 	}
 	
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {}
+    public void render(GL2 gl, GLU glu, int width, int height) {}
 }

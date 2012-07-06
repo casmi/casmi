@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
  
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
  
 /**
@@ -204,11 +204,11 @@ public class RoundRect extends Element implements Renderable {
     }
  
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
         calcRect();
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
         gl.glPushMatrix();
@@ -216,19 +216,19 @@ public class RoundRect extends Element implements Renderable {
         if (this.fill) {
             getSceneFillColor().setup(gl);
             // this.fillColor.setup(gl);
-            gl.glBegin(GL.GL_QUADS);
+            gl.glBegin(GL2.GL_QUADS);
             gl.glVertex2d(x1 + r, y1);
             gl.glVertex2d(x2 + r, y2);
             gl.glVertex2d(x3 - r, y3);
             gl.glVertex2d(x4 - r, y4);
             gl.glEnd();
-            gl.glBegin(GL.GL_QUADS);
+            gl.glBegin(GL2.GL_QUADS);
             gl.glVertex2d(x1, y1 - r);
             gl.glVertex2d(x2, y2 + r);
             gl.glVertex2d(x2 + r, y3 + r);
             gl.glVertex2d(x1 + r, y4 - r);
             gl.glEnd();
-            gl.glBegin(GL.GL_QUADS);
+            gl.glBegin(GL2.GL_QUADS);
             gl.glVertex2d(x4 - r, y1 - r);
             gl.glVertex2d(x3 - r, y2 + r);
             gl.glVertex2d(x3, y3 + r);
@@ -267,7 +267,7 @@ public class RoundRect extends Element implements Renderable {
             gl.glLineWidth(this.strokeWidth);
             // this.strokeColor.setup(gl);
             getSceneStrokeColor().setup(gl);
-            gl.glBegin(GL.GL_LINES);
+            gl.glBegin(GL2.GL_LINES);
             gl.glVertex2d(x1, y1 - r);
             gl.glVertex2d(x2, y2 + r);
             gl.glVertex2d(x2 + r, y2);
@@ -300,7 +300,7 @@ public class RoundRect extends Element implements Renderable {
         gl.glPopMatrix();
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
     

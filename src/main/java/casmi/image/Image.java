@@ -27,13 +27,14 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.media.opengl.GL2;
 
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
-import com.sun.opengl.util.texture.Texture;
-import com.sun.opengl.util.texture.TextureIO;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * Image class.
@@ -164,32 +165,34 @@ public class Image {
     }
 
     public final void loadTexture() {
-        texture = TextureIO.newTexture(img, true);
+    //	TextureIO.
+      //  texture = TextureIO.(img, true);
         if(texture == null)
         	System.out.println("can not load texture!");
     }
 
-    public final void unloadTexture() {
+    @SuppressWarnings("deprecation")
+	public final void unloadTexture(GL2 gl) {
         if( texture != null ) {
-            texture.dispose();
+            texture.dispose(gl);
         }
     }
     
-    public final void reloadTexture() {
-        unloadTexture();
+    public final void reloadTexture(GL2 gl) {
+        unloadTexture(gl);
         loadTexture();
     }
     
-    public void enableTexture() {
+    public void enableTexture(GL2 gl) {
         if( texture != null ) {
-            texture.enable();
-            texture.bind();	 
+            texture.enable(gl);
+            texture.bind(gl);	 
         }
     }
     
-    public void disableTexture() {
+    public void disableTexture(GL2 gl) {
         if( texture != null ) {
-            texture.disable();
+            texture.disable(gl);
         }
     }
     

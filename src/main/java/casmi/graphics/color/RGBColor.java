@@ -19,7 +19,7 @@
 
 package casmi.graphics.color;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * RGB color class.
@@ -404,7 +404,7 @@ public class RGBColor implements Color {
     }
     
     @Override
-    public void setup(GL gl) {
+    public void setup(GL2 gl) {
         gl.glColor4d(this.red, this.green, this.blue, this.alpha);
     }
     

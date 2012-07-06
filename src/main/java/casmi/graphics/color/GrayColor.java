@@ -19,7 +19,7 @@
 
 package casmi.graphics.color;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * Gray color class.
@@ -130,7 +130,7 @@ public class GrayColor implements Color {
     }
 
     @Override
-    public void setup(GL gl) {
+    public void setup(GL2 gl) {
         gl.glColor4d(gray, gray, gray, alpha);
     }
 

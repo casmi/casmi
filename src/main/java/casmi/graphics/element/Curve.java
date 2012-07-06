@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -367,9 +367,9 @@ public class Curve extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
         gl.glPushMatrix();
@@ -379,7 +379,7 @@ public class Curve extends Element implements Renderable {
 
         if (this.fill) {
             getSceneFillColor().setup(gl);
-            gl.glBegin(GL.GL_TRIANGLE_STRIP);
+            gl.glBegin(GL2.GL_TRIANGLE_STRIP);
             for (int i = 0; i < detail; i++) {
                 if (i == 0 && isGradation() && startColor != null)
                     getSceneColor(this.startColor).setup(gl);
@@ -400,7 +400,7 @@ public class Curve extends Element implements Renderable {
         if (this.stroke) {
         	getSceneStrokeColor().setup(gl);
             gl.glLineWidth(this.strokeWidth);
-            gl.glBegin(GL.GL_LINE_STRIP);
+            gl.glBegin(GL2.GL_LINE_STRIP);
             for (int i = 0; i < detail; i++) {
                 if (i == 0 && isGradation() && startColor != null)
                     getSceneColor(this.startColor).setup(gl);
@@ -421,7 +421,7 @@ public class Curve extends Element implements Renderable {
         gl.glPopMatrix();
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
     private final double catmullRom(float p0, float p1, float p2, float p3, float t) {

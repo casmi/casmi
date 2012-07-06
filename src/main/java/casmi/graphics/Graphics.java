@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -37,7 +38,8 @@ import casmi.matrix.Vertex;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-import com.sun.opengl.util.GLUT;
+//import com.sun.opengl.util.GLUT;
+import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
  * Graphics class. Wrap JOGL and make it easy to use.
@@ -47,7 +49,7 @@ import com.sun.opengl.util.GLUT;
  */
 public class Graphics {
 
-	private GL   gl;
+	private GL2   gl;
 	private GLU  glu;
 	private GLUT glut;
 
@@ -83,7 +85,7 @@ public class Graphics {
 	}
 	
 
-	public Graphics(GL g, GLU Glu, GLUT Glut, int width, int height) {
+	public Graphics(GL2 g, GLU Glu, GLUT Glut, int width, int height) {
 		this.gl = g;
 		this.glu = Glu;
 		this.glut = Glut;
@@ -92,7 +94,7 @@ public class Graphics {
 		this.height = height;
 	}
 
-	public GL getGL(){
+	public GL2 getGL(){
 	    return gl;
 	}
 	
@@ -286,10 +288,10 @@ public class Graphics {
 	public void matrixMode(MatrixMode mode) {
 		switch (mode) {
 		case PROJECTION:
-			gl.glMatrixMode(GL.GL_PROJECTION);
+			gl.glMatrixMode(GL2.GL_PROJECTION);
 			break;
 		case MODELVIEW:
-			gl.glMatrixMode(GL.GL_MODELVIEW);
+			gl.glMatrixMode(GL2.GL_MODELVIEW);
 			break;
 		default:
 			break;
@@ -368,9 +370,9 @@ public class Graphics {
 	public void ambientLight(float r, float g, float b) {
 		float ambient[] = { r, g, b, 255 };
 		normalize(ambient);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0);
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
 	}
 
 	/**
@@ -381,10 +383,10 @@ public class Graphics {
 		float ambient[] = { r, g, b, 255 };
 		float position[] = { x, y, z, 1.0f };
 		normalize(ambient);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0);
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position, 0);
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
 	}
 
 	/**
@@ -394,10 +396,10 @@ public class Graphics {
 		float ambient[] = { r, g, b, 255 };
 		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
 		normalize(ambient);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0);
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position, 0);
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
 	}
 
 	/**
@@ -410,9 +412,9 @@ public class Graphics {
 		    (float)color.getBlue(),
 		    (float)color.getAlpha() 
 		};
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0);
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
 	}
 	
 	/**
@@ -431,10 +433,10 @@ public class Graphics {
             (float)v.getZ(),
             1.0f 
         };
-        gl.glEnable(GL.GL_LIGHTING);
-        gl.glEnable(GL.GL_LIGHT0);
-        gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position, 0);
-        gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient, 0);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
     }
 
 	/**
@@ -443,9 +445,9 @@ public class Graphics {
 	public void ambientLight(int i, float r, float g, float b) {
 		float ambient[] = { r, g, b, 255 };
 		normalize(ambient);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
 	}
 
 	/**
@@ -456,10 +458,10 @@ public class Graphics {
 		float ambient[] = { r, g, b, 255 };
 		float position[] = { x, y, z, 1.0f };
 		normalize(ambient);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, position, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
 	}
 
 	/**
@@ -469,10 +471,10 @@ public class Graphics {
 		float ambient[] = { r, g, b, 255 };
 		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
 		normalize(ambient);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, position, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
 	}
 
 	/**
@@ -485,9 +487,9 @@ public class Graphics {
             (float)color.getBlue(),
             (float)color.getAlpha() 
         };
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_AMBIENT, ambient, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
 	}
 	
 	/**
@@ -501,10 +503,10 @@ public class Graphics {
             (float)color.getAlpha() 
         };
         float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
-        gl.glEnable(GL.GL_LIGHTING);
-        gl.glEnable(GL.GL_LIGHT0 + i);
-        gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, position, 0);
-        gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_AMBIENT, ambient, 0);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0 + i);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
     }
 
 	/**
@@ -518,10 +520,10 @@ public class Graphics {
             (float)color.getAlpha() 
         };
 		float pos[] = { x, y, z, 0 };
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, directionalColor, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, pos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, directionalColor, 0);
 	}
 
 	/**
@@ -535,10 +537,10 @@ public class Graphics {
             (float)color.getAlpha() 
         };
 		float pos[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 0.0f };
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, directionalColor, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, pos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, directionalColor, 0);
 	}
 
 	/**
@@ -552,10 +554,10 @@ public class Graphics {
             (float)color.getAlpha() 
         };
 		float pos[] = { x, y, z, 0 };
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, pointColor, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, pos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, pointColor, 0);
 	}
 
 	/**
@@ -574,10 +576,10 @@ public class Graphics {
 		    (float)v.getZ(),
 		    0.0f
 		};
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, pointColor, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, pos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, pointColor, 0);
 	}
 
 	/**
@@ -598,12 +600,12 @@ public class Graphics {
 		};
 		float direction[] = { nx, ny, nz };
 		float a[] = { angle };
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_POSITION, pos, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, spotColor, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPOT_DIRECTION, direction, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPOT_CUTOFF, a, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, pos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, spotColor, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPOT_DIRECTION, direction, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPOT_CUTOFF, a, 0);
 	}
 
 	/**
@@ -613,11 +615,11 @@ public class Graphics {
 		float c[] = { constant };
 		float l[] = { liner };
 		float q[] = { quadratic };
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0 + i);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_CONSTANT_ATTENUATION, c, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_LINEAR_ATTENUATION, l, 0);
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_QUADRATIC_ATTENUATION, q, 0);
+		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0 + i);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_CONSTANT_ATTENUATION, c, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_LINEAR_ATTENUATION, l, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_QUADRATIC_ATTENUATION, q, 0);
 	}
 
 	/**
@@ -630,7 +632,7 @@ public class Graphics {
 		    (float)color.getBlue(),
 		    (float)color.getAlpha()
 		};
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_SPECULAR, tmpColor, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_SPECULAR, tmpColor, 0);
 	}
 
 	/**
@@ -643,7 +645,7 @@ public class Graphics {
             (float)color.getBlue(),
             (float)color.getAlpha()
         };
-		gl.glLightfv(GL.GL_LIGHT0 + i, GL.GL_DIFFUSE, tmpColor, 0);
+		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, tmpColor, 0);
 	}
 
 	/**
@@ -662,7 +664,7 @@ public class Graphics {
 	 * Starts to draw polygon.
 	 */
 	public void beginShape() {
-		gl.glBegin(GL.GL_POLYGON);
+		gl.glBegin(GL2.GL_POLYGON);
 	}
 
 	/**
@@ -676,14 +678,14 @@ public class Graphics {
 	 * Enables texture.
 	 */
 	public void texture(Image image) {
-		image.enableTexture();
+		image.enableTexture(gl);
 	}
 
 	/**
      * Disables texture.
      */
 	public void notexture(Image image) {
-		image.disableTexture();
+		image.disableTexture(gl);
 	}
 
 	/**
@@ -717,9 +719,9 @@ public class Graphics {
 	public void image(Image img, double x, double y) {
 		if (img.getTexture() != null) {
 		    gl.glDisable(GL.GL_DEPTH_TEST);
-		    img.enableTexture();
-			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject());
-			gl.glBegin(GL.GL_QUADS);
+		    img.enableTexture(gl);
+			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
+			gl.glBegin(GL2.GL_QUADS);
 			switch (img.getMode()) {
 			default:
 			case CORNER:
@@ -748,7 +750,7 @@ public class Graphics {
 				break;
 			}
 			gl.glEnd();
-			img.disableTexture();
+			img.disableTexture(gl);
 			gl.glEnable(GL.GL_DEPTH_TEST);
 		}
 
@@ -762,9 +764,9 @@ public class Graphics {
 	public void image(Image img, double x, double y, double w, double h) {
 		if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
-			img.enableTexture();
-			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject());
-			gl.glBegin(GL.GL_QUADS);
+			img.enableTexture(gl);
+			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
+			gl.glBegin(GL2.GL_QUADS);
 			switch (img.getMode()) {
 			default:
 			case CORNER:
@@ -799,7 +801,7 @@ public class Graphics {
 				break;
 			}
 			gl.glEnd();
-			img.disableTexture();
+			img.disableTexture(gl);
             gl.glEnable(GL.GL_DEPTH_TEST);
 		}
 
@@ -810,13 +812,12 @@ public class Graphics {
 		textureImages.add(img);
 	}
 	
-	public static void reloadTextures() {
+	public static void reloadTextures(GL2 gl) {
 	    for (Image img : textureImages) {
-            img.unloadTexture();
+            img.unloadTexture(gl);
             img.loadTexture();
         }
 	}
-
 	// camera
 	/**
 	 * Sets a perspective projection applying foreshortening, making distant objects appear smaller 

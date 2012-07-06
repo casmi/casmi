@@ -22,7 +22,7 @@ package casmi.graphics.element;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
@@ -214,33 +214,33 @@ public class Texture extends Element implements Renderable {
     	}
     }
 
-    public final void enableTexture() {
-        image.enableTexture();
+    public final void enableTexture(GL2 gl) {
+        image.enableTexture(gl);
     }
 
-    public final void disableTexture() {
-        image.disableTexture();
+    public final void disableTexture(GL2 gl) {
+        image.disableTexture(gl);
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
         if (reloadFlag) {
-            Graphics.reloadTextures();
+            Graphics.reloadTextures(gl);
             reloadFlag = false;
         }
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-        	gl.glDisable(GL.GL_DEPTH_TEST);
+        	gl.glDisable(GL2.GL_DEPTH_TEST);
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
             getSceneFillColor().setup(gl);
             double tmpx, tmpy, tmpz;
             double tmpnx, tmpny;
-            image.enableTexture();
+            image.enableTexture(gl);
             material.setup(gl);
             if (xList.size() < 1) {
                 Image img = getImage();
-                gl.glBegin(GL.GL_QUADS);
+                gl.glBegin(GL2.GL_QUADS);
                 switch (img.getMode()) {
                 default:
                 case CORNER:
@@ -268,7 +268,7 @@ public class Texture extends Element implements Renderable {
             } else {
                 switch (mode) {
                 case LINES:
-                    gl.glBegin(GL.GL_POLYGON);
+                    gl.glBegin(GL2.GL_POLYGON);
                     for (int i = 0; i < xList.size(); i++) {
                         tmpx = this.xList.get(i);
                         tmpy = this.yList.get(i);
@@ -280,7 +280,7 @@ public class Texture extends Element implements Renderable {
                     gl.glEnd();
                     break;
                 case LINES_3D:
-                    gl.glBegin(GL.GL_POLYGON);
+                    gl.glBegin(GL2.GL_POLYGON);
                     for (int i = 0; i < xList.size(); i++) {
                         tmpx = this.xList.get(i);
                         tmpy = this.yList.get(i);
@@ -295,11 +295,11 @@ public class Texture extends Element implements Renderable {
                     break;
                 }
             }
-            image.disableTexture();
+            image.disableTexture(gl);
         }
         gl.glPopMatrix();
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-        	gl.glEnable(GL.GL_DEPTH_TEST);
+        	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
     public final double getWidth() {

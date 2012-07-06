@@ -54,19 +54,9 @@
 			<version>1.2.5</version>
 		</dependency>
 		<dependency>
-			<groupId>jogl</groupId>
-			<artifactId>jogl</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>cron4j</groupId>
 			<artifactId>cron4j</artifactId>
 			<version>2.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>gluegen</groupId>
-			<artifactId>gluegen-rt</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>

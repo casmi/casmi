@@ -19,7 +19,7 @@
 
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
@@ -65,19 +65,19 @@ public class Box extends Element implements Renderable {
 	}
 
 	@Override
-	public void render(GL gl, GLU glu, int width, int height) {
+	public void render(GL2 gl, GLU glu, int width, int height) {
 		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-			gl.glDisable(GL.GL_DEPTH_TEST);
+			gl.glDisable(GL2.GL_DEPTH_TEST);
 		}
 		
-		gl.glEnable(GL.GL_DEPTH_TEST);
+		gl.glEnable(GL2.GL_DEPTH_TEST);
 
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
 
             if (!this.enableTexture) {
-                gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+                gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
                 gl.glPolygonOffset(1f, 1f);
             }
 
@@ -87,7 +87,7 @@ public class Box extends Element implements Renderable {
 
                 gl.glPushMatrix();
                 {
-                    drawBox(gl, this.width, this.height, this.depth, GL.GL_QUADS);
+                    drawBox(gl, this.width, this.height, this.depth, GL2.GL_QUADS);
                 }
                 gl.glPopMatrix();
             }
@@ -102,25 +102,25 @@ public class Box extends Element implements Renderable {
                                 this.width  * STROKE_BIAS_RATIO,
                                 this.height * STROKE_BIAS_RATIO,
                                 this.depth  * STROKE_BIAS_RATIO,
-                                GL.GL_LINE_STRIP);
+                                GL2.GL_LINE_STRIP);
                     } else {
-                        drawBox(gl, this.width, this.height, this.depth, GL.GL_LINE_STRIP);
+                        drawBox(gl, this.width, this.height, this.depth, GL2.GL_LINE_STRIP);
                     }
                 }
                 gl.glPopMatrix();
             }
 
             if (!this.enableTexture) {
-                gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+                gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
             }
         }
         gl.glPopMatrix();
 
 
-		gl.glDisable(GL.GL_DEPTH_TEST);
+		gl.glDisable(GL2.GL_DEPTH_TEST);
         
 		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
 
@@ -144,7 +144,7 @@ public class Box extends Element implements Renderable {
         { 7, 4, 0, 3 }
     };
 
-    private final void drawBox(GL gl, double width, double height, double depth, int type) {
+    private final void drawBox(GL2 gl, double width, double height, double depth, int type) {
 		if (boxVertices == null) {
 			boxVertices = new float[8][3];
 			boxVertices[0][0] = boxVertices[1][0] = boxVertices[2][0] = boxVertices[3][0] = -0.5f;
@@ -160,10 +160,10 @@ public class Box extends Element implements Renderable {
 		int[][] faces = boxFaces;
 
 		for (int i = 5; 0 <= i; i--) {
-			if (type == GL.GL_QUADS) {
+			if (type == GL2.GL_QUADS) {
 				if (this.enableTexture) {
 					if (textures[i].reloadFlag) {
-						Graphics.reloadTextures();
+						Graphics.reloadTextures(gl);
 						textures[i].reloadFlag = false;
 					}
 					textures[i].enableTexture();
@@ -201,12 +201,12 @@ public class Box extends Element implements Renderable {
 			}
 			gl.glVertex3d(vt[0] * width, vt[1] * height, vt[2] * depth);
 
-			if (type == GL.GL_LINE_STRIP) {
+			if (type == GL2.GL_LINE_STRIP) {
 				vt = v[faces[i][0]];
 				gl.glVertex3d(vt[0] * width, vt[1] * height, vt[2] * depth);
 			}
 
-			if (this.enableTexture && type == GL.GL_QUADS) {
+			if (this.enableTexture && type == GL2.GL_QUADS) {
 				textures[i].disableTexture();
 			}
 			gl.glEnd();

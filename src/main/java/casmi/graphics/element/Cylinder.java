@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -130,10 +130,10 @@ public class Cylinder extends Element implements Renderable {
         this.setHeight(height);
     }
 
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
         
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
         gl.glPushMatrix();
@@ -154,7 +154,7 @@ public class Cylinder extends Element implements Renderable {
         gl.glPopMatrix();
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
     
@@ -176,7 +176,7 @@ public class Cylinder extends Element implements Renderable {
         glu.gluCylinder(quadObj, radius, radius, height, slices, stacks);
       }
 
-      private void drawSolidCylinder(GL gl,GLU glu, double radius, double height, int slices, int stacks) {
+      private void drawSolidCylinder(GL2 gl,GLU glu, double radius, double height, int slices, int stacks) {
         
         double [] x = new double[slices];
         double [] y = new double[slices];
@@ -189,7 +189,7 @@ public class Cylinder extends Element implements Renderable {
         }
         
         // Draw bottom cap
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
+        gl.glBegin(GL2.GL_TRIANGLE_FAN);
         gl.glNormal3d(0,0,-1);
         gl.glVertex3d(0,0,0);
         for (int i = 0 ; i < slices ; i ++) {
@@ -199,7 +199,7 @@ public class Cylinder extends Element implements Renderable {
         gl.glEnd();
         
         // Draw top cap
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
+        gl.glBegin(GL2.GL_TRIANGLE_FAN);
         gl.glNormal3d(0,0,1);
         gl.glVertex3d(0,0,height);
         for (int i = 0 ; i < slices ; i ++) {

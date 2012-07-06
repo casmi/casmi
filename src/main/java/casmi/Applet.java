@@ -40,11 +40,13 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
-import javax.media.opengl.GLJPanel;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
@@ -81,8 +83,10 @@ import casmi.tween.TweenSerialGroup;
 import casmi.util.DateUtil;
 import casmi.util.FileUtil;
 
-import com.sun.opengl.util.GLUT;
-import com.sun.opengl.util.Screenshot;
+//import com.sun.opengl.util.gl2.GLUT;
+//import com.sun.opengl.util.gl2.Screenshot;
+import com.jogamp.opengl.util.gl2.GLUT;
+import com.jogamp.opengl.util.awt.Screenshot;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 
@@ -188,7 +192,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		this.setup();
 		rootObject.setDepthTest(false);
 		// JOGL setup
-		this.caps = new GLCapabilities();
+		GLProfile profile = GLProfile.get(GLProfile.GL2);
+		this.caps = new GLCapabilities(profile);
 		this.caps.setStencilBits(8);
 		this.panel = new GLJPanel(this.caps);
 		this.listener = new AppletGLEventListener(this, getWidth(), getHeight());
@@ -1056,7 +1061,7 @@ class AppletGLEventListener implements GLEventListener {
 
 	public int width;
 	public int height;
-	private GL gl;
+	private GL2 gl;
 	GLU glu;
 	GLUT glut;
 	private Graphics g = null;
@@ -1070,7 +1075,7 @@ class AppletGLEventListener implements GLEventListener {
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
-		gl = drawable.getGL();
+		gl = drawable.getGL().getGL2();
 		glu = new GLU();
 		glut = new GLUT();
 
@@ -1086,14 +1091,14 @@ class AppletGLEventListener implements GLEventListener {
 
 			g.ortho();
 			gl.glClearStencil(0);
-			gl.glEnable(GL.GL_DEPTH_TEST);
-			gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT
-					| GL.GL_STENCIL_BUFFER_BIT);
+			gl.glEnable(GL2.GL_DEPTH_TEST);
+			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT
+					| GL2.GL_STENCIL_BUFFER_BIT);
 			//gl.glDepthMask(false);
-			gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-			gl.glEnable(GL.GL_BLEND);
+			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+			gl.glEnable(GL2.GL_BLEND);
 
-			gl.glEnable(GL.GL_LINE_SMOOTH);
+			gl.glEnable(GL2.GL_LINE_SMOOTH);
 
 			if (d != null) {
 				d.drawWithGraphics(g);
@@ -1110,7 +1115,6 @@ class AppletGLEventListener implements GLEventListener {
 	    this.setSize(width, height);
 	}
 
-	@Override
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {}
 
 	public void setSize(int w, int h) {
@@ -1118,5 +1122,11 @@ class AppletGLEventListener implements GLEventListener {
 		this.height = h;
 		this.g.setWidth(w);
 		this.g.setHeight(h);
+	}
+
+	@Override
+	public void dispose(GLAutoDrawable arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

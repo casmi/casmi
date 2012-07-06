@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -129,16 +129,16 @@ public class Cone extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
 
-            gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+            gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
             gl.glPolygonOffset(1f, 1f);
 
             gl.glPushMatrix();
@@ -154,12 +154,12 @@ public class Cone extends Element implements Renderable {
             }
             gl.glPopMatrix();
 
-            gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+            gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
         }
         gl.glPopMatrix();
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
     

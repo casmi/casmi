@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Iterator;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 
@@ -40,7 +40,9 @@ import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-import com.sun.opengl.util.BufferUtil;
+//import com.sun.opengl.util.BufferUtil;
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.util.*;
 
 /**
  * GrapicsObject.
@@ -83,7 +85,8 @@ public class GraphicsObject extends Element implements ObjectRender {
 		perseList     = new CopyOnWriteArrayList<Perse>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
-		selectBuffer  = BufferUtil.newIntBuffer(selectionbufsize);
+		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
+		//selectBuffer  = BufferUtil.newIntBuffer(selectionbufsize);
 		selectBuff    =  new int[selectionbufsize];
 	}
 
@@ -227,21 +230,21 @@ public class GraphicsObject extends Element implements ObjectRender {
 			int hits;
 			int viewport[] = new int[4];
 
-			g.getGL().glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+			g.getGL().glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
 			g.getGL().glSelectBuffer(selectionbufsize, selectBuffer);
-			g.getGL().glRenderMode(GL.GL_SELECT);
+			g.getGL().glRenderMode(GL2.GL_SELECT);
 
 			g.getGL().glInitNames();
 			g.getGL().glPushName(-1);
 
 			drawTweenManager(g);
 
-			g.getGL().glMatrixMode(GL.GL_PROJECTION);
+			g.getGL().glMatrixMode(GL2.GL_PROJECTION);
 			g.getGL().glLoadIdentity();
 
 			g.getGLU().gluPickMatrix(mouseX, mouseY, 5.0, 5.0, viewport, 0);
 
-			g.getGL().glMatrixMode(GL.GL_MODELVIEW);
+			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
 			g.getGL().glLoadIdentity();
 			drawPerse(g, true);
 			drawCamera(g);
@@ -254,10 +257,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 			drawObject(g, true, mouseX, mouseY, index, selectedIndex);
 			g.popMatrix();
 
-			hits = g.getGL().glRenderMode(GL.GL_RENDER);
+			hits = g.getGL().glRenderMode(GL2.GL_RENDER);
 			selectBuffer.get(selectBuff);
 			processHits(hits, selectBuff);
-			g.getGL().glMatrixMode(GL.GL_MODELVIEW);
+			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
 
 		}
 		if(removeObject){
@@ -401,7 +404,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 			    }
 
 			    if (el.isMasked()) {
-			        g.getGL().glDisable(GL.GL_STENCIL_TEST);
+			        g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 			    }
 			}
 			g.popMatrix();
@@ -433,7 +436,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 					if(o.isSelectionbuff()==true)
 						selectionbuff = true;
 					if (((Element) o).getMask() != null)
-						g.getGL().glDisable(GL.GL_STENCIL_TEST);
+						g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
@@ -590,7 +593,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	@Override
-	public void render(GL gl, GLU glu, int width, int height) {
+	public void render(GL2 gl, GLU glu, int width, int height) {
 	}
 
 	public boolean isSelectionbuff() {

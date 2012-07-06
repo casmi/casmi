@@ -22,7 +22,7 @@ package casmi.graphics.element;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
@@ -277,7 +277,7 @@ abstract public class Element implements Cloneable, Renderable {
 		return this.tween;
 	}
 
-	protected void setTweenParameter(GL gl) {
+	protected void setTweenParameter(GL2 gl) {
 			gl.glTranslated(x, y, z);
 			gl.glScaled(scaleX, scaleY, scaleZ);
 			gl.glRotated(rotate, 0.0, 0.0, 1.0);
@@ -285,7 +285,7 @@ abstract public class Element implements Cloneable, Renderable {
 			gl.glRotated(rotateY, 0.0, 1.0, 0.0);
 	}
 
-	protected void setTextTweenParameter(GL gl) {
+	protected void setTextTweenParameter(GL2 gl) {
 			gl.glTranslated(x, y, z);
 			gl.glScaled(scaleX, scaleY, scaleZ);
 			gl.glRotated(rotate, 0.0, 0.0, 1.0);

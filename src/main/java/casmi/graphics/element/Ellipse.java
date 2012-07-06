@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -281,16 +281,16 @@ public class Ellipse extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-    		gl.glDisable(GL.GL_DEPTH_TEST);
+    		gl.glDisable(GL2.GL_DEPTH_TEST);
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
 
             if (this.fill) {
                 getSceneFillColor().setup(gl);
-                gl.glBegin(GL.GL_TRIANGLE_FAN);
+                gl.glBegin(GL2.GL_TRIANGLE_FAN);
                 {
                     if (isGradation() && centerColor != null)
                         getSceneColor(this.centerColor).setup(gl);
@@ -323,7 +323,7 @@ public class Ellipse extends Element implements Renderable {
                     double x2 = (this.width  / 2.0) * Math.cos(th2Rad);
                     double y2 = (this.height / 2.0) * Math.sin(th2Rad);
 
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     {
                         gl.glVertex2d(x1, y1);
                         gl.glVertex2d(x2, y2);
@@ -334,7 +334,7 @@ public class Ellipse extends Element implements Renderable {
         }
         gl.glPopMatrix();
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-        	gl.glEnable(GL.GL_DEPTH_TEST);
+        	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
     /**

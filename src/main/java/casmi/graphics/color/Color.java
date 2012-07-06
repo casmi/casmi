@@ -19,7 +19,7 @@
 
 package casmi.graphics.color;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * Color class.
@@ -52,7 +52,7 @@ public interface Color {
     
     void setAlpha(double alpha);
     
-	void setup(GL gl);
+	void setup(GL2 gl);
 	
 	Color clone();
 }

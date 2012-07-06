@@ -23,12 +23,13 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
 
-import com.sun.opengl.util.j2d.TextRenderer;
+import com.jogamp.opengl.util.awt.TextRenderer;
+//import com.sun.opengl.util.j2d.TextRenderer;
 
 /**
  * Text class.
@@ -165,9 +166,9 @@ public class Text extends Element implements Renderable {
     }
     
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
-    		gl.glDisable(GL.GL_DEPTH_TEST);
+    		gl.glDisable(GL2.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
         {
@@ -224,7 +225,7 @@ public class Text extends Element implements Renderable {
                         tmpX = -getWidth(i);
                     }
 
-                    gl.glBegin(GL.GL_QUADS);
+                    gl.glBegin(GL2.GL_QUADS);
                     {
                         gl.glVertex2d(tmpX, (tmpY - leading * i) - getDescent(i));
                         gl.glVertex2d(tmpX, (tmpY - leading * i) + getAscent(i));
@@ -237,7 +238,7 @@ public class Text extends Element implements Renderable {
         }
         gl.glPopMatrix();
         if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
-        	gl.glEnable(GL.GL_DEPTH_TEST);
+        	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
     /**
