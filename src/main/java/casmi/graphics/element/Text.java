@@ -24,6 +24,8 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 
 import javax.media.opengl.GL2;
+import javax.media.opengl.GLContext;
+import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
@@ -154,7 +156,8 @@ public class Text extends Element implements Renderable {
         leading = font.getSize() * 1.2;
         
         try{
-            textRenderer = new TextRenderer(font.getAWTFont(), true, true);
+        	if(GLContext.getCurrent()==null);
+        	  textRenderer = new TextRenderer(font.getAWTFont(), true, true);
             frc = new FontRenderContext(new AffineTransform(), false, false);
             layout = new TextLayout[strArray.length];
             for(int num = 0; num < strArray.length; num++) {
@@ -250,7 +253,7 @@ public class Text extends Element implements Renderable {
      *           The descent of text.    
      */
     public double getDescent(int line) {
-        if (layout[line] == null) return 0;
+    	 if (layout[line] == null) return 0;
         return layout[line].getDescent();
     }
 
@@ -317,8 +320,14 @@ public class Text extends Element implements Renderable {
      *           The letter's width.    
      */
     public double getWidth(int line) {
-        if (strArray.length == 0) return 0.0;
-        return textRenderer.getBounds(strArray[line]).getWidth();
+       if (strArray.length == 0) return 0.0;
+      //  return layout[line].getBounds().getWidth();
+    	 try{
+    		return textRenderer.getBounds(strArray[line]).getWidth();
+    	 }catch (GLException e){
+    		 reset = true;
+    		 return 0;
+    	 }
     }
     
     /**
@@ -331,7 +340,13 @@ public class Text extends Element implements Renderable {
      */
     public double getHeight(int line) {
         if (strArray.length == 0) return 0.0;
+        try {
         return textRenderer.getBounds(strArray[line]).getHeight();
+        }catch (GLException e){
+        	reset = true;
+        	return 0;
+        }
+        //return layout[line].getBounds().getHeight();
     }
     
     /**

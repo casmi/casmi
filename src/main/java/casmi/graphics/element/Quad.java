@@ -32,7 +32,7 @@ import casmi.matrix.Vertex;
  * Quad class.
  * Wrap JOGL and make it easy to use.
  * 
- * @author Y. Ban
+ * @author Y. Ban 
  * 
  */
 public class Quad extends Element implements Renderable {
@@ -240,7 +240,7 @@ public class Quad extends Element implements Renderable {
                 Graphics.reloadTextures(gl);
                 texture.reloadFlag = false;
             }
-            texture.enableTexture();
+            texture.enableTexture(gl);
         }
 
         gl.glPushMatrix();
@@ -309,7 +309,7 @@ public class Quad extends Element implements Renderable {
         }
         gl.glPopMatrix();
         if (this.enableTexture)
-            texture.disableTexture();
+            texture.disableTexture(gl);
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glEnable(GL2.GL_DEPTH_TEST);

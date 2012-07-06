@@ -814,7 +814,7 @@ public class Graphics {
 	
 	public static void reloadTextures(GL2 gl) {
 	    for (Image img : textureImages) {
-            img.unloadTexture(gl);
+            img.unloadTexture();
             img.loadTexture();
         }
 	}

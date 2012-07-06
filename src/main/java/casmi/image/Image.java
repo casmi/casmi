@@ -28,13 +28,15 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GLProfile;
 
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
 import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureIO;
+import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.awt.*;
 
 /**
  * Image class.
@@ -59,7 +61,6 @@ public class Image {
         this.height = height;
         
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        
         Graphics.addTextureImage(this);
     }
     
@@ -82,6 +83,8 @@ public class Image {
     public Image(URL url) {
         try {
             BufferedImage preimg = ImageIO.read(url);
+            if(preimg==null)
+            	System.out.println("null");
             img =  convertBytetoInt(preimg);
          } catch (IOException e) {
             e.printStackTrace();
@@ -166,20 +169,21 @@ public class Image {
 
     public final void loadTexture() {
     //	TextureIO.
-      //  texture = TextureIO.(img, true);
+        //texture = TextureIO.newTexture(img, true);
+        texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2),img,true);
         if(texture == null)
         	System.out.println("can not load texture!");
     }
 
-    @SuppressWarnings("deprecation")
-	public final void unloadTexture(GL2 gl) {
+   // @SuppressWarnings("deprecation")
+	public final void unloadTexture() {
         if( texture != null ) {
-            texture.dispose(gl);
+            //texture.dispose();
         }
     }
     
-    public final void reloadTexture(GL2 gl) {
-        unloadTexture(gl);
+    public final void reloadTexture() {
+        unloadTexture();
         loadTexture();
     }
     

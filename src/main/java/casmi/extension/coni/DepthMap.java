@@ -21,6 +21,8 @@ package casmi.extension.coni;
 import java.nio.ShortBuffer;
 import java.util.Arrays;
 
+import javax.media.opengl.GL2;
+
 import org.OpenNI.DepthMetaData;
 
 import casmi.graphics.color.RGBColor;
