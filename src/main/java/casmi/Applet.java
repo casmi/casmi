@@ -820,6 +820,27 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     	update(g);
     }
     
+    public void glTest(Graphics g) {
+    	//g.getGL().glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+    	//g.getGL().glLoadIdentity();
+    	g.getGL().glColor3d(1.0, 1.0, 1.0);
+    	g.getGL().glTranslatef(-1.5f, 0.0f, -6.0f);
+    	g.getGL().glBegin(GL2.GL_TRIANGLES);		
+    	g.getGL().glVertex3f(100.0f, 100.0f, 0.0f);	
+    	g.getGL().glVertex3f(0.0f, 0.0f, 0.0f);	
+    	g.getGL().glVertex3f(300.0f, 0.0f, 0.0f);	
+    	g.getGL().glEnd();				
+    	g.getGL().glTranslatef(1.5f, 0.0f, 0.0f);
+    	g.getGL().glColor3d(0.5, 0.5, 0.5);
+    	g.getGL().glBegin(GL2.GL_QUADS);           	
+    	g.getGL().glVertex3f(0.0f, 400.0f, 0.0f);	
+    	g.getGL().glVertex3f(200.0f, 400.0f, 0.0f);	
+    	g.getGL().glVertex3f(200.0f, -100.0f, 0.0f);	
+    	g.getGL().glVertex3f(0.0f, -100.0f, 0.0f);	
+    	g.getGL().glEnd();				
+    	//g.getGL().glFlush();
+    }
+    
     // TODO: should change access public to private final
     public void update(Graphics g) {
     	if(rootObject.isResetObject()){
@@ -827,6 +848,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     		this.initRootOject();
     		this.setup();
     	}
+    	
+
+    	
     	update();
     }
     
@@ -1102,7 +1126,6 @@ class AppletGLEventListener implements GLEventListener {
 			gl.glEnable(GL2.GL_DEPTH_TEST);
 			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT
 					| GL2.GL_STENCIL_BUFFER_BIT);
-			//gl.glDepthMask(false);
 			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL2.GL_BLEND);
 

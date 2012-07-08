@@ -89,6 +89,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
 		//selectBuffer  = BufferUtil.newIntBuffer(selectionbufsize);
 		selectBuff    =  new int[selectionbufsize];
+		this.setDepthTest(false);
 	}
 
 	public void add(Object object) {
@@ -383,6 +384,15 @@ public class GraphicsObject extends Element implements ObjectRender {
 			if (el.isMasked()) {
 				el.getMask().render(g);
 			}
+			
+			if (el.getPosition().getZ()==0){
+				el.setDepthTest(false);
+			} else {
+				this.setDepthTest(true);
+			}
+			
+			if(this.isDepthTest())
+				el.setDepthTest(true);
 			
 			g.pushMatrix();
 			{
