@@ -1088,10 +1088,7 @@ class AppletGLEventListener implements GLEventListener {
 		glut = new GLUT();
 
 		g = new Graphics(gl, glu, glut, width, height);
-<<<<<<< HEAD
-		System.out.println("init");
-=======
->>>>>>> 686145373b2117f372f3f115ee648796db36acf4
+
 		g.init();
 	}
 	
