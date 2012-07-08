@@ -77,6 +77,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	private int selectBuff[];
 	
 	private boolean removeObject;
+	private boolean resetObject = false;
 
 	public GraphicsObject() {
 	    objectList    = new CopyOnWriteArrayList<Object>();
@@ -479,6 +480,10 @@ public class GraphicsObject extends Element implements ObjectRender {
 				if (!selection) {
 					if (e.isRemove())
 						removeObject = true;
+					if (e.isReset()){
+						resetObject = true;
+						e.setReset(false);
+					}
 					if (e.getMouseOverCallback() != null) {
 						selectionbuff = true;
 						
@@ -622,5 +627,13 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public void setSelectionList(ArrayList<Integer> selectionList) {
 		this.selectionList = selectionList;
+	}
+
+	public boolean isResetObject() {
+		return resetObject;
+	}
+
+	public void setResetObject(boolean resetObject) {
+		this.resetObject = resetObject;
 	}
 }

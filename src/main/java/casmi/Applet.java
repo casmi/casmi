@@ -39,7 +39,6 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -159,7 +158,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
 	
-	public void setGLParam(GL gl) {
+	public void setGLParam(GL2 gl) {
 		
 	}
 
@@ -184,13 +183,17 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			}
 		}
 	}
+	
+	public void initRootOject() {
+		rootObject = new GraphicsObject();
+		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
+		rootObject.setDepthTest(false);
+	}
 
 	@Override
 	public void init() {
-		rootObject = new GraphicsObject();
-		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
+		this.initRootOject();
 		this.setup();
-		rootObject.setDepthTest(false);
 		// JOGL setup
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
 		this.caps = new GLCapabilities(profile);
@@ -819,6 +822,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     
     // TODO: should change access public to private final
     public void update(Graphics g) {
+    	if(rootObject.isResetObject()){
+    		rootObject = null;
+    		this.initRootOject();
+    		this.setup();
+    	}
     	update();
     }
     
@@ -1080,7 +1088,7 @@ class AppletGLEventListener implements GLEventListener {
 		glut = new GLUT();
 
 		g = new Graphics(gl, glu, glut, width, height);
-
+		System.out.println("init");
 		g.init();
 	}
 	

@@ -20,6 +20,11 @@
 			<name>casmi</name>
 			<url>http://casmi.github.com/maven-repo/</url>
 		</repository>
+		<repository>
+           <id>jogamp-remote</id>
+           <name>jogamp test mirror</name>
+           <url>http://jogamp.org/deployment/maven/</url>
+         </repository>
 	</repositories>
 
 	<dependencies>
@@ -87,6 +92,16 @@
 			<groupId>ddf</groupId>
 			<artifactId>minim-java</artifactId>
 			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jogamp.gluegen</groupId>
+			<artifactId>gluegen-rt-main</artifactId>
+			<version>2.0-rc9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jogamp.jogl</groupId>
+			<artifactId>jogl-all-main</artifactId>
+			<version>2.0-rc9</version>
 		</dependency>
 	</dependencies>
 

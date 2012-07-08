@@ -92,6 +92,8 @@ abstract public class Element implements Cloneable, Renderable {
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
 	protected boolean gradation = false;
+	
+	protected boolean reset = false;
 
 	/**
 	 * Returns the width of this Element's stroke.
@@ -605,5 +607,13 @@ abstract public class Element implements Cloneable, Renderable {
 	
 	public boolean isRemove() {
 		return this.removeElement;
+	}
+
+	public boolean isReset() {
+		return reset;
+	}
+
+	public void setReset(boolean reset) {
+		this.reset = reset;
 	}
 }

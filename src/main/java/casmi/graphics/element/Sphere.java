@@ -87,7 +87,7 @@ public class Sphere extends Element implements Renderable {
         }
         
         if (this.enableTexture) {
-        	texture.enableTexture();
+        	texture.enableTexture(gl);
         }
         
         gl.glPushMatrix();
@@ -114,7 +114,7 @@ public class Sphere extends Element implements Renderable {
         gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL); 
 
         if (this.enableTexture) {
-        	texture.disableTexture();
+        	texture.disableTexture(gl);
         }
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
