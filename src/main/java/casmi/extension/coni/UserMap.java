@@ -20,8 +20,6 @@ package casmi.extension.coni;
 
 import java.nio.ShortBuffer;
 
-import javax.media.opengl.GL2;
-
 import org.OpenNI.SceneMetaData;
 
 import casmi.graphics.color.Color;

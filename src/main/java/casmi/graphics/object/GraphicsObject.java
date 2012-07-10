@@ -42,7 +42,6 @@ import casmi.tween.TweenManager;
 
 //import com.sun.opengl.util.BufferUtil;
 import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.util.*;
 
 /**
  * GrapicsObject.

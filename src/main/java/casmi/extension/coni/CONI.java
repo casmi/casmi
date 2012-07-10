@@ -19,7 +19,6 @@
 
 package casmi.extension.coni;
 
-import javax.media.opengl.GL2;
 
 import org.OpenNI.ActiveHandEventArgs;
 import org.OpenNI.CalibrationProgressEventArgs;
