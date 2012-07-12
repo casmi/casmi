@@ -35,8 +35,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
 import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureData;
-import com.jogamp.opengl.util.texture.awt.*;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 /**
  * Image class.
