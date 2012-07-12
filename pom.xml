@@ -21,10 +21,15 @@
 			<url>http://casmi.github.com/maven-repo/</url>
 		</repository>
 		<repository>
-           <id>jogamp-remote</id>
-           <name>jogamp test mirror</name>
-           <url>http://jogamp.org/deployment/maven/</url>
-         </repository>
+            <id>jogamp-remote</id>
+            <name>jogamp test mirror</name>
+            <url>http://jogamp.org/deployment/maven/</url>
+        </repository>
+        <repository>
+            <id>xuggle</id>
+            <name>xuggle</name>
+            <url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+        </repository>
 	</repositories>
 
 	<dependencies>
@@ -79,11 +84,6 @@
 			<version>1.5.2.23</version>
 		</dependency>
 		<dependency>
-			<groupId>com.xuggle</groupId>
-			<artifactId>xuggle-xuggler</artifactId>
-			<version>3.4</version>
-		</dependency>
-		<dependency>
 			<groupId>com.primesense</groupId>
 			<artifactId>NITE</artifactId>
 			<version>1.5.2.21</version>
@@ -102,6 +102,11 @@
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-main</artifactId>
 			<version>2.0-rc9</version>
+		</dependency>
+		<dependency>
+			<groupId>xuggle</groupId>
+			<artifactId>xuggle-xuggler</artifactId>
+			<version>5.2</version>
 		</dependency>
 	</dependencies>
 
