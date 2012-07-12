@@ -116,6 +116,11 @@ public class GraphicsObject extends Element implements ObjectRender {
 	public void addTweenManager(TweenManager r) {
 		tmList.add(r);
 	}
+	
+	public void clearAllObjects() {
+		objectList = null;
+	    objectList = new CopyOnWriteArrayList<Object>();
+	}
 
 	public void remove(int index) {
 		objectList.remove(index);

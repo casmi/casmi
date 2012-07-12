@@ -194,7 +194,6 @@ public class Line extends Element implements Renderable {
     	}
 
         calcG();
-        System.out.println(this.x+" "+this.y);
         dx[0] = x1 - this.x;
         dx[1] = x2 - this.x;
         dy[0] = y1 - this.y;
