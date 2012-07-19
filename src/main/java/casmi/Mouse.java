@@ -39,6 +39,7 @@ public class Mouse {
     
     private boolean pressed  = false;
     private boolean clicked  = false;
+    private boolean doubleClicked = false;
     private boolean	entered  = false;
     private boolean exited   = false;
     private boolean released = false;
@@ -46,6 +47,10 @@ public class Mouse {
     private boolean moved    = false;
     
     private int wheelRotation = 0;
+    
+    private long mouseClickLeftTime = 0;
+    private long mouseClickRightTime = 0;
+    private long mouseClickMiddleTime = 0;
     
     Mouse() {}
     
@@ -174,4 +179,36 @@ public class Mouse {
     void setWheelRotation(int wheelRotation) {
         this.wheelRotation = wheelRotation;
     }
+
+	public boolean isDoubleClicked() {
+		return doubleClicked;
+	}
+
+	public void setDoubleClicked(boolean doubleClicked) {
+		this.doubleClicked = doubleClicked;
+	}
+
+	public long getMouseClickLeftTime() {
+		return mouseClickLeftTime;
+	}
+
+	public void setMouseClickLeftTime(long mouseClickTime) {
+		this.mouseClickLeftTime = mouseClickTime;
+	}
+
+	public long getMouseClickRightTime() {
+		return mouseClickRightTime;
+	}
+
+	public void setMouseClickRightTime(long mouseClickRightTime) {
+		this.mouseClickRightTime = mouseClickRightTime;
+	}
+
+	public long getMouseClickMiddleTime() {
+		return mouseClickMiddleTime;
+	}
+
+	public void setMouseClickMiddleTime(long mouseClickMiddleTime) {
+		this.mouseClickMiddleTime = mouseClickMiddleTime;
+	}
 }

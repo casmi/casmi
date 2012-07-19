@@ -34,6 +34,9 @@ import javax.media.opengl.glu.GLU;
 
 
 import casmi.graphics.Graphics;
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
@@ -649,5 +652,197 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public void setResetObject(boolean resetObject) {
 		this.resetObject = resetObject;
+	}
+	
+	@Override
+	public void setStroke(boolean setStroke) {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStroke(setStroke);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStroke(setStroke);
+			}
+		}
+	}
+	
+	@Override
+	public void setFill(boolean setFill) {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStroke(setFill);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStroke(setFill);
+			}
+		}
+	}
+	
+
+	/**
+	 * Sets the width of this Element's stroke.
+	 * 
+	 * @param strokeWidth
+	 *            The width of the Element's stroke.
+	 */
+	@Override
+	public void setStrokeWidth(double strokeWidth) {
+		this.strokeWidth = (float) strokeWidth;
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStrokeWidth(strokeWidth);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStrokeWidth(strokeWidth);
+			}
+		}
+	}
+
+
+	/**
+	 * Sets the color of this Element's stroke.
+	 * 
+	 * @param color
+	 *            The color of the Element's stroke.
+	 */
+	@Override
+	public void setStrokeColor(Color color) {
+		this.strokeColor = color;
+		this.tAS = color.getAlpha();
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStrokeColor(color);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStrokeColor(color);
+			}
+		}
+	}
+
+	@Override
+	public void setStrokeColorAlpha(double alpha) {
+		this.strokeColor.setAlpha(alpha);
+		this.tAS = alpha;
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStrokeColorAlpha(alpha);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStrokeColorAlpha(alpha);
+			}
+		}
+	}
+
+	/**
+	 * Sets the color of this Element's stroke.
+	 * 
+	 * @param strokeColor
+	 *            The color of the Element's stroke.
+	 */
+	@Override
+	public void setStrokeColor(ColorSet colorSet) {
+		strokeColor = new RGBColor(colorSet);
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStrokeColor(colorSet);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStrokeColor(colorSet);
+			}
+		}
+	}
+
+	@Override
+	public void setStrokeColor(ColorSet colorSet, double alpha) {
+	    strokeColor = new RGBColor(colorSet);
+	    this.tAS = alpha;
+	    for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setStrokeColor(colorSet, alpha);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setStrokeColor(colorSet, alpha);
+			}
+		}
+	}
+
+
+
+	/**
+	 * Sets the color of this Element's fill.
+	 * 
+	 * @param color
+	 *            The color of the Element's fill.
+	 */
+	@Override
+	public void setFillColor(Color color) {
+		this.fillColor = color;
+		this.tAF = color.getAlpha();
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setFillColor(color);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setFillColor(color);
+			}
+		}
+	}
+
+	@Override
+	public void setFillColorAlpha(double alpha) {
+		this.fillColor.setAlpha(alpha);
+		this.tAF = alpha;
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setFillColorAlpha(alpha);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setFillColorAlpha(alpha);
+			}
+		}
+	}
+
+	/**
+	 * Sets the color of this Element's fill.
+	 * 
+	 * @param colorSet
+	 *            The color of the Element's fill.
+	 */
+	@Override
+	public void setFillColor(ColorSet colorSet) {
+		this.fillColor = new RGBColor(colorSet);
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setFillColor(colorSet);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setFillColor(colorSet);
+			}
+		}
+	}
+
+	@Override
+	public void setFillColor(ColorSet colorSet, double alpha) {
+		this.fillColor = new RGBColor(colorSet, alpha);
+		this.tAF = alpha;
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setFillColor(colorSet, alpha);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setFillColor(colorSet, alpha);
+			}
+		}
 	}
 }

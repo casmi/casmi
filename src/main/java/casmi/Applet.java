@@ -171,6 +171,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 				
 				mouse.setPressed(false);
 				mouse.setClicked(false);
+				mouse.setDoubleClicked(false);
 				mouse.setEntered(false);
 				mouse.setExited(false);
 				mouse.setReleased(false);
@@ -398,12 +399,27 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
+			if((System.currentTimeMillis() - mouse.getMouseClickLeftTime())<300){
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
 			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
+			if((System.currentTimeMillis() - mouse.getMouseClickMiddleTime())<300){
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
 			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
+			if((System.currentTimeMillis() - mouse.getMouseClickRightTime())<300){
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		}
 		
