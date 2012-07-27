@@ -46,18 +46,6 @@ public class Box extends Element implements Renderable {
 		height = size;
 	}
 	
-	/**
-	 * 
-	 * @param width
-	 * @param height
-	 * 
-	 * @deprecated
-	 */
-	public Box(double width, double height) {
-		this.width  = width;
-		this.height = height;
-	}
-	
 	public Box(double width, double height, double depth) {
 	    this.width  = width;
 	    this.height = height;

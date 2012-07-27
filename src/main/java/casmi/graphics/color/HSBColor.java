@@ -46,22 +46,6 @@ public class HSBColor implements Color {
     public HSBColor(double hue, double saturation, double brightness) {
         this(hue, saturation, brightness, 1.0);
     }
-    
-    /**
-     * Creates a new Color object using HSB values.
-     *
-     * @param hue 
-     *              The H value. 0 - 360.
-     * @param saturation 
-     *              The S value. 0 - 255.
-     * @param brightness 
-     *              The B value. 0 - 255.
-     *              
-     * @deprecated
-     */
-    public HSBColor(int hue, int saturation, int brightness) {
-        this(hue / 360.0, saturation / 255.0, brightness / 255.0);
-    }
 
     /**
      * Creates a new Color object using HSB and alpha values.
@@ -83,24 +67,6 @@ public class HSBColor implements Color {
     }
     
     /**
-     * Creates a new Color object using HSB and alpha values.
-     *
-     * @param hue 
-     *              The H value. 0 - 360.
-     * @param saturation 
-     *              The S value. 0 - 255.
-     * @param brightness 
-     *              The B value. 0 - 255.
-     * @param alpha 
-     *              The Alpha value. 0 - 255.
-     *              
-     * @deprecated
-     */
-    public HSBColor(int hue, int saturation, int brightness, int alpha) {
-        this(hue / 360.0, saturation / 255.0, brightness / 255.0, alpha / 255.0);
-    }
-    
-    /**
      * Creates a new Color object from ColorSet.
      * 
      * @param colorSet
@@ -110,22 +76,6 @@ public class HSBColor implements Color {
      */
     public HSBColor(ColorSet colorSet) {
         this(colorSet, 1.0);
-    }
-    
-    /**
-     * Creates a new Color object from ColorSet and an alpha value.
-     * 
-     * @param colorSet
-     *            ColorSet.
-     * @param alpha
-     *            alpha value. 0 - 255.
-     *            
-     * @see casmi.graphics.color.ColorSet
-     * 
-     * @deprecated
-     */
-    public HSBColor(ColorSet colorSet, int alpha) {
-        this(colorSet, alpha / 255.0);
     }
     
     /**
