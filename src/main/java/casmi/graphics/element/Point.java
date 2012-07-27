@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 /**
@@ -104,9 +104,9 @@ public class Point extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-    		gl.glDisable(GL.GL_DEPTH_TEST);
+    		gl.glDisable(GL2.GL_DEPTH_TEST);
         getSceneStrokeColor().setup(gl);
 
         gl.glPushMatrix();
@@ -114,12 +114,12 @@ public class Point extends Element implements Renderable {
 
         switch (MODE) {
         case POINTS:
-            gl.glBegin(GL.GL_POINTS);
+            gl.glBegin(GL2.GL_POINTS);
             gl.glVertex2d(this.x, this.y);
             gl.glEnd();
             break;
         case POINTS_3D:
-            gl.glBegin(GL.GL_POINTS);
+            gl.glBegin(GL2.GL_POINTS);
             gl.glVertex3d(this.x, this.y, this.z);
             gl.glEnd();
             break;
@@ -129,7 +129,7 @@ public class Point extends Element implements Renderable {
         
         gl.glPopMatrix();
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
-    		gl.glEnable(GL.GL_DEPTH_TEST);
+    		gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
 }

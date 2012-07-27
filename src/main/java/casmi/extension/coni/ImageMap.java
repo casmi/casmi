@@ -20,6 +20,7 @@ package casmi.extension.coni;
 
 import java.nio.ByteBuffer;
 
+
 import org.OpenNI.ImageMetaData;
 
 import casmi.graphics.color.Color;

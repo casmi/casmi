@@ -28,6 +28,8 @@ public enum MouseEvent {
     
     CLICKED,
     
+    DOUBLE_CLICKED,
+    
     ENTERED,
     
     EXITED,

@@ -37,7 +37,7 @@ public enum MovieCodec {
     /** flv1. */
     FLV,
     
-    XVID;
+    ;
     
     public static final MovieCodec getDefaultCodec() {
         return MPEG4;
@@ -53,8 +53,6 @@ public enum MovieCodec {
             return ICodec.ID.CODEC_ID_WMV3;
         case FLV:
             return ICodec.ID.CODEC_ID_FLV1;
-        case XVID:
-            return ICodec.ID.CODEC_ID_XVID;
         }
         
         return null; // dummy

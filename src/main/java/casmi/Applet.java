@@ -39,12 +39,13 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
-import javax.media.opengl.GLJPanel;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
@@ -81,8 +82,10 @@ import casmi.tween.TweenSerialGroup;
 import casmi.util.DateUtil;
 import casmi.util.FileUtil;
 
-import com.sun.opengl.util.GLUT;
-import com.sun.opengl.util.Screenshot;
+//import com.sun.opengl.util.gl2.GLUT;
+//import com.sun.opengl.util.gl2.Screenshot;
+import com.jogamp.opengl.util.gl2.GLUT;
+import com.jogamp.opengl.util.awt.Screenshot;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 
@@ -155,7 +158,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
 	
-	public void setGLParam(GL gl) {
+	public void setGLParam(GL2 gl) {
 		
 	}
 
@@ -168,6 +171,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 				
 				mouse.setPressed(false);
 				mouse.setClicked(false);
+				mouse.setDoubleClicked(false);
 				mouse.setEntered(false);
 				mouse.setExited(false);
 				mouse.setReleased(false);
@@ -180,15 +184,20 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			}
 		}
 	}
+	
+	public void initRootOject() {
+		rootObject = new GraphicsObject();
+		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
+		rootObject.setDepthTest(false);
+	}
 
 	@Override
 	public void init() {
-		rootObject = new GraphicsObject();
-		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
+		this.initRootOject();
 		this.setup();
-		rootObject.setDepthTest(false);
 		// JOGL setup
-		this.caps = new GLCapabilities();
+		GLProfile profile = GLProfile.get(GLProfile.GL2);
+		this.caps = new GLCapabilities(profile);
 		this.caps.setStencilBits(8);
 		this.panel = new GLJPanel(this.caps);
 		this.listener = new AppletGLEventListener(this, getWidth(), getHeight());
@@ -390,12 +399,27 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
+			if((System.currentTimeMillis() - mouse.getMouseClickLeftTime())<300){
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
 			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
+			if((System.currentTimeMillis() - mouse.getMouseClickMiddleTime())<300){
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
 			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
+			if((System.currentTimeMillis() - mouse.getMouseClickRightTime())<300){
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		}
 		
@@ -812,8 +836,37 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     	update(g);
     }
     
+    public void glTest(Graphics g) {
+    	//g.getGL().glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+    	//g.getGL().glLoadIdentity();
+    	g.getGL().glColor3d(1.0, 1.0, 1.0);
+    	g.getGL().glTranslatef(-1.5f, 0.0f, -6.0f);
+    	g.getGL().glBegin(GL2.GL_TRIANGLES);		
+    	g.getGL().glVertex3f(100.0f, 100.0f, 0.0f);	
+    	g.getGL().glVertex3f(0.0f, 0.0f, 0.0f);	
+    	g.getGL().glVertex3f(300.0f, 0.0f, 0.0f);	
+    	g.getGL().glEnd();				
+    	g.getGL().glTranslatef(1.5f, 0.0f, 0.0f);
+    	g.getGL().glColor3d(0.5, 0.5, 0.5);
+    	g.getGL().glBegin(GL2.GL_QUADS);           	
+    	g.getGL().glVertex3f(0.0f, 400.0f, 0.0f);	
+    	g.getGL().glVertex3f(200.0f, 400.0f, 0.0f);	
+    	g.getGL().glVertex3f(200.0f, -100.0f, 0.0f);	
+    	g.getGL().glVertex3f(0.0f, -100.0f, 0.0f);	
+    	g.getGL().glEnd();				
+    	//g.getGL().glFlush();
+    }
+    
     // TODO: should change access public to private final
     public void update(Graphics g) {
+    	if(rootObject.isResetObject()){
+    		rootObject = null;
+    		this.initRootOject();
+    		this.setup();
+    	}
+    	
+
+    	
     	update();
     }
     
@@ -1056,7 +1109,7 @@ class AppletGLEventListener implements GLEventListener {
 
 	public int width;
 	public int height;
-	private GL gl;
+	private GL2 gl;
 	GLU glu;
 	GLUT glut;
 	private Graphics g = null;
@@ -1070,7 +1123,7 @@ class AppletGLEventListener implements GLEventListener {
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
-		gl = drawable.getGL();
+		gl = drawable.getGL().getGL2();
 		glu = new GLU();
 		glut = new GLUT();
 
@@ -1086,14 +1139,13 @@ class AppletGLEventListener implements GLEventListener {
 
 			g.ortho();
 			gl.glClearStencil(0);
-			gl.glEnable(GL.GL_DEPTH_TEST);
-			gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT
-					| GL.GL_STENCIL_BUFFER_BIT);
-			//gl.glDepthMask(false);
-			gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-			gl.glEnable(GL.GL_BLEND);
+			gl.glEnable(GL2.GL_DEPTH_TEST);
+			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT
+					| GL2.GL_STENCIL_BUFFER_BIT);
+			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+			gl.glEnable(GL2.GL_BLEND);
 
-			gl.glEnable(GL.GL_LINE_SMOOTH);
+			gl.glEnable(GL2.GL_LINE_SMOOTH);
 
 			if (d != null) {
 				d.drawWithGraphics(g);
@@ -1110,7 +1162,6 @@ class AppletGLEventListener implements GLEventListener {
 	    this.setSize(width, height);
 	}
 
-	@Override
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {}
 
 	public void setSize(int w, int h) {
@@ -1118,5 +1169,11 @@ class AppletGLEventListener implements GLEventListener {
 		this.height = h;
 		this.g.setWidth(w);
 		this.g.setHeight(h);
+	}
+
+	@Override
+	public void dispose(GLAutoDrawable arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

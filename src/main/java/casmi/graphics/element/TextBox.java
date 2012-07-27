@@ -1,13 +1,15 @@
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 
-import com.sun.opengl.util.j2d.TextRenderer;
+import com.jogamp.opengl.util.awt.TextRenderer;
+//import com.sun.opengl.util.j2d.TextRenderer;
 
 public class TextBox extends Element implements Renderable {
 
@@ -46,7 +48,7 @@ public class TextBox extends Element implements Renderable {
     }
     
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
 
         double x1 = x - this.width  / 2.0;
         double y1 = y + this.height / 2.0;
@@ -57,16 +59,16 @@ public class TextBox extends Element implements Renderable {
         double x4 = x + this.width  / 2.0;
         double y4 = y + this.height / 2.0;
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        }
+       // if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+            gl.glDisable(GL2.GL_DEPTH_TEST);
+       // }
         
         gl.glPushMatrix();
         {
             // fill
             if (fill) {
                 getSceneFillColor().setup(gl);
-                gl.glBegin(GL.GL_QUADS);
+                gl.glBegin(GL2.GL_QUADS);
                 {
                     gl.glVertex2d(x1, y1);
                     gl.glVertex2d(x2, y2);
@@ -80,7 +82,7 @@ public class TextBox extends Element implements Renderable {
             if (stroke) {
                 gl.glLineWidth(this.strokeWidth);
                 getSceneStrokeColor().setup(gl);
-                gl.glBegin(GL.GL_LINE_STRIP);
+                gl.glBegin(GL2.GL_LINE_STRIP);
                 {
                     gl.glVertex2d(x1, y1);
                     gl.glVertex2d(x2, y2);
@@ -110,9 +112,9 @@ public class TextBox extends Element implements Renderable {
         }
         gl.glPopMatrix();
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
-        }
+      //  if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+            gl.glEnable(GL2.GL_DEPTH_TEST);
+      //  }
     }
     
     private final void init() {
@@ -127,7 +129,7 @@ public class TextBox extends Element implements Renderable {
         String[] strs = text.getArrayText();
         TextRenderer tr = text.getRenderer();
         StringBuilder sb = new StringBuilder();
-        
+        try{
         for (String str : strs) {
             while (1 < str.length() && width < tr.getBounds(str).getWidth()) {
                 String tmp = str;
@@ -140,6 +142,9 @@ public class TextBox extends Element implements Renderable {
             }
             sb.append(str);
             sb.append('\n');
+        }
+        } catch (GLException e) {
+        	this.reset = true;
         }
         
         text.setArrayText(sb.toString());

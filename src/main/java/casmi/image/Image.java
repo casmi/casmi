@@ -27,13 +27,15 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.media.opengl.GL2;
+import javax.media.opengl.GLProfile;
 
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
-import com.sun.opengl.util.texture.Texture;
-import com.sun.opengl.util.texture.TextureIO;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 /**
  * Image class.
@@ -58,7 +60,6 @@ public class Image {
         this.height = height;
         
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        
         Graphics.addTextureImage(this);
     }
     
@@ -81,6 +82,8 @@ public class Image {
     public Image(URL url) {
         try {
             BufferedImage preimg = ImageIO.read(url);
+            if(preimg==null)
+            	System.out.println("null");
             img =  convertBytetoInt(preimg);
          } catch (IOException e) {
             e.printStackTrace();
@@ -164,14 +167,17 @@ public class Image {
     }
 
     public final void loadTexture() {
-        texture = TextureIO.newTexture(img, true);
+    //	TextureIO.
+        //texture = TextureIO.newTexture(img, true);
+        texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2),img,true);
         if(texture == null)
         	System.out.println("can not load texture!");
     }
 
-    public final void unloadTexture() {
+   // @SuppressWarnings("deprecation")
+	public final void unloadTexture() {
         if( texture != null ) {
-            texture.dispose();
+            //texture.dispose();
         }
     }
     
@@ -180,16 +186,16 @@ public class Image {
         loadTexture();
     }
     
-    public void enableTexture() {
+    public void enableTexture(GL2 gl) {
         if( texture != null ) {
-            texture.enable();
-            texture.bind();	 
+            texture.enable(gl);
+            texture.bind(gl);	 
         }
     }
     
-    public void disableTexture() {
+    public void disableTexture(GL2 gl) {
         if( texture != null ) {
-            texture.disable();
+            texture.disable(gl);
         }
     }
     

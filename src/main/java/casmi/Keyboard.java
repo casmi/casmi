@@ -22,7 +22,7 @@ package casmi;
 /**
  * Keyboard class.
  * 
- * @author T. Takeuchi
+ * @author T. Takeuchi rw
  */
 public class Keyboard {
 

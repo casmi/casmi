@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 /**
@@ -129,9 +129,9 @@ public class Torus extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
         
         gl.glPushMatrix();
@@ -141,39 +141,38 @@ public class Torus extends Element implements Renderable {
 
             if (this.fill) {
                 getSceneFillColor().setup(gl);
-                drawSolidTorus(glu, in, out, nside, rings);
+                drawSolidTorus(gl, glu, in, out, nside, rings);
             }
 
             if (this.stroke) {
                 getSceneStrokeColor().setup(gl);
                 this.strokeColor.setup(gl);
-                drawWireTorus(glu, in, out, nside, rings);
+                drawWireTorus(gl, glu, in, out, nside, rings);
             }
         }
         gl.glPopMatrix();
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
     
 
     
-    public void drawWireTorus(GLU glu, double innerRadius, double outerRadius,
+    public void drawWireTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
         int nsides, int rings) {
-            GL gl = GLU.getCurrentGL();
-            gl.glPushAttrib(GL.GL_POLYGON_BIT);
-            gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_LINE);
+            gl.glPushAttrib(GL2.GL_POLYGON_BIT);
+            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
             doughnut(gl, innerRadius, outerRadius, nsides, rings);
             gl.glPopAttrib();
     }
 
-    public void drawSolidTorus(GLU glu, double innerRadius, double outerRadius,
+    public void drawSolidTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
          int nsides, int rings) {
-        doughnut(GLU.getCurrentGL(), innerRadius, outerRadius, nsides, rings);
+        doughnut(gl, innerRadius, outerRadius, nsides, rings);
     }
     
-    private static void doughnut(GL gl, double r, double R, int nsides, int rings) {
+    private static void doughnut(GL2 gl, double r, double R, int nsides, int rings) {
         int i, j;
         float theta, phi, theta1;
         float cosTheta, sinTheta;
@@ -190,7 +189,7 @@ public class Torus extends Element implements Renderable {
           theta1 = theta + ringDelta;
           cosTheta1 = (float) Math.cos(theta1);
           sinTheta1 = (float) Math.sin(theta1);
-          gl.glBegin(GL.GL_QUAD_STRIP);
+          gl.glBegin(GL2.GL_QUAD_STRIP);
           phi = 0.0f;
           for (j = nsides; j >= 0; j--) {
             float cosPhi, sinPhi, dist;

@@ -19,7 +19,7 @@
 
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
@@ -292,14 +292,14 @@ public class Triangle extends Element implements Renderable {
 	}
 
 	@Override
-	public void render(GL gl, GLU glu, int width, int height) {
+	public void render(GL2 gl, GLU glu, int width, int height) {
 		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-			gl.glDisable(GL.GL_DEPTH_TEST);
+			gl.glDisable(GL2.GL_DEPTH_TEST);
 		}
 		
 		if (this.enableTexture) {
 			if (texture.reloadFlag) {
-                Graphics.reloadTextures();
+                Graphics.reloadTextures(gl);
                 texture.reloadFlag = false;
             }
             texture.enableTexture();
@@ -312,7 +312,7 @@ public class Triangle extends Element implements Renderable {
             case TRIANGLE:
                 if (this.fill) {
                     getSceneFillColor().setup(gl);
-                    gl.glBegin(GL.GL_TRIANGLE_FAN);
+                    gl.glBegin(GL2.GL_TRIANGLE_FAN);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[0]).setup(gl);
                     if (this.enableTexture == true)
@@ -337,7 +337,7 @@ public class Triangle extends Element implements Renderable {
                 if (this.stroke) {
                     gl.glLineWidth(this.strokeWidth);
                     getSceneStrokeColor().setup(gl);
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[0]).setup(gl);
                     gl.glVertex2d(x1 - x, y1 - y);
@@ -345,13 +345,13 @@ public class Triangle extends Element implements Renderable {
                         getSceneColor(cornerColor[1]).setup(gl);
                     gl.glVertex2d(x2 - x, y2 - y);
                     gl.glEnd();
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     gl.glVertex2d(x2 - x, y2 - y);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[2]).setup(gl);
                     gl.glVertex2d(x3 - x, y3 - y);
                     gl.glEnd();
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     gl.glVertex2d(x1 - x, y1 - y);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[0]).setup(gl);
@@ -363,7 +363,7 @@ public class Triangle extends Element implements Renderable {
             case TRIANGLE_3D:
                 if (this.fill) {
                     this.fillColor.setup(gl);
-                    gl.glBegin(GL.GL_TRIANGLE_FAN);
+                    gl.glBegin(GL2.GL_TRIANGLE_FAN);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[0]).setup(gl);
                     gl.glVertex3d(x1 - x, y1 - y, z1);
@@ -379,7 +379,7 @@ public class Triangle extends Element implements Renderable {
                 if (this.stroke) {
                     gl.glLineWidth(this.strokeWidth);
                     this.strokeColor.setup(gl);
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[0]).setup(gl);
                     gl.glVertex3d(x1 - x, y1 - y, z1);
@@ -387,13 +387,13 @@ public class Triangle extends Element implements Renderable {
                         getSceneColor(cornerColor[1]).setup(gl);
                     gl.glVertex3d(x2 - x, y2 - y, z2);
                     gl.glEnd();
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     gl.glVertex3d(x2 - x, y2 - y, z2);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[2]).setup(gl);
                     gl.glVertex3d(x3 - x, y3 - y, z3);
                     gl.glEnd();
-                    gl.glBegin(GL.GL_LINES);
+                    gl.glBegin(GL2.GL_LINES);
                     gl.glVertex3d(x1 - x, y1 - y, z1);
                     if (isGradation() == true)
                         getSceneColor(cornerColor[0]).setup(gl);
@@ -413,7 +413,7 @@ public class Triangle extends Element implements Renderable {
 		}
 		
 		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-			gl.glEnable(GL.GL_DEPTH_TEST);
+			gl.glEnable(GL2.GL_DEPTH_TEST);
 		}
 	}
 

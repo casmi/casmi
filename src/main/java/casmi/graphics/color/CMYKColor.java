@@ -19,7 +19,7 @@
 
 package casmi.graphics.color;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * CMYK color class.
@@ -293,7 +293,7 @@ public class CMYKColor implements Color {
     }
 
     @Override
-    public void setup(GL gl) {
+    public void setup(GL2 gl) {
         double[] rgb  = CMYKColor.getRGB(cyan, magenta, yellow, black);
         gl.glColor4d(rgb[0], rgb[1], rgb[2], alpha);
     }

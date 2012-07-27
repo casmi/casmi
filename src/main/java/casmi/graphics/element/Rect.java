@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -113,10 +113,10 @@ public class Rect extends Element implements Renderable {
     }
     
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
         calcRect();
         if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
-          	gl.glDisable(GL.GL_DEPTH_TEST);
+          	gl.glDisable(GL2.GL_DEPTH_TEST);
 
         gl.glPushMatrix();
         {
@@ -124,7 +124,7 @@ public class Rect extends Element implements Renderable {
             
             if (this.fill) {
                 getSceneFillColor().setup(gl);
-                gl.glBegin(GL.GL_QUADS);
+                gl.glBegin(GL2.GL_QUADS);
                 if (!isGradation()) {
                     gl.glVertex2d(x1, y1);
                     gl.glVertex2d(x2, y2);
@@ -182,7 +182,7 @@ public class Rect extends Element implements Renderable {
             if (this.stroke) {
                 gl.glLineWidth(this.strokeWidth);
                 getSceneStrokeColor().setup(gl);
-                gl.glBegin(GL.GL_LINE_STRIP);
+                gl.glBegin(GL2.GL_LINE_STRIP);
                 gl.glVertex2d(x1, y1);
                 gl.glVertex2d(x2, y2);
                 gl.glVertex2d(x3, y3);
@@ -193,7 +193,7 @@ public class Rect extends Element implements Renderable {
         }
         gl.glPopMatrix();
         if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
-        	gl.glEnable(GL.GL_DEPTH_TEST);
+        	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
     
     public void setGradationColor(GradationMode mode, Color color1, Color color2) {

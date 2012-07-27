@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -160,9 +160,9 @@ public class Bezier extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
         gl.glPushMatrix();
@@ -173,9 +173,9 @@ public class Bezier extends Element implements Renderable {
             if (this.fill) {
                 getSceneFillColor().setup(gl);
 
-                gl.glMap1d(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
-                gl.glEnable(GL.GL_MAP1_VERTEX_3);
-                gl.glBegin(GL.GL_TRIANGLE_FAN);
+                gl.glMap1d(GL2.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
+                gl.glEnable(GL2.GL_MAP1_VERTEX_3);
+                gl.glBegin(GL2.GL_TRIANGLE_FAN);
 
                 for (int i = 0; i <= detail; i++) {
                     if (i == 0 && isGradation() == true && startColor != null)
@@ -190,16 +190,16 @@ public class Bezier extends Element implements Renderable {
                 }
 
                 gl.glEnd();
-                gl.glDisable(GL.GL_MAP1_VERTEX_3);
+                gl.glDisable(GL2.GL_MAP1_VERTEX_3);
             }
 
             if (this.stroke) {
                 getSceneStrokeColor().setup(gl);
                 gl.glLineWidth(this.strokeWidth);
 
-                gl.glMap1d(GL.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
-                gl.glEnable(GL.GL_MAP1_VERTEX_3);
-                gl.glBegin(GL.GL_LINE_STRIP);
+                gl.glMap1d(GL2.GL_MAP1_VERTEX_3, 0.0f, 1.0f, 3, 4, java.nio.DoubleBuffer.wrap(points));
+                gl.glEnable(GL2.GL_MAP1_VERTEX_3);
+                gl.glBegin(GL2.GL_LINE_STRIP);
 
                 for (int i = 0; i <= detail; i++) {
                     if (i == 0 && isGradation() && startColor != null)
@@ -213,7 +213,7 @@ public class Bezier extends Element implements Renderable {
                     gl.glEvalCoord1f((float)(i / (float)detail));
                 }
                 gl.glEnd();
-                gl.glDisable(GL.GL_MAP1_VERTEX_3);
+                gl.glDisable(GL2.GL_MAP1_VERTEX_3);
             }
 
             gl.glTranslated(this.points[0], this.points[1], this.points[2]);
@@ -221,7 +221,7 @@ public class Bezier extends Element implements Renderable {
         gl.glPopMatrix();
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
     

@@ -19,7 +19,7 @@
   
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -194,7 +194,6 @@ public class Line extends Element implements Renderable {
     	}
 
         calcG();
-        System.out.println(this.x+" "+this.y);
         dx[0] = x1 - this.x;
         dx[1] = x2 - this.x;
         dy[0] = y1 - this.y;
@@ -251,9 +250,9 @@ public class Line extends Element implements Renderable {
    
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
         getSceneStrokeColor().setup(gl);
@@ -268,7 +267,7 @@ public class Line extends Element implements Renderable {
             switch (MODE) {
             case LINES:
                 gl.glLineWidth(this.strokeWidth);
-                gl.glBegin(GL.GL_LINES);
+                gl.glBegin(GL2.GL_LINES);
                 {
                     if (isGradation() && startColor != null)
                         getSceneColor(startColor).setup(gl);
@@ -284,7 +283,7 @@ public class Line extends Element implements Renderable {
                 break;
             case LINES_3D:
                 gl.glLineWidth(this.strokeWidth);
-                gl.glBegin(GL.GL_LINES);
+                gl.glBegin(GL2.GL_LINES);
                 {
                     if (isGradation() && startColor != null)
                         getSceneColor(startColor).setup(gl);
@@ -305,7 +304,7 @@ public class Line extends Element implements Renderable {
         gl.glPopMatrix();
         
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
     

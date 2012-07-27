@@ -19,7 +19,7 @@
 
 package casmi.graphics.object;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
@@ -98,17 +98,17 @@ public class Light extends Element implements ObjectRender {
 		v.set(x, y, z);
 
 		float pos[] = {(float) v.getX(),(float) v.getY(),(float) v.getZ(), 1.0f};
-		g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_POSITION, pos, 0);
+		g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_POSITION, pos, 0);
 		if(Am==true)
-			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_AMBIENT, ambient, 0);
+			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_AMBIENT, ambient, 0);
 		if(Di==true)
-			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_DIFFUSE, diffuse, 0);
+			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_DIFFUSE, diffuse, 0);
 		if(Sp==true)
-			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_SPECULAR,specular, 0);
+			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_SPECULAR,specular, 0);
 		if(Em==true)
-			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_EMISSION,emissive, 0);
+			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_EMISSION,emissive, 0);
 		if(Sh==true)
-			g.getGL().glLightfv(GL.GL_LIGHT0+index, GL.GL_SHININESS,shininess, 0);
+			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_SHININESS,shininess, 0);
 		
 		switch(lightMode){
 		case AMBIENT:
@@ -130,7 +130,7 @@ public class Light extends Element implements ObjectRender {
 	}
 	
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     }
 
 	public double getDirectionX() {

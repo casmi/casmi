@@ -19,7 +19,7 @@
 
 package casmi.graphics.element;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.color.Color;
@@ -279,13 +279,13 @@ public class Arc extends Element implements Renderable {
 	}
 
 	@Override
-	public void render(GL gl, GLU glu, int width, int height) {
+	public void render(GL2 gl, GLU glu, int width, int height) {
 		if (precision <= 0.0) {
 			precision = 5.0;
 		}
 
 		 if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false) {
-			gl.glDisable(GL.GL_DEPTH_TEST);
+			gl.glDisable(GL2.GL_DEPTH_TEST);
 		}
 
 		gl.glPushMatrix();
@@ -294,7 +294,7 @@ public class Arc extends Element implements Renderable {
 		if (this.fill) {
 			// this.fillColor.setup(gl);
 			getSceneFillColor().setup(gl);
-			gl.glBegin(GL.GL_TRIANGLE_FAN);
+			gl.glBegin(GL2.GL_TRIANGLE_FAN);
 			if (isGradation() == true && centerColor != null)
 				getSceneColor(this.centerColor).setup(gl);
 			gl.glVertex2d(0, 0);
@@ -326,7 +326,7 @@ public class Arc extends Element implements Renderable {
 				x2 = (w / 2.0) * Math.cos((float) th2_rad);
 				y2 = (h / 2.0) * Math.sin((float) th2_rad);
 
-				gl.glBegin(GL.GL_LINES);
+				gl.glBegin(GL2.GL_LINES);
 				gl.glVertex2d(x1, y1);
 				gl.glVertex2d(x2, y2);
 				gl.glEnd();
@@ -336,7 +336,7 @@ public class Arc extends Element implements Renderable {
 		gl.glPopMatrix();
 
 		if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false) {
-			gl.glEnable(GL.GL_DEPTH_TEST);
+			gl.glEnable(GL2.GL_DEPTH_TEST);
 		}
 	}
 

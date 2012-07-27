@@ -19,7 +19,7 @@
 
 package casmi.graphics.color;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 /**
  * RGB color class.
@@ -38,36 +38,10 @@ public class RGBColor implements Color {
      * Creates a new Color object using Grayscale value.
      *
      * @param gray 
-     *              The grayscale value. 0 - 255.
-     *              
-     * @deprecated
-     */
-    public RGBColor(int gray) {
-        this(gray / 255.0, 1.0);
-    }
-    
-    /**
-     * Creates a new Color object using Grayscale value.
-     *
-     * @param gray 
      *              The grayscale value. 0.0 - 1.0.
      */
     public RGBColor(double gray) {
         this(gray, 1.0);
-    }
-
-    /**
-     * Creates a new Color object using Grayscale and alpha values.
-     *
-     * @param gray 
-     *              The grayscale value. 0 - 255.
-     * @param alpha 
-     *              The alpha value. 0 - 255.
-     *              
-     * @deprecated
-     */
-    public RGBColor(int gray, int alpha) {
-        this(gray / 255.0, gray / 255.0, gray / 255.0, alpha / 255.0);
     }
     
     /**
@@ -80,22 +54,6 @@ public class RGBColor implements Color {
      */
     public RGBColor(double gray, double alpha) {
         this(gray, gray, gray, alpha);
-    }
-
-    /**
-     * Creates a new Color object using RGB values.
-     *
-     * @param red 
-     *              The R value. 0 - 255.
-     * @param green 
-     *              The G value. 0 - 255.
-     * @param blue 
-     *              The B value. 0 - 255.
-     *              
-     * @deprecated
-     */
-    public RGBColor(int red, int green, int blue) {
-        this(red / 255.0, green / 255.0, blue / 255.0, 1.0);
     }
     
     /**
@@ -110,27 +68,6 @@ public class RGBColor implements Color {
      */
     public RGBColor(double red, double green, double blue) {
         this(red, green, blue, 1.0);
-    }
-
-    /**
-     * Creates a new Color object using RGB and alpha values.
-     *
-     * @param red 
-     *              The R value. 0 - 255.
-     * @param green 
-     *              The G value. 0 - 255.
-     * @param blue 
-     *              The B value. 0 - 255.
-     * @param alpha 
-     *              The Alpha value. 0 - 255.
-     *              
-     * @deprecated
-     */
-    public RGBColor(int red, int green, int blue, int alpha) {
-        this.red   = red   / 255.0;
-        this.green = green / 255.0;
-        this.blue  = blue  / 255.0;
-        this.alpha = alpha / 255.0;
     }
     
     /**
@@ -203,23 +140,6 @@ public class RGBColor implements Color {
      */
     public RGBColor(ColorSet colorSet) {
         setColor(colorSet);
-    }
-    
-    /**
-     * Creates a new Color object from ColorSet and an alpha value.
-     * 
-     * @param colorSet
-     *            ColorSet.
-     * @param alpha
-     *            alpha value. 0 - 255.
-     *            
-     * @see casmi.graphics.color.ColorSet
-     * 
-     * @deprecated
-     */
-    public RGBColor(ColorSet colorSet, int alpha) {
-        setColor(colorSet);
-        this.alpha = alpha / 255.0;
     }
     
     /**
@@ -309,16 +229,6 @@ public class RGBColor implements Color {
     public double getRed() {
         return red;
     }
-
-    /**
-     * 
-     * @param red
-     * 
-     * @deprecated
-     */
-    public void setRed(int red) {
-        this.red = red / 255.0;
-    }
     
     @Override
     public void setRed(double red) {
@@ -328,16 +238,6 @@ public class RGBColor implements Color {
     @Override
     public double getGreen() {
         return green;
-    }
-
-    /**
-     * 
-     * @param green
-     * 
-     * @deprecated
-     */
-    public void setGreen(int green) {
-        this.green = green / 255.0;
     }
     
     @Override
@@ -349,16 +249,6 @@ public class RGBColor implements Color {
     public double getBlue() {
         return blue;
     }
-
-    /**
-     * 
-     * @param blue
-     * 
-     * @deprecated
-     */
-    public void setBlue(int blue) {
-        this.blue = blue / 255.0;
-    }
     
     @Override
     public void setBlue(double blue) {
@@ -369,32 +259,10 @@ public class RGBColor implements Color {
     public double getAlpha() {
         return alpha;
     }
-
-    /**
-     * 
-     * @param alpha
-     * 
-     * @deprecated
-     */
-    public void setAlpha(int alpha) {
-        this.alpha = alpha / 255.0;
-    }
     
     @Override
     public void setAlpha(double alpha) {
         this.alpha = alpha;
-    }
-
-    /**
-     * 
-     * @param gray
-     * 
-     * @deprecated
-     */
-    public void setGray(int gray) {
-        this.red   = gray / 255.0;
-        this.green = gray / 255.0;
-        this.blue  = gray / 255.0;
     }
     
     public void setGray(double gray) {
@@ -404,7 +272,7 @@ public class RGBColor implements Color {
     }
     
     @Override
-    public void setup(GL gl) {
+    public void setup(GL2 gl) {
         gl.glColor4d(this.red, this.green, this.blue, this.alpha);
     }
     

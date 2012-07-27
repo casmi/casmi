@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
@@ -97,23 +97,23 @@ public class Mask extends Element implements ObjectRender {
     }
 
     @Override
-    public void render(GL gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height) {
     }
 
     @Override
     public void render(Graphics g) {
-        GL gl = g.getGL();
-        gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glEnable(GL.GL_STENCIL_TEST);
-        gl.glStencilFunc(GL.GL_ALWAYS, 1, ~0);
-        gl.glStencilOp(GL.GL_KEEP, GL.GL_REPLACE, GL.GL_REPLACE);
+        GL2 gl = g.getGL();
+        gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glEnable(GL2.GL_STENCIL_TEST);
+        gl.glStencilFunc(GL2.GL_ALWAYS, 1, ~0);
+        gl.glStencilOp(GL2.GL_KEEP, GL2.GL_REPLACE, GL2.GL_REPLACE);
         gl.glColorMask(false, false, false, false);
         gl.glDepthMask(false);
         drawingMask(g);
         gl.glColorMask(true, true, true, true);
         gl.glDepthMask(true);
-        gl.glStencilOp(GL.GL_KEEP, GL.GL_KEEP, GL.GL_KEEP);
-        gl.glStencilFunc(GL.GL_EQUAL, 1, ~0);
+        gl.glStencilOp(GL2.GL_KEEP, GL2.GL_KEEP, GL2.GL_KEEP);
+        gl.glStencilFunc(GL2.GL_EQUAL, 1, ~0);
     }
 
     public BufferedImage getMaskBuff() {
