@@ -36,7 +36,6 @@ import java.nio.DoubleBuffer;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
@@ -72,22 +71,16 @@ import casmi.graphics.object.Light;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.io.ImageType;
-import casmi.io.MovieCodec;
 import casmi.timeline.Timeline;
 import casmi.timeline.TimelineRender;
 import casmi.tween.Tween;
 import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;
 import casmi.tween.TweenSerialGroup;
-import casmi.util.DateUtil;
 import casmi.util.FileUtil;
 
-//import com.sun.opengl.util.gl2.GLUT;
-//import com.sun.opengl.util.gl2.Screenshot;
-import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.util.awt.Screenshot;
-import com.xuggle.mediatool.IMediaWriter;
-import com.xuggle.mediatool.ToolFactory;
+import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
  * casmi Applet.
@@ -135,13 +128,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private boolean saveImageFlag = false;
 	private boolean saveBackground = true;
 	private String saveFile;
-
-	// for recording a movie
-	private IMediaWriter mediaWriter;
-	private boolean recordFlag = false;
-	private boolean recordBackground = true;
-	private int recordTime = 0;
-	private int recordSpan = 0;
 	
 	// Abstract methods.
 	// -------------------------------------------------------------------------
@@ -257,21 +243,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    if (c.getType() == getCursor().getType()) return;
 		setCursor(c);   
 	}
-	
-	/**
-	 * @param cursorMode
-	 * @deprecated
-	 */
-	public void cursor(CursorMode cursorMode) {
-		setCursor(cursorMode);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public void noCursor() {
-		setCursor(CursorMode.NONE);
-	}
 
 	public void setCursor(String path, int hotspotX, int hotspotY) throws IOException {
 		Image image = ImageIO.read(new java.io.File(path));
@@ -280,18 +251,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Cursor cursor = tk.createCustomCursor(image, hotspot, "Custom Cursor");
 		setCursor(cursor);
-	}
-	
-	/**
-	 * @param path
-	 * @param hotspotX
-	 * @param hotspotY
-	 * @throws IOException
-	 * 
-	 * @deprecated
-	 */
-	public void cursor(String path, int hotspotX, int hotspotY) throws IOException {
-	    setCursor(path, hotspotX, hotspotY);
 	}
 
 	public void setFPS(double fps) {
@@ -316,7 +275,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject.setDepthTest(depthTest);
 	}
 	
-	public boolean isDepthTest(){
+	public boolean isDepthTest() {
 		return rootObject.isDepthTest();
 	}
 
@@ -587,71 +546,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	// -------------------------------------------------------------------------
-	// record movie
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Records the window as a movie file with background by H264 codec.
-	 * 
-	 * @param file
-	 *            an output file.
-	 */
-	public void record(String file) {
-		record(file, true, 0);
-	}
-
-	/**
-	 * Records the window as a movie file by H264 codec.
-	 * 
-	 * @param file
-	 *            an output file.
-	 * @param background
-	 *            if true, records with background.
-	 * @param sec
-	 *            records for specified seconds. if specifies 0, records until
-	 *            call {@link #stopRecord()}.
-	 */
-	public void record(String file, boolean background, int sec) {
-		record(file, background, sec, MovieCodec.getDefaultCodec());
-	}
-
-	/**
-	 * Records the window as a movie file.
-	 * 
-	 * @param file
-	 *            an output file.
-	 * @param background
-	 *            if true, records with background.
-	 * @param sec
-	 *            records for specified seconds. if specifies 0, records until
-	 *            call {@link #stopRecord()}.
-	 * @param codec
-	 *            a codec of a movie.
-	 */
-	public void record(String file, boolean background, int sec,
-			MovieCodec codec) {
-		stopRecord();
-
-		mediaWriter = ToolFactory.makeWriter(file);
-		mediaWriter.addVideoStream(0, 0, MovieCodec.toXugglerCodec(codec),
-				width, height);
-		recordBackground = background;
-		recordSpan = sec * 1000;
-		recordTime = 0;
-		recordFlag = true;
-	}
-
-	/**
-	 * Stops recording.
-	 */
-	public void stopRecord() {
-		recordFlag = false;
-		if (mediaWriter != null) {
-			mediaWriter.close();
-		}
-	}
-
-	// -------------------------------------------------------------------------
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
@@ -708,20 +602,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			} catch (COSVisitorException e) {
 				e.printStackTrace();
 			}
-		}
-
-		// record movie
-		if (recordFlag) {
-			BufferedImage bi = Screenshot.readToBufferedImage(width, height,
-					!recordBackground);
-			if (recordTime <= 0) {
-				recordTime = DateUtil.millis();
-			}
-			int elapse = DateUtil.millis() - recordTime;
-			if (0 < recordSpan && recordSpan < elapse) {
-				stopRecord();
-			}
-			mediaWriter.encodeVideo(0, bi, elapse, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -831,7 +711,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	
     private final void drawObjects(Graphics g) {
     	rootObject.clearSelectionList();
-    	rootObject.bufRender(g, getMouseX(), getMouseY(),false,0);
+    	rootObject.bufRender(g, getMouseX(), getMouseY(), false,0);
     	rootObject.selectionbufRender(g, getMouseX(), getMouseY(), 0);
     	update(g);
     }
@@ -859,21 +739,19 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     
     // TODO: should change access public to private final
     public void update(Graphics g) {
-    	if(rootObject.isResetObject()){
+    	if (rootObject.isResetObject()) {
     		rootObject = null;
     		this.initRootOject();
     		this.setup();
     	}
-    	
-
     	
     	update();
     }
     
     private static TweenManager tweenManager = null;
     
-    private TweenManager getTweenManager(){
-    	if( tweenManager == null ) {
+    private TweenManager getTweenManager() {
+    	if (tweenManager == null) {
     		tweenManager = new TweenManager();
     		rootObject.addTweenManager(tweenManager);
     	}
@@ -1140,8 +1018,7 @@ class AppletGLEventListener implements GLEventListener {
 			g.ortho();
 			gl.glClearStencil(0);
 			gl.glEnable(GL2.GL_DEPTH_TEST);
-			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT
-					| GL2.GL_STENCIL_BUFFER_BIT);
+			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
 			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL2.GL_BLEND);
 
@@ -1157,7 +1034,6 @@ class AppletGLEventListener implements GLEventListener {
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-//	    System.out.println(x + ", " + y + ", " + width + ", " + height);
 	    ((Applet)d).setAppletSize(width, height);    
 	    this.setSize(width, height);
 	}
