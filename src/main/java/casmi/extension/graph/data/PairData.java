@@ -15,23 +15,39 @@
  * limitations under the License.
  */
 
-package casmi.extension.graphics;
+package casmi.extension.graph.data;
 
 /**
- * ArrowAlign Class.
+ * PairData Class.
  * 
- * @author Y. Ban
+ * @author K. Nishimura
  */
 
+public class PairData {
+	private String x;
+	private double y;
 
-public enum ArrowAlign {
+	public PairData(String x, double y){
+		this.x = x;
+		this.y = y;
+	}
+
+	public void set(String x, double y){
+		this.x = x;
+		this.y = y;
+	}
 	
-	BOTTOM,
-	
-	CENTER,
-	
-	TOP,
-	
-	CORNER
+	public String getX() {
+		return x;
+	}
+	public void setX(String x) {
+		this.x = x;
+	}
+	public double getY() {
+		return y;
+	}
+	public void setY(double y) {
+		this.y = y;
+	}
 	
 }

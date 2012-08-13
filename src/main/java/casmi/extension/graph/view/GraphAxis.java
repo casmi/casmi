@@ -15,23 +15,18 @@
  * limitations under the License.
  */
 
-package casmi.extension.graphics;
+
+package casmi.extension.graph.view;
+
 
 /**
- * ArrowAlign Class.
- * 
  * @author Y. Ban
  */
 
+public enum GraphAxis {
+	
+	HORIZONTAL,
+	
+	VERTICAL
 
-public enum ArrowAlign {
-	
-	BOTTOM,
-	
-	CENTER,
-	
-	TOP,
-	
-	CORNER
-	
 }
