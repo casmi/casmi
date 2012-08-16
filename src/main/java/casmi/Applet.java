@@ -33,6 +33,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,6 +59,7 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 
+import casmi.exception.CasmiRuntimeException;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
@@ -120,6 +122,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private TimelineRender rootTimelineRender;
 
 	private GraphicsObject rootObject;
+	private List<Updatable> updateObjectList = new ArrayList<Updatable>(); 
+	
 	private static final int SELECTION_BUFSIZE = 1024 * 1024;
 	// private int selectedIndex = 0;
 
@@ -203,7 +207,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		panel.setFocusable(true);
 
 		timer = new Timer();
-		timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
+		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 		    
@@ -549,8 +553,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
-		this.setGLParam(g.getGL());
-		this.drawObjects(g);
+		setGLParam(g.getGL());
+		
+		drawObjects(g);
+		
+		updateObjects();
 
 		// Calculate real fps.
 		{
@@ -707,13 +714,18 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public int getHeight() {
 		return height;
 	}
-
 	
     private final void drawObjects(Graphics g) {
     	rootObject.clearSelectionList();
     	rootObject.bufRender(g, getMouseX(), getMouseY(), false,0);
     	rootObject.selectionbufRender(g, getMouseX(), getMouseY(), 0);
     	update(g);
+    }
+    
+    private final void updateObjects() {
+        for (Updatable obj : updateObjectList) {
+            obj.update();
+        }
     }
     
     public void glTest(Graphics g) {
@@ -801,11 +813,17 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	   rootObject.setRotation(angle, x, y, z);
    }
     
-   public void addObject(Object r) {
-	   if(r instanceof Element || r instanceof Group || r instanceof TimelineRender)
-		   rootObject.add(r);
-       
-	   
+   public void addObject(Object obj) {
+       addObject(0, obj);
+   }
+   
+   public void addObject(int index, Object obj) {
+       if (obj instanceof Element || obj instanceof Group || obj instanceof TimelineRender) {
+           rootObject.add(index, obj);
+       } else {
+           throw new CasmiRuntimeException("The added object is not rendarable");              
+       }
+
        // NOTE: ???
        if (rootObject instanceof TimelineRender) {
            timeline = true;
@@ -817,31 +835,15 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
        }
    }
    
-   public void addObject(List<Object> objects) {
-	   for(Object obj : objects){
-		   if(obj instanceof Element || obj instanceof Group)
-			   rootObject.add(obj);
+   public void addObject(List<Object> objectList) {
+	   for (Object obj : objectList) {
+	       addObject(obj);
 	   }
    }
-   
-   public void addObject(int index, Object r) {
-	   if(r instanceof Element || r instanceof Group)
-		   rootObject.add(index, r);
-       
-       // NOTE: ???
-       if (rootObject instanceof TimelineRender) {
-           timeline = true;
-           rootTimelineRender = (TimelineRender) rootObject;
-           if( rootTimelineRender instanceof Timeline){
-               rootTimeline = (Timeline)rootTimelineRender;
-               rootTimeline.setApplet(this);
-           }
-       }
-    }
 
     public void removeObject(int index) {
     	rootObject.remove(index);
-    }
+    }    
     
     public Object getObject(int index) {
     	return rootObject.get(index);
@@ -849,6 +851,34 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     
     public void clearObject() {
     	rootObject.clear();
+    }
+    
+    public void addUpdateObject(Updatable obj) {
+        addUpdateObject(0, obj);
+    }
+    
+    public void addUpdateObject(int index, Updatable obj) {
+        if (obj instanceof Updatable) {
+            updateObjectList.add(index, obj);
+        } else {
+            throw new CasmiRuntimeException("The added object is not updatable");
+        } 
+    }
+    
+    public Updatable getUpdateObject(int index) {
+        return updateObjectList.get(index);
+    }
+    
+    public void removeUpdateObject(int index) {
+        updateObjectList.remove(index);
+    }
+    
+    public void removeUpdateObject(Updatable obj) {
+        updateObjectList.remove(obj);
+    }
+    
+    public void clearUpdateObject() {
+        updateObjectList.clear();
     }
     
     public void setPerspective() {
