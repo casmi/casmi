@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import casmi.exception.NetException;
 import casmi.exception.ParserException;
-import casmi.extension.net.OAuth;
 import casmi.io.Reader;
 import casmi.parser.XML;
 import casmi.parser.XMLElement;
