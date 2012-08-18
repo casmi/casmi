@@ -92,17 +92,18 @@ import com.jogamp.opengl.util.gl2.GLUT;
 abstract public class Applet extends JApplet 
 implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
-    private int width = 100, height = 100;
+    private int width  = 100;
+    private int height = 100;
     
     // FPS.
-    private double fps = 30.0;
+    private double fps        = 30.0;
     private double workingFPS = fps;
-    private int frame = 0;
-    private long baseTime = 0;
+    private int    frame      = 0;
+    private long   baseTime   = 0;
 
-    // Mouse and keyboard instances.
-    private Mouse mouse = new Mouse();
-    private Keyboard keyboard = new Keyboard();
+    private final Mouse     mouse     = new Mouse();
+    private final Keyboard  keyboard  = new Keyboard();    
+    private final PopupMenu popupMenu = new PopupMenu(this);
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -683,11 +684,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public char getKey() {
 		return keyboard.getKey();
 	}
-
-	/**	@deprecated */
-	public int getKeycode() {
-		return keyboard.getKeyCode();
-	}
 	
 	public int getKeyCode() {
 	    return keyboard.getKeyCode();
@@ -704,6 +700,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public boolean isKeyTyped() {
 		return keyboard.isTyped();
 	}
+	
+	// PopupMenu
+	
+	public PopupMenu getPopupMenu() {
+	    return popupMenu;
+	}
+	
+	// ----------
 
 	@Override
 	public int getWidth() {
