@@ -17,7 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.extension.cpop;
+package casmi;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,19 +28,16 @@ import java.lang.reflect.Method;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import casmi.Applet;
-
 /**
- * easy to create popup menu
+ * Class for creating popup menu easily.
  * 
- * @author shigeodayo
- *
+ * @author S. Yoshida
  */
-public class CPopupMenu extends JPopupMenu {
+public class PopupMenu extends JPopupMenu {
 
 	private final Applet target;
 
-	public CPopupMenu(Applet target) {
+	public PopupMenu(Applet target) {
 		this.target = target;
 	}
 

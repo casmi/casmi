@@ -33,6 +33,7 @@ import javax.media.opengl.glu.GLU;
 
 
 
+import casmi.Updatable;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
@@ -51,7 +52,7 @@ import com.jogamp.common.nio.Buffers;
  * 
  * @author Y. Ban
  */
-public class GraphicsObject extends Element implements ObjectRender {
+public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	private Graphics g;
 	
@@ -606,6 +607,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		update();
 	}
 
+	@Override
 	public void update() {
 
 	}
