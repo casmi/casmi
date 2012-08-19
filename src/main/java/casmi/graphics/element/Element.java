@@ -356,6 +356,20 @@ abstract public class Element implements Cloneable, Renderable {
 		this.y = v.getY();
 		this.z = v.getZ();
 	}
+	
+	public void flip(int mode) {
+		switch(mode){
+		case 0:
+			this.rotateY += 180;
+			break;
+		case 1:
+			this.rotateX += 180;
+			break;
+		default:
+			this.rotate += 180;
+			break;
+		}
+	}
 
 	public void setRotation(double angle) {
 		this.rotate = angle;

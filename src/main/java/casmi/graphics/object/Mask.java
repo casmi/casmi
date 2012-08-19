@@ -38,9 +38,11 @@ public class Mask extends Element implements ObjectRender {
 
     private List<Element> elements;
     private BufferedImage maskBuff;
+    private boolean maskFlip;
 
     public Mask() {
         elements = new ArrayList<Element>();
+        maskFlip = false;
     }
 
     /**
@@ -113,7 +115,10 @@ public class Mask extends Element implements ObjectRender {
         gl.glColorMask(true, true, true, true);
         gl.glDepthMask(true);
         gl.glStencilOp(GL2.GL_KEEP, GL2.GL_KEEP, GL2.GL_KEEP);
-        gl.glStencilFunc(GL2.GL_EQUAL, 1, ~0);
+        if(maskFlip)
+        	gl.glStencilFunc(GL2.GL_NOTEQUAL, 1, ~0);
+        else
+        	gl.glStencilFunc(GL2.GL_EQUAL, 1, ~0);
     }
 
     public BufferedImage getMaskBuff() {
@@ -122,5 +127,13 @@ public class Mask extends Element implements ObjectRender {
 
     public void setMaskBuff(BufferedImage maskBuff) {
         this.maskBuff = maskBuff;
+    }
+    
+    public void setNormalMask(){
+    	this.maskFlip = false;
+    }
+    
+    public void setInverseMask(){
+    	this.maskFlip = true;
     }
 }

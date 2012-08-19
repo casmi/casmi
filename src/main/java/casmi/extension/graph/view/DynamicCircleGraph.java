@@ -74,15 +74,18 @@ public class DynamicCircleGraph extends Group{
         tw.setValue(0);
         setGraphArc();
         if(turn == GraphTurn.CLOCKWISE){
-        	for(Arc arc: arclist)
-    			arc.setRotationY(180);
+        	for(Arc arc: arclist){
+    			arc.flip(0);
+    			arc.setDetail(180);
+        	}
+        	
         }
         
         tweencallback = new TweenCallback() {
 
             @Override
             public void run(TweenCallbackTypes eventType, Tween tween) {
-            	arclist.get(arclist.size()-1).setEnd(451.0);
+            	arclist.get(arclist.size()-1).setEnd(450.0);
             }
         };
 	}
