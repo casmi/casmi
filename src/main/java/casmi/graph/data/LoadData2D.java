@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package casmi.extension.graph.data;
+package casmi.graph.data;
 
 import java.io.IOException;
 import java.net.URL;

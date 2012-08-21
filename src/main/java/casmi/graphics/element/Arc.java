@@ -356,7 +356,6 @@ public class Arc extends Element implements Renderable {
 	public void setDetail(double detail) {
 		this.precision = detail;
 		this.precisionangle = (this.radEnd - this.radStart) / detail;
-		System.out.println(this.precisionangle);
 	}
 
 	/**

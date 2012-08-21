@@ -18,7 +18,7 @@
  */
 
 
-package casmi.extension.graph.view;
+package casmi.graph.view;
 
 
 /**

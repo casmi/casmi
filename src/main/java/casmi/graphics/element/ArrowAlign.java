@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package casmi.extension.graphics;
+package casmi.graphics.element;
 
 /**
  * ArrowAlign Class.

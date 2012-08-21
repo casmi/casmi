@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package casmi.extension.graph.view;
+package casmi.graph.view;
 
 import java.util.List;
 
-import casmi.extension.graph.data.MatrixData2D;
+import casmi.graph.data.MatrixData2D;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Line;
 import casmi.graphics.element.Text;

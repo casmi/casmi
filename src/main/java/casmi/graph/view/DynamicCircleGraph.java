@@ -18,13 +18,13 @@
  */
 
 
-package casmi.extension.graph.view;
+package casmi.graph.view;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import casmi.extension.graph.data.MatrixData2D;
-import casmi.extension.graph.data.PairData;
+import casmi.graph.data.MatrixData2D;
+import casmi.graph.data.PairData;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;

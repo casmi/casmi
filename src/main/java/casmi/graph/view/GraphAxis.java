@@ -15,39 +15,18 @@
  * limitations under the License.
  */
 
-package casmi.extension.graph.data;
+
+package casmi.graph.view;
+
 
 /**
- * PairData Class.
- * 
- * @author K. Nishimura
+ * @author Y. Ban
  */
 
-public class PairData {
-	private String x;
-	private double y;
-
-	public PairData(String x, double y){
-		this.x = x;
-		this.y = y;
-	}
-
-	public void set(String x, double y){
-		this.x = x;
-		this.y = y;
-	}
+public enum GraphAxis {
 	
-	public String getX() {
-		return x;
-	}
-	public void setX(String x) {
-		this.x = x;
-	}
-	public double getY() {
-		return y;
-	}
-	public void setY(double y) {
-		this.y = y;
-	}
+	HORIZONTAL,
 	
+	VERTICAL
+
 }

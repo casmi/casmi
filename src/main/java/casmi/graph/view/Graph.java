@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package casmi.extension.graph.view;
+package casmi.graph.view;
 
-import casmi.extension.graph.data.MatrixData2D;
+import casmi.graph.data.MatrixData2D;
 import casmi.graphics.color.Color;
 import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;

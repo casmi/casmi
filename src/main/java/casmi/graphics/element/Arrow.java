@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package casmi.extension.graphics;
+package casmi.graphics.element;
 
 import casmi.graphics.element.Rect;
 import casmi.graphics.element.Triangle;
