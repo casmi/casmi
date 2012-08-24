@@ -39,6 +39,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
+import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
@@ -844,6 +845,18 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			} else if (obj instanceof GraphicsObject) {
 				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(colorSet, alpha);
+			}
+		}
+	}
+	
+	public void resetObjects() {
+		for (Object obj : objectList) {
+			if (obj instanceof Reset) {
+				Reset el = (Reset)obj;
+				el.reset();
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.resetObjects();
 			}
 		}
 	}

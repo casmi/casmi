@@ -551,6 +551,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	// -------------------------------------------------------------------------
+	
+	@Override
+	public void reset(){
+		rootObject.resetObjects();
+	}
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
@@ -1009,6 +1014,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
  */
 interface GraphicsDrawable {
 	public void drawWithGraphics(Graphics g);
+	public void reset();
 }
 
 /**
@@ -1026,6 +1032,7 @@ class AppletGLEventListener implements GLEventListener {
 	GLUT glut;
 	private Graphics g = null;
 	private GraphicsDrawable d = null;
+	boolean reset = false;
 	
 	public AppletGLEventListener(GraphicsDrawable drawable, int w, int h) {
 		this.width = w;
@@ -1041,7 +1048,9 @@ class AppletGLEventListener implements GLEventListener {
 
 		g = new Graphics(gl, glu, glut, width, height);
 
-		g.init();
+		if(reset)
+			d.reset();
+		reset = true;
 	}
 	
 	@Override

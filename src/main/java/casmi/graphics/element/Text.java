@@ -40,7 +40,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  * @author Y. Ban, T. Takeuchi
  * 
  */
-public class Text extends Element implements Renderable {
+public class Text extends Element implements Renderable, Reset {
 
     private Font font;
     private String str;
@@ -167,6 +167,21 @@ public class Text extends Element implements Renderable {
         	// ignore
         }
     }
+    
+	@Override
+	public void reset() {
+        try{
+        	if(GLContext.getCurrent()==null);
+        	  textRenderer = new TextRenderer(font.getAWTFont(), true, true);
+            frc = new FontRenderContext(new AffineTransform(), false, false);
+            layout = new TextLayout[strArray.length];
+            for(int num = 0; num < strArray.length; num++) {
+                layout[num] = new TextLayout(strArray[num], font.getAWTFont(), frc);
+            }
+        } catch(java.lang.IllegalArgumentException e) {
+        	// ignore
+        }
+	}
     
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
@@ -474,4 +489,6 @@ public class Text extends Element implements Renderable {
 	public void setSelection(boolean selection) {
 		this.selection = selection;
 	}
+
+
 }

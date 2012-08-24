@@ -173,6 +173,8 @@ public class Image {
         if(texture == null)
         	System.out.println("can not load texture!");
     }
+    
+    
 
    // @SuppressWarnings("deprecation")
 	public final void unloadTexture() {

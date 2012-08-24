@@ -37,7 +37,7 @@ import casmi.matrix.Vertex;
  * @author Y. Ban
  * 
  */
-public class Texture extends Element implements Renderable {
+public class Texture extends Element implements Renderable, Reset {
 
     public static final int LINES     = 1;
     public static final int LINES_3D  = 3;
@@ -402,5 +402,11 @@ public class Texture extends Element implements Renderable {
 	
 	public void disableMask(){
 		masking = false;
+	}
+
+	@Override
+	public void reset() {
+		image.loadTexture();
+		
 	}
 }

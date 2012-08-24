@@ -106,12 +106,6 @@ public class Graphics {
 	    return glut;
 	}
 	
-	public void init() {
-//		for (Image img : textureImages) {
-//			img.unloadTexture();
-//			img.loadTexture();
-//		}
-	}
 
 	/**
 	 * Returns the width of the display window. 
