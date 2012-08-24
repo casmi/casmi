@@ -394,14 +394,14 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				el.getMask().render(g);
 			}
 			
-			if (el.getPosition().getZ()==0){
+			/*if (el.getPosition().getZ()==0){
 				el.setDepthTest(false);
 			} else {
 				this.setDepthTest(true);
-			}
+			}*/
 			
-			if(this.isDepthTest())
-				el.setDepthTest(true);
+			//if(this.isDepthTest())
+			//	el.setDepthTest(true);
 			
 			g.pushMatrix();
 			{

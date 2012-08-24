@@ -117,7 +117,6 @@ public class Rect extends Element implements Renderable {
         calcRect();
         if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
           	gl.glDisable(GL2.GL_DEPTH_TEST);
-
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
