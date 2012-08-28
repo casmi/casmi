@@ -350,7 +350,7 @@ public class Arc extends Element implements Renderable {
 	/**
 	 * Set the precision of this Arc.
 	 * 
-	 * @param precision
+	 * @param detail
 	 *            The precision of the Arc.
 	 */
 	public void setDetail(double detail) {

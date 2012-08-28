@@ -566,7 +566,7 @@ public class MySQL extends SQL {
      * Retrieves the value of the designated column in the current row as a
      * Object in the Java programming language.
      * 
-     * @param column
+     * @param field
      *            The name of the field.
      * 
      * @return

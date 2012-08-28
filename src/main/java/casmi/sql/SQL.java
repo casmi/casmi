@@ -144,6 +144,8 @@ abstract class SQL {
      * makes the second row the current row, and so on.
      * 
      * @return
+     *     <code>true</code> if the new current row is valid; <code>false</code> if there are no more rows
+     * 
      * @throws SQLException
      */
     abstract boolean next() throws SQLException;

@@ -95,7 +95,10 @@ public class JSON {
      * Convert a XML object to a JSON string.
      * 
      * @param xml
+     * 
      * @return
+     *     JSON string
+     * 
      * @throws ParserException
      * @throws SAXException
      * @throws IOException
