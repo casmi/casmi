@@ -36,6 +36,7 @@ import casmi.parser.CSV;
  * 
  * @author Y. Ban
  * 
+ * @see Scene
  */
 public class Timeline implements TimelineRender {
 

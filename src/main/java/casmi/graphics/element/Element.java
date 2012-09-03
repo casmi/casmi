@@ -98,7 +98,8 @@ abstract public class Element implements Cloneable, Renderable {
 	/**
 	 * Returns the width of this Element's stroke.
 	 * 
-	 * @return strokeWidth The width of the Element's stroke.
+	 * @return
+	 * 			 The width of the Element's stroke.
 	 */
 	public double getStrokeWidth() {
 		return (double) strokeWidth;
@@ -117,7 +118,8 @@ abstract public class Element implements Cloneable, Renderable {
 	/**
 	 * Returns the color of this Element's stroke.
 	 * 
-	 * @return strokeColor The color of the Element's stroke.
+	 * @return
+	 * 				The color of the Element's stroke.
 	 */
 	public Color getStrokeColor() {
 		return strokeColor;
@@ -157,7 +159,8 @@ abstract public class Element implements Cloneable, Renderable {
 	/**
 	 * Returns the color of this Element's fill.
 	 * 
-	 * @return fillColor The color of the Element's fill.
+	 * @return 
+	 * 			 The color of the Element's fill.
 	 */
 	public Color getFillColor() {
 		return fillColor;
@@ -174,6 +177,12 @@ abstract public class Element implements Cloneable, Renderable {
 		this.tAF = color.getAlpha();
 	}
 	
+	/**
+	 * Sets the alpha of this Element's fill.
+	 * 
+	 * @param alpha
+	 *            The color of the Element's fill.
+	 */
 	public void setFillColorAlpha(double alpha) {
 		this.fillColor.setAlpha(alpha);
 		this.tAF = alpha;
@@ -189,6 +198,14 @@ abstract public class Element implements Cloneable, Renderable {
 		this.fillColor = new RGBColor(colorSet);
 	}
 	
+	/**
+	 * Sets the color of this Element's fill.
+	 * 
+	 * @param colorSet
+	 *            The color of the Element's fill.
+	 * @param alpha
+	 * 			  The alpha of the Element's fill.
+	 */
 	public void setFillColor(ColorSet colorSet, double alpha) {
 		this.fillColor = new RGBColor(colorSet, alpha);
 		this.tAF = alpha;

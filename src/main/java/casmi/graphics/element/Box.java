@@ -40,12 +40,28 @@ public class Box extends Element implements Renderable {
 
 	private Texture[] textures = new Texture[6];
 
+	/**
+	 * Creates a new Box whose shape is square using size.
+	 * 
+	 * @param size
+	 * 				The size of the Box.
+	 */
 	public Box(double size) {
 		width  = size;
 		depth  = size;
 		height = size;
 	}
 	
+	/**
+	 * Creates a new Box using width, height and depth.
+	 * 
+     * @param width
+     *              The width of the box.
+     * @param height 
+     *              The height of the box.
+     * @param depth
+     * 				The depth of the box. 
+	 */
 	public Box(double width, double height, double depth) {
 	    this.width  = width;
 	    this.height = height;
@@ -201,36 +217,88 @@ public class Box extends Element implements Renderable {
 		}
 	}
 
+    /**
+     * Gets the width of this Box.
+     * 
+     * @return
+     * 			The width of the Box.
+     */
 	public double getWidth() {
 		return width;
 	}
 
+	/**
+     * Sets the width of this Box.
+     * 
+     * @param width
+     * 				The width of the Box.
+     */
 	public void setWidth(double width) {
 		this.width = width;
 	}
 	
+	/**
+     * Gets the height of this Box.
+     * 
+     * @return
+     * 			The height of the Box.
+     */
 	public double getHeight() {
 		return height;
 	}
 
+	/**
+     * Sets the height of this Box.
+     * 
+     * @param height
+     * 				The height of the Box.
+     */
 	public void setHeight(double height) {
 		this.height = height;
 	}
 	
+	/**
+     * Gets the depth of this Box.
+     * 
+     * @return
+     * 			The depth of the Box.
+     */
 	public double getDepth() {
 	    return depth;
 	}
 	
+	/**
+     * Sets the depth of this Box.
+     * 
+     * @param depth
+     * 			The depth of the Box.
+     */
 	public void setDepth(double depth) {
 	    this.depth = depth;
 	}
 
+	/**
+     * Sets the size of this Box whose shape is square.
+     * 
+     * @param size
+     * 			The size of the Box whose shape is square .
+     */
 	public void setSize(double size) {
 	    width  = size;
 		height = size;
 		depth  = size;
 	}
 
+	/**
+     * Sets the texture of this Box.
+     * 
+     * @param index
+     * 			The index of the surface of the Box.
+     * @param texture
+     * 			The texture of the Box.
+     * 
+     * @see casmi.graphics.element.Texture
+     */
 	public void setTexture(int index, Texture texture) {
 		this.enableTexture = true;
 		textures[index] = texture;

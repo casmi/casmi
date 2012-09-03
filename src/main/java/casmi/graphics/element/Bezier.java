@@ -123,7 +123,19 @@ public class Bezier extends Element implements Renderable {
              v3.getX(), v3.getY(), v3.getZ(),
              v4.getX(), v4.getY(), v4.getZ());
     }
-    
+   
+    /**
+     * Sets coordinates for the anchor and control points of this Bezier.
+     * 
+     * @param v1
+     *            The coordinates for the first anchor point.
+     * @param v2
+     *            The coordinates for the first control point.
+     * @param v3
+     *            The coordinates for the second control point.
+     * @param v4
+     *            The coordinates for the second anchor point.
+     */
     public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
     	this.points[0]  = v1.getX();
         this.points[1]  = v1.getY();
@@ -139,10 +151,38 @@ public class Bezier extends Element implements Renderable {
         this.points[11] = v4.getZ();
     }
     
+	/**
+	 * Sets x,y-coordinate of nodes of this Bezier.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param x
+	 *            The x-coordinate of this node.
+	 * @param y
+	 *            The y-coordinate of this node.
+	 */
     public void setNode(int number, double x, double y) {
         setNode(number, x, y, 0.0);
     }
 
+	/**
+	 * Sets x,y,z-coordinate of nodes of this Bezier.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param x
+	 *            The x-coordinate of this node.
+	 * @param y
+	 *            The y-coordinate of this node.
+	 * @param z
+	 *            The y-coordinate of this node.
+	 */
     public void setNode(int number, double x, double y, double z) {
         if (number <= 0) {
             number = 0;
@@ -155,6 +195,17 @@ public class Bezier extends Element implements Renderable {
         set();
     }
 
+	/**
+	 * Sets coordinate of nodes of this Bezier.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param v
+	 *            The coordinates of this node.
+	 */
     public void setNode(int number, Vertex v) {
         setNode(number, v.getX(), v.getY(), v.getZ());
     }
@@ -226,14 +277,17 @@ public class Bezier extends Element implements Renderable {
     }
     
     /**
-     * Returns the detail of this Bezier.
+     * Gets the detail of this Bezier.
+     * 
+     * @return 
+     * 			The detail of the Bezier.
      */
     public int getDetail() {
     	return detail;
     }
     
     /**
-     * Set the detail of this Bezier.
+     * Sets the detail of this Bezier.
      * 
      * @param detail
      *             The detail of the Bezier.
@@ -242,14 +296,25 @@ public class Bezier extends Element implements Renderable {
         detail = d;
     }
     
+
+    /**
+     * Sets the color of the anchor point for gradation.
+     * 
+     * @param index
+     * 				The index of anchors. 
+     * 				The index of the start anchor point is 0, the index of the end anchor point is 1.
+     * 
+     * @param color
+     * 				The color of the anchor point.
+     * */
     public void setAnchorColor(int index, Color color) {
-        if (index == 0) {
+        if (index <= 0) {
             if (startColor == null) {
                 startColor = new RGBColor(0.0, 0.0, 0.0);
             }
             setGradation(true);
             this.startColor = color;
-        } else if (index == 1) {
+        } else if (index >= 1) {
             if (endColor == null) {
                 endColor = new RGBColor(0.0, 0.0, 0.0);
             }
@@ -257,7 +322,17 @@ public class Bezier extends Element implements Renderable {
             this.endColor = color;
         }
     }
-    
+ 
+    /**
+     * Sets the colorSet of the anchor point for gradation.
+     * 
+     * @param index
+     * 				The index of anchors. 
+     * 				The index of the start anchor point is 0, the index of the end anchor point is 1.
+     * 
+     * @param colorSet
+     * 				The colorSet of the anchor point.
+     * */
     public void setAnchorColor(int index, ColorSet colorSet) {
         setAnchorColor(index, new RGBColor(colorSet));
     }

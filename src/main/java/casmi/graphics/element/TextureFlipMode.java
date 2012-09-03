@@ -22,7 +22,7 @@ package casmi.graphics.element;
 /**
  * Enum for texture flip modes.
  * 
- * @author T. Takeuchi
+ * @author Y. Ban
  */
 public enum TextureFlipMode {
 

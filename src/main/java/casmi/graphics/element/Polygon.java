@@ -46,8 +46,6 @@ public class Polygon extends Element implements Renderable {
 	private List<Double> cornerY;
 	private List<Double> cornerZ;
 
-	private double centerX = 0;
-	private double centerY = 0;
 	private int size;
 
 	private Vertex tmpV = new Vertex(0, 0, 0);
@@ -56,57 +54,74 @@ public class Polygon extends Element implements Renderable {
 
 	private int MODE;
 
+	/**
+	 * Creates a new Polygon object.
+	 */
 	public Polygon() {
 		cornerX = new ArrayList<Double>();
 		cornerY = new ArrayList<Double>();
 		cornerZ = new ArrayList<Double>();
 	}
 
-	public void vertex(float x, float y) {
-		MODE = LINES;
-		this.cornerX.add((double) x);
-		this.cornerY.add((double) y);
-		this.cornerZ.add( 0d);
-		setSize(this.cornerX.size());
-		calcG();
-	}
-
-	public void vertex(float x, float y, float z) {
-		MODE = LINES_3D;
-		this.cornerX.add((double) x);
-		this.cornerY.add((double) y);
-		this.cornerZ.add((double) z);
-		setSize(this.cornerX.size());
-		calcG();
-	}
-
+	/**
+	 * Adds the corner of Polygon.
+	 * 
+	 * @param x
+	 * 			The x-coordinate of a new added corner.
+	 * @param y
+	 * 			The y-coordinate of a new added corner.
+	 */
 	public void vertex(double x, double y) {
 		MODE = LINES;
 		this.cornerX.add(x);
 		this.cornerY.add(y);
 		this.cornerZ.add(0d);
-		setSize(this.cornerX.size());
+		setNumberOfCorner(this.cornerX.size());
 		calcG();
 	}
 
+	/**
+	 * Adds the corner of Polygon.
+	 * 
+	 * @param x
+	 * 			The x-coordinate of a new added corner.
+	 * @param y
+	 * 			The y-coordinate of a new added corner.
+	 * @param z
+	 * 			The z-coordinate of a new added corner.
+	 */
 	public void vertex(double x, double y, double z) {
 		MODE = LINES_3D;
 		this.cornerX.add(x);
 		this.cornerY.add(y);
 		this.cornerZ.add(z);
-		setSize(this.cornerX.size());
+		setNumberOfCorner(this.cornerX.size());
 		calcG();
 	}
 
+	/**
+	 * Adds the corner of Polygon.
+	 * 
+	 * @param v
+	 * 			The coordinates of a new added corner.
+	 */
 	public void vertex(Vertex v) {
 		MODE = LINES_3D;
 		this.cornerX.add(v.getX());
 		this.cornerY.add(v.getY());
 		this.cornerZ.add(v.getZ());
-		setSize(this.cornerX.size());
+		setNumberOfCorner(this.cornerX.size());
 		calcG();
 	}
 
+	/**
+	 * Gets the corner of Polygon.
+	 * 
+	 * @param index
+	 * 				The index number of the corner.
+	 * @return
+	 * 				The coordinates of the corner.
+	 */
 	public Vertex getVertex(int index) {
 		tmpV.setX(cornerX.get(index));
 		tmpV.setY(cornerY.get(index));
@@ -115,16 +130,32 @@ public class Polygon extends Element implements Renderable {
 		return tmpV;
 	}
 
+	/**
+	 * Removes the corner of Polygon.
+	 * 
+	 * @param index
+	 * 				The index number of the corner.
+	 */
 	public void removeVertex(int index) {
 		this.cornerX.remove(index);
 		this.cornerY.remove(index);
 		this.cornerZ.remove(index);
 		if (isGradation() == true)
 			this.cornerColor.remove(index);
-		setSize(this.cornerX.size());
+		setNumberOfCorner(this.cornerX.size());
 		calcG();
 	}
 
+	/**
+	 * Sets the coordinates of the corner.
+	 * 
+	 * @param i
+	 * 			The index number of the point.
+	 * @param x
+	 * 			The x-coordinate of the point.
+	 * @param y
+	 * 			The y-coordinate of the point.
+	 */
 	public void setVertex(int i, double x, double y) {
 		this.cornerX.set(i, x);
 		this.cornerY.set(i, y);
@@ -132,6 +163,18 @@ public class Polygon extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Sets the coordinates of the corner.
+	 * 
+	 * @param i
+	 * 			The index number of the point.
+	 * @param x
+	 * 			The x-coordinate of the point.
+	 * @param y
+	 * 			The y-coordinate of the point.
+	 * @param z
+	 * 			The z-coordinate of the point.
+	 */
 	public void setVertex(int i, double x, double y, double z) {
 		this.cornerX.set(i, x);
 		this.cornerY.set(i, y);
@@ -148,8 +191,6 @@ public class Polygon extends Element implements Renderable {
 		double tmpx, tmpy, tmpz;
 
 		gl.glPushMatrix();
-//		gl.glTranslated(X, Y, 0);
-//		gl.glRotated(rotate, 0, 0, 1.0);
 		this.setTweenParameter(gl);
 
 		switch (MODE) {
@@ -236,27 +277,6 @@ public class Polygon extends Element implements Renderable {
 		this.y = cenY/cornerX.size();
 		this.z = cenZ/cornerX.size();
 	}
-
-	public double getX() {
-		return this.centerX;
-	}
-
-	public double getY() {
-		return this.centerY;
-	}
-
-	public void setX(double x) {
-		this.centerX = x;
-	}
-
-	public void setY(double y) {
-		this.centerY = y;
-	}
-
-	public void setXY(double x, double y) {
-		this.centerX = x;
-		this.centerY = y;
-	}
     
     @Override
     public void setPosition(double x, double y) {
@@ -274,6 +294,14 @@ public class Polygon extends Element implements Renderable {
     	calcG();
     }
 
+    /**
+     * Sets the color of a corner.
+     * 
+     * @param index
+     * 				The index number of a corner.
+     * @param color
+     * 				The color of a corner.
+     */
 	public void setCornerColor(int index, Color color) {
 		if (cornerColor == null) {
 			for (int i = 0; i < cornerX.size(); i++) {
@@ -295,15 +323,29 @@ public class Polygon extends Element implements Renderable {
 		cornerColor.set(index, color);
 	}
 
+    /**
+     * Sets the color of a corner.
+     * 
+     * @param index
+     * 				The index number of a corner.
+     * @param colorSet
+     * 				The colorSet of a corner.
+     */
 	public void setCornerColor(int index, ColorSet colorSet) {
 	    setCornerColor(index, new RGBColor(colorSet));
 	}
 
-	public int getSize() {
+	/**
+	 * Gets the number of corners.
+	 * 
+	 * @return
+	 * 			The number of corners.
+	 */
+	public int getNumberOfCorner() {
 		return size;
 	}
 
-	public void setSize(int size) {
+	private void setNumberOfCorner(int size) {
 		this.size = size;
 	}
 }

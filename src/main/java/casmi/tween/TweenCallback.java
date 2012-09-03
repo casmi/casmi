@@ -20,7 +20,10 @@
 package casmi.tween;
 
 /**
+ * TweenCallback interface for Tween.
  * @author Y. Ban
+ * 
+ * @see Tween
  */
 public interface TweenCallback {
 	

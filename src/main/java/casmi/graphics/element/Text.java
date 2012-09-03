@@ -31,7 +31,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.font.Font;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
-//import com.sun.opengl.util.j2d.TextRenderer;
 
 /**
  * Text class.
@@ -267,7 +266,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return 
      *           The descent of text.    
      */
-    public double getDescent(int line) {
+    public final double getDescent(int line) {
     	 if (layout[line] == null) return 0;
         return layout[line].getDescent();
     }
@@ -280,7 +279,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return 
      *           The ascent of text.    
      */
-    public double getAscent(int line) {
+    public final double getAscent(int line) {
         if (layout[line] == null) return 0;
         return layout[line].getAscent();
     }
@@ -291,7 +290,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return 
      *           The descent of text.    
      */
-    public double getDescent() {
+    public final double getDescent() {
         return getDescent(0);
     }
     
@@ -301,7 +300,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return 
      *           The ascent of text.    
      */
-    public double getAscent() {
+    public final double getAscent() {
         return getAscent(0);
     }
     
@@ -311,7 +310,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return 
      *           The letter's width.    
      */
-    public double getWidth() {
+    public final double getWidth() {
         return getWidth(0);
     }
     
@@ -322,7 +321,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return 
      *           The letter's height.    
      */
-    public double getHeight() {
+    public final double getHeight() {
         return getHeight(0);
     }
     
@@ -333,8 +332,12 @@ public class Text extends Element implements Renderable, Reset {
      *           The number of lines.                                                     
      * @return 
      *           The letter's width.    
+     * 
+     * @throws GLException
+     *             If the textRenderer is not valid; calls the reset method and 
+     *             creates a new textRenderer.
      */
-    public double getWidth(int line) {
+    public final double getWidth(int line) {
        if (strArray.length == 0) return 0.0;
       //  return layout[line].getBounds().getWidth();
     	 try{
@@ -351,9 +354,13 @@ public class Text extends Element implements Renderable, Reset {
      * @param line
      *           The number of lines.                                                     
      * @return 
-     *           The letter's height.    
+     *           The letter's height.  
+     *            
+     * @throws GLException
+     *             If the textRenderer is not valid; calls the reset method and 
+     *             creates a new textRenderer. 
      */
-    public double getHeight(int line) {
+    public final double getHeight(int line) {
         if (strArray.length == 0) return 0.0;
         try {
         return textRenderer.getBounds(strArray[line]).getHeight();
@@ -370,7 +377,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return
      *           The TextLayout of this Text.
      */
-    public TextLayout getLayout() {
+    public final TextLayout getLayout() {
         return layout[0];
     }
     
@@ -382,7 +389,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return
      *           The TextLayout of the i line.
      */
-    public TextLayout getLayout(int line) {
+    public final TextLayout getLayout(int line) {
         return layout[line];
     }
     
@@ -395,7 +402,7 @@ public class Text extends Element implements Renderable, Reset {
      * @return
      *        The TextAlign of the text.   
      */
-    public TextAlign getAlign() {
+    public final TextAlign getAlign() {
         
         return align;
     }
@@ -473,20 +480,32 @@ public class Text extends Element implements Renderable, Reset {
         return textRenderer;
     }
         
-    public Font getFont() {
+    /**
+     * Returns the Font of this Text.
+     * 
+     * @return
+     *           The Font of the Text.
+     */
+    public final Font getFont() {
         return font;
     }
     
-    public void setFont(Font font) {
+    /**
+     * Sets the Font of this Text.
+     * 
+     * @param
+     *           The Font of the Text.
+     */
+    public final void setFont(Font font) {
         this.font = font;
         textRenderer = new TextRenderer(font.getAWTFont(), true, true);
     }
 
-	public boolean isSelection() {
+	public final boolean isSelection() {
 		return selection;
 	}
 
-	public void setSelection(boolean selection) {
+	public final void setSelection(boolean selection) {
 		this.selection = selection;
 	}
 

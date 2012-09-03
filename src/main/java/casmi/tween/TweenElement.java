@@ -26,8 +26,11 @@ import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
 
 /**
+ * TweenElement class.
  * 
  * @author Y. Ban
+ * 
+ * @see Tweenable
  */
 public class TweenElement implements Tweenable {
 	

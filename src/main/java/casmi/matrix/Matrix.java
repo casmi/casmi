@@ -23,7 +23,7 @@ package casmi.matrix;
 
 
 /**
- * Matrix class. 
+ * Matrix interface for Matrix2D and Matrix3D. 
  * 
  * @author Y. Ban
  * 
@@ -110,14 +110,6 @@ public interface Matrix {
 	  public Vertex mult(Vertex source);
 	  
 	  public double[] mult(double[] source, double[] target);
-	  
-	  
-	//  public double multX(double x, double y);
-	//  public double multY(double x, double y);
-	  
-	//  public double multX(double x, double y, double z);
-	//  public double multY(double x, double y, double z);
-	//  public double multZ(double x, double y, double z);  
 	  
 	  public void transpose();
 

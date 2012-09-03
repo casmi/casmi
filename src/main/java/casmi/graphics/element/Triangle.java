@@ -442,6 +442,14 @@ public class Triangle extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Sets the color of the corner for gradation.
+	 * 
+	 * @param index
+	 * 				The index of the corner.
+	 * @param color
+	 * 				The color of the corner.
+	 */
 	public void setCornerColor(int index, Color color) {
 		if (!isGradation()) {
 			for (int i = 0; i < 3; i++) {
@@ -453,6 +461,14 @@ public class Triangle extends Element implements Renderable {
 		cornerColor[index] = color;
 	}
 
+	/**
+	 * Sets the color of the corner for gradation.
+	 * 
+	 * @param index
+	 * 				The index of the corner.
+	 * @param colorSet
+	 * 				The colorSet of the corner.
+	 */
 	public void setCornerColor(int index, ColorSet colorSet) {
 	    setCornerColor(index, new RGBColor(colorSet));
 	}

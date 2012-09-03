@@ -40,13 +40,16 @@ public class Mask extends Element implements ObjectRender {
     private BufferedImage maskBuff;
     private boolean maskFlip;
 
+    /**
+     * Creates a new Mask.
+     */
     public Mask() {
         elements = new ArrayList<Element>();
         maskFlip = false;
     }
 
     /**
-     * Add a Graphics Element for stencil mask.
+     * Adds a Graphics Element for stencil mask.
      * 
      * @param element
      *            Graphics Element for mask.
@@ -55,28 +58,51 @@ public class Mask extends Element implements ObjectRender {
         elements.add(element);
     }
 
+    /**
+     * Adds a Graphics Element for stencil mask.
+     * 
+     * @param element
+     *            Graphics Element for mask.
+     * @param index
+     * 			  The index of the Mask.
+     */
     public void add(Element element, int index) {
         elements.add(index, element);
     }
 
+    /**
+     * Removes the Element for Mask using index.
+     * 
+     * @param index
+     * 			  The index of the Element.
+     */
     public void remove(int index) {
         elements.remove(index);
     }
 
+    /**
+     * Removes the Element for Mask using index.
+     * 
+     * @param element
+     * 			  The element for Mask
+     */
     public void remove(Element element) {
         elements.remove(element);
     }
 
+    /**
+     * Removes all Elements for Mask.
+     */
     public void clear() {
         elements.clear();
     }
 
-    public void drawingMask(Graphics g) {
+    private void drawingMask(Graphics g) {
         for (Element e : elements)
             render(e, g);
     }
 
-    public void render(Element el, Graphics g) {
+    private void render(Element el, Graphics g) {
         if (el.isVisible()) {
             g.pushMatrix();
             {
@@ -121,18 +147,36 @@ public class Mask extends Element implements ObjectRender {
         	gl.glStencilFunc(GL2.GL_EQUAL, 1, ~0);
     }
 
+    /**
+     * Returns the Mask Image.
+     * 
+     * @return
+     * 				The Image for Mask
+     */
     public BufferedImage getMaskBuff() {
         return maskBuff;
     }
 
+    /**
+     * Sets the Mask Image.
+     * 
+     * @param maskBuff
+     * 				The Image for Mask
+     */
     public void setMaskBuff(BufferedImage maskBuff) {
         this.maskBuff = maskBuff;
     }
     
+    /**
+     * Sets Mask mode; masking the area where Elements draw.
+     */
     public void setNormalMask(){
     	this.maskFlip = false;
     }
     
+    /**
+     * Sets Mask mode; masking the ex-area where Elements draw.
+     */
     public void setInverseMask(){
     	this.maskFlip = true;
     }

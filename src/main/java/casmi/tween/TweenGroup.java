@@ -22,7 +22,12 @@ package casmi.tween;
 import java.util.ArrayList;
 
 /**
+ * TweenGroup class.
+ *
  * @author Y. Ban
+ * 
+ * @see Tween
+ * @see Group
  */
 public abstract class TweenGroup implements Groupable {
 

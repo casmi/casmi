@@ -59,16 +59,16 @@ public class RoundRect extends Element implements Renderable {
      *              The x-coordinate of the upper-left corner.
      * @param y
      *              The y-coordinate of the upper-left corner.
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public RoundRect(double x, double y, double w, double h) {
+    public RoundRect(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.w = width;
+        this.h = height;
         setRect();
         initArc();
     }
@@ -77,16 +77,16 @@ public class RoundRect extends Element implements Renderable {
      * Creates a new RoundRect object using width and height.
      * 
  
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public RoundRect( double w, double h) {
+    public RoundRect( double width, double height) {
         this.x = 0;
         this.y = 0;
-        this.w = w;
-        this.h = h;
+        this.w = width;
+        this.h = height;
         setRect();
         initArc();
     }
@@ -94,19 +94,19 @@ public class RoundRect extends Element implements Renderable {
     /**
      * Creates a new RoundRect object using radius, width and height.
      * 
-     * @param r 
+     * @param radius 
      *              The radius of the corner. 
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public RoundRect(double r, double w, double h) {
+    public RoundRect(double radius, double width, double height) {
         this.x = 0;
         this.y = 0;
-        this.w = w;
-        this.h = h;
-        this.r = r;
+        this.w = width;
+        this.h = height;
+        this.r = radius;
         setRect();
         initArc();
     }
@@ -114,23 +114,23 @@ public class RoundRect extends Element implements Renderable {
     /**
      * Creates a new RoundRect object using radius, position of the upper-left corner, width and height.
      * 
-     * @param r 
+     * @param radius 
      *              The radius of the corner. 
      * @param x
      *              The x-coordinate of the upper-left corner.
      * @param y
      *              The y-coordinate of the upper-left corner.
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public RoundRect(double r, double x, double y, double w, double h) {
-        this.r = r;
+    public RoundRect(double radius, double x, double y, double width, double height) {
+        this.r = radius;
         this.x = x;
         this.y = y;
-        this.w = w;
-        this.h = h;
+        this.w = width;
+        this.h = height;
         setRect();
         initArc();
     }
@@ -147,10 +147,6 @@ public class RoundRect extends Element implements Renderable {
         arc[1] = new Arc(x2 + r, y2 + r,r, 180, 270, precision);
         arc[2] = new Arc(x3 - r, y3 + r,r, 270, 360, precision);
         arc[3] = new Arc(x4 - r, y4 - r,r, 0, 90, precision);
-    }
- 
-    public void rectMode(ShapeMode mode) {
-        this.MODE = mode;
     }
     
     private final void setRect() {
@@ -234,25 +230,6 @@ public class RoundRect extends Element implements Renderable {
             gl.glVertex2d(x3, y3 + r);
             gl.glVertex2d(x4, y4 - r);
 
-            /*
-             * gl.glVertex2d(x1, y1 + r);
-             * gl.glVertex2d(x2, y2 - r);
-             * gl.glVertex2d(x3, y3 - r);
-             * gl.glVertex2d(x4, y4 + r);
-             * gl.glEnd();
-             * gl.glBegin(GL.GL_QUADS);
-             * gl.glVertex2d(x1 - r, y1);
-             * gl.glVertex2d(x2 - r, y2);
-             * gl.glVertex2d(x2, y3);
-             * gl.glVertex2d(x1, y4);
-             * gl.glEnd();
-             * gl.glBegin(GL.GL_QUADS);
-             * gl.glVertex2d(x4, y1);
-             * gl.glVertex2d(x3, y2);
-             * gl.glVertex2d(x3 + r, y3);
-             * gl.glVertex2d(x4 + r, y4);
-             */
-
             gl.glEnd();
 
             for (int i = 0; i < 4; i++) {
@@ -276,18 +253,6 @@ public class RoundRect extends Element implements Renderable {
             gl.glVertex2d(x4, y4 - r);
             gl.glVertex2d(x4 - r, y4);
             gl.glVertex2d(x1 + r, y1);
-
-            /*
-             * gl.glVertex2d(x1-r,y1);
-             * gl.glVertex2d(x2-r, y2);
-             * gl.glVertex2d(x2, y2-r);
-             * gl.glVertex2d(x3, y3-r);
-             * gl.glVertex2d(x3+r, y3);
-             * gl.glVertex2d(x4+r, y4);
-             * gl.glVertex2d(x4, y4+r);
-             * gl.glVertex2d(x1, y1+r);
-             */
-
             gl.glEnd();
             for (int i = 0; i < 4; i++) {
                 arc[i].setFill(false);
@@ -303,68 +268,94 @@ public class RoundRect extends Element implements Renderable {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
-    
-    public void setRotate(double angle) {
-    	this.rotate = angle;
-    }
-    
-    public double getRotate() {
-    	return this.rotate;
-    }
-    
-    public double getWidth() {
+
+    /**
+     * Gets width of this RoundRect.
+     * 
+     * @return
+     * 				The width of the RoundRect.
+     */
+    public final double getWidth() {
     	return this.w;
     }
     
-    public double getHeight() {
+    /**
+     * Gets height of this RoundRect.
+     * 
+     * @return
+     * 				The height of the RoundRect.
+     */
+    public final double getHeight() {
     	return this.h;
     }
     
-    @Override
-    public double getX() {
-    	return this.x;
-    }
-    
-    @Override
-    public double getY() {
-    	return this.y;
-    }
-    
-    public void setWidth(double w) {
-        this.w = w;
+    /**
+     * Sets width of this RoundRect.
+     * 
+     * @param width
+     * 				The width of the RoundRect.
+     */
+    public final void setWidth(double width) {
+        this.w = width;
     }
 
-    public void setHeight(double h) {
-        this.h = h;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
+    /**
+     * Sets height of this RoundRect
+     * 
+     * @param height
+     * 				The height of the RoundRect.
+     */
+    public final void setHeight(double height) {
+        this.h = height;
     }
     
-    
-    public void setXY(double x, double y){
-    	this.x = x;
-    	this.y = y;
-    }
-    
-    public void setRadius(double radius) {
+    /**
+     * Sets the radius of the corner of this RoundRect.
+     * 
+     * @param radius
+     * 				The radius of the corner.
+     */
+    public final void setRadius(double radius) {
         this.r = radius;
     }
 
-    public double getRadius() {
+    /**
+     * Gets the radius of the corner of this RoundRect.
+     * 
+     * @return 
+     * 				The radius of the corner.
+     */
+    public final double getRadius() {
         return this.r;
     }
 
-    public double getPrecision() {
+    /**
+     * Gets the precision of the corner arc.
+     * 
+     * @return 
+     * 				The precision of the corner.
+     */
+    public final double getPrecision() {
         return this.precision;
     }
     
-    public void setPrecision(double precision) {
+    /**
+     * Sets the precision of the corner arc.
+     * 
+     * @param precision
+     * 				The precision of the corner.
+     */
+    public final void setPrecision(double precision) {
         this.precision = precision;
+    }
+    
+    /**
+     * Align the position of this RoundRect
+     * 
+     * @param mode
+     * 				The Alignment of the position.
+     */
+    public final void rectMode(ShapeMode mode) {
+        this.MODE = mode;
     }
 }

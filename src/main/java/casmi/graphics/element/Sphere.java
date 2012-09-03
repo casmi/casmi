@@ -43,33 +43,69 @@ public class Sphere extends Element implements Renderable {
     /**
      * Creates a new Sphere object using radius.
      * 
-     * @param r
+     * @param radius
      *           The radius of the Sphere.              
      */
-    public Sphere(double r) {
-        this.r = r;
+    public Sphere(double radius) {
+        this.r = radius;
     }
 
-    public Sphere(double r, int slices, int stacks) {
-        this.r = r;
+    /**
+     * Creates a new Sphere object using radius, slices and stacks.
+     * 
+     * @param radius
+     *           The radius of the Sphere.  
+     * @param slices
+     * 			 The sliced division number.
+     * @param stacks
+     * 			 The stacks division number.            
+     */
+    public Sphere(double radius, int slices, int stacks) {
+        this.r = radius;
         this.slices = slices;
         this.stacks = stacks;
     }
     
-    public void setRadius(double r) {
-    	this.r = r;
+    /**
+     * Sets radius of this Sphere.
+     * 
+     * @param radius
+     * 			The radius of the Sphere.
+     */
+    public final void setRadius(double radius) {
+    	this.r = radius;
     }
     
-    public void setDetail(int slices, int stacks) {
+    /**
+     * Sets the division number.
+     * 
+     * @param slices
+     * 			 The sliced division number.
+     * @param stacks
+     * 			 The stacks division number.            
+     */
+    public final void setDetail(int slices, int stacks) {
     	this.slices = slices;
     	this.stacks = stacks;
     }
     
-    public void setSlices(int slices) {
+    /**
+     * Sets the sliced division number.
+     * 
+     * @param slices
+     * 			 The sliced division number.           
+     */
+    public final void setSlices(int slices) {
     	this.slices = slices;
     }
     
-    public void setStacks(int stacks) {
+    /**
+     * Sets the stacked division number.
+     * 
+     * @param stacks
+     * 			 The stacks division number.            
+     */
+    public final void setStacks(int stacks) {
     	this.stacks = stacks;
     }
 

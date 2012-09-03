@@ -22,7 +22,11 @@ package casmi.timeline;
 import casmi.graphics.Graphics;
 
 /**
+ * TimelineRender interface for Timeline.
+ * 
  * @author Y. Ban
+ * 
+ * @see Timeline
  */
 public interface TimelineRender {
 

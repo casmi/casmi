@@ -19,12 +19,39 @@
 
 package casmi.graphics.element;
 
+/**
+ * Circle class.
+ * Wrap JOGL and make it easy to use.
+ * 
+ * @see casmi.graphics.element.Ellipse
+ * 
+ * @author Y. Ban
+ * 
+ */
+
 public class Circle extends Ellipse {
 
+
+    /**
+     * Creates a new Circle using radius.
+     * 
+     * @param radius
+     * 				The radius of the Circle.
+     */
 	public Circle(double radius) {
 		super(radius);
 	}
 	
+	/**
+     * Creates a new Circle using radius.
+     * 
+     * @param x
+     * 				The x-coordinate of a position of the Circle.
+     * @param y
+     * 				The y-coordinate of a position of the Circle.
+     * @param radius
+     * 				The radius of the Circle.
+     */
 	public Circle(double x, double y, double radius) {
 		super(x, y, radius);
 	}

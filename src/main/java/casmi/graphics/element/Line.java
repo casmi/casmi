@@ -63,9 +63,9 @@ public class Line extends Element implements Renderable {
      * Creates a new Line object using coordinates for the first and second point.
      * 
      * @param x1,y1
-     *            The coordinates for the first anchor point.
+     *            The coordinates for the first point.
      * @param x2,y2
-     *            The coordinates for the first control point.
+     *            The coordinates for the second point.
      */            
     public Line(double x1, double y1, double x2, double y2) {
         this.MODE = LINES_3D;
@@ -88,9 +88,9 @@ public class Line extends Element implements Renderable {
      * Creates a new Line object using coordinates for the first and second point.
      * 
      * @param v1
-     *            The coordinates for the first anchor point.
+     *            The coordinates for the first point.
      * @param V2
-     *            The coordinates for the first control point.
+     *            The coordinates for the second point.
      */            
     public Line(Vertex v1, Vertex v2) {
         this.MODE = LINES_3D;
@@ -113,9 +113,9 @@ public class Line extends Element implements Renderable {
      * Creates a new Line object using coordinates for the first and second point.
      * 
      * @param x1,y1,z1
-     *            The coordinates for the first anchor point.
+     *            The coordinates for the first point.
      * @param x2,y2,z2
-     *            The coordinates for the first control point.
+     *            The coordinates for the second point.
      */            
     public Line(double x1, double y1, double z1, double x2, double y2, double z2) {
         this.MODE = LINES_3D;
@@ -137,10 +137,10 @@ public class Line extends Element implements Renderable {
     /**
      * Sets the coordinates for the first and second point.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
+     * @param x1,y1,z1
+     *            The coordinates for the first point.
+     * @param x2,y2,z2
+     *            The coordinates for the second point.
      */                        
     public void set(double x1, double y1, double z1, double x2, double y2, double z2) {
         this.MODE = LINES_3D;
@@ -183,6 +183,16 @@ public class Line extends Element implements Renderable {
         dz[1] = z2 - 0;
     }
     
+    /**
+     * Sets the coordinates for the first or second point.
+     * 
+     * @param index
+     *            choose the point; if index is true, the point is first.
+     * @param x
+     *            The x-coordinate of the first or second control point.
+     * @param y
+     *            The y-coordinate of the first or second control point.
+     */  
     public void set(boolean index, double x, double y) {
     	this.MODE = LINES;
     	if(index == true){
@@ -202,6 +212,18 @@ public class Line extends Element implements Renderable {
         dz[1] = z2 - 0;
     }
     
+    /**
+     * Sets the coordinates for the first or second point.
+     * 
+     * @param index
+     *            choose the point; if index is true, the point is first.
+     * @param x
+     *            The x-coordinate of the first or second control point.
+     * @param y
+     *            The y-coordinate of the first or second control point.
+     * @param z
+     *            The z-coordinate of the first or second control point.
+     */ 
     public void set(boolean index, double x, double y, double z) {
         this.MODE = LINES_3D;
         if(index==true){
@@ -262,7 +284,6 @@ public class Line extends Element implements Renderable {
         {
             this.setTweenParameter(gl);
 
-//            gl.glTranslated(x, y, z);
 
             switch (MODE) {
             case LINES:
@@ -314,23 +335,22 @@ public class Line extends Element implements Renderable {
         z = (z1 + z2) / 2.0;
     }
     
-//    private void setPoint() {
-//    	this.x1 = x + dx[0];
-//        this.x2 = x + dx[1];
-//        this.y1 = y + dy[0];
-//        this.y2 = y + dy[1];
-//        this.z1 = z + dz[0];
-//        this.z2 = z + dz[1];
-//    }
-    
+    /**
+     * Sets the color of the first or second point for gradation.
+     * 
+     * @param index
+     * 				The index of the point; if index is 0, the point is first.
+     * @param color
+     * 				The color of the first or second point.
+     */
     public void setCornerColor(int index, Color color) {
-        if (index == 0) {
+        if (index <= 0) {
             if (startColor == null) {
                 startColor = new RGBColor(0.0, 0.0, 0.0);
             }
             setGradation(true);
             this.startColor = color;
-        } else if (index == 1) {
+        } else if (index >= 1) {
             if (endColor == null) {
                 endColor = new RGBColor(0.0, 0.0, 0.0);
             }
@@ -338,14 +358,30 @@ public class Line extends Element implements Renderable {
             this.endColor = color;
         }
     }
-
+    
+    /**
+     * Sets the color of the first or second point for gradation.
+     * 
+     * @param index
+     * 				The index of the point; if index is 0, the point is first.
+     * @param colorSet
+     * 				The colorSt of the first or second point.
+     */
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
     }
     
+    /**
+     * Gets coordinates of the point.
+     * 
+     * @param index
+     * 				The index of the point; if the index is 0, the point is first.
+     * @return
+     * 				The coordinates of the point.
+     */
     public Vertex getCorner(int index){
     	Vertex v = new Vertex();
-    	if(index==0)
+    	if(index <= 0)
     		v.set(x1, y1, z1);
     	else
     		v.set(x2, y2, z2);

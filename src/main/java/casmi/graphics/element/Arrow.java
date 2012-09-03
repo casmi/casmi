@@ -23,7 +23,7 @@ import casmi.graphics.group.Group;
 import casmi.matrix.Vertex;
 
 /**
- * Arrow Class.
+ * Arrow Class. Wrap JOGL and make it easy to use.
  * 
  * @author Y. Ban
  */
@@ -38,6 +38,14 @@ public class Arrow extends Group{
 	private ArrowAlign align = ArrowAlign.BOTTOM;
 	private Vertex startPoint, endPoint;
 	
+	/**
+	 * Creates a new Arrow object using top size and length.
+	 * 
+	 * @param topSize
+	 *            The size of a top-triangle.
+	 * @param length
+	 *            The length of the Arrow.
+	 */
 	public Arrow(double topSize, double length) {
 		this.topSize = topSize;
 		this.length = length;
@@ -50,10 +58,20 @@ public class Arrow extends Group{
 		add(rect);
 		add(triangle);
 		
-		
 		this.setStroke(false);
 	}
 	
+	
+	/**
+	 * Creates a new Arrow object using top size, start point and end point.
+	 * 
+	 * @param topSize
+	 *            The size of a top-triangle.
+	 * @param start
+	 *            The coordinates of the start point.
+	 * @param end 
+	 * 			  The coordinates of the end point.
+	 */
 	public Arrow(double topSize, Vertex start, Vertex end) {
 		this.topSize = topSize;
 		this.length = Math.sqrt(Math.pow(end.getY()-start.getY(), 2)+Math.pow(end.getX()-start.getX(), 2));
@@ -75,12 +93,19 @@ public class Arrow extends Group{
 		this.setStroke(false);
 	}
 	
+	/**
+	 * Sets the width of this Arrow.
+	 * 
+	 * @param width
+	 *            The width of the Arc.
+	 */
 	public void setWidth(double width) {
 		this.width = width;
 		rect.set(this.width, rect.getHeight());
 	}
 	
-	public void setArrow() {
+	
+	private void setArrow() {
 		switch(align){
 		case TOP:
 			rect.set(this.width,this.length-topSize*Math.cos(Math.PI/6.0));
@@ -111,22 +136,84 @@ public class Arrow extends Group{
 			break;
 		}
 	}
+
 	
+	/**
+	 * Gets the length of this Arrow.
+	 * 
+	 * @return 
+	 *            The length of the Arc.
+	 */
+	public double getLength(double length) {
+		return this.length;
+	}
+
+	/**
+	 * Sets the length of this Arrow.
+	 * 
+	 * @param length
+	 *            The length of the Arc.
+	 */
 	public void setLength(double length) {
 		this.length = length;
 		setArrow();
 	}
+
+	/**
+	 * Gets the size of top triangle of this Arrow.
+	 * 
+	 * @return
+	 *            The width of the Arc.
+	 */
+	public double getTopSize() {
+		return this.topSize;
+	}
 	
+	/**
+	 * Sets the size of top triangle of this Arrow.
+	 * 
+	 * @param size
+	 *            The width of the Arc.
+	 */
 	public void setTopSize(double size) {
 		this.topSize = size;
 		setArrow();
 	}
+
+	/**
+	 * Gets the positional Alignment of this Arrow.
+	 * 
+	 * @return
+	 *            The ArrowAlign of the Arc.
+	 *            
+	 * @see		  casmi.graphics.element.ArrowAlign
+	 */	
+	public ArrowAlign getAlign() {
+		return this.align;
+	}
 	
+	/**
+	 * Aligns the position of this Arrow.
+	 * 
+	 * @param align
+	 *            The ArrowAlign of the Arc.
+	 *            
+	 * @see		  casmi.graphics.element.ArrowAlign
+	 */	
 	public void setAlign(ArrowAlign align) {
 		this.align = align;
 		setArrow();
 	}
 	
+	/**
+	 * Sets the position of corners of this Arrow.
+	 * 
+	 * @param start
+	 *            The coordinates of the start point.
+	 * @param end 
+	 * 			  The coordinates of the end point.
+	 * 
+	 */
 	public void setCorner(Vertex start, Vertex end){
 		this.startPoint = start;
 		this.endPoint = end;
@@ -134,22 +221,52 @@ public class Arrow extends Group{
 		setArrow();
 	}
 	
+	/**
+	 * Sets the coordinates of the start point of this Arrow.
+	 * 
+     * @param x
+     *           The x-coordinate of the start point.      
+     * @param y
+     *           The y-coordinate of the start point.
+	 * 
+	 */
 	public void setStartCorner(double x, double y){
 		this.startPoint.set(x, y);
 		this.align = ArrowAlign.CORNER;
 		setArrow();
 	}
 	
+	/**
+	 * Sets the coordinates of the end point of this Arrow.
+	 * 
+     * @param x
+     *           The x-coordinate of the end point.      
+     * @param y
+     *           The y-coordinate of the end point.
+	 * 
+	 */
 	public void setEndCorner(double x, double y){
 		this.endPoint.set(x, y);
 		this.align = ArrowAlign.CORNER;
 		setArrow();
 	}
 	
+	/**
+	 * Gets the coordinates of the start point of this Arrow.
+	 * 
+     * @return 
+     *           The coordinate of the start point.     
+	 */
 	public Vertex getStartCorner(){
 		return startPoint;
 	}
-	
+
+	/**
+	 * Gets the coordinates of the end point of this Arrow.
+	 * 
+     * @return 
+     *           The coordinate of the end point.     
+	 */
 	public Vertex getEndCorner(){
 		return endPoint;
 	}

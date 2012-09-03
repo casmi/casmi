@@ -19,6 +19,7 @@ package casmi.graphics.element;
 
 /**
  * ArrowAlign Class.
+ * Sets the location from which Arrow draw.
  * 
  * @author Y. Ban
  */
@@ -26,12 +27,16 @@ package casmi.graphics.element;
 
 public enum ArrowAlign {
 	
+	/** Drawing from the bottom of Arrow constant.  */
 	BOTTOM,
 	
+	/** Drawing from the center of Arrow constant.  */
 	CENTER,
 	
+	/** Drawing from the top of Arrow constant.  */
 	TOP,
 	
+	/** Drawing using top and bottom corners of Arrow constant.  */
 	CORNER
 	
 }

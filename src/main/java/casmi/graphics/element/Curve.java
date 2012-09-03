@@ -332,6 +332,19 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
+	/**
+	 * Sets x,y,z-coordinate of nodes of this Curve.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param x
+	 *            The x-coordinate of this node.
+	 * @param y
+	 *            The y-coordinate of this node.
+	 */
     public void setNode(int number, double x, double y){
     	if(number<=0)
     		number = 0;
@@ -343,6 +356,21 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
+	/**
+	 * Sets x,y,z-coordinate of nodes of this Curve.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param x
+	 *            The x-coordinate of this node.
+	 * @param y
+	 *            The y-coordinate of this node.
+	 * @param z
+	 *            The y-coordinate of this node.
+	 */
     public void setNode(int number, double x, double y, double z){
     	if(number<=0)
     		number = 0;
@@ -354,6 +382,17 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
+	/**
+	 * Sets coordinate of nodes of this Curve.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param v
+	 *            The coordinates of this node.
+	 */
     public void setNode(int number, Vertex v) {
     	if (number <= 0) {
     		number = 0;
@@ -455,14 +494,16 @@ public class Curve extends Element implements Renderable {
     }
 
     /**
-     * Returns the detail of this Curve.
+     * Gets the detail of this Curve.
+     * 
+     * @return The detail of the Curve.
      */
     public int getDetail() {
     	return detail;
     }
     
     /**
-     * Set the detail of this Curve.
+     * Sets the detail of this Curve.
      * 
      * @param detail
      *             The detail of the Curve.
@@ -477,6 +518,16 @@ public class Curve extends Element implements Renderable {
     	z = this.points[2];
     }
     
+    /**
+     * Sets the color of the anchor point for gradation.
+     * 
+     * @param index
+     * 				The index of anchors. 
+     * 				The index of the start anchor point is 0, the index of the end anchor point is 1.
+     * 
+     * @param color
+     * 				The color of the anchor point.
+     * */
     public void setAnchorColor(int index, Color color) {
         if (index == 0) {
             if (startColor == null) {
@@ -493,6 +544,16 @@ public class Curve extends Element implements Renderable {
         }
     }
     
+    /**
+     * Sets the colorSet of the anchor point for gradation.
+     * 
+     * @param index
+     * 				The index of anchors. 
+     * 				The index of the start anchor point is 0, the index of the end anchor point is 1.
+     * 
+     * @param colorSet
+     * 				The colorSet of the anchor point.
+     * */
     public void setAnchorColor(int index, ColorSet colorSet) {
         setAnchorColor(index, new RGBColor(colorSet));
     }

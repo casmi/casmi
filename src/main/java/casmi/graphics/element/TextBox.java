@@ -1,3 +1,20 @@
+/*   casmi examples
+ *   http://casmi.github.com/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
@@ -9,8 +26,14 @@ import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
-//import com.sun.opengl.util.j2d.TextRenderer;
 
+/**
+ * Text class.
+ * Wrap JOGL and make it easy to use.
+ * 
+ * @author  T. Takeuchi,Y. Ban
+ * 
+ */
 public class TextBox extends Element implements Renderable {
 
     private static final boolean DEFAULT_FILL         = false;
@@ -25,6 +48,37 @@ public class TextBox extends Element implements Renderable {
     private double width = 0.0;
     private double height = 0.0;
     
+    
+    /**
+     * Creates a new TextBox using Text, width and height.
+     * 
+     * @param text
+     * 				The content of the TextBox.
+     * @param width
+     * 				The width of the TextBox.
+     * @param height
+     * 				The height of the TextBox.
+     */  
+    public TextBox(Text text, 
+            double width, double height) {
+ 
+    	this(text, 0.0, 0.0, 0.0, width, height);
+    }
+    
+    /**
+     * Creates a new TextBox using Text, x,y-coordinate, width and height.
+     * 
+     * @param text
+     * 				The content of the TextBox.
+     * @param x
+     * 				The x-coordinate of the TextBox.
+     * @param y
+     * 				The y-coordinate of the TextBox.
+     * @param width
+     * 				The width of the TextBox.
+     * @param height
+     * 				The height of the TextBox.
+     */
     public TextBox(Text text, 
                    double x, double y,
                    double width, double height) {
@@ -32,6 +86,22 @@ public class TextBox extends Element implements Renderable {
         this(text, x, y, 0.0, width, height);
     }
     
+    /**
+     * Creates a new TextBox using Text, x,y,z-coordinate, width and height.
+     * 
+     * @param text
+     * 				The content of the TextBox.
+     * @param x
+     * 				The x-coordinate of the TextBox.
+     * @param y
+     * 				The y-coordinate of the TextBox.
+     * @param z
+     * 				The y-coordinate of the TextBox.
+     * @param width
+     * 				The width of the TextBox.
+     * @param height
+     * 				The height of the TextBox.
+     */
     public TextBox(Text text,
                    double x, double y, double z, 
                    double width, double height) {

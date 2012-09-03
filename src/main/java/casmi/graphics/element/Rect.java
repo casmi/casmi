@@ -54,48 +54,72 @@ public class Rect extends Element implements Renderable {
     /**
      * Creates a new Rect object using width and height.
      *
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public Rect(double w, double h) {
-        this.w = w;
-        this.h = h;
+    public Rect(double width, double height) {
+        this.w = width;
+        this.h = height;
     }
     
-    public Rect(double x, double y, double w, double h) {
-        this.w = w;
-        this.h = h;
+    public Rect(double x, double y, double width, double height) {
+        this.w = width;
+        this.h = height;
         this.x = x;
         this.y = y;
     }
     
     /**
-     * Sets a Rect's position of the upper-left corner, width and height.
+     * Sets width and height of this Rect.
      *
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public void set(double w, double h) {
-    	this.w = w;
-    	this.h = h;
+    public void set(double width, double height) {
+    	this.w = width;
+    	this.h = height;
     }
     
-    public void setWidth(double w) {
-    	this.w = w;
+    /**
+     * Sets width of this Rect.
+     *
+     * @param width
+     *              The width of the rectangle.                          
+     */
+    public void setWidth(double width) {
+    	this.w = width;
     }
     
-    public void setHeight(double h) {
-    	this.h = h;
+    /**
+     * Sets height of this Rect.
+     *
+     * @param height 
+     *              The height of the rectangle.                          
+     */
+    public void setHeight(double height) {
+    	this.h = height;
     }
     
+    /**
+     * Gets width of this Rect.
+     * 
+     * @return
+     * 			The width of the Rect.
+     */
     public double getWidth() {
     	return this.w;
     }
     
+    /**
+     * Gets height of this Rect.
+     * 
+     * @return
+     * 			The height of the Rect.
+     */
     public double getHeight() {
     	return this.h;
     }
@@ -195,6 +219,18 @@ public class Rect extends Element implements Renderable {
         	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
     
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     * @param color1
+     * 					The color for gradation.
+     * @param color2
+     * 					The color for gradation.
+     * 
+     * @see casmi.graphics.element.GradationMode
+     */
     public void setGradationColor(GradationMode mode, Color color1, Color color2) {
         setGradation(true);
         if (startColor == null || endColor == null) {
@@ -206,10 +242,27 @@ public class Rect extends Element implements Renderable {
         this.mode  = mode;
 	}
 	
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     * @param colorSet1
+     * 					The colorSet for gradation.
+     * @param colorSet2
+     * 					The colorSet for gradation.
+     * 
+     * @see casmi.graphics.element.GradationMode
+     */
 	public void setGradationColor(GradationMode mode, ColorSet colorSet1, ColorSet colorSet2){
 	    setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
 	}
-	
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     */
 	public void setGradationMode(GradationMode mode) {
 		this.mode = mode;
 	}

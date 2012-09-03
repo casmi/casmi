@@ -125,6 +125,8 @@ public class Matrix2D implements Matrix{
 	                  double m10, double m11, double m12, double m13,
 	                  double m20, double m21, double m22, double m23,
 	                  double m30, double m31, double m32, double m33) {
+		    this.m00 = m00; this.m01 = m01; this.m02 = m02;
+		    this.m10 = m10; this.m11 = m11; this.m12 = m12;
 
 	  }
 

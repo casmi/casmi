@@ -341,14 +341,16 @@ public class Arc extends Element implements Renderable {
 	}
 
 	/**
-	 * Returns the precision of this Arc.
+	 * Gets the precision of this Arc.
+	 * 
+	 * @return The precision of the Arc.
 	 */
 	public double getDetail() {
 		return precision;
 	}
 
 	/**
-	 * Set the precision of this Arc.
+	 * Sets the precision of this Arc.
 	 * 
 	 * @param precision
 	 *            The precision of the Arc.
@@ -359,7 +361,7 @@ public class Arc extends Element implements Renderable {
 	}
 
 	/**
-	 * Set the width of this Arc.
+	 * Sets the width of this Arc.
 	 * 
 	 * @param width
 	 *            The width of the Arc.
@@ -369,7 +371,7 @@ public class Arc extends Element implements Renderable {
 	}
 
 	/**
-	 * Set the height of this Arc.
+	 * Sets the height of this Arc.
 	 * 
 	 * @param height
 	 *            The height of the Arc.
@@ -379,7 +381,7 @@ public class Arc extends Element implements Renderable {
 	}
 
 	/**
-	 * Set the radius of this Arc.
+	 * Sets the radius of this Arc.
 	 * 
 	 * @param radius
 	 *            The radius of the Arc.
@@ -390,7 +392,7 @@ public class Arc extends Element implements Renderable {
 	}
 
 	/**
-	 * Set the start degree of this Arc.
+	 * Sets the start degree of this Arc.
 	 * 
 	 * @param start
 	 *            The start degree of the Arc.
@@ -400,7 +402,7 @@ public class Arc extends Element implements Renderable {
 	}
 
 	/**
-	 * Set the end degree of this Arc.
+	 * Sets the end degree of this Arc.
 	 * 
 	 * @param end
 	 *            The end degree of the Arc.
@@ -409,55 +411,62 @@ public class Arc extends Element implements Renderable {
 		this.radEnd = end;
 	}
 
+	/**
+	 * Gets the start degree of this Arc.
+	 * 
+	 * @return
+	 *            The start degree of the Arc.
+	 */
 	public double getStart() {
 		return this.radStart;
 	}
 
+	/**
+	 * Gets the end degree of this Arc.
+	 * 
+	 * @return
+	 *            The end degree of the Arc.
+	 */
 	public double getEnd() {
 		return this.radEnd;
 	}
 
-	public void setX(double x) {
-		this.x = x;
-	}
-
-	public void setY(double y) {
-		this.y = y;
-	}
-
-	public void setXY(double x, double y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	public double getX() {
-		return this.x;
-	}
-
-	public double getY() {
-		return this.y;
-	}
-
-	public void setRotate(double angle) {
-		this.rotate = angle;
-	}
-
-	public double getRotate() {
-		return this.rotate;
-	}
-
+	/**
+	 * Gets the width of this Arc.
+	 * 
+	 * @return
+	 *            The width of the Arc.
+	 */
 	public double getWidth() {
 		return this.w;
 	}
 
+	/**
+	 * Gets the height of this Arc.
+	 * 
+	 * @return
+	 *            The height of the Arc.
+	 */
 	public double getHeight() {
 		return this.h;
 	}
 
+	/**
+	 * Gets the radius of this Arc.
+	 * 
+	 * @return
+	 *            The radius of the Arc.
+	 */
 	public double getRadius() {
 		return this.w / 2;
 	}
 
+	/**
+	 * Sets the color of the center of this Arc.
+	 * 
+	 * @param color
+	 *            The color of the center of the Arc.
+	 */
 	public void setCenterColor(Color color) {
         if (centerColor == null) {
             centerColor = new RGBColor(0.0, 0.0, 0.0);
@@ -465,7 +474,13 @@ public class Arc extends Element implements Renderable {
         setGradation(true);
         this.centerColor = color;
     }
-	
+
+	/**
+	 * Sets the colorSet of the center of this Arc.
+	 * 
+	 * @param colorSet
+	 *            The colorSet of the center of the Arc.
+	 */
 	public void setCenterColor(ColorSet colorSet) {
 		if (this.centerColor == null) {
 			this.centerColor = new RGBColor(0.0, 0.0, 0.0);
@@ -474,6 +489,12 @@ public class Arc extends Element implements Renderable {
 		this.centerColor = RGBColor.color(colorSet);
 	}
 
+	/**
+	 * Sets the color of the edge of this Arc.
+	 * 
+	 * @param color
+	 *            The color of the edge of the Arc.
+	 */
 	public void setEdgeColor(Color color) {
         if (edgeColor == null)
             edgeColor = new RGBColor(0.0, 0.0, 0.0);
@@ -481,6 +502,12 @@ public class Arc extends Element implements Renderable {
         this.edgeColor = color;
     }
 	
+	/**
+	 * Sets the colorSet of the edge of this Arc.
+	 * 
+	 * @param colorSet
+	 *            The colorSet of the edge of the Arc.
+	 */
 	public void setEdgeColor(ColorSet colorSet) {
 		if (edgeColor == null)
 			edgeColor = new RGBColor(0.0, 0.0, 0.0);
