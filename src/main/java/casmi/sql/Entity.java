@@ -57,12 +57,12 @@ import casmi.sql.annotation.Tablename;
  *     
  *         public  String text;
  *         
- *         @Fieldname(NUM_1)
+ *         {@code @Fieldname}(NUM_1)
  *         private int    num1;
  *         
  *         public  double num2;
  *         
- *         @Ignore
+ *         {@code @Ignore}
  *         public  float  num3;
  *         
  *         public int getNum1() {

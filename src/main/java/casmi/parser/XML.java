@@ -36,10 +36,9 @@ import casmi.io.Writer;
  * when you want to read or write a XML file.
  * </p>
  * 
- * @see casmi.exception.ParseException
+ * @see casmi.exception.ParserException
  * 
  * @author T. Takeuchi
- * 
  */
 public class XML extends XMLElement {
 

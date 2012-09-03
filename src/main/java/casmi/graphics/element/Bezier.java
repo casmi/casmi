@@ -49,14 +49,22 @@ public class Bezier extends Element implements Renderable {
     /**
      * Creates a new Bezier object using coordinates for the anchor and control points.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     * @param x3,y3
-     *            The coordinates for the second control point.
-     * @param x4,y4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
      */
     public Bezier(double x1, double y1, 
                   double x2, double y2,

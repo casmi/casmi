@@ -36,8 +36,6 @@ public class GrayColor implements Color {
      *
      * @param gray 
      *              The gray-scale value, from 0.0 to 1.0.
-     * @param alpha 
-     *              The alpha value, from 0.0 to 1.0.
      */
     public GrayColor(double gray) {
         this(gray, 1.0);
