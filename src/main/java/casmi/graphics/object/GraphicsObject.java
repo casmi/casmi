@@ -91,7 +91,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
 		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
-		//selectBuffer  = BufferUtil.newIntBuffer(selectionbufsize);
 		selectBuff    =  new int[selectionbufsize];
 		this.setDepthTest(false);
 	}
@@ -394,14 +393,14 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				el.getMask().render(g);
 			}
 			
-			/*if (el.getPosition().getZ()==0){
+			if (el.getPosition().getZ()==0){
 				el.setDepthTest(false);
 			} else {
 				this.setDepthTest(true);
-			}*/
+			}
 			
 			//if(this.isDepthTest())
-			//	el.setDepthTest(true);
+			//el.setDepthTest(false);
 			
 			g.pushMatrix();
 			{
@@ -488,7 +487,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
-				System.out.println("test");
+				//System.out.println("test");
 				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;

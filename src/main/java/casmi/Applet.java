@@ -823,7 +823,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
     
    public void addObject(Object obj) {
-       addObject(0, obj);
+      // addObject(0, obj);
+	   rootObject.add(obj);
    }
    
    public void addObject(int index, Object obj) {
@@ -854,6 +855,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     	rootObject.remove(index);
     }    
     
+    
     public Object getObject(int index) {
     	return rootObject.get(index);
     }
@@ -863,7 +865,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
     
     public void addUpdateObject(Updatable obj) {
-        addUpdateObject(0, obj);
+       // addUpdateObject(0, obj);
+    	addUpdateObject(obj);
     }
     
     public void addUpdateObject(int index, Updatable obj) {
