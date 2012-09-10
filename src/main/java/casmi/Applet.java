@@ -865,8 +865,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
     
     public void addUpdateObject(Updatable obj) {
-       // addUpdateObject(0, obj);
-    	addUpdateObject(obj);
+        addUpdateObject(0, obj);
     }
     
     public void addUpdateObject(int index, Updatable obj) {
