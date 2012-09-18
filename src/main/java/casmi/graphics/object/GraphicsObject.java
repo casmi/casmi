@@ -59,12 +59,12 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	
 	private double tmpAs, tmpAf;
 	
-	private List<Object> objectList;
-	private List<Light> lightList;
-	private List<Camera> cameraList;
-	private List<Perse> perseList;
+	private List<Object>       objectList;
+	private List<Light>        lightList;
+	private List<Camera>       cameraList;
+	private List<Perse>        perseList;
 	private List<TweenManager> tmList;
-	private List<Integer> selectionList;
+	private List<Integer>      selectionList;
 	
 	private BackGround bg;
 
@@ -75,7 +75,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	private MatrixMode mode = MatrixMode.NONE;
 	private DoubleBuffer matrix;
 	private boolean selectionbuff = false;
-	private int selectionbufsize = 1024*1024;
+	private int selectionBufSize = 1024 * 1024;
 	private int selectedIndex = -1;
 	private IntBuffer selectBuffer;
 	private int selectBuff[];
@@ -90,13 +90,13 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		perseList     = new CopyOnWriteArrayList<Perse>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
-		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
-		selectBuff    =  new int[selectionbufsize];
+		selectBuffer  = Buffers.newDirectIntBuffer(selectionBufSize);
+		selectBuff    = new int[selectionBufSize];
 		this.setDepthTest(false);
 	}
 
 	public void add(Object object) {
-		   if(object instanceof Element || object instanceof Group || object instanceof TimelineRender)
+		   if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
 			   	objectList.add(object);
 	}
 	
@@ -205,43 +205,41 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	/**
 	 * Applies the transformation matrix.
 	 */
-	public void applyMatrix(double matrix[]) {
+	public void applyMatrix(double[] matrix) {
 		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode = MatrixMode.APPLY;
+		this.mode   = MatrixMode.APPLY;
 	}
 
 	public void applyMatrix(DoubleBuffer matrix) {
 		this.matrix = matrix;
-		this.mode = MatrixMode.APPLY;
+		this.mode   = MatrixMode.APPLY;
 	}
 
-	public void loadMatrix(double matrix[]) {
-
-		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode = MatrixMode.LOAD;
+	public void loadMatrix(double[] matrix) {
+	    this.matrix = java.nio.DoubleBuffer.wrap(matrix);
+		this.mode   = MatrixMode.LOAD;
 	}
 
 	public void loadMatrix(DoubleBuffer matrix) {
-		this.matrix = matrix;
-		this.mode = MatrixMode.LOAD;
+	    this.matrix = matrix;
+	    this.mode   = MatrixMode.LOAD;
 	}
 
 	public void setBackGroundColor(BackGround bg) {
 		this.bg = bg;
 	}
 
-	public void selectionbufRender(Graphics g, double mouseX, double mouseY,
-			int index) {
-		if (selectionbuff == true || this.isSelectionbuffer() == true) {
-			
-			
-			Arrays.fill(selectBuff,0);
+	public void selectionbufRender(Graphics g, double mouseX, double mouseY, int index) {
+		
+	    if (selectionbuff || isSelectionbuffer()) {
+						
+			Arrays.fill(selectBuff, 0);
 			selectBuffer.position(0);
 			int hits;
 			int viewport[] = new int[4];
 
 			g.getGL().glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-			g.getGL().glSelectBuffer(selectionbufsize, selectBuffer);
+			g.getGL().glSelectBuffer(selectionBufSize, selectBuffer);
 			g.getGL().glRenderMode(GL2.GL_SELECT);
 
 			g.getGL().glInitNames();
@@ -273,18 +271,19 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
 
 		}
-		if(removeObject){
+	    
+		if (removeObject) {
 			Iterator<Object> itr = objectList.iterator();
-			while(itr.hasNext()){
+			while (itr.hasNext()) {
 				Object obj = itr.next();
-				if(obj instanceof Element )
-					if(((Element) obj).isRemove())
-					objectList.remove(obj);
+				if (obj instanceof Element)
+					if (((Element)obj).isRemove())
+					    objectList.remove(obj);
 			}
 		}
 	}
 
-	private void processHits(int hits, int buffer[]) {
+	private void processHits(int hits, int[] buffer) {
 		if (hits > 0) {
 			selectedIndex = buffer[4 * hits - 1];
 		} else {
@@ -629,11 +628,11 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	public int getSelectionbuffsize() {
-		return selectionbufsize;
+		return selectionBufSize;
 	}
 
 	public void setSelectionbuffsize(int selectionbuffsize) {
-		this.selectionbufsize = selectionbuffsize;
+		this.selectionBufSize = selectionbuffsize;
 	}
 
 	public List<Integer> getSelectionList() {
