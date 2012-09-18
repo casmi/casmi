@@ -172,6 +172,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 				keyboard.setPressed(false);
 				keyboard.setReleased(false);
 				keyboard.setTyped(false);
+				
+				rootObject.setMouseEvent(null);
 			}
 		}
 	}
@@ -323,7 +325,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(MouseEvent.PRESSED);
+		rootObject.setMouseEvent(MouseEvent.PRESSED);
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED);
@@ -349,7 +351,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(MouseEvent.RELEASED);
+		rootObject.setMouseEvent(MouseEvent.RELEASED);
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED);
@@ -387,7 +389,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(MouseEvent.CLICKED);
+		rootObject.setMouseEvent(MouseEvent.CLICKED);
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.CLICKED);
@@ -435,7 +437,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			break;
 		}
 		
-		rootObject.callMouseClickCallbackOfChildren(MouseEvent.DRAGGED);
+		rootObject.setMouseEvent(MouseEvent.DRAGGED);
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED);
@@ -450,7 +452,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    
 	    mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
 		
-		rootObject.callMouseClickCallbackOfChildren(MouseEvent.MOVED);
+		rootObject.setMouseEvent(MouseEvent.MOVED);
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED);

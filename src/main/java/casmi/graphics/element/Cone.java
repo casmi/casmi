@@ -54,6 +54,7 @@ public class Cone extends Element implements Renderable {
         this.z = 0.0;
         this.base = base;
         this.height = height;
+		this.setThreeD(true);
     }
 
     /**
@@ -76,6 +77,7 @@ public class Cone extends Element implements Renderable {
         this.height = height;
         this.slices = slices;
         this.stacks = stacks;
+		this.setThreeD(true);
     }
 
     /**
@@ -98,6 +100,7 @@ public class Cone extends Element implements Renderable {
         this.z = z;
         this.base = base;
         this.height = height;
+		this.setThreeD(true);
     }
 
     /**
@@ -126,11 +129,12 @@ public class Cone extends Element implements Renderable {
         this.stacks = stacks;
         this.base = base;
         this.height = height;
+		this.setThreeD(true);
     }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+    	if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
@@ -158,7 +162,7 @@ public class Cone extends Element implements Renderable {
         }
         gl.glPopMatrix();
 
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }

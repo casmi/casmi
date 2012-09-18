@@ -48,6 +48,7 @@ public class Sphere extends Element implements Renderable {
      */
     public Sphere(double radius) {
         this.r = radius;
+		this.setThreeD(true);
     }
 
     /**
@@ -64,6 +65,7 @@ public class Sphere extends Element implements Renderable {
         this.r = radius;
         this.slices = slices;
         this.stacks = stacks;
+		this.setThreeD(true);
     }
     
     /**
@@ -118,7 +120,7 @@ public class Sphere extends Element implements Renderable {
             }
         }
 
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false){
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false){
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
         
@@ -153,7 +155,7 @@ public class Sphere extends Element implements Renderable {
         	texture.disableTexture(gl);
         }
         
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }

@@ -50,6 +50,7 @@ public class Box extends Element implements Renderable {
 		width  = size;
 		depth  = size;
 		height = size;
+		this.setThreeD(true);
 	}
 	
 	/**
@@ -66,11 +67,12 @@ public class Box extends Element implements Renderable {
 	    this.width  = width;
 	    this.height = height;
 	    this.depth  = depth;
+		this.setThreeD(true);
 	}
 
 	@Override
 	public void render(GL2 gl, GLU glu, int width, int height) {
-		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+		if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
 			gl.glDisable(GL2.GL_DEPTH_TEST);
 		}
 		
@@ -123,7 +125,7 @@ public class Box extends Element implements Renderable {
 
 		gl.glDisable(GL2.GL_DEPTH_TEST);
         
-		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+		if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }

@@ -88,6 +88,7 @@ abstract public class Element implements Cloneable, Renderable {
 	
 	private boolean depthTest = true;
 	private boolean removeElement = false;
+	private boolean threeD = false;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -299,6 +300,7 @@ abstract public class Element implements Cloneable, Renderable {
 	protected void setTweenParameter(GL2 gl) {
 			gl.glTranslated(x, y, z);
 			gl.glScaled(scaleX, scaleY, scaleZ);
+//			gl.glRotated(360.0,rotateX/360.0,rotateY/360.0,rotate/360.0);
 			gl.glRotated(rotate, 0.0, 0.0, 1.0);
 			gl.glRotated(rotateX, 1.0, 0.0, 0.0);
 			gl.glRotated(rotateY, 0.0, 1.0, 0.0);
@@ -487,7 +489,6 @@ abstract public class Element implements Cloneable, Renderable {
 		}
 		mouseEventCallbacks.add(callback);
 		
-///////////////////////////////////		
 		if(this instanceof GraphicsObject){
 			GraphicsObject g = (GraphicsObject)this;
 			for (Object obj : g.getObjectList()) {
@@ -527,6 +528,7 @@ abstract public class Element implements Cloneable, Renderable {
 			if (mouseEventCallbacks.get(i) instanceof MouseClickCallback) {
 				MouseClickCallback mClick = (MouseClickCallback) mouseEventCallbacks
 						.get(i);
+
 				if (e == casmi.MouseEvent.CLICKED)
 					mClick.run(
 							MouseEventCallback.MouseClickTypes.CLICKED, this);
@@ -646,5 +648,13 @@ abstract public class Element implements Cloneable, Renderable {
 
 	public void setReset(boolean reset) {
 		this.reset = reset;
+	}
+
+	public boolean isThreeD() {
+		return threeD;
+	}
+
+	public void setThreeD(boolean threeD) {
+		this.threeD = threeD;
 	}
 }

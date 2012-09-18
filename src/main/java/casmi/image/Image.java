@@ -192,6 +192,7 @@ public class Image {
      * Loads a texture using image data.
      */
     public final void loadTexture() {
+    	texture = null;
         texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2),img,true);
         if(texture == null)
         	System.out.println("can not load texture!");

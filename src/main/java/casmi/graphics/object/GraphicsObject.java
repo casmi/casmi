@@ -33,6 +33,7 @@ import javax.media.opengl.glu.GLU;
 
 
 
+import casmi.MouseEvent;
 import casmi.Updatable;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
@@ -65,6 +66,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	private List<Perse> perseList;
 	private List<TweenManager> tmList;
 	private List<Integer> selectionList;
+	private List<MouseEvent> mouseEventList;
 	
 	private BackGround bg;
 
@@ -80,8 +82,12 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	private IntBuffer selectBuffer;
 	private int selectBuff[];
 	
+	public final int NO_SELECTIONBUFF = 10;
+	
 	private boolean removeObject;
 	private boolean resetObject = false;
+	
+	private MouseEvent mouseEvent;
 
 	public GraphicsObject() {
 	    objectList    = new CopyOnWriteArrayList<Object>();
@@ -90,8 +96,21 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		perseList     = new CopyOnWriteArrayList<Perse>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
+		mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
 		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
 		selectBuff    =  new int[selectionbufsize];
+		this.setDepthTest(false);
+	}
+	
+	public GraphicsObject(int selectionNum ) {
+	    objectList    = new CopyOnWriteArrayList<Object>();
+		lightList     = new CopyOnWriteArrayList<Light>();
+		cameraList    = new CopyOnWriteArrayList<Camera>();
+		perseList     = new CopyOnWriteArrayList<Perse>();
+		tmList        = new CopyOnWriteArrayList<TweenManager>();
+		selectionList = new CopyOnWriteArrayList<Integer>();
+		selectBuffer =  Buffers.newDirectIntBuffer(NO_SELECTIONBUFF);
+		selectBuff    =  new int[NO_SELECTIONBUFF];
 		this.setDepthTest(false);
 	}
 
@@ -515,6 +534,11 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 						}
 						if (selectionIndex == selectedIndex) {
 							e.callMouseOverCallback(true);
+						//	if(mouseEventList.size()!=0){
+								e.callMouseClickCallback(mouseEvent);
+						//		e.callMouseClickCallback(mouseEventList.get(0));
+						//		mouseEventList.remove(0);
+						//	}
 						} else {
 							e.setMouseover(false);
 						}
@@ -536,11 +560,30 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
 		for (Object obj : objectList) {
-			if (obj instanceof Element) {
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.callMouseClickCallbackOfChildren(e);
+			}
+			else if (obj instanceof Element) {
 				Element el = (Element)obj;
 				if (el.isMouseover()) {
 					el.callMouseClickCallback(e);
+					System.out.println("teststertts");
 				}
+			} 
+		}
+	}
+	
+	public void setMouseEvent(casmi.MouseEvent e){
+	//	if(mouseEventList==null)
+	//		mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
+	//	if(e!=null&&(e!=mouseEvent||mouseEventList.size()==0))
+	//		mouseEventList.add(e);
+		mouseEvent = e;
+		for (Object obj : objectList) {
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject) obj;
+				go.setMouseEvent(mouseEvent);
 			}
 		}
 	}
@@ -634,6 +677,9 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	public void setSelectionbuffsize(int selectionbuffsize) {
 		this.selectionbufsize = selectionbuffsize;
+
+		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
+		selectBuff    =  new int[selectionbufsize];
 	}
 
 	public List<Integer> getSelectionList() {

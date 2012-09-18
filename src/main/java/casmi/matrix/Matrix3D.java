@@ -68,6 +68,16 @@ public class Matrix3D implements Matrix{
 	  public Matrix3D(Matrix matrix) {
 	    set(matrix);
 	  }
+	  
+	  public Matrix3D(double rotateX, double rotateY, double rotateZ) {
+		    	set(1, 0, 0, 0,
+		    		0, 1, 0, 0,
+			        0, 0, 1, 0,
+			        0, 0, 0, 1);
+		    	apply(getRotateZMatrix(rotateX));
+		    	apply(getRotateYMatrix(rotateY));
+		    	apply(getRotateXMatrix(rotateZ));
+	  }
 
 
 	  public void reset() {
@@ -75,6 +85,34 @@ public class Matrix3D implements Matrix{
 	        0, 1, 0, 0,
 	        0, 0, 1, 0,
 	        0, 0, 0, 1);
+	  }
+	  
+	  
+	  public final Matrix3D getRotateYMatrix(double x){
+		  double radian = x/180.0*Math.PI;
+		  Matrix3D matrix = new Matrix3D(Math.cos(radian),0,Math.sin(radian),0,
+				  						0, 1, 0, 0,
+				  						-Math.sin(radian), 0, Math.cos(radian), 0,
+				  						0,0,0,1);
+		  return matrix;
+	  }
+	  
+	  public final Matrix3D getRotateXMatrix(double x){
+		  double radian = x/180.0*Math.PI;
+		  Matrix3D matrix = new Matrix3D(1,0,0,0,
+				  						0,Math.cos(radian), -Math.sin(radian), 0,
+				  						0,Math.sin(radian), Math.cos(radian), 0,
+				  						0,0,0,1);
+		  return matrix;
+	  }
+	  
+	  public final Matrix3D getRotateZMatrix(double x){
+		  double radian = x/180.0*Math.PI;
+		  Matrix3D matrix = new Matrix3D(Math.cos(radian), -Math.sin(radian),0,0,
+				  						Math.sin(radian),Math.cos(radian), 0, 0,
+				  						0, 0, 1, 0,
+				  						0,0,0,1);
+		  return matrix;
 	  }
 
 
