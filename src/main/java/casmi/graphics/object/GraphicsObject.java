@@ -507,7 +507,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
-				//System.out.println("test");
 				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;
@@ -569,7 +568,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				Element el = (Element)obj;
 				if (el.isMouseover()) {
 					el.callMouseClickCallback(e);
-					System.out.println("teststertts");
 				}
 			} 
 		}
@@ -697,6 +695,15 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	public boolean isResetObject() {
+		for (Object obj : objectList) {
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				if(go.isResetObject()){
+					resetObject = true;
+					go.setResetObject(false);
+				}
+			}
+		}
 		return resetObject;
 	}
 
@@ -897,6 +904,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 	
 	public void resetObjects() {
+		System.out.println("fff");
 		for (Object obj : objectList) {
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;

@@ -125,7 +125,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private GraphicsObject rootObject;
 	private List<Updatable> updateObjectList = new ArrayList<Updatable>(); 
 	
-	private static final int SELECTION_BUFSIZE = 1024 * 1024;
+	//private static final int SELECTION_BUFSIZE = 1024 * 1024;
 	// private int selectedIndex = 0;
 
 	// for capturing a window
@@ -180,7 +180,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	
 	public void initRootOject() {
 		rootObject = new GraphicsObject();
-		rootObject.setSelectionbuffsize(SELECTION_BUFSIZE);
+		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
 		rootObject.setDepthTest(false);
 	}
 
@@ -1051,7 +1051,6 @@ class AppletGLEventListener implements GLEventListener {
 		glut = new GLUT();
 
 		g = new Graphics(gl, glu, glut, width, height);
-
 		if(reset)
 			d.reset();
 		reset = true;

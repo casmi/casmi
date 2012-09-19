@@ -34,7 +34,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  * @author  T. Takeuchi,Y. Ban
  * 
  */
-public class TextBox extends Element implements Renderable {
+public class TextBox extends Element implements Renderable , Reset{
 
     private static final boolean DEFAULT_FILL         = false;
     private static final Color   DEFAULT_FILL_COLOR   = new RGBColor(ColorSet.BLACK);
@@ -42,9 +42,6 @@ public class TextBox extends Element implements Renderable {
     private static final Color   DEFAULT_STROKE_COLOR = new RGBColor(ColorSet.WHITE);
     
     private Text text;
-    private double x = 0.0;
-    private double y = 0.0;
-    private double z = 0.0;
     private double width = 0.0;
     private double height = 0.0;
     
@@ -112,26 +109,29 @@ public class TextBox extends Element implements Renderable {
         this.z      = z;
         this.width  = width;
         this.height = height;
-        
         init();
         format();
+        this.fill = true;
+        this.stroke = true;
     }
     
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
 
-        double x1 = x - this.width  / 2.0;
-        double y1 = y + this.height / 2.0;
-        double x2 = x - this.width  / 2.0;
-        double y2 = y - this.height / 2.0;
-        double x3 = x + this.width  / 2.0;
-        double y3 = y - this.height / 2.0;
-        double x4 = x + this.width  / 2.0;
-        double y4 = y + this.height / 2.0;
+        double x1 =  - this.width  / 2.0;
+        double y1 =  + this.height / 2.0;
+        double x2 =  - this.width  / 2.0;
+        double y2 =  - this.height / 2.0;
+        double x3 =  + this.width  / 2.0;
+        double y3 =  - this.height / 2.0;
+        double x4 =  + this.width  / 2.0;
+        double y4 =  + this.height / 2.0;
         
        // if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
        // }
+
+        this.setTweenParameter(gl);
         
         gl.glPushMatrix();
         {
@@ -166,20 +166,21 @@ public class TextBox extends Element implements Renderable {
             // text
             switch (text.getAlign()) {
             case CENTER:
-                text.setX(x);
+                text.setX(0);
                 break;
             case RIGHT:
-                text.setX(x + this.width / 2.0);
+                text.setX( + this.width / 2.0);
                 break;
             case LEFT:
             default:
-                text.setX(x - this.width / 2.0);
+                text.setX( - this.width / 2.0);
                 break;
             }
-            text.setY(y + this.height / 2.0 - text.getHeight());
-            text.setZ(z);
+            text.setY( + this.height / 2.0 - text.getHeight());
+            text.setZ(0);
             text.render(gl, glu, width, height);
-        }
+
+            }
         gl.glPopMatrix();
         
       //  if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
@@ -201,6 +202,8 @@ public class TextBox extends Element implements Renderable {
         StringBuilder sb = new StringBuilder();
         try{
         for (String str : strs) {
+        	//System.out.println("tes"+str);
+        	//System.out.println("tes"+tr.getBounds(str).getWidth());
             while (1 < str.length() && width < tr.getBounds(str).getWidth()) {
                 String tmp = str;
                 while (1 < tmp.length() && width < tr.getBounds(tmp).getWidth()) {
@@ -216,7 +219,6 @@ public class TextBox extends Element implements Renderable {
         } catch (GLException e) {
         	this.reset = true;
         }
-        
         text.setArrayText(sb.toString());
     }
 
@@ -280,4 +282,10 @@ public class TextBox extends Element implements Renderable {
     
         this.height = height;
     }
+
+	@Override
+	public void reset() {
+		text.reset();
+	}
+
 }
