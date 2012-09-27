@@ -202,8 +202,6 @@ public class TextBox extends Element implements Renderable , Reset{
         StringBuilder sb = new StringBuilder();
         try{
         for (String str : strs) {
-        	//System.out.println("tes"+str);
-        	//System.out.println("tes"+tr.getBounds(str).getWidth());
             while (1 < str.length() && width < tr.getBounds(str).getWidth()) {
                 String tmp = str;
                 while (1 < tmp.length() && width < tr.getBounds(tmp).getWidth()) {
@@ -285,7 +283,7 @@ public class TextBox extends Element implements Renderable , Reset{
 
 	@Override
 	public void reset() {
-		text.reset();
+		format();
 	}
 
 }

@@ -1,22 +1,3 @@
-/*
- *   casmi
- *   http://casmi.github.com/
- *   Copyright (C) 2011, Xcoo, Inc.
- *
- *  casmi is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package casmi.graphics.object;
 
 import java.nio.DoubleBuffer;
@@ -24,13 +5,12 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.Iterator;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
-
 
 
 import casmi.MouseEvent;
@@ -42,80 +22,55 @@ import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
 import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
+import casmi.graphics.element.TextBox;
 import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-//import com.sun.opengl.util.BufferUtil;
-import com.jogamp.common.nio.Buffers;
+public class GraphicsObjects  extends Element implements Updatable, ObjectRender {
 
-/**
- * GrapicsObject.
- * 
- * @author Y. Ban
- */
-public class GraphicsObject extends Element implements Updatable, ObjectRender {
+protected Graphics g;
+	
+protected double tmpAs, tmpAf;
+	
+protected List<Object>       objectList;
+protected List<Light>        lightList;
+protected List<Camera>       cameraList;
+protected List<Perse>        perseList;
+protected List<TweenManager> tmList;
+protected List<Integer> selectionList;
+protected List<MouseEvent> mouseEventList;
+	
+	//private BackGround bg;
 
-	private Graphics g;
-	
-	private double tmpAs, tmpAf;
-	
-	private List<Object>       objectList;
-	private List<Light>        lightList;
-	private List<Camera>       cameraList;
-	private List<Perse>        perseList;
-	private List<TweenManager> tmList;
-	private List<Integer> selectionList;
-	private List<MouseEvent> mouseEventList;
-	
-	private BackGround bg;
-
-	private enum MatrixMode {
+	protected enum MatrixMode {
 		APPLY, LOAD, NONE
 	};
 
-	private MatrixMode mode = MatrixMode.NONE;
-	private DoubleBuffer matrix;
-	private boolean selectionbuff = false;
-	private int selectionBufSize = 1024 * 1024;
-	private int selectedIndex = -1;
-	private IntBuffer selectBuffer;
-	private int selectBuff[];
+	protected MatrixMode mode = MatrixMode.NONE;
+	protected DoubleBuffer matrix;
+	protected boolean selectionbuff = false;
 	
 	public final int NO_SELECTIONBUFF = 10;
 	
-	private boolean removeObject;
-	private boolean resetObject = false;
+	protected boolean removeObject;
+	protected boolean resetObject = false;
 	
-	private MouseEvent mouseEvent;
-
-	public GraphicsObject() {
-	    objectList    = new CopyOnWriteArrayList<Object>();
+	protected MouseEvent mouseEvent;
+	
+	protected int selectionBufSize = 1024*1024;
+	
+	public GraphicsObjects() {
+		objectList    = new CopyOnWriteArrayList<Object>();
 		lightList     = new CopyOnWriteArrayList<Light>();
 		cameraList    = new CopyOnWriteArrayList<Camera>();
 		perseList     = new CopyOnWriteArrayList<Perse>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
-
-		mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
-		selectBuffer =  Buffers.newDirectIntBuffer(selectionBufSize);
-		selectBuff    =  new int[selectionBufSize];
-
+		
 		this.setDepthTest(false);
 	}
 	
-	public GraphicsObject(int selectionNum ) {
-	    objectList    = new CopyOnWriteArrayList<Object>();
-		lightList     = new CopyOnWriteArrayList<Light>();
-		cameraList    = new CopyOnWriteArrayList<Camera>();
-		perseList     = new CopyOnWriteArrayList<Perse>();
-		tmList        = new CopyOnWriteArrayList<TweenManager>();
-		selectionList = new CopyOnWriteArrayList<Integer>();
-		selectBuffer =  Buffers.newDirectIntBuffer(NO_SELECTIONBUFF);
-		selectBuff    =  new int[NO_SELECTIONBUFF];
-		this.setDepthTest(false);
-	}
-
 	public void add(Object object) {
 		   if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
 			   	objectList.add(object);
@@ -246,11 +201,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	    this.mode   = MatrixMode.LOAD;
 	}
 
-	public void setBackGroundColor(BackGround bg) {
-		this.bg = bg;
-	}
-
-	public void selectionbufRender(Graphics g, double mouseX, double mouseY, int index) {
+	
+	public double selectionbufRender(Graphics g, double mouseX, double mouseY, int index, int[] selectBuff, IntBuffer selectBuffer, int selectedIndex) {
 		
 	    if (selectionbuff || isSelectionbuffer()) {
 						
@@ -277,8 +229,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			g.getGL().glLoadIdentity();
 			drawPerse(g, true);
 			drawCamera(g);
-			if (bg != null)
-				bg.render(g);
 			drawLight(g);
 			g.pushMatrix();
 			setMatrix(g);
@@ -288,7 +238,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 			hits = g.getGL().glRenderMode(GL2.GL_RENDER);
 			selectBuffer.get(selectBuff);
-			processHits(hits, selectBuff);
+			selectedIndex = processHits(hits, selectBuff, selectedIndex);
 			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
 
 		}
@@ -302,14 +252,19 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 					    objectList.remove(obj);
 			}
 		}
+		
+		return selectedIndex;
 	}
 
-	private void processHits(int hits, int[] buffer) {
+
+
+	private int processHits(int hits, int[] buffer, int selectedIndex) {
 		if (hits > 0) {
 			selectedIndex = buffer[4 * hits - 1];
 		} else {
 			selectedIndex = -1;
 		}
+		return selectedIndex;
 	}
 
 	@Override
@@ -323,8 +278,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			
 			drawCamera(g);
 			
-			if (bg != null)
-				bg.render(g);
 			
 			drawLight(g);
 			
@@ -360,9 +313,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 			drawCamera(g);
 			
-			if (bg != null)
-				bg.render(g);
-			
 			drawLight(g);
 			
 			g.pushMatrix();
@@ -381,7 +331,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		}
 	}
 
-	private int bufRender(Graphics g, double mouseX, double mouseY,
+	protected int bufRender(Graphics g, double mouseX, double mouseY,
 			boolean bool, int index, int selectedIndex) {
 		int sIndex = -1;
 		if (this.isVisible() == true) {
@@ -391,8 +341,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				drawPerse(g, bool);
 
 			drawCamera(g);
-			if (bg != null)
-				bg.render(g);
 			drawLight(g);
 			g.pushMatrix();
 			setMatrix(g);
@@ -460,8 +408,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	                             boolean selection, double mouseX, double mouseY,
 	                             int selectionIndex, int selectedIndex) {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObject) {
-				GraphicsObject o = (GraphicsObject)obj;
+			if (obj instanceof GraphicsObjects) {
+				GraphicsObjects o = (GraphicsObjects)obj;
 				if (!selection) {
 					if(o.isRemove())
 						removeObject = true;
@@ -560,8 +508,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.callMouseClickCallbackOfChildren(e);
 			}
 			else if (obj instanceof Element) {
@@ -580,8 +528,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	//		mouseEventList.add(e);
 		mouseEvent = e;
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject) obj;
+			if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects) obj;
 				go.setMouseEvent(mouseEvent);
 			}
 		}
@@ -674,13 +622,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		return selectionBufSize;
 	}
 
-	public void setSelectionbuffsize(int selectionbuffsize) {
-
-		this.selectionBufSize = selectionbuffsize;
-
-		selectBuffer =  Buffers.newDirectIntBuffer(selectionBufSize);
-		selectBuff    =  new int[selectionBufSize];
-	}
 
 	public List<Integer> getSelectionList() {
 		return selectionList;
@@ -696,8 +637,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	public boolean isResetObject() {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				if(go.isResetObject()){
 					resetObject = true;
 					go.setResetObject(false);
@@ -717,8 +658,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStroke(setStroke);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStroke(setStroke);
 			}
 		}
@@ -730,8 +671,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStroke(setFill);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStroke(setFill);
 			}
 		}
@@ -751,8 +692,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeWidth(strokeWidth);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStrokeWidth(strokeWidth);
 			}
 		}
@@ -773,8 +714,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(color);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStrokeColor(color);
 			}
 		}
@@ -788,8 +729,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColorAlpha(alpha);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStrokeColorAlpha(alpha);
 			}
 		}
@@ -808,8 +749,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(colorSet);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStrokeColor(colorSet);
 			}
 		}
@@ -823,8 +764,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(colorSet, alpha);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setStrokeColor(colorSet, alpha);
 			}
 		}
@@ -846,8 +787,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(color);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setFillColor(color);
 			}
 		}
@@ -861,8 +802,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColorAlpha(alpha);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setFillColorAlpha(alpha);
 			}
 		}
@@ -881,8 +822,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(colorSet);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setFillColor(colorSet);
 			}
 		}
@@ -896,8 +837,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(colorSet, alpha);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.setFillColor(colorSet, alpha);
 			}
 		}
@@ -909,10 +850,12 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;
 				el.reset();
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
+			} else if (obj instanceof GraphicsObjects) {
+				GraphicsObjects go = (GraphicsObjects)obj;
 				go.resetObjects();
 			}
 		}
 	}
 }
+
+

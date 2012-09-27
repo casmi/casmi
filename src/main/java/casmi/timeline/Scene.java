@@ -29,7 +29,7 @@ import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
-import casmi.graphics.object.GraphicsObject;
+import casmi.graphics.object.RootObject;
 import casmi.graphics.object.Light;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
@@ -46,7 +46,7 @@ abstract public class Scene {
     private double sceneA = 1.0;
     private boolean selectionBuffer = false;
 
-    private GraphicsObject rootObject = new GraphicsObject();
+    private RootObject rootObject = new RootObject();
 
 //	private static final int SELECTION_BUFSIZE = 512;
 //    private int selectedIndex = 0;
@@ -102,7 +102,7 @@ abstract public class Scene {
         rootObject.setRotation(angle, x, y, z);
     }
 
-    public GraphicsObject getRootObject() {
+    public RootObject getRootObject() {
         return rootObject;
     }
 
@@ -264,7 +264,7 @@ abstract public class Scene {
 
     }
     
-    public GraphicsObject getObjects(){
+    public RootObject getObjects(){
     	return rootObject;
     }
 

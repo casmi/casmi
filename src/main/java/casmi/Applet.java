@@ -68,7 +68,7 @@ import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
-import casmi.graphics.object.GraphicsObject;
+import casmi.graphics.object.RootObject;
 import casmi.graphics.object.Light;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
@@ -122,7 +122,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private Timeline rootTimeline;
 	private TimelineRender rootTimelineRender;
 
-	private GraphicsObject rootObject;
+	private boolean rootObjectInit = false;
+	private RootObject rootObject;
 	private List<Updatable> updateObjectList = new ArrayList<Updatable>(); 
 	
 	//private static final int SELECTION_BUFSIZE = 1024 * 1024;
@@ -179,7 +180,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 	
 	public void initRootOject() {
-		rootObject = new GraphicsObject();
+		rootObject = new RootObject();
 		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
 		rootObject.setDepthTest(false);
 	}
@@ -187,7 +188,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	@Override
 	public void init() {
 		this.initRootOject();
-		this.setup();
+		this.setSize(100, 100);
 		// JOGL setup
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
 		this.caps = new GLCapabilities(profile);
@@ -209,6 +210,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		setFocusable(false);
 		panel.setFocusable(true);
 
+		this.setup();
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
 		
@@ -558,6 +560,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void reset(){
 		rootObject.resetObjects();
 	}
+	
+	@Override
+	public void initSet(){
+		this.setup();
+	}
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
@@ -728,8 +735,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	
     private final void drawObjects(Graphics g) {
     	rootObject.clearSelectionList();
-    	rootObject.bufRender(g, getMouseX(), getMouseY(), false,0);
-    	rootObject.selectionbufRender(g, getMouseX(), getMouseY(), 0);
+    	rootObject.rootBufRender(g, getMouseX(), getMouseY(), false,0);
+    	rootObject.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
     	update(g);
     }
     
@@ -762,12 +769,13 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     
     // TODO: should change access public to private final
     public void update(Graphics g) {
-    	if (rootObject.isResetObject()) {
-    		rootObject = null;
-    		this.initRootOject();
-    		this.setup();
+    	if (rootObject.isResetObject() ) {
+    		rootObject.resetObjects();
+    		rootObject.setResetObject(false);
     	}
-    	
+
+    	if (!rootObjectInit)
+    		rootObjectInit = true;
     	update();
     }
     
@@ -799,18 +807,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     	rootObject.clearTweenManager();
     }
 
-//    public void addTweenManager(TweenManager tweenmanager){
-//    	rootObject.addTweenManager(tweenmanager);
-//    }
-//    
-//    public void removeTweenManger(int index){
-//    	rootObject.removeTweenManager(index);
-//    }
-//    
-//    public void clearTweenManager(){
-//   	rootObject.clearTweenManager();
-//    }
-        
+
    public void setPosition(double x, double y, double z){
 	   rootObject.setPosition(x, y, z);
    }
@@ -1019,6 +1016,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 interface GraphicsDrawable {
 	public void drawWithGraphics(Graphics g);
 	public void reset();
+	public void initSet();
 }
 
 /**
@@ -1053,6 +1051,8 @@ class AppletGLEventListener implements GLEventListener {
 		g = new Graphics(gl, glu, glut, width, height);
 		if(reset)
 			d.reset();
+		else 
+			d.initSet();
 		reset = true;
 	}
 	

@@ -19,14 +19,15 @@
 
 package casmi.graphics.group;
 
-import casmi.graphics.object.GraphicsObject;
+import casmi.graphics.object.RootObject;
+import casmi.graphics.object.GraphicsObjects;
 
 /**
  * Group abstract class.
  *  
  * @author Y. Ban.
  */
-abstract public class Group extends GraphicsObject {
+abstract public class Group extends GraphicsObjects {
 
 	public void setup() {};
 	
