@@ -43,32 +43,49 @@ import casmi.tween.equations.Linear;
  */
 
 public class DynamicBarGraph extends Graph{
-	private TweenElement tw; 
 	private List<Rect> rlist = new ArrayList<Rect>();
 	private Color rectColor;
 	private double barRatio = 0.8;
-	private boolean tweenstart = false;
-	private TweenManager manager;
+	private int delayMillSec = 300;
+	private boolean animation = true;
+	DynamicBarGraphTweenType tweenType = DynamicBarGraphTweenType.AT_ONCE;
 	
 
 	public DynamicBarGraph(double width, double height, MatrixData2D m) {
 		super(width, height, m);
 		rectColor = new RGBColor(ColorSet.WHITE);
 		setGraphBar();
-		for(Rect r: rlist)
-			add(r);
 	}
 	
 	public DynamicBarGraph(double width, double height, MatrixData2D m, double maxY, double minY) {
 		super(width, height, m, maxY, minY);
 		rectColor = new RGBColor(ColorSet.WHITE);
 		setGraphBar();
-		for(Rect r: rlist)
-			add(r);
 	}
 	
-	public void setRectColor(Color color){
+	public DynamicBarGraph(double width, double height, MatrixData2D m, boolean animation) {
+		super(width, height, m);
+		rectColor = new RGBColor(ColorSet.WHITE);
+		this.animation = animation;
+		setGraphBar();
+	}
+	
+	public DynamicBarGraph(double width, double height, MatrixData2D m, double maxY, double minY, boolean animation) {
+		super(width, height, m, maxY, minY);
+		rectColor = new RGBColor(ColorSet.WHITE);
+		this.animation = animation;
+		setGraphBar();
+	}
+	
+	public void setBarColor(Color color){
 		rectColor = color;
+		for(Rect r: rlist)
+			r.setFillColor(rectColor);
+		
+	}
+	
+	public void setBarColor(ColorSet colorset){
+		rectColor = new RGBColor(colorset);
 		for(Rect r: rlist)
 			r.setFillColor(rectColor);
 		
@@ -76,6 +93,9 @@ public class DynamicBarGraph extends Graph{
 	
 	private void setGraphBar(){
 		int count = 0;
+		for(Rect r: rlist)
+			r.remove();
+		rlist.clear();
 		double barSize = (double)width / (double)m.getSize();
 		this.axisHolizontal.setOffset(0.5*barSize);
 		for(PairData p : m.getData()){
@@ -84,10 +104,22 @@ public class DynamicBarGraph extends Graph{
 			r.setFillColor(rectColor);
 			r.setStroke(false);
 			r.setPosition( (count+0.5)*barSize, 0);
+			if(!animation){
+				r.setHeight(p.getY());
+				r.setY(p.getY()/2.0);
+			}
 			rlist.add(r);
 			System.out.println(p.getX() + "\t" + p.getY());
 			count++;
 		}
+
+		for(Rect r: rlist)
+			add(r);
+	}
+	
+	public void setAnimation(boolean animation) {
+		this.animation = animation;
+		setGraphBar();
 	}
 
 	public double getBarRatio() {
@@ -98,12 +130,29 @@ public class DynamicBarGraph extends Graph{
 		this.barRatio = barRatio;
 	}
 	
-	@Override
-	public void update(){
+	public void setData(MatrixData2D m){
+		this.m = m;
+		for(Rect r: rlist)
+			r.remove();
+		rlist.clear();
+		setGraphBar();
+		for(Rect r: rlist)
+			add(r);
+	}
+	
+	private void animationUpdate() {
+
+		if(tweenreset){
+			tweenreset = false;
+			for(TweenElement t: twlist){
+				t.reset();
+			}
+		}
  
 		if(tweenstart){
+			tweenstart = false;
 			double barSize = (double)width / (double)m.getSize();
-			setTweenstart(false);
+			tweenstart = false;
             manager = new TweenManager();
             addTweenManager(manager);
 
@@ -112,25 +161,61 @@ public class DynamicBarGraph extends Graph{
 			int count = 0;
 			for(Rect r: rlist){
 				tw = new TweenElement(r);
-				TweenSerialGroup tsg = TweenSerialGroup.create(
+				twlist.add(tw);
+				TweenSerialGroup tsg = null; 
+				if(tweenType == DynamicBarGraphTweenType.AT_ONCE){
+					tsg = TweenSerialGroup.create(
 						TweenParallelGroup.create(
-								Tween.to(tw, TweenType.SCALE_Y, 1000, Linear.INOUT).target((float) m.getDataY(count)),
-								Tween.to(tw, TweenType.POSITION_3D, 1000, Linear.INOUT).target((count+0.5)*barSize, (float) (m.getDataY(count)/2.0), 0)
+								Tween.to(tw, TweenType.SCALE_Y, tweenMillSec, Linear.INOUT).target((float) m.getDataY(count)),
+								Tween.to(tw, TweenType.POSITION_3D, tweenMillSec, Linear.INOUT).target((count+0.5)*barSize, (float) (m.getDataY(count)/2.0), 0)
 								)
 						);
+				} else if(tweenType == DynamicBarGraphTweenType.ORDER) {
+					tsg = TweenSerialGroup.create(
+							TweenParallelGroup.create(
+									Tween.to(tw, TweenType.SCALE_Y, tweenMillSec, Linear.INOUT).target((float) m.getDataY(count)).addDelay(delayMillSec * count),
+									Tween.to(tw, TweenType.POSITION_3D, tweenMillSec, Linear.INOUT).target((count+0.5)*barSize, (float) (m.getDataY(count)/2.0), 0).addDelay(delayMillSec * count)
+									)
+							);
+				}
 				manager.add(tsg);
 				count++;
 			}    		
 		}
 	}
 	
-	public void setTweenstart(boolean start){
-		this.tweenstart = start;
+	@Override
+	public void update(){
+		animationUpdate();
 	}
+	
+
+	
+	public void resetTween() {
+		this.tweenstart = false;
+		this.tweenreset = true;
+	}
+
 	
 	public boolean isTweenstart(){
 		return tweenstart;
 	}
 
+	public int getDelayMilliSec() {
+		return delayMillSec;
+	}
+
+	public void setDelayMilliSec(int delayMilliSec) {
+		this.delayMillSec = delayMilliSec;
+	}
+
+	
+	public void setTweenType(DynamicBarGraphTweenType tweentype){
+		this.tweenType = tweentype;
+	}
+	
+	public DynamicBarGraphTweenType getTweenType(){
+		return this.tweenType;
+	}
 
 }

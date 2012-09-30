@@ -563,6 +563,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	
 	@Override
 	public void initSet(){
+		rootObjectInit = true;
+		rootObject = null;
+		initRootOject();
 		this.setup();
 	}
 
@@ -823,7 +826,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     
    public void addObject(Object obj) {
       // addObject(0, obj);
-	   rootObject.add(obj);
+	   if(rootObjectInit)
+		   rootObject.add(obj);
    }
    
    public void addObject(int index, Object obj) {

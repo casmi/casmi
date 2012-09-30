@@ -51,7 +51,11 @@ abstract public class Scene {
 //	private static final int SELECTION_BUFSIZE = 512;
 //    private int selectedIndex = 0;
 
-    abstract public void setup();
+  //  abstract public void setup();
+    public Scene(int id, double time) {
+    	setId(id);
+    	setTime(time);
+    }
 
     public int getId() {
         return id;
@@ -88,7 +92,7 @@ abstract public class Scene {
         update();
     }
 
-    public void update() {}
+    abstract public void update();
 
     public void setPosition(double x, double y, double z) {
         rootObject.setPosition(x, y, z);

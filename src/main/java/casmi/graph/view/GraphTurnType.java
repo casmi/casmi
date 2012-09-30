@@ -25,7 +25,7 @@ package casmi.graph.view;
  * @author Y. Ban
  */
 
-public enum GraphTurn {
+public enum GraphTurnType {
 	
 	CLOCKWISE,
 	

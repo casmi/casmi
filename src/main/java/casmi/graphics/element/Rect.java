@@ -144,7 +144,7 @@ public class Rect extends Element implements Renderable {
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
-            
+
             if (this.fill) {
                 getSceneFillColor().setup(gl);
                 gl.glBegin(GL2.GL_QUADS);

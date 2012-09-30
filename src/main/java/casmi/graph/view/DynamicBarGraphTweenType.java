@@ -17,18 +17,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.timeline;
+
+package casmi.graph.view;
 
 /**
- * Modes of dissolving in timeline.
- *  
  * @author Y. Ban
  */
-public enum DissolveMode {
-    
-    /** Normal dissolve. */
-    BLACK,
-    
-    /** Cross dissolve. */
-    CROSS, 
+public enum DynamicBarGraphTweenType {
+	
+	AT_ONCE,
+	
+	ORDER
+
 }

@@ -17,10 +17,16 @@
 
 package casmi.graph.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import casmi.graph.data.MatrixData2D;
 import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
 import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;
+import casmi.tween.TweenElement;
+import casmi.tween.TweenManager;
 
 /**
  * Graph Class.
@@ -35,6 +41,12 @@ public class Graph extends Group{
 	protected Axis axisVertical;
 	protected double width, height;
 	protected double minY,maxY;
+	protected boolean tweenstart = false;
+	protected boolean tweenreset = false;
+	protected TweenManager manager;
+	protected int tweenMillSec = 1000;
+	protected TweenElement tw; 
+	protected List<TweenElement> twlist = new ArrayList<TweenElement>();
 	
 	public Graph(double width, double height, MatrixData2D m){
 		setSize(width, height);
@@ -86,6 +98,30 @@ public class Graph extends Group{
 		axisVertical.setStrokeColor(color);
 	}
 	
+	public void setAxisColor(ColorSet color){
+		axisHolizontal.setStrokeColor(color);
+		axisVertical.setStrokeColor(color);
+	}
+	
+	public void setAxisName(GraphAxis axis, String name){
+		switch(axis){
+		case HORIZONTAL:
+			this.axisHolizontal.setAxisName(name);
+			break;
+		case VERTICAL:
+			this.axisVertical.setAxisName(name);
+			break;
+		}
+	}
+	
+	public Axis getAxisX(){
+		return axisHolizontal;
+	}
+	
+	public Axis getAxisY(){
+		return axisVertical;
+	}
+	
 	public void drawAxis(){
 		this.axisHolizontal.setData(m);
 		this.axisVertical.setData(m);
@@ -108,6 +144,19 @@ public class Graph extends Group{
 			this.axisVertical.setDivisionDiff(space);
 			break;
 		}
+	}
+	
+	public void startTween() {
+		this.tweenstart = true;
+	}
+	
+
+	public int getTweenMilliSec() {
+		return tweenMillSec;
+	}
+
+	public void setTweenMilliSec(int tweenMilliSec) {
+		this.tweenMillSec = tweenMilliSec;
 	}
 	
 	

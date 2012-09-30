@@ -298,7 +298,7 @@ public class Timeline implements TimelineRender {
                 sceneList.get(nextSceneID).setSceneA(tmp, g);
                 sceneList.get(nextSceneID).drawscene(g);
                 break;
-            case NORMAL:
+            case BLACK:
                 if (tmp <= 0.5) {
                     sceneList.get(nowSceneID).setSceneA((1.0 - tmp * 2), g);
                     sceneList.get(nowSceneID).drawscene(g);

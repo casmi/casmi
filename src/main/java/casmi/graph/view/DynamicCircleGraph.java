@@ -29,6 +29,9 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Arc;
+import casmi.graphics.element.Text;
+import casmi.graphics.element.TextAlign;
+import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;
 import casmi.tween.Tween;
 import casmi.tween.TweenCallback;
@@ -50,36 +53,44 @@ public class DynamicCircleGraph extends Group{
 	private TweenDouble tw; 
 	private List<Arc> arclist = new ArrayList<Arc>();
 	private List<Color> colorList = new ArrayList<Color>();
+	private List<Text> textList = new ArrayList<Text>();
+	private Font indexNameFont;
 	private boolean tweenstart = false;
 	private TweenManager manager;
 	private MatrixData2D data;
 	private double radius;
-	private GraphTurn turn = GraphTurn.COUNTERCLOCKWISE;
+	private GraphTurnType turn = GraphTurnType.CLOCKWISE;
 	private int tweenMilliSecond = 1500;
     TweenCallback tweencallback;
+    private boolean animation = true;
 	
 	public DynamicCircleGraph(MatrixData2D m, double radius){
-		init(m, radius);
+		init(m, radius, true);
 	}
 	
-	public DynamicCircleGraph(MatrixData2D m, double radius, GraphTurn turn){
-		this.setTurn(turn);
-		init(m, radius);
+	public DynamicCircleGraph(MatrixData2D m, double radius, GraphTurnType turn){
+		this.setTweenType(turn);
+		init(m, radius, true);
 	}
 	
-	private void init(MatrixData2D m, double radius){
+	public DynamicCircleGraph(MatrixData2D m, double radius, boolean animation){
+		init(m, radius, animation);
+	}
+	
+	public DynamicCircleGraph(MatrixData2D m, double radius, GraphTurnType turn, boolean animation){
+		this.setTweenType(turn);
+		init(m, radius, animation);
+	}
+	
+	private void init(MatrixData2D m, double radius, boolean animation){
 		data = m;
 		this.radius = radius;
         tw = new TweenDouble();
         tw.setValue(0);
-        setGraphArc();
-        if(turn == GraphTurn.CLOCKWISE){
-        	for(Arc arc: arclist){
-    			arc.flip(0);
-    			arc.setDetail(180);
-        	}
-        	
-        }
+        indexNameFont = new Font();
+        this.animation = animation;
+       	setGraphArc();
+
         
         tweencallback = new TweenCallback() {
 
@@ -90,22 +101,19 @@ public class DynamicCircleGraph extends Group{
         };
 	}
 	
-	@Override
-	public void update() {
-		if(tweenstart){
+	public void animationUpdate() {
+		if(tweenstart && tw.getValue()<=360){
 			setTweenstart(false);
             manager = new TweenManager();
             addTweenManager(manager);
-            tw = new TweenDouble();
-            tw.setValue(0);
 			TweenSerialGroup tsg = TweenSerialGroup.create(
-					Tween.to(tw, tweenMilliSecond, Linear.INOUT).target(360).addCompleteCallback(tweencallback)
+					Tween.to(tw, tweenMilliSecond, Linear.INOUT).target(360.01).addCompleteCallback(tweencallback)
 					);
 
-			manager.add(tsg); 
+			manager.add(tsg);
 		}
 		
-		if(tw.getValue()!=0 && tw.getValue()!=361){
+		if(tw.getValue()!=0 && tw.getValue()<=360){
 			for(int i=0; i<arclist.size(); i++){
 				if(arclist.get(i).getStart()-90 < tw.getValue() ){
 					arclist.get(i).visible();
@@ -125,34 +133,110 @@ public class DynamicCircleGraph extends Group{
 		}
 	}
 	
-	public void resetArc(){
-		this.clearAllObjects();
-		System.out.println("reset!!");
-		for(Arc arc: arclist)
-			add(arc);
+	@Override
+	public void update() {
+		if(animation)
+			animationUpdate();
+		
+	}
+	
+	public void setAnimation(boolean animation){
+		this.animation = animation;
+		setGraphArc();
+	}
+	
+	public void resetTween(){
+		for(Arc arc: arclist){
+			arc.setEnd(arc.getStart()+0.1);
+			arc.hidden();
+		}
+        tw.setValue(0);
 	}
 	
 	private void setGraphArc(){
+		textList.clear();
+		colorList.clear();
+		arclist.clear();
 		int count = 0;
 		double total = 0;
 		for(PairData p : data.getData())
 			total += p.getY();
 		for(PairData p : data.getData()){
-			//setting graph bars
 			double startRad = 0;
 			for(int i = 0; i < count; i++)
 				startRad += (data.getDataY(i)*360.0/total);
 			
-			Arc arc = new Arc(this.radius, startRad+90, startRad+91);
+			Arc arc = new Arc(this.radius, startRad+90, startRad+90.1);
 			colorList.add(new RGBColor(ColorSet.values()[Random.random(ColorSet.values().length)]));
 			arc.setFillColor(colorList.get(count));
 			arc.setStroke(false);
-			arc.hidden();
+			arc.setDetail(180);
+	        if(turn == GraphTurnType.CLOCKWISE)
+	        	arc.flip(0);
+			if(animation)
+				arc.hidden();
 			arclist.add(arc);
 			add(arclist.get(count));
 			System.out.println(p.getX() + "\t" + p.getY());
 			count++;
 		}
+		setIndexName();
+       
+	}
+	
+	private void setIndexName() {
+		int count = 0;
+		for(PairData p : data.getData()){
+			Text indexName = new Text(p.getX() , indexNameFont);
+			indexName.setAlign(TextAlign.CENTER);
+			double textRadian;
+			if(count < data.getSize() - 1){
+				if(!animation)
+					arclist.get(count).setEnd(arclist.get(count+1).getStart());
+				textRadian = ((arclist.get(count).getStart()+arclist.get(count+1).getStart() )/2.0 - 90) * Math.PI / 180.0;
+			}
+			else{
+				if(!animation)
+					arclist.get(count).setEnd(450.1);
+				textRadian = ((arclist.get(count).getStart()+450.0)/2.0 - 90) * Math.PI / 180.0;
+			}
+			indexName.setPosition(this.radius*0.6*Math.sin(textRadian), this.radius*0.6*Math.cos(textRadian));
+			textList.add(indexName);
+			add(textList.get(count));		
+			count ++;
+		}
+	}
+	
+	
+	public void setIndexNameFont(Font font){
+		this.indexNameFont = font;
+	}
+	
+	public void setIndexNameTextColor(Color color){
+		for(Text t: textList)
+			t.setStrokeColor(color);
+	}
+	
+	public void setIndexNameTextColor(ColorSet colorSet){
+		for(Text t: textList)
+			t.setStrokeColor(colorSet);
+	}
+	
+	public Color getIndexNameTextColor() {
+		return textList.get(0).getStrokeColor();
+	}
+	
+	public void setIndexNameTextWidth(double width) {
+		for(Text t: textList)
+			t.setStrokeWidth(width);
+	}
+	
+	public double getIndexNameTextWidth() {
+		return textList.get(0).getStrokeWidth();
+	}
+	
+	public List<Text> getIndexNameTextList(){
+		return textList;
 	}
 	
 	public Color getArcColor(int index){
@@ -183,8 +267,12 @@ public class DynamicCircleGraph extends Group{
 		return tweenstart;
 	}
 
-	public void setTweenstart(boolean tweenstart) {
+	private void setTweenstart(boolean tweenstart) {
 		this.tweenstart = tweenstart;
+	}
+	
+	public void startTween() {
+		this.setTweenstart(true);
 	}
 
 	public int getTweenMilliSecond() {
@@ -195,11 +283,11 @@ public class DynamicCircleGraph extends Group{
 		this.tweenMilliSecond = tweenMilliSecond;
 	}
 
-	public GraphTurn getTurn() {
+	public GraphTurnType getTweenType() {
 		return turn;
 	}
 
-	public void setTurn(GraphTurn turn) {
+	public void setTweenType(GraphTurnType turn) {
 		this.turn = turn;
 	}
 
