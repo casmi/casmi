@@ -27,7 +27,7 @@ import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-public class GraphicsObjects  extends Element implements Updatable, ObjectRender {
+public class GraphicsObject  extends Element implements Updatable, ObjectRender {
 
 protected Graphics g;
 	
@@ -60,7 +60,7 @@ protected List<MouseEvent> mouseEventList;
 	
 	protected int selectionBufSize = 1024*1024;
 	
-	public GraphicsObjects() {
+	public GraphicsObject() {
 		objectList    = new CopyOnWriteArrayList<Object>();
 		lightList     = new CopyOnWriteArrayList<Light>();
 		cameraList    = new CopyOnWriteArrayList<Camera>();
@@ -408,8 +408,8 @@ protected List<MouseEvent> mouseEventList;
 	                             boolean selection, double mouseX, double mouseY,
 	                             int selectionIndex, int selectedIndex) {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects o = (GraphicsObjects)obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject o = (GraphicsObject)obj;
 				if (!selection) {
 					if(o.isRemove())
 						removeObject = true;
@@ -508,8 +508,8 @@ protected List<MouseEvent> mouseEventList;
 
 	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.callMouseClickCallbackOfChildren(e);
 			}
 			else if (obj instanceof Element) {
@@ -528,8 +528,8 @@ protected List<MouseEvent> mouseEventList;
 	//		mouseEventList.add(e);
 		mouseEvent = e;
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects) obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject) obj;
 				go.setMouseEvent(mouseEvent);
 			}
 		}
@@ -637,8 +637,8 @@ protected List<MouseEvent> mouseEventList;
 
 	public boolean isResetObject() {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				if(go.isResetObject()){
 					resetObject = true;
 					go.setResetObject(false);
@@ -658,8 +658,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStroke(setStroke);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStroke(setStroke);
 			}
 		}
@@ -671,8 +671,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStroke(setFill);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStroke(setFill);
 			}
 		}
@@ -692,8 +692,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeWidth(strokeWidth);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeWidth(strokeWidth);
 			}
 		}
@@ -714,8 +714,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(color);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColor(color);
 			}
 		}
@@ -729,8 +729,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColorAlpha(alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColorAlpha(alpha);
 			}
 		}
@@ -749,8 +749,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(colorSet);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColor(colorSet);
 			}
 		}
@@ -764,8 +764,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(colorSet, alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColor(colorSet, alpha);
 			}
 		}
@@ -787,8 +787,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(color);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(color);
 			}
 		}
@@ -802,8 +802,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColorAlpha(alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColorAlpha(alpha);
 			}
 		}
@@ -822,8 +822,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(colorSet);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(colorSet);
 			}
 		}
@@ -837,8 +837,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(colorSet, alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(colorSet, alpha);
 			}
 		}
@@ -850,8 +850,8 @@ protected List<MouseEvent> mouseEventList;
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;
 				el.reset();
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.resetObjects();
 			}
 		}

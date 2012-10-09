@@ -49,6 +49,7 @@ public class Timeline implements TimelineRender {
     private Applet baseApplet;
 
     private List<Scene> sceneList;
+    private List<Scene> tmpSceneList;
     private List<Dissolve> disolveList;
     private Timer timer;
     private TimerTask task = new SceneTask();
@@ -70,7 +71,7 @@ public class Timeline implements TimelineRender {
                 if (!dissolve) {
                     goDissolve();
                 } else {
-                    endDisolve_goNextScene();
+                    endDisolve();
                     preDissolve = nextDissolve;
                 }
             }
@@ -109,45 +110,35 @@ public class Timeline implements TimelineRender {
 
     public Timeline() {
         sceneList = new ArrayList<Scene>();
+        tmpSceneList = new ArrayList<Scene>();
         disolveList = new ArrayList<Dissolve>();
     }
 
-    public Timeline(String csvFile) {
-        sceneList = new ArrayList<Scene>();
-        readTimelineCSV(csvFile);
-    }
 
-    private final void readTimelineCSV(String csvfile) {
+    public final void readTimelineCSV(String csvfile) {
         CSV csv;
         String name;
-//		double time;
-        ClassLoader loader = ClassLoader.getSystemClassLoader();
+		double time;
         try {
             csv = new CSV(csvfile);
             String[] test;
             while ((test = csv.readLine()) != null) {
                 name = test[0];
-//        		time = Double.valueOf(test[3]).doubleValue();
-                Class<?> clazz;
-                Object obj;
-                try {
-                    clazz = loader.loadClass(name);
-                    obj = clazz.newInstance();
-                    if (obj instanceof Scene) {
-
-                    }
-
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
-                // if(!sl.contains()){
-                // sl.add(clazz);
-                // }
+                time = Double.valueOf(test[1]).doubleValue();
+               if(name == "blackDissolve")
+            	   appendDisolve(time, DissolveMode.BLACK);
+               else if(name == "crossDissolve")
+            	   appendDisolve(time, DissolveMode.CROSS);
+               else{
+            	   for(Scene s : tmpSceneList){
+            		   if(s.getIdName() == name){
+            			   s.setTime(time);
+            			   this.appendScene(s);
+            			   break;
+            		   }
+            	   }
+               }
+            	   
             }
             csv.close();
         } catch (IOException e) {
@@ -167,7 +158,7 @@ public class Timeline implements TimelineRender {
     }
 
     // TODO: Rename! Can't understand!
-    private final void endDisolve_goNextScene() {
+    private final void endDisolve() {
         preDhalf = disolveList.get(nowDissolveID).getTime() / 2;
         nextDhalf = disolveList.get(nextDissolveID).getTime() / 2;
         nowDissolveID = nextDissolveID;

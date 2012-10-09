@@ -54,7 +54,7 @@ import com.jogamp.common.nio.Buffers;
  * 
  * @author Y. Ban
  */
-public class RootObject extends GraphicsObjects {
+public class RootObject extends GraphicsObject {
 	
 	
 	private BackGround bg;
@@ -427,8 +427,8 @@ public class RootObject extends GraphicsObjects {
 	                             boolean selection, double mouseX, double mouseY,
 	                             int selectionIndex, int selectedIndex) {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects o = (GraphicsObjects)obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject o = (GraphicsObject)obj;
 				if (!selection) {
 					if(o.isRemove())
 						removeObject = true;
@@ -527,8 +527,8 @@ public class RootObject extends GraphicsObjects {
 
 	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.callMouseClickCallbackOfChildren(e);
 			}
 			else if (obj instanceof Element) {
@@ -547,8 +547,8 @@ public class RootObject extends GraphicsObjects {
 	//		mouseEventList.add(e);
 		mouseEvent = e;
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects) obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject) obj;
 				go.setMouseEvent(mouseEvent);
 			}
 		}
@@ -663,8 +663,8 @@ public class RootObject extends GraphicsObjects {
 
 	public boolean isResetObject() {
 		for (Object obj : objectList) {
-			if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				if(go.isResetObject()){
 					resetObject = true;
 					go.setResetObject(false);
@@ -684,8 +684,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStroke(setStroke);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStroke(setStroke);
 			}
 		}
@@ -697,8 +697,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStroke(setFill);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStroke(setFill);
 			}
 		}
@@ -718,8 +718,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeWidth(strokeWidth);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeWidth(strokeWidth);
 			}
 		}
@@ -740,8 +740,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(color);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColor(color);
 			}
 		}
@@ -755,8 +755,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColorAlpha(alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColorAlpha(alpha);
 			}
 		}
@@ -775,8 +775,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(colorSet);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColor(colorSet);
 			}
 		}
@@ -790,8 +790,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setStrokeColor(colorSet, alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setStrokeColor(colorSet, alpha);
 			}
 		}
@@ -813,8 +813,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(color);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(color);
 			}
 		}
@@ -828,8 +828,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColorAlpha(alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColorAlpha(alpha);
 			}
 		}
@@ -848,8 +848,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(colorSet);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(colorSet);
 			}
 		}
@@ -863,8 +863,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
 				el.setFillColor(colorSet, alpha);
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.setFillColor(colorSet, alpha);
 			}
 		}
@@ -875,8 +875,8 @@ public class RootObject extends GraphicsObjects {
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;
 				el.reset();
-			} else if (obj instanceof GraphicsObjects) {
-				GraphicsObjects go = (GraphicsObjects)obj;
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
 				go.resetObjects();
 			}
 		}

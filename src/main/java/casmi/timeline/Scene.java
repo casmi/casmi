@@ -41,7 +41,7 @@ import casmi.graphics.object.Perspective;
  */
 abstract public class Scene {
 
-    private int id;
+    private String idName;
     private double time;
     private double sceneA = 1.0;
     private boolean selectionBuffer = false;
@@ -52,17 +52,22 @@ abstract public class Scene {
 //    private int selectedIndex = 0;
 
   //  abstract public void setup();
-    public Scene(int id, double time) {
-    	setId(id);
+    public Scene(String id) {
+    	setIdName(id);
+    	setTime(0);
+    }
+    
+    public Scene(String id, double time) {
+    	setIdName(id);
     	setTime(time);
     }
 
-    public int getId() {
-        return id;
+    public String getIdName() {
+        return idName;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdName(String id) {
+        this.idName = id;
     }
 
     public double getTime() {
