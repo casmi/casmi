@@ -210,7 +210,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		setFocusable(false);
 		panel.setFocusable(true);
 
-		this.setup();
+		//this.setup();
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
 		
@@ -567,6 +567,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject = null;
 		initRootOject();
 		this.setup();
+		if(AppletRunner.frame!=null)
+			AppletRunner.frame.setSize(this.getWidth(), this.getHeight());
 	}
 
 	@Override
