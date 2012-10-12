@@ -52,8 +52,7 @@ public class Texture extends Element implements Renderable, Reset {
     protected double x;
     protected double y;
     protected double z;
-    protected int    mode;
-    
+    protected int    mode;    
     
     private ArrayList<Double> xList;
     private ArrayList<Double> yList;
@@ -68,7 +67,12 @@ public class Texture extends Element implements Renderable, Reset {
 
     protected boolean masking = false;
     
-    private float[][] corner = {{0.0f,1.0f},{0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f}}; 
+    private float[][] corner = {
+        { 0.0f, 1.0f },
+        { 0.0f, 0.0f },
+        { 1.0f, 0.0f },
+        { 1.0f, 1.0f }
+    }; 
 
     /**
      * Creates a new Texture using the Image's path.
@@ -129,7 +133,7 @@ public class Texture extends Element implements Renderable, Reset {
      * @param url
      * 				The url of the mask Image.
      */
-	public void setMask(URL url){
+	public void setMask(URL url) {
 		setMask(new Image(url));
 	}
 	
@@ -139,17 +143,16 @@ public class Texture extends Element implements Renderable, Reset {
      * @param maskImage
      * 				The mask Image for this Texture.
      */
-	public void setMask(Image maskImage){
+	public void setMask(Image maskImage) {
 		masking = true;
 		this.mask = maskImage;
 		maskedImage = Image.clone(image);
-		for(int imageY = 0; imageY<this.maskedImage.getHeight();imageY++){
-			for(int imageX = 0; imageX<this.maskedImage.getWidth();imageX++){
-				if(imageX<=mask.getWidth()&&imageY<=mask.getHeight())
+		for (int imageY = 0; imageY < this.maskedImage.getHeight(); imageY++) {
+			for (int imageX = 0; imageX < this.maskedImage.getWidth(); imageX++) {
+				if (imageX <= mask.getWidth() && imageY <= mask.getHeight())
 					this.image.setA(mask.getGray(imageX, imageY), imageX , imageY);
 			}
 		}
-		
 	}
 	
 	/**
@@ -158,17 +161,16 @@ public class Texture extends Element implements Renderable, Reset {
      * @param maskTexture
      * 				The mask Texture for this Texture.
      */
-	public void setMask(Texture maskTexture){
+	public void setMask(Texture maskTexture) {
 		masking = true;
 		this.mask = maskTexture.getImage();
 		maskedImage = Image.clone(image);
-		for(int imageY = 0; imageY<this.maskedImage.getHeight();imageY++){
-			for(int imageX = 0; imageX<this.maskedImage.getWidth();imageX++){
-				if(imageX<=mask.getWidth()&&imageY<=mask.getHeight())
+		for (int imageY = 0; imageY < this.maskedImage.getHeight(); imageY++) {
+			for (int imageX = 0; imageX < this.maskedImage.getWidth(); imageX++) {
+				if (imageX <= mask.getWidth() && imageY <= mask.getHeight())
 					this.image.setA(mask.getGray(imageX, imageY), imageX , imageY);
 			}
-		}
-		
+		}		
 	}
 	
 	/**
@@ -176,7 +178,7 @@ public class Texture extends Element implements Renderable, Reset {
      * 
      * @param texture
      */
-	public void setTexture(Texture texture){
+	public void setTexture(Texture texture) {
 		this.image = texture.image;
 	}
 
@@ -351,8 +353,9 @@ public class Texture extends Element implements Renderable, Reset {
             Graphics.reloadTextures(gl);
             reloadFlag = false;
         }
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
         	gl.glDisable(GL2.GL_DEPTH_TEST);
+
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
@@ -421,7 +424,8 @@ public class Texture extends Element implements Renderable, Reset {
             image.disableTexture(gl);
         }
         gl.glPopMatrix();
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false)
+        
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
         	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
     

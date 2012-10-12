@@ -19,7 +19,6 @@
 
 package casmi.graphics.group;
 
-import casmi.graphics.object.RootObject;
 import casmi.graphics.object.GraphicsObject;
 
 /**

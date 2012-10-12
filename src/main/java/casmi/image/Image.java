@@ -82,7 +82,7 @@ public class Image {
         
         try {
            BufferedImage preimg = ImageIO.read(imgLoc);
-           img =  convertBytetoInt(preimg);
+           img =  convertByteToInt(preimg);
         } catch (IOException e) {
            e.printStackTrace();
         }
@@ -102,9 +102,9 @@ public class Image {
     public Image(URL url) {
         try {
             BufferedImage preimg = ImageIO.read(url);
-            if(preimg==null)
+            if (preimg == null)
             	System.out.println("null");
-            img =  convertBytetoInt(preimg);
+            img =  convertByteToInt(preimg);
          } catch (IOException e) {
             e.printStackTrace();
          }
@@ -148,27 +148,27 @@ public class Image {
         return newImage;
     }
     
-    private BufferedImage convertBytetoInt(BufferedImage src){
+    private BufferedImage convertByteToInt(BufferedImage src) {
     	BufferedImage dst = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
     	int[] pixels = ((DataBufferInt)(dst.getRaster().getDataBuffer())).getData();
     	byte[] binary = ((DataBufferByte)(src.getRaster().getDataBuffer())).getData();
-    	int r,g,b,a;
-    	int pixelsize = src.getWidth()*src.getHeight();
-    	if(src.getType() == BufferedImage.TYPE_4BYTE_ABGR){
-    		for(int i=0,j=0;i<pixelsize;i++) {
-    			a = binary[j++]&0xff;
-    			b = binary[j++]&0xff;
-    			g = binary[j++]&0xff;
-    			r = binary[j++]&0xff;
-    			pixels[i] = (a<<24)|(r<<16)|(g<<8)|b;
+    	int r, g, b, a;
+    	int pixelsize = src.getWidth() * src.getHeight();
+    	if (src.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
+    	    for (int i = 0, j = 0; i < pixelsize; i++) {
+    			a = binary[j++] & 0xff;
+    			b = binary[j++] & 0xff;
+    			g = binary[j++] & 0xff;
+    			r = binary[j++] & 0xff;
+    			pixels[i] = (a<<24) | (r<<16) | (g<<8) | b;
     		}
     	}
-    	if(src.getType() == BufferedImage.TYPE_3BYTE_BGR){
-    		for(int i=0,j=0;i<pixelsize;i++) {
-    			b = binary[j++]&0xff;
-    			g = binary[j++]&0xff;
-    			r = binary[j++]&0xff;	
-    			pixels[i] =0xff000000|(r<<16)|(g<<8)|b;
+    	if (src.getType() == BufferedImage.TYPE_3BYTE_BGR) {
+    		for (int i = 0, j = 0; i < pixelsize; i++) {
+    			b = binary[j++] & 0xff;
+    			g = binary[j++] & 0xff;
+    			r = binary[j++] & 0xff;	
+    			pixels[i] = 0xff000000 | (r<<16) | (g<<8) | b;
     		}
     	}
     	return dst;
@@ -183,7 +183,7 @@ public class Image {
      * @return
      * 					The clone image of the input image.
      */
-    public static Image clone(Image image){
+    public static Image clone(Image image) {
     	Image cloneImage = new Image(image.img);
     	return cloneImage;
     }
@@ -193,8 +193,8 @@ public class Image {
      */
     public final void loadTexture() {
     	texture = null;
-        texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2),img,true);
-        if(texture == null)
+        texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2), img, true);
+        if (texture == null)
         	System.out.println("can not load texture!");
     }
     

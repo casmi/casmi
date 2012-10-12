@@ -167,7 +167,6 @@ public class Text extends Element implements Renderable, Reset {
 	@Override
 	public void reset() {
         try {
-        	System.out.println("testsss");
             textRenderer = new TextRenderer(font.getAWTFont(), true, true);
             frc = new FontRenderContext(new AffineTransform(), false, false);
             layout = new TextLayout[strArray.length];

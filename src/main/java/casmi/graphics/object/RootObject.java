@@ -24,17 +24,14 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.Iterator;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-
-
 import casmi.MouseEvent;
-import casmi.Updatable;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
@@ -46,8 +43,8 @@ import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-//import com.sun.opengl.util.BufferUtil;
 import com.jogamp.common.nio.Buffers;
+//import com.sun.opengl.util.BufferUtil;
 
 /**
  * GrapicsObject.

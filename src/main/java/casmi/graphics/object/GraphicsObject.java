@@ -12,7 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-
 import casmi.MouseEvent;
 import casmi.Updatable;
 import casmi.graphics.Graphics;
@@ -22,34 +21,33 @@ import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
 import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
-import casmi.graphics.element.TextBox;
 import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
 public class GraphicsObject  extends Element implements Updatable, ObjectRender {
 
-protected Graphics g;
-	
-protected double tmpAs, tmpAf;
-	
-protected List<Object>       objectList;
-protected List<Light>        lightList;
-protected List<Camera>       cameraList;
-protected List<Perse>        perseList;
-protected List<TweenManager> tmList;
-protected List<Integer> selectionList;
-protected List<MouseEvent> mouseEventList;
-	
-	//private BackGround bg;
+    protected Graphics g;
 
-	protected enum MatrixMode {
-		APPLY, LOAD, NONE
-	};
+    protected double tmpAs, tmpAf;
 
-	protected MatrixMode mode = MatrixMode.NONE;
-	protected DoubleBuffer matrix;
-	protected boolean selectionbuff = false;
+    protected List<Object>       objectList;
+    protected List<Light>        lightList;
+    protected List<Camera>       cameraList;
+    protected List<Perse>        perseList;
+    protected List<TweenManager> tmList;
+    protected List<Integer> selectionList;
+    protected List<MouseEvent> mouseEventList;
+
+    //private BackGround bg;
+
+    protected enum MatrixMode {
+        APPLY, LOAD, NONE
+    };
+
+    protected MatrixMode mode = MatrixMode.NONE;
+    protected DoubleBuffer matrix;
+    protected boolean selectionbuff = false;
 	
 	public final int NO_SELECTIONBUFF = 10;
 	
@@ -72,8 +70,8 @@ protected List<MouseEvent> mouseEventList;
 	}
 	
 	public void add(Object object) {
-		   if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
-			   	objectList.add(object);
+	    if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
+	        objectList.add(object);
 	}
 	
 	public void addAll(Collection<? extends Object> c) {
@@ -845,7 +843,6 @@ protected List<MouseEvent> mouseEventList;
 	}
 	
 	public void resetObjects() {
-		System.out.println("fff");
 		for (Object obj : objectList) {
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;
