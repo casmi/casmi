@@ -609,9 +609,22 @@ public class Texture extends Element implements Renderable, Reset {
 	    reloadFlag = true;
 	}
 	
-	@Override
-	public void reset() {
+	public void reloadImage(GL2 gl){
+		image.reloadTexture(gl);
+	}
+	
+	public void loadImage(){
 		image.loadTexture();
+	}
+	
+	@Override
+	public void reset(GL2 gl) {
+		if(init){
+			loadImage();
+			init = false;
+		}else{
+			reloadImage(gl);
+		}
 	}
 
 

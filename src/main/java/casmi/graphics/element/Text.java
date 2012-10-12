@@ -165,7 +165,7 @@ public class Text extends Element implements Renderable, Reset {
     }
     
 	@Override
-	public void reset() {
+	public void reset(GL2 gl) {
         try {
             textRenderer = new TextRenderer(font.getAWTFont(), true, true);
             frc = new FontRenderContext(new AffineTransform(), false, false);

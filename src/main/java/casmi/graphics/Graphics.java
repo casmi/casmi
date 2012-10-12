@@ -20,8 +20,6 @@
 package casmi.graphics;
 
 import java.nio.DoubleBuffer;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -57,7 +55,6 @@ public class Graphics {
 	private int height;
 	private double sceneAlpha = 1.0;
 
-	private static List<Image> textureImages = new CopyOnWriteArrayList<Image>();
 
     public void render(Renderable r) {
         r.setAlpha(sceneAlpha);

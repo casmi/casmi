@@ -19,6 +19,8 @@
 
 package casmi.graphics.element;
 
+import javax.media.opengl.GL2;
+
 /**
  * Reset interface for graphics object.
  * 
@@ -26,5 +28,5 @@ package casmi.graphics.element;
  */
 
 public interface Reset {
-	void reset();
+	void reset(GL2 gl);
 }

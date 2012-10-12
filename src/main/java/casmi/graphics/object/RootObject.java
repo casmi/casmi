@@ -873,7 +873,7 @@ public class RootObject extends GraphicsObject {
 		for (Object obj : objectList) {
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;
-				el.reset();
+				el.reset(g.getGL());
 			} else if (obj instanceof GraphicsObject) {
 				GraphicsObject go = (GraphicsObject)obj;
 				go.resetObjects();

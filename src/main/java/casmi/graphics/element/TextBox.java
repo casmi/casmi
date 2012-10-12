@@ -282,7 +282,7 @@ public class TextBox extends Element implements Renderable , Reset{
     }
 
 	@Override
-	public void reset() {
+	public void reset(GL2 gl) {
 		format();
 	}
 

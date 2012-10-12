@@ -95,6 +95,7 @@ abstract public class Element implements Cloneable, Renderable {
 	protected boolean gradation = false;
 	
 	protected boolean reset = false;
+	protected boolean init = true;
 
 	/**
 	 * Returns the width of this Element's stroke.

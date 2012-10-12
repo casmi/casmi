@@ -24,8 +24,6 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-import casmi.graphics.Graphics;
-
 /**
  * Sphere class.
  * Wrap JOGL and make it easy to use.
@@ -33,7 +31,7 @@ import casmi.graphics.Graphics;
  * @author Y. Ban
  * 
  */
-public class Sphere extends Element implements Renderable {
+public class Sphere extends Element implements Renderable, Reset {
     
     private double r;
 
@@ -185,4 +183,15 @@ public class Sphere extends Element implements Renderable {
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
         glu.gluSphere(quadObj, radius, slices, stacks);   
     }
+
+	@Override
+	public void reset(GL2 gl) {
+		if(this.enableTexture)
+			if(init){
+				texture.loadImage();
+				init = false;
+			}else{
+				texture.reloadImage(gl);
+			}
+	}
 }

@@ -30,12 +30,10 @@ import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLProfile;
 
-import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
 import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 /**

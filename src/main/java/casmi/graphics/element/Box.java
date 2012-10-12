@@ -22,7 +22,6 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.Graphics;
 
 /**
  * Box class. 
@@ -30,7 +29,7 @@ import casmi.graphics.Graphics;
  * 
  * @author Y. Ban
  */
-public class Box extends Element implements Renderable {
+public class Box extends Element implements Renderable, Reset {
 
 	private static final double STROKE_BIAS_RATIO = 1.00;
 
@@ -310,5 +309,18 @@ public class Box extends Element implements Renderable {
 		this.enableTexture = true;
 		textures[index] = texture;
 		textures[index].loadFlag = true;
+	}
+
+	@Override
+	public void reset(GL2 gl) {
+		if(this.enableTexture)
+			for(Texture tex : textures){
+				if(init)
+					tex.loadImage();
+				else
+					tex.reloadImage(gl);
+			}
+		init = false;
+		
 	}
 }

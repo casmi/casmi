@@ -22,7 +22,6 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -35,7 +34,7 @@ import casmi.matrix.Vertex;
  * @author Y. Ban 
  * 
  */
-public class Quad extends Element implements Renderable {
+public class Quad extends Element implements Renderable, Reset {
 
     private double x1;
     private double y1;
@@ -408,5 +407,17 @@ public class Quad extends Element implements Renderable {
      */
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
+	}
+
+	@Override
+	public void reset(GL2 gl) {
+		if(this.enableTexture)
+			if(init){
+				texture.loadImage();
+				init = false;
+			}else{
+				texture.reloadImage(gl);
+			}
+		
 	}
 }
