@@ -272,10 +272,10 @@ public class Quad extends Element implements Renderable {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
         if (this.enableTexture) {
-            if (texture.reloadFlag) {
-                Graphics.reloadTextures(gl);
-                texture.reloadFlag = false;
-            }
+//            if (texture.reloadFlag) {
+//                Graphics.reloadTextures(gl);
+//                texture.reloadFlag = false;
+//            }
             texture.enableTexture(gl);
         }
 

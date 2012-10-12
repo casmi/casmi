@@ -35,6 +35,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
 import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 /**
@@ -68,7 +69,7 @@ public class Image {
         this.height = height;
         
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics.addTextureImage(this);
+//        Graphics.addTextureImage(this);
     }
     
     /**
@@ -90,7 +91,7 @@ public class Image {
         this.width  = img.getWidth();
         this.height = img.getHeight();
         
-        Graphics.addTextureImage(this);
+//        Graphics.addTextureImage(this);
     }
     
     /**
@@ -112,7 +113,7 @@ public class Image {
          this.width  = img.getWidth();
          this.height = img.getHeight();
          
-         Graphics.addTextureImage(this);
+//         Graphics.addTextureImage(this);
     }
     
     /**
@@ -128,7 +129,7 @@ public class Image {
          this.width  = this.img.getWidth();
          this.height = this.img.getHeight();
          
-         Graphics.addTextureImage(this);
+         //Graphics.addTextureImage(this);
     }
     
     /**
@@ -196,6 +197,10 @@ public class Image {
         texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2), img, true);
         if (texture == null)
         	System.out.println("can not load texture!");
+    }
+    
+    public final void reloadTexture(GL2 gl) {
+        texture.updateImage(gl, AWTTextureIO.newTextureData(GLProfile.get(GLProfile.GL2), img, false));
     }
     
     /**
@@ -394,8 +399,8 @@ public class Image {
      */
     public final void setColors(Color[] colors) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
                 int idx = x + y * width;
                 if (colors.length <= idx) break;
                 int red   = (int)(colors[idx].getRed()   * 255.0);

@@ -63,6 +63,8 @@ public class OAuthTest {
         } catch (IOException e) {
             e.printStackTrace();
             fail();
+        } finally {
+            reader.close();
         }
         
         // Retrieve an access token and a secret.

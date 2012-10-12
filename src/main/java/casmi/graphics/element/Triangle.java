@@ -298,10 +298,10 @@ public class Triangle extends Element implements Renderable {
 		}
 		
 		if (this.enableTexture) {
-			if (texture.reloadFlag) {
-                Graphics.reloadTextures(gl);
-                texture.reloadFlag = false;
-            }
+//			if (texture.reloadFlag) {
+//                Graphics.reloadTextures(gl);
+//                texture.reloadFlag = false;
+//            }
             texture.enableTexture();
         }
 

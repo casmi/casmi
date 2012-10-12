@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.Graphics;
+import casmi.graphics.color.Color;
 import casmi.image.Image;
 import casmi.image.ImageMode;
 import casmi.matrix.Vertex;
@@ -63,6 +63,7 @@ public class Texture extends Element implements Renderable, Reset {
 
     private Vertex tmpV = new Vertex();
     
+    protected boolean loadFlag = false;
     protected boolean reloadFlag = false;    
 
     protected boolean masking = false;
@@ -114,7 +115,7 @@ public class Texture extends Element implements Renderable, Reset {
         nx = new ArrayList<Double>();
         ny = new ArrayList<Double>();
 
-        reloadFlag = true;
+        loadFlag = true;
     }
     
     /**
@@ -331,10 +332,9 @@ public class Texture extends Element implements Renderable, Reset {
     }
     
     public final Image getImage() {
-    	if(masking == false){
+    	if (!masking) {
     		return this.image;
-    	}
-    	else{
+    	} else {
     		return this.maskedImage;
     	}
     }
@@ -349,8 +349,13 @@ public class Texture extends Element implements Renderable, Reset {
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
+        if (loadFlag) {
+            image.loadTexture();
+            loadFlag = false;
+        }
         if (reloadFlag) {
-            Graphics.reloadTextures(gl);
+            image.reloadTexture(gl);
+//            Graphics.reloadTextures(gl);
             reloadFlag = false;
         }
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
@@ -595,10 +600,18 @@ public class Texture extends Element implements Renderable, Reset {
 		masking = false;
 	}
 
+	public void setReloadFlag(boolean reloadFlag) {
+	    this.reloadFlag = reloadFlag;
+	}
+	
+	public void setColors(Color[] colors) {
+	    image.setColors(colors);
+	    reloadFlag = true;
+	}
+	
 	@Override
 	public void reset() {
 		image.loadTexture();
-		
 	}
 
 

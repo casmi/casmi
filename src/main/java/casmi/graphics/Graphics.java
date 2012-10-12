@@ -800,7 +800,7 @@ public class Graphics {
 		}
 
 	}
-
+/*
 	// textures
 	public static void addTextureImage(Image img) {
 		textureImages.add(img);
@@ -811,6 +811,8 @@ public class Graphics {
             img.loadTexture();
         }
 	}
+*/	
+	
 	// camera
 	/**
 	 * Sets a perspective projection applying foreshortening, making distant objects appear smaller 

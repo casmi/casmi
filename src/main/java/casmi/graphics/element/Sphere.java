@@ -114,10 +114,10 @@ public class Sphere extends Element implements Renderable {
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         if (this.enableTexture) {
-            if (texture.reloadFlag) {
-                Graphics.reloadTextures(gl);
-                texture.reloadFlag = false;
-            }
+//            if (texture.reloadFlag) {
+//                Graphics.reloadTextures(gl);
+//                texture.reloadFlag = false;
+//            }
         }
 
         if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false){

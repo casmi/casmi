@@ -347,10 +347,11 @@ public class RootObject extends GraphicsObject {
 		}
 	}
 
+/*
 	private int rootBufRender(Graphics g, double mouseX, double mouseY,
 			boolean bool, int index, int selectedIndex) {
 		int sIndex = -1;
-		if (this.isVisible() == true) {
+		if (this.isVisible()) {
 			this.g = g;
 			drawTweenManager(g);
 			if (bool == false)
@@ -370,6 +371,7 @@ public class RootObject extends GraphicsObject {
 
 		return sIndex;
 	}
+ */
 
 	public void render(Element el) {
 		if (el.isVisible()) {

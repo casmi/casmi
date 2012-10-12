@@ -168,8 +168,13 @@ public class Box extends Element implements Renderable {
 		for (int i = 5; 0 <= i; i--) {
 			if (type == GL2.GL_QUADS) {
 				if (this.enableTexture) {
+				    if (textures[i].loadFlag) {
+				        textures[i].getImage().loadTexture();
+				        textures[i].loadFlag = false;
+				    }
 					if (textures[i].reloadFlag) {
-						Graphics.reloadTextures(gl);
+//						Graphics.reloadTextures(gl);
+					    textures[i].getImage().reloadTexture(gl);
 						textures[i].reloadFlag = false;
 					}
 					textures[i].enableTexture();
@@ -304,5 +309,6 @@ public class Box extends Element implements Renderable {
 	public void setTexture(int index, Texture texture) {
 		this.enableTexture = true;
 		textures[index] = texture;
+		textures[index].loadFlag = true;
 	}
 }
