@@ -260,7 +260,6 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public Color getSceneStrokeColor() {
-		//System.out.println("scenA is ... "+sceneA);
 		sceneStrokeColor = strokeColor.clone();
 		if (tween) {
 			sceneStrokeColor.setAlpha(gettAS() * sceneA);
@@ -299,20 +298,11 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	protected void setTweenParameter(GL2 gl) {
-			gl.glTranslated(x, y, z);
-			gl.glScaled(scaleX, scaleY, scaleZ);
-//			gl.glRotated(360.0,rotateX/360.0,rotateY/360.0,rotate/360.0);
-			gl.glRotated(rotate, 0.0, 0.0, 1.0);
-			gl.glRotated(rotateX, 1.0, 0.0, 0.0);
-			gl.glRotated(rotateY, 0.0, 1.0, 0.0);
-	}
-
-	protected void setTextTweenParameter(GL2 gl) {
-			gl.glTranslated(x, y, z);
-			gl.glScaled(scaleX, scaleY, scaleZ);
-			gl.glRotated(rotate, 0.0, 0.0, 1.0);
-			gl.glRotated(rotateX, 1.0, 0.0, 0.0);
-			gl.glRotated(rotateY, 0.0, 1.0, 0.0);
+	    gl.glTranslated(x, y, z);
+	    gl.glScaled(scaleX, scaleY, scaleZ);
+	    gl.glRotated(rotate,  0.0, 0.0, 1.0);
+	    gl.glRotated(rotateX, 1.0, 0.0, 0.0);
+	    gl.glRotated(rotateY, 0.0, 1.0, 0.0);
 	}
 
 	public double gettAS() {
@@ -344,7 +334,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 	
 	public Vertex getPosition() {
-		Vertex v = new Vertex(x,y,z);
+		Vertex v = new Vertex(x, y, z);
 		return v;
 	}
 
@@ -378,7 +368,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 	
 	public void flip(int mode) {
-		switch(mode){
+		switch (mode) {
 		case 0:
 			this.rotateY += 180;
 			break;
@@ -398,13 +388,13 @@ abstract public class Element implements Cloneable, Renderable {
 	public void setRotation(double angle, double x, double y, double z) {
 		this.rotateX = angle * x;
 		this.rotateY = angle * y;
-		this.rotate = angle * z;
+		this.rotate  = angle * z;
 	}
 
 	public void setRotation(double x, double y, double z) {
 		this.rotateX = x;
 		this.rotateY = y;
-		this.rotate = z;
+		this.rotate  = z;
 	}
 
 	public double getRotation() {

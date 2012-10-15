@@ -275,8 +275,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			drawPerse(g, false);
 			
 			drawCamera(g);
-			
-			
+						
 			drawLight(g);
 			
 			g.pushMatrix();
@@ -287,7 +286,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			g.popMatrix();
 
 			if (this instanceof Group) {
-				update(g);
+				update();
 			}
 		}
 	}
@@ -296,9 +295,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 		if (this.isVisible()) {
 			this.g = g;
 			
-			if(removeObject){
-				for(Object obj : objectList){
-					if(obj instanceof Element && ((Element) obj).isRemove())
+			if (removeObject) {
+				for (Object obj : objectList) {
+					if(obj instanceof Element && ((Element)obj).isRemove())
 						objectList.remove(obj);
 				}
 				removeObject = false;
@@ -359,14 +358,11 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				el.getMask().render(g);
 			}
 			
-			if (el.getPosition().getZ()==0){
+			if (el.getPosition().getZ() == 0) {
 				el.setDepthTest(false);
 			} else {
 				this.setDepthTest(true);
 			}
-			
-			//if(this.isDepthTest())
-			//el.setDepthTest(false);
 			
 			g.pushMatrix();
 			{
@@ -409,7 +405,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			if (obj instanceof GraphicsObject) {
 				GraphicsObject o = (GraphicsObject)obj;
 				if (!selection) {
-					if(o.isRemove())
+					if (o.isRemove())
 						removeObject = true;
 					if (((Element) o).getMask() != null) {
 						((Element) o).getMask().render(g);
@@ -418,9 +414,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 						selectionbuff = true;
 					}
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
-					if(o.isSelectionbuff()==true)
+					if (o.isSelectionbuff())
 						selectionbuff = true;
-					if (((Element) o).getMask() != null)
+					if (((Element)o).getMask() != null)
 						g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
@@ -459,19 +455,18 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				if (!selection)
 					tm.render(g);
 			} else {
-				Element e = (Element) obj;
+				Element e = (Element)obj;
 				if (!selection) {
 					if (e.isRemove())
 						removeObject = true;
-					if (e.isReset()){
+					if (e.isReset()) {
 						resetObject = true;
 						e.setReset(false);
 					}
 					if (e.getMouseOverCallback() != null) {
-						selectionbuff = true;
-						
+						selectionbuff = true;						
 					}
-					this.render((Element) obj);
+					this.render((Element)obj);
 				} else {
 					if (e.getMouseOverCallback() != null) {
 						g.getGL().glLoadName(selectionIndex);

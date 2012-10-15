@@ -185,46 +185,58 @@ public class Text extends Element implements Renderable, Reset {
         
         gl.glPushMatrix();
         {
+            setTweenParameter(gl);
+            
             if (!isSelection()) {
-                setTextTweenParameter(gl);
                 textRenderer.begin3DRendering();
-                if (stroke) {
-                    textRenderer.setColor((float)getSceneStrokeColor().getRed(),
-                                          (float)getSceneStrokeColor().getGreen(),
-                                          (float)getSceneStrokeColor().getBlue(),
-                                          (float)getSceneStrokeColor().getAlpha());
-                } else if (fill) {
-                    textRenderer.setColor((float)getSceneFillColor().getRed(),
-                                          (float)getSceneFillColor().getGreen(),
-                                          (float)getSceneFillColor().getBlue(),
-                                          (float)getSceneFillColor().getAlpha());
-                }
-                double tmpX = 0;
-                double tmpY = 0;
-                for (int i = 0; i < strArray.length; ++i) {
-                    switch (align) {
-                    case LEFT:
-                        break;
-                    case CENTER:
-                        tmpX = -getWidth(i) / 2.0;
-                        break;
-                    case RIGHT:
-                        tmpX = -getWidth(i);
-                        break;
-                    default:
-                        break;
+                {
+                    if (stroke) {
+                        textRenderer.setColor(
+                            (float)getSceneStrokeColor().getRed(),
+                            (float)getSceneStrokeColor().getGreen(),
+                            (float)getSceneStrokeColor().getBlue(),
+                            (float)getSceneStrokeColor().getAlpha()
+                        );
+                    } else if (fill) {
+                        textRenderer.setColor(
+                            (float)getSceneFillColor().getRed(),
+                            (float)getSceneFillColor().getGreen(),
+                            (float)getSceneFillColor().getBlue(),
+                            (float)getSceneFillColor().getAlpha()
+                        );
                     }
                     
-                    try {
-                        textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        // Ignore
-                    }
+                    double tmpX = 0.0;
+                    double tmpY = 0.0;
+                    
+                    for (int i = 0; i < strArray.length; ++i) {
+                        switch (align) {
+                        case LEFT:
+                            break;
+                        case CENTER:
+                            tmpX = -getWidth(i) / 2.0;
+                            break;
+                        case RIGHT:
+                            tmpX = -getWidth(i);
+                            break;
+                        default:
+                            break;
+                        }
 
+                        try {
+                            textRenderer.draw3D(strArray[i],
+                                                (float)tmpX,
+                                                (float)(tmpY - leading * i),
+                                                (float)z,
+                                                1.0f);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            // Ignore
+                            break;
+                        }
+                    }
                 }
                 textRenderer.end3DRendering();
             } else {
-                setTextTweenParameter(gl);
                 double tmpX = 0.0;
                 double tmpY = 0.0;
 

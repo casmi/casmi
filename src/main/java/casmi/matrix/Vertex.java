@@ -134,4 +134,9 @@ public class Vertex {
     public static Vertex crossProduct(Vertex a, Vertex b) {
     	return new Vertex(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
     }
+    
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + z + ")"; 
+    }
 }
