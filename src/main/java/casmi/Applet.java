@@ -22,6 +22,7 @@ package casmi;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
@@ -68,10 +69,10 @@ import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
-import casmi.graphics.object.RootObject;
 import casmi.graphics.object.Light;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
+import casmi.graphics.object.RootObject;
 import casmi.io.ImageType;
 import casmi.timeline.Timeline;
 import casmi.timeline.TimelineRender;
@@ -557,18 +558,25 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	// -------------------------------------------------------------------------
 	
 	@Override
-	public void reset(){
+	public void reset() {
 		rootObject.resetObjects();
 	}
 	
 	@Override
-	public void initSet(){
+	public void initSet() {
 		rootObjectInit = true;
 		rootObject = null;
+		
 		initRootOject();
+		
 		this.setup();
-		if(AppletRunner.frame!=null)
-			AppletRunner.frame.setSize(this.getWidth(), this.getHeight());
+		
+		if (AppletRunner.frame != null && runAsApplication) {
+		    JFrame frame = AppletRunner.frame;
+			Insets insets = frame.getInsets();
+            frame.setSize(getWidth() + insets.left + insets.right,
+                          getHeight() + insets.top + insets.bottom);
+		}
 	}
 
 	@Override
