@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.color.Color;
 import casmi.image.Image;
 import casmi.image.ImageMode;
 import casmi.matrix.Vertex;
@@ -602,11 +601,6 @@ public class Texture extends Element implements Renderable, Reset {
 
 	public void setReloadFlag(boolean reloadFlag) {
 	    this.reloadFlag = reloadFlag;
-	}
-	
-	public void setColors(Color[] colors) {
-	    image.setColors(colors);
-	    reloadFlag = true;
 	}
 	
 	public void reloadImage(GL2 gl){

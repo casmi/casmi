@@ -67,7 +67,6 @@ public class Image {
         this.height = height;
         
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-//        Graphics.addTextureImage(this);
     }
     
     /**
@@ -88,8 +87,6 @@ public class Image {
         
         this.width  = img.getWidth();
         this.height = img.getHeight();
-        
-//        Graphics.addTextureImage(this);
     }
     
     /**
@@ -110,8 +107,6 @@ public class Image {
 
          this.width  = img.getWidth();
          this.height = img.getHeight();
-         
-//         Graphics.addTextureImage(this);
     }
     
     /**
@@ -126,8 +121,6 @@ public class Image {
          this.img = copyImage(image);
          this.width  = this.img.getWidth();
          this.height = this.img.getHeight();
-         
-         //Graphics.addTextureImage(this);
     }
     
     /**
