@@ -841,7 +841,8 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 		for (Object obj : objectList) {
 			if (obj instanceof Reset) {
 				Reset el = (Reset)obj;
-				el.reset(g.getGL());
+				if (g != null)
+				    el.reset(g.getGL());
 			} else if (obj instanceof GraphicsObject) {
 				GraphicsObject go = (GraphicsObject)obj;
 				go.resetObjects();
