@@ -139,13 +139,15 @@ public class Rect extends Element implements Renderable {
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         calcRect();
-        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+        
+        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || !isDepthTest())
           	gl.glDisable(GL2.GL_DEPTH_TEST);
+        
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            setTweenParameter(gl);
 
-            if (this.fill) {
+            if (fill) {
                 getSceneFillColor().setup(gl);
                 gl.glBegin(GL2.GL_QUADS);
                 if (!isGradation()) {
@@ -202,20 +204,23 @@ public class Rect extends Element implements Renderable {
                 gl.glEnd();
             }
 
-            if (this.stroke) {
+            if (stroke) {
                 gl.glLineWidth(this.strokeWidth);
                 getSceneStrokeColor().setup(gl);
                 gl.glBegin(GL2.GL_LINE_STRIP);
-                gl.glVertex2d(x1, y1);
-                gl.glVertex2d(x2, y2);
-                gl.glVertex2d(x3, y3);
-                gl.glVertex2d(x4, y4);
-                gl.glVertex2d(x1, y1);
+                {
+                    gl.glVertex2d(x1, y1);
+                    gl.glVertex2d(x2, y2);
+                    gl.glVertex2d(x3, y3);
+                    gl.glVertex2d(x4, y4);
+                    gl.glVertex2d(x1, y1);
+                }
                 gl.glEnd();
             }
         }
         gl.glPopMatrix();
-        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+        
+        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || !isDepthTest())
         	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
     

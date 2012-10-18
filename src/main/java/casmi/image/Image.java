@@ -30,6 +30,7 @@ import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLProfile;
 
+import casmi.exception.CasmiRuntimeException;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.RGBColor;
 
@@ -67,7 +68,6 @@ public class Image {
         this.height = height;
         
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-//        Graphics.addTextureImage(this);
     }
     
     /**
@@ -88,8 +88,6 @@ public class Image {
         
         this.width  = img.getWidth();
         this.height = img.getHeight();
-        
-//        Graphics.addTextureImage(this);
     }
     
     /**
@@ -110,8 +108,6 @@ public class Image {
 
          this.width  = img.getWidth();
          this.height = img.getHeight();
-         
-//         Graphics.addTextureImage(this);
     }
     
     /**
@@ -126,8 +122,6 @@ public class Image {
          this.img = copyImage(image);
          this.width  = this.img.getWidth();
          this.height = this.img.getHeight();
-         
-         //Graphics.addTextureImage(this);
     }
     
     /**
@@ -193,8 +187,9 @@ public class Image {
     public final void loadTexture() {
     	texture = null;
         texture = AWTTextureIO.newTexture(GLProfile.get(GLProfile.GL2), img, true);
-        if (texture == null)
-        	System.out.println("can not load texture!");
+        if (texture == null) {
+            throw new CasmiRuntimeException("Cannot load texture");
+        }
     }
     
     public final void reloadTexture(GL2 gl) {

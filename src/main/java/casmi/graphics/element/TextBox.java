@@ -34,7 +34,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  * @author  T. Takeuchi,Y. Ban
  * 
  */
-public class TextBox extends Element implements Renderable , Reset{
+public class TextBox extends Element implements Renderable, Reset {
 
     private static final boolean DEFAULT_FILL         = false;
     private static final Color   DEFAULT_FILL_COLOR   = new RGBColor(ColorSet.BLACK);
@@ -44,7 +44,6 @@ public class TextBox extends Element implements Renderable , Reset{
     private Text text;
     private double width = 0.0;
     private double height = 0.0;
-    
     
     /**
      * Creates a new TextBox using Text, width and height.
@@ -56,9 +55,7 @@ public class TextBox extends Element implements Renderable , Reset{
      * @param height
      * 				The height of the TextBox.
      */  
-    public TextBox(Text text, 
-            double width, double height) {
- 
+    public TextBox(Text text, double width, double height) {
     	this(text, 0.0, 0.0, 0.0, width, height);
     }
     
@@ -109,32 +106,34 @@ public class TextBox extends Element implements Renderable , Reset{
         this.z      = z;
         this.width  = width;
         this.height = height;
+        
         init();
         format();
-        this.fill = true;
-        this.stroke = true;
     }
     
     @Override
+	public void reset(GL2 gl) {
+	    text.reset(gl);
+		format();
+	}
+    
+    @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-
-        double x1 =  - this.width  / 2.0;
-        double y1 =  + this.height / 2.0;
-        double x2 =  - this.width  / 2.0;
-        double y2 =  - this.height / 2.0;
-        double x3 =  + this.width  / 2.0;
-        double y3 =  - this.height / 2.0;
-        double x4 =  + this.width  / 2.0;
-        double y4 =  + this.height / 2.0;
+        double x1 = - this.width  / 2.0;
+        double y1 =   this.height / 2.0;
+        double x2 = - this.width  / 2.0;
+        double y2 = - this.height / 2.0;
+        double x3 =   this.width  / 2.0;
+        double y3 = - this.height / 2.0;
+        double x4 =   this.width  / 2.0;
+        double y4 =   this.height / 2.0;
         
-       // if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glDisable(GL2.GL_DEPTH_TEST);
-       // }
-
-        this.setTweenParameter(gl);
+        gl.glDisable(GL2.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
         {
+            setTweenParameter(gl);
+            
             // fill
             if (fill) {
                 getSceneFillColor().setup(gl);
@@ -166,26 +165,23 @@ public class TextBox extends Element implements Renderable , Reset{
             // text
             switch (text.getAlign()) {
             case CENTER:
-                text.setX(0);
+                text.setX(0.0);
                 break;
             case RIGHT:
-                text.setX( + this.width / 2.0);
+                text.setX(this.width / 2.0);
                 break;
             case LEFT:
             default:
-                text.setX( - this.width / 2.0);
+                text.setX(-this.width / 2.0);
                 break;
             }
-            text.setY( + this.height / 2.0 - text.getHeight());
-            text.setZ(0);
+            text.setY(this.height / 2.0 - text.getHeight());
+            text.setZ(0.0);
             text.render(gl, glu, width, height);
-
-            }
+        }
         gl.glPopMatrix();
         
-      //  if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-      //  }
+        gl.glEnable(GL2.GL_DEPTH_TEST);
     }
     
     private final void init() {
@@ -195,29 +191,28 @@ public class TextBox extends Element implements Renderable , Reset{
         this.strokeColor = DEFAULT_STROKE_COLOR;
     }
     
-    private final void format() {
-        
+    private final void format() {        
         String[] strs = text.getArrayText();
         TextRenderer tr = text.getRenderer();
         StringBuilder sb = new StringBuilder();
-        try{
-        for (String str : strs) {
-            while (1 < str.length() && width < tr.getBounds(str).getWidth()) {
-                String tmp = str;
-                while (1 < tmp.length() && width < tr.getBounds(tmp).getWidth()) {
-                    tmp = tmp.substring(0, tmp.length() - 1);
+        try {
+            for (String str : strs) {
+                while (1 < str.length() && width < tr.getBounds(str).getWidth()) {
+                    String tmp = str;
+                    while (1 < tmp.length() && width < tr.getBounds(tmp).getWidth()) {
+                        tmp = tmp.substring(0, tmp.length() - 1);
+                    }
+                    sb.append(tmp);
+                    sb.append('\n');
+                    str = str.substring(tmp.length());
                 }
-                sb.append(tmp);
+                sb.append(str);
                 sb.append('\n');
-                str = str.substring(tmp.length());
             }
-            sb.append(str);
-            sb.append('\n');
-        }
+            text.setArrayText(sb.toString());
         } catch (GLException e) {
-        	this.reset = true;
+            reset = true;
         }
-        text.setArrayText(sb.toString());
     }
 
     public final Text getText() {
@@ -234,31 +229,6 @@ public class TextBox extends Element implements Renderable , Reset{
     public final double getX() {
     
         return x;
-    }
-
-    public final void setX(double x) {
-    
-        this.x = x;
-    }
-
-    public final double getY() {
-    
-        return y;
-    }
-
-    public final void setY(double y) {
-    
-        this.y = y;
-    }
-
-    public final double getZ() {
-    
-        return z;
-    }
-
-    public final void setZ(double z) {
-    
-        this.z = z;
     }
 
     public final double getWidth() {
@@ -280,10 +250,5 @@ public class TextBox extends Element implements Renderable , Reset{
     
         this.height = height;
     }
-
-	@Override
-	public void reset(GL2 gl) {
-		format();
-	}
 
 }

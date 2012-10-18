@@ -47,17 +47,18 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 public class Graphics {
 
-	private GL2   gl;
+	private GL2  gl;
 	private GLU  glu;
 	private GLUT glut;
 
 	private int width;
 	private int height;
+	
 	private double sceneAlpha = 1.0;
-
 
     public void render(Renderable r) {
         r.setAlpha(sceneAlpha);
+    
         if (r instanceof GroupRender) {
             GroupRender gr = (GroupRender)r;
             gr.render(this);
@@ -69,10 +70,6 @@ public class Graphics {
         }
 	}
 	
-//	public void render(ObjectRender or, boolean b){
-//		or.render(this,b);
-//	}
-	
 	public void render(TimelineRender tr) {
 		tr.render(this);
 	}
@@ -82,24 +79,24 @@ public class Graphics {
 	}
 	
 
-	public Graphics(GL2 g, GLU Glu, GLUT Glut, int width, int height) {
-		this.gl = g;
-		this.glu = Glu;
-		this.glut = Glut;
+	public Graphics(GL2 gl, GLU glu, GLUT glut, int width, int height) {
+		this.gl   = gl;
+		this.glu  = glu;
+		this.glut = glut;
 
-		this.width = width;
+		this.width  = width;
 		this.height = height;
 	}
 
-	public GL2 getGL(){
+	public GL2 getGL() {
 	    return gl;
 	}
 	
-	public GLU getGLU(){
+	public GLU getGLU() {
 	    return glu;
 	}
 	
-	public GLUT getGLUT(){
+	public GLUT getGLUT() {
 	    return glut;
 	}
 	
@@ -247,22 +244,22 @@ public class Graphics {
 	/**
 	 * Applies the transformation matrix.
 	 */
-	public void applyMatrix(double n[]) {
+	public void applyMatrix(double[] n) {
 		gl.glMultMatrixd(java.nio.DoubleBuffer.wrap(n));
 	}
 	
-	public void applyMatrix(DoubleBuffer n){
+	public void applyMatrix(DoubleBuffer n) {
 		gl.glMultMatrixd(n);
 	}
 
 	/**
 	 * Loads the transformation matrix.
 	 */
-	public void loadMatrix(double n[]) {
+	public void loadMatrix(double[] n) {
 		gl.glLoadMatrixd(java.nio.DoubleBuffer.wrap(n));
 	}
 	
-	public void loadMatrix(DoubleBuffer n){
+	public void loadMatrix(DoubleBuffer n) {
 		gl.glLoadMatrixd(n);
 	}
 
