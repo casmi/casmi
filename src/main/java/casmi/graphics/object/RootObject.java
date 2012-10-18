@@ -501,7 +501,8 @@ public class RootObject extends GraphicsObject {
 						if (selectionIndex == selectedIndex) {
 							e.callMouseOverCallback(true);
 						//	if(mouseEventList.size()!=0){
-								e.callMouseClickCallback(mouseEvent);
+							e.callMouseClickCallback(mouseEvent);
+						//
 						//		e.callMouseClickCallback(mouseEventList.get(0));
 						//		mouseEventList.remove(0);
 						//	}
@@ -524,7 +525,7 @@ public class RootObject extends GraphicsObject {
 		return selectionIndex;
 	}
 
-	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
+	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {	
 		for (Object obj : objectList) {
 			if (obj instanceof GraphicsObject) {
 				GraphicsObject go = (GraphicsObject)obj;

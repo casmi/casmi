@@ -104,6 +104,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private final Mouse     mouse     = new Mouse();
     private final Keyboard  keyboard  = new Keyboard();    
     private final PopupMenu popupMenu = new PopupMenu(this);
+    private MouseButton mouseButton;
+    private MouseEvent mouseEvent;
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -120,7 +122,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	private boolean timeline = false;
 	private Timeline rootTimeline;
-	private TimelineRender rootTimelineRender;
+	//private TimelineRender rootTimelineRender;
 
 	private boolean rootObjectInit = false;
 	private RootObject rootObject;
@@ -314,49 +316,46 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    
 	    switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
-		    mouse.setButtonPressed(MouseButton.LEFT, true);
-			mouseEvent(MouseEvent.PRESSED, MouseButton.LEFT);
+			mouseButton = MouseButton.LEFT;
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
-		    mouse.setButtonPressed(MouseButton.MIDDLE, true);
-			mouseEvent(MouseEvent.PRESSED, MouseButton.MIDDLE);
+			mouseButton = MouseButton.MIDDLE;
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
-		    mouse.setButtonPressed(MouseButton.RIGHT, true);
-			mouseEvent(MouseEvent.PRESSED, MouseButton.RIGHT);
+			mouseButton = MouseButton.RIGHT;
 			break;
 		}
+	    mouse.setButtonPressed(mouseButton, true);
+		mouseEvent(MouseEvent.PRESSED, mouseButton);
 		
 		rootObject.setMouseEvent(MouseEvent.PRESSED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
 		}
 	}
 	
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 		mouse.setReleased(true);
-	    
 	    switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
-		    mouse.setButtonPressed(MouseButton.LEFT, false);
-			mouseEvent(MouseEvent.RELEASED, MouseButton.LEFT);
+			mouseButton = MouseButton.LEFT;
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
-		    mouse.setButtonPressed(MouseButton.MIDDLE, false);
-			mouseEvent(MouseEvent.RELEASED, MouseButton.MIDDLE);
+			mouseButton = MouseButton.MIDDLE;
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
-		    mouse.setButtonPressed(MouseButton.RIGHT, true);
-			mouseEvent(MouseEvent.RELEASED, MouseButton.RIGHT);
+			mouseButton = MouseButton.RIGHT;
 			break;
 		}
-		
+
+	    mouse.setButtonPressed(mouseButton, false);
+	    mouseEvent(MouseEvent.RELEASED, mouseButton);
 		rootObject.setMouseEvent(MouseEvent.RELEASED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
 		}
 	}
 
@@ -366,26 +365,35 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
+			mouseButton = MouseButton.LEFT;
 			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
+			mouseEvent = MouseEvent.CLICKED;
 			if((System.currentTimeMillis() - mouse.getMouseClickLeftTime())<300){
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
+				mouseEvent = MouseEvent.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
+			mouseButton = MouseButton.MIDDLE;
 			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
+			mouseEvent = MouseEvent.CLICKED;
 			if((System.currentTimeMillis() - mouse.getMouseClickMiddleTime())<300){
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
+				mouseEvent = MouseEvent.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
+			mouseButton = MouseButton.RIGHT;
 			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
+			mouseEvent = MouseEvent.CLICKED;
 			if((System.currentTimeMillis() - mouse.getMouseClickRightTime())<300){
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
+				mouseEvent = MouseEvent.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
@@ -394,7 +402,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject.setMouseEvent(MouseEvent.CLICKED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.CLICKED);
+			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
 		}
 	}
 
@@ -405,7 +413,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		mouse.setEntered(true);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
 		}
 	}
 
@@ -416,34 +424,33 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		mouse.setEntered(false);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
 		}
 	}
 
 	@Override
 	public void mouseDragged(java.awt.event.MouseEvent e) {
 		mouse.setDragged(true);
-	    
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
-		    mouse.setButtonPressed(MouseButton.LEFT, true);
-			mouseEvent(MouseEvent.DRAGGED, MouseButton.LEFT);
+			mouseButton = MouseButton.LEFT;
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
-		    mouse.setButtonPressed(MouseButton.MIDDLE, true);
-			mouseEvent(MouseEvent.DRAGGED, MouseButton.MIDDLE);
+			mouseButton = MouseButton.MIDDLE;
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
-		    mouse.setButtonPressed(MouseButton.RIGHT, true);
-			mouseEvent(MouseEvent.DRAGGED, MouseButton.RIGHT);
+			mouseButton = MouseButton.RIGHT;
 			break;
 		}
 		
+
+	    mouse.setButtonPressed(mouseButton, true);
+		mouseEvent(MouseEvent.DRAGGED, mouseButton);
 		rootObject.setMouseEvent(MouseEvent.DRAGGED);
-		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
 		}
+
 		
 		updateMouse();
 	}
@@ -457,7 +464,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject.setMouseEvent(MouseEvent.MOVED);
 		
 		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED);
+			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
 		}
 		
 		updateMouse();
@@ -828,8 +835,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     
    public void addObject(Object obj) {
       // addObject(0, obj);
-	   if(rootObjectInit)
+	   if(rootObjectInit){
 		   rootObject.add(obj);
+		   if(obj instanceof TimelineRender){
+			   rootTimeline = (Timeline)obj;
+			   timeline = true;
+			   rootTimeline.setKeyboard(keyboard);
+			   rootTimeline.setMouse(mouse);
+			   rootTimeline.setPopup(popupMenu);
+		   }
+	   }
    }
    
    public void addObject(int index, Object obj) {
@@ -839,15 +854,19 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
            throw new CasmiRuntimeException("The added object is not rendarable");              
        }
 
+	   if(obj instanceof TimelineRender){
+		   rootTimeline = (Timeline)obj;
+		   timeline = true;
+	   }
        // NOTE: ???
-       if (rootObject instanceof TimelineRender) {
+      /* if (rootObject instanceof TimelineRender) {
            timeline = true;
            rootTimelineRender = (TimelineRender)rootObject;
            if (rootTimelineRender instanceof Timeline) {
                rootTimeline = (Timeline)rootTimelineRender;
                rootTimeline.setApplet(this);
            }
-       }
+       }*/
    }
    
    public void addObject(List<Object> objectList) {

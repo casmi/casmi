@@ -49,7 +49,7 @@ public class Rect extends Element implements Renderable {
     private Color startColor;
     private Color endColor;
     private Color gradationColor = new RGBColor(0.0, 0.0, 0.0);
-    private GradationMode mode = GradationMode.HORIZONTAL;
+    private GradationMode2D mode = GradationMode2D.HORIZONTAL;
 
     /**
      * Creates a new Rect object using width and height.
@@ -229,9 +229,9 @@ public class Rect extends Element implements Renderable {
      * @param color2
      * 					The color for gradation.
      * 
-     * @see casmi.graphics.element.GradationMode
+     * @see casmi.graphics.element.GradationMode2D
      */
-    public void setGradationColor(GradationMode mode, Color color1, Color color2) {
+    public void setGradationColor(GradationMode2D mode, Color color1, Color color2) {
         setGradation(true);
         if (startColor == null || endColor == null) {
             startColor = new RGBColor(0.0, 0.0, 0.0);
@@ -252,9 +252,9 @@ public class Rect extends Element implements Renderable {
      * @param colorSet2
      * 					The colorSet for gradation.
      * 
-     * @see casmi.graphics.element.GradationMode
+     * @see casmi.graphics.element.GradationMode2D
      */
-	public void setGradationColor(GradationMode mode, ColorSet colorSet1, ColorSet colorSet2){
+	public void setGradationColor(GradationMode2D mode, ColorSet colorSet1, ColorSet colorSet2){
 	    setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
 	}
     /**
@@ -263,7 +263,7 @@ public class Rect extends Element implements Renderable {
      * @param mode
      * 					The mode of gradation.
      */
-	public void setGradationMode(GradationMode mode) {
+	public void setGradationMode(GradationMode2D mode) {
 		this.mode = mode;
 	}
 }

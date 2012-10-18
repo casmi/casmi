@@ -21,14 +21,22 @@ package casmi.timeline;
 
 import java.nio.DoubleBuffer;
 
+import javax.media.opengl.GL2;
+
+import casmi.Keyboard;
+import casmi.Mouse;
+import casmi.MouseButton;
+import casmi.PopupMenu;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
+import casmi.graphics.element.Reset;
 import casmi.graphics.group.Group;
 import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
+import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.RootObject;
 import casmi.graphics.object.Light;
 import casmi.graphics.object.Ortho;
@@ -43,8 +51,9 @@ abstract public class Scene {
 
     private String idName;
     private double time;
-    private double sceneA = 1.0;
+    private double sceneA = 0.0;
     private boolean selectionBuffer = false;
+    private Timeline rootTimeline;
 
     private RootObject rootObject = new RootObject();
 
@@ -60,6 +69,10 @@ abstract public class Scene {
     public Scene(String id, double time) {
     	setIdName(id);
     	setTime(time);
+    }
+    
+    public void setRootTimeline(Timeline timeline) {
+    	this.rootTimeline = timeline;
     }
 
     public String getIdName() {
@@ -77,6 +90,7 @@ abstract public class Scene {
     public void setTime(double time) {
         this.time = time;
     }
+    
 
     public double getSceneA() {
         return sceneA;
@@ -265,13 +279,7 @@ abstract public class Scene {
         rootObject.setBackGroundColor(new BackGround(colorset));
     }
 
-    public void keyEvent(casmi.KeyEvent e) {
 
-    }
-
-    public void mouseEvent(casmi.MouseEvent e) {
-
-    }
     
     public RootObject getObjects(){
     	return rootObject;
@@ -286,5 +294,102 @@ abstract public class Scene {
 		}
 		
 	}
+	
+	public void reset(GL2 gl){
+		for (Object obj : rootObject.getObjectList()) {
+			if (obj instanceof Reset) {
+				Reset el = (Reset)obj;
+				el.reset(gl);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.resetObjects();
+			}
+		}
+	}
+	
+	
+	
+
+	public int getMouseWheelRotation() {
+		return rootTimeline.getMouse().getWheelRotation();
+	}
+	
+	public Mouse getMouse() {
+	    return rootTimeline.getMouse();
+	}
+
+	public int getPreMouseX() {
+		return rootTimeline.getMouse().getPrvX();
+	}
+
+	public int getPreMouseY() {
+		return rootTimeline.getMouse().getPrvY();
+	}
+
+	public int getMouseX() {
+		return rootTimeline.getMouse().getX();
+	}
+
+	public int getMouseY() {
+		return rootTimeline.getMouse().getY();
+	}
+
+	public boolean isMousePressed() {
+		return rootTimeline.getMouse().isPressed();
+	}
+	
+	public boolean isMousePressed(MouseButton button) {
+	    return rootTimeline.getMouse().isButtonPressed(button);
+	}
+
+	public boolean isMouseClicked() {
+		return rootTimeline.getMouse().isClicked();
+	}
+
+	public boolean isMouseEntered() {
+		return rootTimeline.getMouse().isEntered();
+	}
+
+	public boolean isMouseExited() {
+		return rootTimeline.getMouse().isExited();
+	}
+
+	public boolean isMouseReleased() {
+		return rootTimeline.getMouse().isReleased();
+	}
+	
+	public Keyboard getKeyboard() {
+	    return rootTimeline.getKeyboard();
+	}
+	
+	public char getKey() {
+		return rootTimeline.getKeyboard().getKey();
+	}
+	
+	public int getKeyCode() {
+	    return rootTimeline.getKeyboard().getKeyCode();
+	}
+	
+	public boolean isKeyPressed() {
+		return rootTimeline.getKeyboard().isPressed();
+	}
+
+	public boolean isKeyReleased() {
+		return rootTimeline.getKeyboard().isReleased();
+	}
+
+	public boolean isKeyTyped() {
+		return rootTimeline.getKeyboard().isTyped();
+	}
+	
+	// PopupMenu
+	
+	public PopupMenu getPopupMenu() {
+	    return rootTimeline.getPopup();
+	}
+	
+    abstract public void keyEvent(casmi.KeyEvent e);
+
+    abstract public void mouseEvent(casmi.MouseEvent e,  MouseButton b);
 
 }

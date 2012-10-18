@@ -26,8 +26,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import javax.media.opengl.GL2;
+
 import casmi.Applet;
+import casmi.Keyboard;
+import casmi.Mouse;
+import casmi.PopupMenu;
 import casmi.graphics.Graphics;
+import casmi.graphics.element.Reset;
 import casmi.parser.CSV;
 
 /**
@@ -38,9 +44,9 @@ import casmi.parser.CSV;
  * 
  * @see Scene
  */
-public class Timeline implements TimelineRender {
+public class Timeline implements TimelineRender, Reset {
 
-    private int nowSceneID = 0, nextSceneID = 1;
+    private int nowSceneID = 0, nextSceneID = 1, nowId = 0;
     private int nowDissolveID = 0, nextDissolveID = 1;
     private double preDhalf = 0.0, nextDhalf = 0.0;
     private boolean endScene = false;
@@ -53,6 +59,10 @@ public class Timeline implements TimelineRender {
     private List<Dissolve> disolveList;
     private Timer timer;
     private TimerTask task = new SceneTask();
+    
+    private Mouse mouse;
+    private Keyboard keyboard;
+    private PopupMenu popup;
 
     class SceneTask extends TimerTask {
 
@@ -157,7 +167,6 @@ public class Timeline implements TimelineRender {
         setEndScene(true);
     }
 
-    // TODO: Rename! Can't understand!
     private final void endDisolve() {
         preDhalf = disolveList.get(nowDissolveID).getTime() / 2;
         nextDhalf = disolveList.get(nextDissolveID).getTime() / 2;
@@ -190,6 +199,7 @@ public class Timeline implements TimelineRender {
     }
 
     public void appendScene(Scene s) {
+    	s.setRootTimeline(this);
         this.sceneList.add(s);
     }
 
@@ -279,7 +289,10 @@ public class Timeline implements TimelineRender {
         } else {
             dissolveNow = System.currentTimeMillis();
             double tmp = (dissolveNow - dissolveStart) / (disolveList.get(nowDissolveID).getTime() * 1000);
-         
+            if(tmp>=0.5)
+            	nowId = nextSceneID;
+            else 
+            	nowId = nowSceneID;
             switch (disolveList.get(nowDissolveID).mode) {
             default:
             case CROSS:
@@ -308,7 +321,7 @@ public class Timeline implements TimelineRender {
     }
 
     public Scene getScene() {
-        return sceneList.get(nowSceneID);
+        return sceneList.get(nowId);
     }
 
     public Scene getScene(int index) {
@@ -327,4 +340,35 @@ public class Timeline implements TimelineRender {
         this.endScene = endScene;
         return endScene;
     }
+    
+    public void setKeyboard(Keyboard keyboard){
+    	this.keyboard = keyboard;
+    }
+    
+    public void setMouse(Mouse mouse){
+    	this.mouse = mouse;
+    }
+    
+    public void setPopup(PopupMenu popup){
+    	this.popup = popup;
+    }
+    
+    protected Keyboard getKeyboard(){
+    	return this.keyboard;
+    }
+    
+    public Mouse getMouse(){
+    	return this.mouse;
+    }
+    
+    public PopupMenu getPopup(){
+    	return this.popup;
+    }
+
+
+	@Override
+	public void reset(GL2 gl) {
+		this.getScene().reset(gl);
+		
+	}
 }

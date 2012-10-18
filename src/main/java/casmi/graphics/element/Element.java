@@ -29,7 +29,7 @@ import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
-import casmi.graphics.object.RootObject;
+import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.Mask;
 import casmi.matrix.Vertex;
 
@@ -490,8 +490,8 @@ abstract public class Element implements Cloneable, Renderable {
 		}
 		mouseEventCallbacks.add(callback);
 		
-		if(this instanceof RootObject){
-			RootObject g = (RootObject)this;
+		if(this instanceof GraphicsObject){
+			GraphicsObject g = (GraphicsObject)this;
 			for (Object obj : g.getObjectList()) {
 				if(obj instanceof Element)
 					((Element) obj).addMouseEventCallback(callback);
@@ -623,8 +623,8 @@ abstract public class Element implements Cloneable, Renderable {
 	public void setDepthTest(boolean depthTest) {
 		this.depthTest = depthTest;
 		
-		if(this instanceof RootObject){
-			RootObject g = (RootObject)this;
+		if(this instanceof GraphicsObject){
+			GraphicsObject g = (GraphicsObject)this;
 			for (Object obj : g.getObjectList()) {
 				if(obj instanceof Element)
 					((Element) obj).setDepthTest(depthTest);
