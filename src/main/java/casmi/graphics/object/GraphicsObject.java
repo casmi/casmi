@@ -611,10 +611,6 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 		this.selectionbuff = selectionbuff;
 	}
 
-	public int getSelectionbuffsize() {
-		return selectionBufSize;
-	}
-
 
 	public List<Integer> getSelectionList() {
 		return selectionList;

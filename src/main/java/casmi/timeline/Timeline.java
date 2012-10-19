@@ -50,7 +50,7 @@ public class Timeline implements TimelineRender, Reset {
     private int nowDissolveID = 0, nextDissolveID = 1;
     private double preDhalf = 0.0, nextDhalf = 0.0;
     private boolean endScene = false;
-    private boolean dissolve = false, nextDissolve = false, preDissolve = false;
+    private boolean dissolve = false, nextDissolve = false, preDissolve = false, nowDissolve = false;
     private long dissolveStart, dissolveNow;
     private Applet baseApplet;
 
@@ -247,6 +247,7 @@ public class Timeline implements TimelineRender, Reset {
     }
 
     public void render(Graphics g) {
+
         if (endScene) {
             endScene = false;
             task.cancel();
@@ -287,18 +288,24 @@ public class Timeline implements TimelineRender, Reset {
             dissolveStart = System.currentTimeMillis();
             
         } else {
+        	nowDissolve = true;
             dissolveNow = System.currentTimeMillis();
             double tmp = (dissolveNow - dissolveStart) / (disolveList.get(nowDissolveID).getTime() * 1000);
             if(tmp>=0.5)
             	nowId = nextSceneID;
             else 
             	nowId = nowSceneID;
+            if(tmp>1.0){
+            	nowDissolve = false;
+            	tmp = 1.0;
+            }
             switch (disolveList.get(nowDissolveID).mode) {
             default:
             case CROSS:
             	sceneList.get(nowSceneID).setDepthTest(false);
                 sceneList.get(nowSceneID).setSceneA((1.0 - tmp), g);
-                sceneList.get(nowSceneID).drawscene(g);
+                if(nowDissolve)
+                	sceneList.get(nowSceneID).drawscene(g);
                 sceneList.get(nextSceneID).setSceneA(tmp, g);
                 sceneList.get(nextSceneID).drawscene(g);
                 break;
@@ -363,6 +370,10 @@ public class Timeline implements TimelineRender, Reset {
     
     public PopupMenu getPopup(){
     	return this.popup;
+    }
+    
+    public boolean isNowDissolve() {
+    	return nowDissolve;
     }
 
 
