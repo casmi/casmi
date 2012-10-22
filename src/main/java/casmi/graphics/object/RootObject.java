@@ -385,9 +385,6 @@ public class RootObject extends GraphicsObject {
 				this.setDepthTest(true);
 			}
 			
-			//if(this.isDepthTest())
-			//el.setDepthTest(false);
-			
 			g.pushMatrix();
 			{
 			    if (el.isTween()) {
@@ -445,28 +442,9 @@ public class RootObject extends GraphicsObject {
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
-//stuck selectionID of elements in a group
-//					for (int j = sIndex; j < selectionIndex; j++) {
-//						o.getSelectionList().add(j);
-//
-//					}
+
 					if (o.getMouseOverCallback() != null) {
 
-//						s = 0;
-//						for (int j = 0; j < o.getSelectionList().size(); j++) {
-//							if (o.getSelectionList().get(j) == selectedIndex) {
-//								s += 1;
-//							}
-//						}
-
-//						if (s > 0) {
-//							o.callMouseOverCallback(true);
-//						} else {
-//							o.setMouseover(false);
-//						}
-//						if (o.isMouseover() == false
-//								&& o.isPreMouseover() == true)
-//							o.callMouseOverCallback(false);
 					}
 
 				}
@@ -500,12 +478,8 @@ public class RootObject extends GraphicsObject {
 						}
 						if (selectionIndex == selectedIndex) {
 							e.callMouseOverCallback(true);
-						//	if(mouseEventList.size()!=0){
 							e.callMouseClickCallback(mouseEvent);
-						//
-						//		e.callMouseClickCallback(mouseEventList.get(0));
-						//		mouseEventList.remove(0);
-						//	}
+
 						} else {
 							e.setMouseover(false);
 						}

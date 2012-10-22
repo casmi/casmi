@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import javax.media.opengl.GL2;
 
@@ -35,6 +34,9 @@ import casmi.PopupMenu;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
 import casmi.parser.CSV;
+
+import java.util.HashMap;  
+import java.util.Map;  
 
 /**
  * Timeline class.You can use time line with Scene class.
@@ -47,81 +49,46 @@ import casmi.parser.CSV;
 public class Timeline implements TimelineRender, Reset {
 
     private int nowSceneID = 0, nextSceneID = 1, nowId = 0;
-    private int nowDissolveID = 0, nextDissolveID = 1;
     private double preDhalf = 0.0, nextDhalf = 0.0;
     private boolean endScene = false;
-    private boolean dissolve = false, nextDissolve = false, preDissolve = false, nowDissolve = false;
+    private boolean dissolve = false, nowDissolve = false;
     private long dissolveStart, dissolveNow;
     private Applet baseApplet;
+    private double nowDissolveTime;
 
     private List<Scene> sceneList;
     private List<Scene> tmpSceneList;
-    private List<Dissolve> disolveList;
     private Timer timer;
     private TimerTask task = new SceneTask();
     
     private Mouse mouse;
     private Keyboard keyboard;
     private PopupMenu popup;
+    private boolean firstCallback = true;
 
+    private Map<String, Integer> map = new HashMap<String, Integer>();
+    
     class SceneTask extends TimerTask {
 
         @Override
         public void run() {
-            if (!nextDissolve) {
-                goNextScene();
-                preDissolve = nextDissolve;
-                try {
-                    if (disolveList.get(nowDissolveID).now == nowSceneID)
-                        nextDissolve = true;
-                } catch (java.lang.IndexOutOfBoundsException e) {
-                    nextDissolve = false;
-                }
+            if (!sceneList.get(nowSceneID).isHasDissolve()) {
+                goNextSceneWithCallback();
+                
             } else {
                 if (!dissolve) {
                     goDissolve();
                 } else {
+                    sceneList.get(nowSceneID).ExitedSceneCallback();
                     endDisolve();
-                    preDissolve = nextDissolve;
                 }
             }
-        }
-    }
-
-    class Dissolve {
-
-        private int now, next;
-        private double time;
-
-        private DissolveMode mode = DissolveMode.CROSS;
-
-        public Dissolve(int now, int next, double time) {
-            this.now = now;
-            this.next = next;
-            this.setTime(time);
-        }
-
-        public double getTime() {
-            return time;
-        }
-
-        public void setTime(double time) {
-            this.time = time;
-        }
-
-        int getNow() {
-            return now;
-        }
-
-        int getNext() {
-            return next;
         }
     }
 
     public Timeline() {
         sceneList = new ArrayList<Scene>();
         tmpSceneList = new ArrayList<Scene>();
-        disolveList = new ArrayList<Dissolve>();
     }
 
 
@@ -135,11 +102,7 @@ public class Timeline implements TimelineRender, Reset {
             while ((test = csv.readLine()) != null) {
                 name = test[0];
                 time = Double.valueOf(test[1]).doubleValue();
-               if(name == "blackDissolve")
-            	   appendDisolve(time, DissolveMode.BLACK);
-               else if(name == "crossDissolve")
-            	   appendDisolve(time, DissolveMode.CROSS);
-               else{
+               {
             	   for(Scene s : tmpSceneList){
             		   if(s.getIdName() == name){
             			   s.setTime(time);
@@ -157,6 +120,7 @@ public class Timeline implements TimelineRender, Reset {
     }
 
     public void goNextScene() {
+    	firstCallback = true;
         nowSceneID = nextSceneID;
         nextSceneID++;
         try {
@@ -165,20 +129,28 @@ public class Timeline implements TimelineRender, Reset {
             nextSceneID = 0;
         }
         setEndScene(true);
+        
+    	if(!sceneList.get(nowSceneID).isHasDissolve())
+    		nextDhalf = 0;
+    	else
+    		nextDhalf = sceneList.get(nowSceneID).getDissolve().getTime() / 2.0;
+
+        task.cancel();
+        task = null;
+        task = new SceneTask();
+        if(sceneList.get(nowSceneID).getTime()>0)
+        	timer.schedule(task, (long)(1000*((sceneList.get(nowSceneID).getTime() - preDhalf - nextDhalf))));
+        preDhalf = 0;
+        nextDhalf = 0;
     }
 
     private final void endDisolve() {
-        preDhalf = disolveList.get(nowDissolveID).getTime() / 2;
-        nextDhalf = disolveList.get(nextDissolveID).getTime() / 2;
-        nowDissolveID = nextDissolveID;
-        nextDissolveID++;
-        dissolve = false;
+    	if(!sceneList.get(nowSceneID).isHasDissolve())
+    		preDhalf = 0;
+    	else
+    		preDhalf = sceneList.get(nowSceneID).getDissolve().getTime() / 2.0;
 
-        try {
-            disolveList.get(nextDissolveID);
-        } catch (java.lang.IndexOutOfBoundsException e) {
-            nextDissolveID = 0;
-        }
+        dissolve = false;
 
         goNextScene();
 
@@ -187,101 +159,84 @@ public class Timeline implements TimelineRender, Reset {
     private final void goDissolve() {
         dissolve = true;
         setEndScene(true);
+
+        task.cancel();
+        task = null;
+        task = new SceneTask();
+        timer.schedule(task, (long)(1000*(sceneList.get(nowSceneID).getDissolve().getTime())));
+        if(sceneList.get(nowSceneID).getDissolve().getMode()==DissolveMode.CROSS)
+        	sceneList.get(nextSceneID).EnteredSceneCallback();
     }
 
-    public void setNextScene(int i) {
-        nextSceneID = i;
+    public void goNextSceneWithCallback() {
+        sceneList.get(nowSceneID).ExitedSceneCallback();
+        sceneList.get(nextSceneID).EnteredSceneCallback();
+        goNextScene();
+    }
+    
+    public void goNextScene(String idName) {
+        nextSceneID = this.map.get(idName);
         try {
             sceneList.get(nextSceneID);
         } catch (java.lang.IndexOutOfBoundsException e) {
             nextSceneID = nowSceneID;
         }
+        if(!sceneList.get(nowSceneID).isHasDissolve())
+        	goNextSceneWithCallback();
+        else
+        	goDissolve();
+    }
+    
+    public void goNextScene(String idName, DissolveMode mode, double time) {
+        nextSceneID = this.map.get(idName);
+        try {
+            sceneList.get(nextSceneID);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            nextSceneID = nowSceneID;
+        }
+        sceneList.get(nowSceneID).setDissolve(new Dissolve(mode, time));
+        sceneList.get(nowSceneID).setHasDissolve(true);
+        goDissolve();
     }
 
     public void appendScene(Scene s) {
     	s.setRootTimeline(this);
         this.sceneList.add(s);
+        this.map.put(s.getIdName(), this.sceneList.size()-1);
+    }
+    
+    public void appendScene(Scene s, DissolveMode mode, double dissolveTime) {
+    	s.setRootTimeline(this);
+        this.sceneList.add(s);
+        this.map.put(s.getIdName(), this.sceneList.size()-1);
+        s.setDissolve(new Dissolve(mode, dissolveTime));
+        s.setHasDissolve(true);
     }
 
     public void removeScene(int i) {
         this.sceneList.remove(i);
     }
-
-    public void appendDissolve(double time) {
-        int nowID = this.sceneList.size() - 1;
-        Dissolve dissolve = new Dissolve(nowID, nowID + 1, time);
-        this.disolveList.add(dissolve);
-    }
-
-    public void appendDisolve(double time, DissolveMode mode) {
-        int nowID = this.sceneList.size() - 1;
-        Dissolve dissolve = new Dissolve(nowID, nowID + 1, time);
-        dissolve.mode = mode;
-        this.disolveList.add(dissolve);
-    }
-
-    public void setDisolve(int now, int next, double time) {
-        Dissolve dissolve;
-        dissolve = new Dissolve(now, next, time);
-        this.disolveList.add(dissolve);
+    
+    public void removeScene(String idName) {
+    	this.sceneList.remove(this.map.get(idName));
     }
 
     public void startTimer() {
         timer = new Timer(true);
-        long halfd;
+        double halfd = 0;
         try {
-            if (disolveList.get(nowSceneID).now == nowSceneID) {
-                halfd = (long)disolveList.get(nowSceneID).getTime() / 2;
-                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime() - halfd));
-                nextDissolve = true;
-            } else {
-                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime()));
-            }
+            if (sceneList.get(nowSceneID).isHasDissolve()) 
+                halfd = (sceneList.get(nowSceneID).getDissolve().getTime() / 2.0);
+            if(sceneList.get(nowSceneID).getTime()>0)
+            	timer.schedule(task, (long)(1000*(sceneList.get(nowSceneID).getTime() - halfd)));
+            
         } catch (java.lang.IndexOutOfBoundsException e) {
-            timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime()));
-        }
-
-        if (disolveList.size() == 1) {
-            nextDissolveID = nowDissolveID;
+        	if(sceneList.get(nowSceneID).getTime()>0)
+        		timer.schedule(task, (long)(1000*(sceneList.get(nowSceneID).getTime())));
         }
     }
 
-    public void render(Graphics g) {
-
-        if (endScene) {
-            endScene = false;
-            task.cancel();
-            task = null;
-
-            if (task == null)
-                task = new SceneTask();
-
-            if (!nextDissolve) {
-                timer.schedule(task, TimeUnit.SECONDS.toMillis((long)sceneList.get(nowSceneID).getTime()));
-            } else {
-                if (!dissolve) {
-                    timer.schedule(task, TimeUnit.SECONDS.toMillis((long)disolveList.get(nowDissolveID).getTime()));
-                } else {
-                    try {
-                        if (disolveList.get(nowDissolveID).now == nowSceneID) {
-                            nextDissolve = true;
-                        } else {
-                            nextDissolve = false;
-                        }
-                    } catch (java.lang.IndexOutOfBoundsException e) {
-                        nextDissolve = false;
-                    }
-
-                    if (!nextDissolve) {
-                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sceneList.get(nowSceneID).getTime() - preDhalf)));
-                    } else if (!preDissolve) {
-                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sceneList.get(nowSceneID).getTime() - nextDhalf)));
-                    } else {
-                        timer.schedule(task, TimeUnit.SECONDS.toMillis((long)(sceneList.get(nowSceneID).getTime() - preDhalf - nextDhalf)));
-                    }
-                }
-            }
-        }
+    public int render(Graphics g) {
 
         if (!dissolve) {
             sceneList.get(nowSceneID).drawscene(g);
@@ -290,37 +245,47 @@ public class Timeline implements TimelineRender, Reset {
         } else {
         	nowDissolve = true;
             dissolveNow = System.currentTimeMillis();
-            double tmp = (dissolveNow - dissolveStart) / (disolveList.get(nowDissolveID).getTime() * 1000);
-            if(tmp>=0.5)
+            nowDissolveTime = 0;
+            if(sceneList.get(nowSceneID).isHasDissolve())
+            	nowDissolveTime = (dissolveNow - dissolveStart) / ((sceneList.get(nowSceneID).getDissolve().getTime() * 1000));
+            else
+            	return 0;
+            if(nowDissolveTime>=0.5)
             	nowId = nextSceneID;
             else 
             	nowId = nowSceneID;
-            if(tmp>1.0){
+            if(nowDissolveTime>1.0){
             	nowDissolve = false;
-            	tmp = 1.0;
+            	nowDissolveTime = 1.0;
             }
-            switch (disolveList.get(nowDissolveID).mode) {
+            if(nowId==nextSceneID && sceneList.get(nowSceneID).getDissolve().getMode()==DissolveMode.BLACK && firstCallback){
+            	sceneList.get(nextSceneID).EnteredSceneCallback();
+            	firstCallback = false;
+            }
+            
+            switch (sceneList.get(nowSceneID).getDissolve().getMode()) {
             default:
             case CROSS:
             	sceneList.get(nowSceneID).setDepthTest(false);
-                sceneList.get(nowSceneID).setSceneA((1.0 - tmp), g);
+                sceneList.get(nowSceneID).setSceneA((1.0 - nowDissolveTime), g);
                 if(nowDissolve)
                 	sceneList.get(nowSceneID).drawscene(g);
-                sceneList.get(nextSceneID).setSceneA(tmp, g);
+                sceneList.get(nextSceneID).setSceneA(nowDissolveTime, g);
                 sceneList.get(nextSceneID).drawscene(g);
                 break;
             case BLACK:
-                if (tmp <= 0.5) {
-                    sceneList.get(nowSceneID).setSceneA((1.0 - tmp * 2), g);
+                if (nowDissolveTime <= 0.5) {
+                    sceneList.get(nowSceneID).setSceneA((1.0 - nowDissolveTime * 2), g);
                     sceneList.get(nowSceneID).drawscene(g);
                 }
-                if (tmp >= 0.5) {
-                    sceneList.get(nextSceneID).setSceneA(((tmp - 0.5) * 2), g);
+                if (nowDissolveTime >= 0.5) {
+                    sceneList.get(nextSceneID).setSceneA(((nowDissolveTime - 0.5) * 2), g);
                     sceneList.get(nextSceneID).drawscene(g);
                 }
                 break;
             }
         }
+        return 0;
     }
 
     public boolean isEndScene() {
@@ -381,5 +346,19 @@ public class Timeline implements TimelineRender, Reset {
 	public void reset(GL2 gl) {
 		this.getScene().reset(gl);
 		
+	}
+
+
+	public void setSize(int width, int height) {
+		this.getApplet().setSize(width, height);
+	}
+
+
+	public int getWidth() {
+		return this.getApplet().getWidth();
+	}
+	
+	public int getHeight() {
+		return this.getApplet().getHeight();
 	}
 }

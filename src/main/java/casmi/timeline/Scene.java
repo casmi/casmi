@@ -29,6 +29,10 @@ import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
 import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.RootObject;
+import casmi.tween.Tween;
+import casmi.tween.TweenManager;
+import casmi.tween.TweenParallelGroup;
+import casmi.tween.TweenSerialGroup;
 
 /**
  * Scene class for time line animation.
@@ -40,7 +44,10 @@ abstract public class Scene extends RootObject {
     private String idName;
     private double time;
     private double sceneA = 0.0;
+    private boolean hasDissolve = false;
     private Timeline rootTimeline;
+    private Dissolve dissolve;
+	private TweenManager tweenManager;
 
     public Scene(String id) {
     	super();
@@ -52,6 +59,14 @@ abstract public class Scene extends RootObject {
     	super();
     	setIdName(id);
     	setTime(time);
+    }
+    
+    public Scene(String id, double time, DissolveMode mode, double dTime){
+    	super();
+    	setIdName(id);
+    	setTime(time);
+    	dissolve = new Dissolve(mode, dTime);
+    	hasDissolve = true;
     }
     
     public void setRootTimeline(Timeline timeline) {
@@ -86,7 +101,6 @@ abstract public class Scene extends RootObject {
 
     public void drawscene(Graphics g) {
     	this.clearSelectionList();
-    //	this.bufRender(g, getMouseX(), getMouseY(), false, 0);
     	this.rootBufRender(g, getMouseX(), getMouseY(), false,0);
     	if(!this.rootTimeline.isNowDissolve())
     		this.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
@@ -110,7 +124,8 @@ abstract public class Scene extends RootObject {
     }
 
     public int addObject(int index, Object r) {
-    	return this.addObject(index, r);
+    	 this.add(index, r);
+    	 return 0;
     }
 
     public Object getObject(int index) {
@@ -208,7 +223,18 @@ abstract public class Scene extends RootObject {
 		return rootTimeline.getKeyboard().isTyped();
 	}
 	
-	// PopupMenu
+	public void goNextScene() {
+		this.rootTimeline.goNextSceneWithCallback();
+	}
+	
+	
+	public void goNextScene(String sceneIDName) {
+		this.rootTimeline.goNextScene(sceneIDName);
+	}
+	
+	public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime) {
+		this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime);
+	}
 	
 	public PopupMenu getPopupMenu() {
 	    return rootTimeline.getPopup();
@@ -217,5 +243,55 @@ abstract public class Scene extends RootObject {
     abstract public void keyEvent(casmi.KeyEvent e);
 
     abstract public void mouseEvent(casmi.MouseEvent e,  MouseButton b);
+
+	public boolean isHasDissolve() {
+		return hasDissolve;
+	}
+
+	public void setHasDissolve(boolean hasDissolve) {
+		this.hasDissolve = hasDissolve;
+	}
+
+	public Dissolve getDissolve() {
+		return dissolve;
+	}
+
+	public void setDissolve(Dissolve dissolve) {
+		this.dissolve = dissolve;
+	}
+	
+	   private TweenManager getTweenManager() {
+			if (tweenManager == null) {
+	    		tweenManager = new TweenManager();
+	    		this.addTweenManager(tweenManager);
+	    	}
+	    	
+	    	return tweenManager;
+	    }
+	    
+	    public void addTween(Tween t) {
+	    	getTweenManager().add(t);
+	    }
+	    
+	    public void addTween(TweenSerialGroup g) {
+	    	getTweenManager().add(g);
+	    }
+
+	    public void addTween(TweenParallelGroup g) {
+	    	getTweenManager().add(g);
+	    }
+	    
+	    public void clearTween(){
+	    	tweenManager = null;
+	    	this.clearTweenManager();
+	    }
+	    
+	    public void EnteredSceneCallback() {
+	    	
+	    }
+	    
+	    public void ExitedSceneCallback() {
+	    	
+	    }
 
 }

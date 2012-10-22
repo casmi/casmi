@@ -30,5 +30,5 @@ import casmi.graphics.Graphics;
  */
 public interface TimelineRender {
 
-    void render(Graphics g);
+    int render(Graphics g);
 }

@@ -225,7 +225,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
             }
         });
 		
-		isInitializing = false;
+
 	}
 
 	@Override
@@ -333,6 +333,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.PRESSED);
 		}
 	}
 	
@@ -357,6 +358,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.RELEASED);
 		}
 	}
 
@@ -400,10 +402,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			break;
 		}
 		
-		rootObject.setMouseEvent(MouseEvent.CLICKED);
+		rootObject.setMouseEvent(mouseEvent);
 		
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
+			rootTimeline.getScene().setMouseEvent(mouseEvent);
 		}
 	}
 
@@ -450,6 +453,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObject.setMouseEvent(MouseEvent.DRAGGED);
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.DRAGGED);
 		}
 
 		
@@ -461,11 +465,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		mouse.setMoved(true);
 	    
 	    mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
-		
-		rootObject.setMouseEvent(MouseEvent.MOVED);
-		
+		rootObject.setMouseEvent(MouseEvent.MOVED);	
 		if (timeline) {
 			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.MOVED);
 		}
 		
 		updateMouse();
@@ -580,10 +583,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		
 		if (AppletRunner.frame != null && runAsApplication) {
 		    JFrame frame = AppletRunner.frame;
-			Insets insets = frame.getInsets();
-            frame.setSize(getWidth() + insets.left + insets.right,
-                          getHeight() + insets.top + insets.bottom);
+			if (!isFullScreen()) {
+	            Insets insets = frame.getInsets();
+	            frame.setSize(getWidth() + insets.left + insets.right,
+	                getHeight() + insets.top + insets.bottom);
+	        } else {
+	            frame.setSize(getWidth(), getHeight());
+	        }
 		}
+		
+		isInitializing = false;
 	}
 
 	@Override
@@ -851,6 +860,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			   rootTimeline.setKeyboard(keyboard);
 			   rootTimeline.setMouse(mouse);
 			   rootTimeline.setPopup(popupMenu);
+			   rootTimeline.setApplet(this);
 		   }
 	   }
    }
@@ -865,6 +875,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	   if(obj instanceof TimelineRender){
 		   rootTimeline = (Timeline)obj;
 		   timeline = true;
+		   rootTimeline.setKeyboard(keyboard);
+		   rootTimeline.setMouse(mouse);
+		   rootTimeline.setPopup(popupMenu);
+		   rootTimeline.setApplet(this);
 	   }
        // NOTE: ???
       /* if (rootObject instanceof TimelineRender) {
