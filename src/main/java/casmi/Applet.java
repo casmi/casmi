@@ -190,8 +190,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void init() {
-		this.initRootOject();
-		this.setSize(100, 100);
+		initRootOject();
+		
+		setSize(100, 100);
+		
 		// JOGL setup
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
 		this.caps = new GLCapabilities(profile);
@@ -213,7 +215,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		setFocusable(false);
 		panel.setFocusable(true);
 
-		//this.setup();
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
 		
@@ -224,8 +225,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		        exit();
             }
         });
-		
-
 	}
 
 	@Override
@@ -283,7 +282,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    return workingFPS;
 	}
 	
-	public void setDepthTest(boolean depthTest){
+	public void setDepthTest(boolean depthTest) {
 		rootObject.setDepthTest(depthTest);
 	}
 	
@@ -371,7 +370,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			mouseButton = MouseButton.LEFT;
 			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
 			mouseEvent = MouseEvent.CLICKED;
-			if((System.currentTimeMillis() - mouse.getMouseClickLeftTime())<300){
+			if ((System.currentTimeMillis() - mouse.getMouseClickLeftTime()) < 300) {
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
 				mouseEvent = MouseEvent.DOUBLE_CLICKED;
@@ -382,7 +381,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			mouseButton = MouseButton.MIDDLE;
 			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
 			mouseEvent = MouseEvent.CLICKED;
-			if((System.currentTimeMillis() - mouse.getMouseClickMiddleTime())<300){
+			if ((System.currentTimeMillis() - mouse.getMouseClickMiddleTime()) < 300) {
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
 				mouseEvent = MouseEvent.DOUBLE_CLICKED;
@@ -393,7 +392,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			mouseButton = MouseButton.RIGHT;
 			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
 			mouseEvent = MouseEvent.CLICKED;
-			if((System.currentTimeMillis() - mouse.getMouseClickRightTime())<300){
+			if ((System.currentTimeMillis() - mouse.getMouseClickRightTime()) < 300) {
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
 				mouseEvent = MouseEvent.DOUBLE_CLICKED;
@@ -590,6 +589,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	        } else {
 	            frame.setSize(getWidth(), getHeight());
 	        }
+			frame.setLocationRelativeTo(null);
 		}
 		
 		isInitializing = false;
