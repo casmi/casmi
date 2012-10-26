@@ -115,6 +115,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private Timer timer;
 
 	private boolean isFullScreen = false;
+	private boolean initialFullScreen = false;
+	private int normalWidth, normalHeight;
+	
 	private boolean isInitializing = true;
 
 	private boolean runAsApplication = false;
@@ -162,6 +165,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		@Override
 		public void run() {
 			if (panel != null) { // TODO if no update, do not re-render
+			    if (initialFullScreen) {
+			        setFullScreen(true);
+			        initialFullScreen = false;
+			    }
+			    
 				panel.display();
 				
 				mouse.setPressed(false);
@@ -204,13 +212,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
 		panel.addMouseWheelListener(this);
+		panel.addKeyListener(this);
 		
-		if (!isFullScreen) {
-			panel.addKeyListener(this);
-		} else {
-			AppletRunner.frame.addKeyListener(this);
-		}
-
 		add(panel);
 		setFocusable(false);
 		panel.setFocusable(true);
@@ -228,14 +231,20 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	@Override
-	public void setSize(int w, int h) {
-		this.width = w;
-		this.height = h;
-		super.setSize(new Dimension(w, h));
+	public void setSize(int width, int height) {
+	    normalWidth  = width;
+	    normalHeight = height;
+	    innerSetSize(width, height);
+	}
+	
+	private void innerSetSize(int width, int height) {
+		this.width  = width;
+		this.height = height;
+		super.setSize(new Dimension(width, height));
 
 		if (panel != null) {
-			panel.setSize(new Dimension(w, h));
-		}
+			panel.setSize(new Dimension(width, height));
+		}	    
 	}
 	
 	void setAppletSize(int w, int h) {
@@ -295,19 +304,43 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		return isFullScreen;
 	}
 
-	public void setFullScreen(boolean isFullScreen) {
-
-		if (!isInitializing)
-			return;
-
-		this.isFullScreen = isFullScreen;
-
-		if (isFullScreen) {
-			AppletRunner.frame.setUndecorated(true);
-			AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
-			setSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
-					AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+	public void setFullScreen(boolean fullScreen) {	    
+		if (isInitializing) {
+		    initialFullScreen = fullScreen;
+		    if (fullScreen) {
+		        AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
+		        innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
+		                     AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+		    }
+		    return;
 		}
+		    
+		if (this.isFullScreen == fullScreen) {
+			return;
+		}
+
+		this.isFullScreen = fullScreen;
+		
+		if (AppletRunner.frame.isDisplayable()) {		    
+		    AppletRunner.frame.dispose();
+		}
+		
+		if (fullScreen) {
+		    AppletRunner.frame.setUndecorated(true);
+			AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
+
+			innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
+			             AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+			AppletRunner.frame.setSize(width, height);
+		} else {
+		    innerSetSize(normalWidth, normalHeight);
+		    AppletRunner.frame.setUndecorated(false);
+			AppletRunner.displayDevice.setFullScreenWindow(null);
+			Insets insets = AppletRunner.frame.getInsets();
+			AppletRunner.frame.setSize(width  + insets.left + insets.right,
+	                                   height + insets.top  + insets.bottom);			
+		}
+		AppletRunner.frame.setVisible(true);
 	}
 
 	@Override
@@ -580,19 +613,17 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		
 		this.setup();
 		
+		isInitializing = false;
+		
 		if (AppletRunner.frame != null && runAsApplication) {
 		    JFrame frame = AppletRunner.frame;
-			if (!isFullScreen()) {
+			if (!initialFullScreen) {
 	            Insets insets = frame.getInsets();
-	            frame.setSize(getWidth() + insets.left + insets.right,
-	                getHeight() + insets.top + insets.bottom);
-	        } else {
-	            frame.setSize(getWidth(), getHeight());
+	            frame.setSize(getWidth()  + insets.left + insets.right,
+	                          getHeight() + insets.top  + insets.bottom);
 	        }
 			frame.setLocationRelativeTo(null);
 		}
-		
-		isInitializing = false;
 	}
 
 	@Override
@@ -1096,7 +1127,7 @@ class AppletGLEventListener implements GLEventListener {
 		glut = new GLUT();
 
 		g = new Graphics(gl, glu, glut, width, height);
-		if(reset)
+		if (reset)
 			d.reset();
 		else 
 			d.initSet();
