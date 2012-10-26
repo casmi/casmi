@@ -19,6 +19,7 @@
 
 package casmi.timeline;
 
+
 import javax.media.opengl.GL2;
 
 import casmi.Keyboard;
@@ -27,7 +28,11 @@ import casmi.MouseButton;
 import casmi.PopupMenu;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
+import casmi.graphics.object.Camera;
+import casmi.graphics.object.Frustum;
 import casmi.graphics.object.GraphicsObject;
+import casmi.graphics.object.Ortho;
+import casmi.graphics.object.Perspective;
 import casmi.graphics.object.RootObject;
 import casmi.tween.Tween;
 import casmi.tween.TweenManager;
@@ -286,6 +291,61 @@ abstract public class Scene extends RootObject {
 	    	this.clearTweenManager();
 	    }
 	    
+
+	    
+	    public void setPerspective() {
+			this.addPerse(new Perspective());
+		}
+
+		public void setPerspective(double fov, double aspect, double zNear,	double zFar) {
+			this.addPerse(new Perspective(fov, aspect, zNear, zFar));
+		}
+
+		public void setPerspective(Perspective perspective) {
+			this.addPerse(perspective);
+		}
+
+		public void setOrtho() {
+			this.addPerse(new Ortho());
+		}
+
+		public void setOrtho(double left, double right, double bottom, double top,
+				double near, double far) {
+			this.addPerse(new Ortho(left, right, bottom, top, near, far));
+		}
+
+		public void setOrtho(Ortho ortho) {
+			this.addPerse(ortho);
+		}
+
+		public void setFrustum() {
+			this.addPerse(new Frustum());
+		}
+
+		public void setFrustum(double left, double right, double bottom,
+				double top, double near, double far) {
+			this.addPerse(new Frustum(left, right, bottom, top, near, far));
+		}
+
+		public void setFrustum(Frustum frustum) {
+			this.addPerse(frustum);
+		}
+
+		public void setCamera() {
+			this.addCamera(new Camera());
+		}
+
+		public void setCamera(double eyeX, double eyeY, double eyeZ,
+				double centerX, double centerY, double centerZ, double upX,
+				double upY, double upZ) {
+			this.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY,
+					centerZ, upX, upY, upZ));
+		}
+
+		public void setCamera(Camera camera) {
+			this.addCamera(camera);
+		}
+
 	    public void EnteredSceneCallback() {
 	    	
 	    }
