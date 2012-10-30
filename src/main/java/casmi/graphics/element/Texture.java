@@ -331,11 +331,11 @@ public class Texture extends Element implements Renderable, Reset {
     }
     
     public final Image getImage() {
-    	if (!masking) {
+    //	if (!masking) {
     		return this.image;
-    	} else {
-    		return this.maskedImage;
-    	}
+   // 	} else {
+   // 		return this.maskedImage;
+   // 	}
     }
 
     public final void enableTexture(GL2 gl) {

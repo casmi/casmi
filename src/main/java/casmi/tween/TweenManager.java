@@ -157,6 +157,16 @@ public class TweenManager {
 				t.kill();
 		}
 	}
+	
+	public final void remove(Tween target) {
+		for (Tween t : tweens ) {
+			if (t == target ){
+				if(!t.isFinished())
+					t.kill();
+				tweens.remove(t);
+			}
+		}
+	}
 
 	/**
 	 * Kills every valid tween associated to the given target and tween type.

@@ -428,7 +428,7 @@ public class RootObject extends GraphicsObject {
 				if (!selection) {
 					if(o.isRemove())
 						removeObject = true;
-					if (((Element) o).getMask() != null) {
+					if (((Element) o).isMasked()) {
 						((Element) o).getMask().render(g);
 					}
 					if (o.getMouseOverCallback() != null) {
@@ -437,7 +437,7 @@ public class RootObject extends GraphicsObject {
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
 					if(o.isSelectionbuff()==true)
 						selectionbuff = true;
-					if (((Element) o).getMask() != null)
+					if (((Element) o).isMasked())
 						g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,

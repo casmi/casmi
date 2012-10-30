@@ -407,7 +407,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				if (!selection) {
 					if (o.isRemove())
 						removeObject = true;
-					if (((Element) o).getMask() != null) {
+					if (((Element) o).isMasked()) {
 						((Element) o).getMask().render(g);
 					}
 					if (o.getMouseOverCallback() != null) {
@@ -416,7 +416,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
 					if (o.isSelectionbuff())
 						selectionbuff = true;
-					if (((Element)o).getMask() != null)
+					if (((Element)o).isMasked())
 						g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
@@ -842,6 +842,42 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			} else if (obj instanceof GraphicsObject) {
 				GraphicsObject go = (GraphicsObject)obj;
 				go.resetObjects();
+			}
+		}
+	}
+	
+	public void setMask(Mask mask) {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setMask(mask);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setMask(mask);
+			}
+		}
+	}
+	
+	public void enableMask() {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.enableMask();
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.enableMask();
+			}
+		}
+	}
+	
+	public void disableMask() {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.disableMask();
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.disableMask();
 			}
 		}
 	}

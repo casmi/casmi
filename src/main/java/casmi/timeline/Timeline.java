@@ -34,6 +34,10 @@ import casmi.PopupMenu;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
 import casmi.parser.CSV;
+import casmi.tween.Tween;
+import casmi.tween.TweenEquation;
+import casmi.tween.equations.Linear;
+import casmi.tween.simpletweenables.TweenDouble;
 
 import java.util.HashMap;  
 import java.util.Map;  
@@ -55,6 +59,9 @@ public class Timeline implements TimelineRender, Reset {
     private long dissolveStart, dissolveNow;
     private Applet baseApplet;
     private double nowDissolveTime;
+    
+    TweenDouble td = new TweenDouble(0.0f);
+    Tween tween; 
 
     private List<Scene> sceneList;
     private List<Scene> tmpSceneList;
@@ -89,6 +96,7 @@ public class Timeline implements TimelineRender, Reset {
     public Timeline() {
         sceneList = new ArrayList<Scene>();
         tmpSceneList = new ArrayList<Scene>();
+        td = new TweenDouble(0.0);
     }
 
 
@@ -145,6 +153,7 @@ public class Timeline implements TimelineRender, Reset {
     }
 
     private final void endDisolve() {
+    	sceneList.get(nowSceneID).getDissolve().end();
     	if(!sceneList.get(nowSceneID).isHasDissolve())
     		preDhalf = 0;
     	else
@@ -152,19 +161,31 @@ public class Timeline implements TimelineRender, Reset {
 
         dissolve = false;
 
+        sceneList.get(nowSceneID).setPosition(0, 0);
         goNextScene();
 
     }
 
     private final void goDissolve() {
+
+        Dissolve diss = sceneList.get(nowSceneID).getDissolve();
+        diss.setSize(getApplet().getWidth(), getApplet().getHeight());
+        diss.start(sceneList.get(nowSceneID), sceneList.get(nextSceneID));
         dissolve = true;
         setEndScene(true);
+        
+        if(tween!=null)
+        	this.getApplet().removeTween(tween);
+        tween = null;
+        td.setValue(0);
+        tween = Tween.to(td, (int)diss.getTime()*1000, diss.getEquation()).target(1.0);
+        this.getApplet().addTween(tween);
 
         task.cancel();
         task = null;
         task = new SceneTask();
-        timer.schedule(task, (long)(1000*(sceneList.get(nowSceneID).getDissolve().getTime())));
-        if(sceneList.get(nowSceneID).getDissolve().getMode()==DissolveMode.CROSS)
+        timer.schedule(task, (long)(1000*(diss.getTime())));
+        if(diss.getMode()==DissolveMode.CROSS)
         	sceneList.get(nextSceneID).EnteredSceneCallback();
     }
 
@@ -188,13 +209,29 @@ public class Timeline implements TimelineRender, Reset {
     }
     
     public void goNextScene(String idName, DissolveMode mode, double time) {
+        goNextScene(idName, mode, time, Linear.INOUT);
+    }
+    
+    public void goNextScene(String idName, DissolveMode mode, double time, TweenEquation equation) {
         nextSceneID = this.map.get(idName);
         try {
             sceneList.get(nextSceneID);
         } catch (java.lang.IndexOutOfBoundsException e) {
             nextSceneID = nowSceneID;
         }
-        sceneList.get(nowSceneID).setDissolve(new Dissolve(mode, time));
+        sceneList.get(nowSceneID).setDissolve(new Dissolve(mode, time, equation));
+        sceneList.get(nowSceneID).setHasDissolve(true);
+        goDissolve();
+    }
+    
+    public void goNextScene(String idName, Dissolve dissolve) {
+        nextSceneID = this.map.get(idName);
+        try {
+            sceneList.get(nextSceneID);
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            nextSceneID = nowSceneID;
+        }
+        sceneList.get(nowSceneID).setDissolve(dissolve);
         sceneList.get(nowSceneID).setHasDissolve(true);
         goDissolve();
     }
@@ -205,11 +242,23 @@ public class Timeline implements TimelineRender, Reset {
         this.map.put(s.getIdName(), this.sceneList.size()-1);
     }
     
-    public void appendScene(Scene s, DissolveMode mode, double dissolveTime) {
+    public void appendScene(Scene s, Dissolve dissolve) {
     	s.setRootTimeline(this);
         this.sceneList.add(s);
         this.map.put(s.getIdName(), this.sceneList.size()-1);
-        s.setDissolve(new Dissolve(mode, dissolveTime));
+        s.setDissolve(dissolve);
+        s.setHasDissolve(true);
+    }
+    
+    public void appendScene(Scene s, DissolveMode mode, double dissolveTime) {
+    	appendScene(s, mode, dissolveTime, Linear.INOUT);
+    }
+    
+    public void appendScene(Scene s, DissolveMode mode, double dissolveTime, TweenEquation equation) {
+    	s.setRootTimeline(this);
+        this.sceneList.add(s);
+        this.map.put(s.getIdName(), this.sceneList.size()-1);
+        s.setDissolve(new Dissolve(mode, dissolveTime, equation));
         s.setHasDissolve(true);
     }
 
@@ -225,8 +274,10 @@ public class Timeline implements TimelineRender, Reset {
         timer = new Timer(true);
         double halfd = 0;
         try {
-            if (sceneList.get(nowSceneID).isHasDissolve()) 
+            if (sceneList.get(nowSceneID).isHasDissolve()) {
                 halfd = (sceneList.get(nowSceneID).getDissolve().getTime() / 2.0);
+               // sceneList.get(nowSceneID).getDissolve().start(nowScene, nextScene);
+            }
             if(sceneList.get(nowSceneID).getTime()>0)
             	timer.schedule(task, (long)(1000*(sceneList.get(nowSceneID).getTime() - halfd)));
             
@@ -263,30 +314,14 @@ public class Timeline implements TimelineRender, Reset {
             	firstCallback = false;
             }
             
-            switch (sceneList.get(nowSceneID).getDissolve().getMode()) {
-            default:
-            case CROSS:
-            	sceneList.get(nowSceneID).setDepthTest(false);
-                sceneList.get(nowSceneID).setSceneA((1.0 - nowDissolveTime), g);
-                if(nowDissolve)
-                	sceneList.get(nowSceneID).drawscene(g);
-                sceneList.get(nextSceneID).setSceneA(nowDissolveTime, g);
-                sceneList.get(nextSceneID).drawscene(g);
-                break;
-            case BLACK:
-                if (nowDissolveTime <= 0.5) {
-                    sceneList.get(nowSceneID).setSceneA((1.0 - nowDissolveTime * 2), g);
-                    sceneList.get(nowSceneID).drawscene(g);
-                }
-                if (nowDissolveTime >= 0.5) {
-                    sceneList.get(nextSceneID).setSceneA(((nowDissolveTime - 0.5) * 2), g);
-                    sceneList.get(nextSceneID).drawscene(g);
-                }
-                break;
-            }
+            Dissolve dissolve = sceneList.get(nowSceneID).getDissolve();
+            dissolve.setNowDissolve(nowDissolve);
+            dissolve.render(sceneList.get(nowSceneID),sceneList.get(nextSceneID),td.getValue(), g);
+            
         }
         return 0;
     }
+
 
     public boolean isEndScene() {
         return endScene;
@@ -361,4 +396,5 @@ public class Timeline implements TimelineRender, Reset {
 	public int getHeight() {
 		return this.getApplet().getHeight();
 	}
+	
 }

@@ -54,7 +54,9 @@ abstract public class Element implements Cloneable, Renderable {
 	private double sceneA = 1.0;
 	
 	protected Texture texture;
-	private Mask mask;
+	protected Mask mask;
+	
+	public boolean enableMask = true;
 
 	protected double x = 0.0;
 	protected double y = 0.0;
@@ -602,8 +604,15 @@ abstract public class Element implements Cloneable, Renderable {
 		this.mask = mask;
 	}
 	
+	public void clearMask() {
+		this.mask = null;
+	}
+	
 	public boolean isMasked() {
-        return mask != null;
+		if(enableMask)
+			return mask != null;
+		else
+			return false;
     }
 
 	public boolean isDepthTest() {
@@ -647,5 +656,13 @@ abstract public class Element implements Cloneable, Renderable {
 
 	public void setThreeD(boolean threeD) {
 		this.threeD = threeD;
+	}
+
+	public void enableMask() {
+		enableMask = true;
+	}
+
+	public void disableMask() {
+		this.enableMask = false;
 	}
 }

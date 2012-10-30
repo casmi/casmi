@@ -31,10 +31,12 @@ import casmi.graphics.element.Reset;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
 import casmi.graphics.object.GraphicsObject;
+import casmi.graphics.object.Mask;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.graphics.object.RootObject;
 import casmi.tween.Tween;
+import casmi.tween.TweenEquation;
 import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;
 import casmi.tween.TweenSerialGroup;
@@ -237,8 +239,16 @@ abstract public class Scene extends RootObject {
 		this.rootTimeline.goNextScene(sceneIDName);
 	}
 	
+	public void goNextScene(String sceneIDName, Dissolve dissolve) {
+		this.rootTimeline.goNextScene(sceneIDName, dissolve);
+	}
+	
 	public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime) {
 		this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime);
+	}
+	
+	public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime, TweenEquation equation) {
+		this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime, equation);
 	}
 	
 	public PopupMenu getPopupMenu() {
@@ -344,6 +354,14 @@ abstract public class Scene extends RootObject {
 
 		public void setCamera(Camera camera) {
 			this.addCamera(camera);
+		}
+		
+		public Mask getMask(){
+			if(mask==null){
+				mask = new Mask();
+				this.setMask(mask);
+			}
+			return mask;
 		}
 
 	    public void EnteredSceneCallback() {

@@ -70,6 +70,7 @@ import casmi.graphics.object.BackGround;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
 import casmi.graphics.object.Light;
+import casmi.graphics.object.Mask;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.graphics.object.RootObject;
@@ -860,6 +861,15 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     public void addTween(TweenParallelGroup g) {
     	getTweenManager().add(g);
+    }
+    
+    public void removeTween(Tween t) {
+    	getTweenManager().remove(t);
+    }
+    
+    /////////////////
+    public void setMask(Mask mask){
+    	rootObject.setMask(mask);
     }
     
     public void clearTween(){

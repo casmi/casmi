@@ -33,6 +33,14 @@ import casmi.tween.TweenType;
  */
 public class TweenByte implements SimpleTweenable {
 	private byte value;
+	
+	public TweenByte(byte f){
+		value = f;
+	}
+	
+	public TweenByte(){
+		value = 0;
+	}
 
 	@Override
 	public List<Float> getTweenValues(TweenType tweenType) {
