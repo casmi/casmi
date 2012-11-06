@@ -19,7 +19,6 @@
 
 package casmi.timeline;
 
-
 import javax.media.opengl.GL2;
 
 import casmi.Keyboard;
@@ -54,30 +53,30 @@ abstract public class Scene extends RootObject {
     private boolean hasDissolve = false;
     private Timeline rootTimeline;
     private Dissolve dissolve;
-	private TweenManager tweenManager;
+    private TweenManager tweenManager;
 
     public Scene(String id) {
-    	super();
-    	setIdName(id);
-    	setTime(0);
+        super();
+        setIdName(id);
+        setTime(0);
     }
-    
+
     public Scene(String id, double time) {
-    	super();
-    	setIdName(id);
-    	setTime(time);
+        super();
+        setIdName(id);
+        setTime(time);
     }
-    
+
     public Scene(String id, double time, DissolveMode mode, double dTime){
-    	super();
-    	setIdName(id);
-    	setTime(time);
-    	dissolve = new Dissolve(mode, dTime);
-    	hasDissolve = true;
+        super();
+        setIdName(id);
+        setTime(time);
+        dissolve = new Dissolve(mode, dTime);
+        hasDissolve = true;
     }
-    
+
     public void setRootTimeline(Timeline timeline) {
-    	this.rootTimeline = timeline;
+        this.rootTimeline = timeline;
     }
 
     public String getIdName() {
@@ -95,7 +94,7 @@ abstract public class Scene extends RootObject {
     public void setTime(double time) {
         this.time = time;
     }
-    
+
 
     public double getSceneA() {
         return sceneA;
@@ -107,11 +106,11 @@ abstract public class Scene extends RootObject {
     }
 
     public void drawscene(Graphics g) {
-    	this.clearSelectionList();
-    	this.rootBufRender(g, getMouseX(), getMouseY(), false,0);
-    	if(!this.rootTimeline.isNowDissolve())
-    		this.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
-    	update(g);
+        this.clearSelectionList();
+        this.rootBufRender(g, getMouseX(), getMouseY(), false,0);
+        if(!this.rootTimeline.isNowDissolve())
+            this.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
+        update(g);
     }
 
     public void update(Graphics g) {
@@ -119,10 +118,9 @@ abstract public class Scene extends RootObject {
     }
 
     abstract public void update();
-    
 
     public int addObject(Object r) {
-       this.add(r);
+        this.add(r);
         return 0;
     }
 
@@ -131,8 +129,8 @@ abstract public class Scene extends RootObject {
     }
 
     public int addObject(int index, Object r) {
-    	 this.add(index, r);
-    	 return 0;
+        this.add(index, r);
+        return 0;
     }
 
     public Object getObject(int index) {
@@ -142,238 +140,234 @@ abstract public class Scene extends RootObject {
     public void clearObject() {
         this.clear();
     }
-	
-	public void reset(GL2 gl){
-		for (Object obj : this.getObjectList()) {
-			if (obj instanceof Reset) {
-				Reset el = (Reset)obj;
-				el.reset(gl);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
-				go.resetObjects();
-			}
-		}
-	}
-	
-	
-	
 
-	public int getMouseWheelRotation() {
-		return rootTimeline.getMouse().getWheelRotation();
-	}
-	
-	public Mouse getMouse() {
-	    return rootTimeline.getMouse();
-	}
+    public void reset(GL2 gl) {
+        for (Object obj : this.getObjectList()) {
+            if (obj instanceof Reset) {
+                Reset el = (Reset)obj;
+                el.reset(gl);
+            } else if (obj instanceof GraphicsObject) {
+                GraphicsObject go = (GraphicsObject)obj;
+                go.resetObjects();
+            }
+        }
+    }
 
-	public int getPreMouseX() {
-		return rootTimeline.getMouse().getPrvX();
-	}
+    public int getMouseWheelRotation() {
+        return rootTimeline.getMouse().getWheelRotation();
+    }
 
-	public int getPreMouseY() {
-		return rootTimeline.getMouse().getPrvY();
-	}
+    public Mouse getMouse() {
+        return rootTimeline.getMouse();
+    }
 
-	public int getMouseX() {
-		return rootTimeline.getMouse().getX();
-	}
+    public int getPreMouseX() {
+        return rootTimeline.getMouse().getPrvX();
+    }
 
-	public int getMouseY() {
-		return rootTimeline.getMouse().getY();
-	}
+    public int getPreMouseY() {
+        return rootTimeline.getMouse().getPrvY();
+    }
 
-	public boolean isMousePressed() {
-		return rootTimeline.getMouse().isPressed();
-	}
-	
-	public boolean isMousePressed(MouseButton button) {
-	    return rootTimeline.getMouse().isButtonPressed(button);
-	}
+    public int getMouseX() {
+        return rootTimeline.getMouse().getX();
+    }
 
-	public boolean isMouseClicked() {
-		return rootTimeline.getMouse().isClicked();
-	}
+    public int getMouseY() {
+        return rootTimeline.getMouse().getY();
+    }
 
-	public boolean isMouseEntered() {
-		return rootTimeline.getMouse().isEntered();
-	}
+    public boolean isMousePressed() {
+        return rootTimeline.getMouse().isPressed();
+    }
 
-	public boolean isMouseExited() {
-		return rootTimeline.getMouse().isExited();
-	}
+    public boolean isMousePressed(MouseButton button) {
+        return rootTimeline.getMouse().isButtonPressed(button);
+    }
 
-	public boolean isMouseReleased() {
-		return rootTimeline.getMouse().isReleased();
-	}
-	
-	public Keyboard getKeyboard() {
-	    return rootTimeline.getKeyboard();
-	}
-	
-	public char getKey() {
-		return rootTimeline.getKeyboard().getKey();
-	}
-	
-	public int getKeyCode() {
-	    return rootTimeline.getKeyboard().getKeyCode();
-	}
-	
-	public boolean isKeyPressed() {
-		return rootTimeline.getKeyboard().isPressed();
-	}
+    public boolean isMouseClicked() {
+        return rootTimeline.getMouse().isClicked();
+    }
 
-	public boolean isKeyReleased() {
-		return rootTimeline.getKeyboard().isReleased();
-	}
+    public boolean isMouseEntered() {
+        return rootTimeline.getMouse().isEntered();
+    }
 
-	public boolean isKeyTyped() {
-		return rootTimeline.getKeyboard().isTyped();
-	}
-	
-	public Scene getSceneWithId(String sceneIDName) {
-		return this.rootTimeline.getSceneWithId(sceneIDName);
-	}
-	
-	public void goNextScene() {
-		this.rootTimeline.goNextSceneWithCallback();
-	}
-	
-	
-	public void goNextScene(String sceneIDName) {
-		this.rootTimeline.goNextScene(sceneIDName);
-	}
-	
-	public void goNextScene(String sceneIDName, Dissolve dissolve) {
-		this.rootTimeline.goNextScene(sceneIDName, dissolve);
-	}
-	
-	public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime) {
-		this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime);
-	}
-	
-	public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime, TweenEquation equation) {
-		this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime, equation);
-	}
-	
-	public PopupMenu getPopupMenu() {
-	    return rootTimeline.getPopup();
-	}
-	
+    public boolean isMouseExited() {
+        return rootTimeline.getMouse().isExited();
+    }
+
+    public boolean isMouseReleased() {
+        return rootTimeline.getMouse().isReleased();
+    }
+
+    public Keyboard getKeyboard() {
+        return rootTimeline.getKeyboard();
+    }
+
+    public char getKey() {
+        return rootTimeline.getKeyboard().getKey();
+    }
+
+    public int getKeyCode() {
+        return rootTimeline.getKeyboard().getKeyCode();
+    }
+
+    public boolean isKeyPressed() {
+        return rootTimeline.getKeyboard().isPressed();
+    }
+
+    public boolean isKeyReleased() {
+        return rootTimeline.getKeyboard().isReleased();
+    }
+
+    public boolean isKeyTyped() {
+        return rootTimeline.getKeyboard().isTyped();
+    }
+
+    public Scene getSceneWithId(String sceneIDName) {
+        return this.rootTimeline.getSceneWithId(sceneIDName);
+    }
+
+    public void goNextScene() {
+        this.rootTimeline.goNextSceneWithCallback();
+    }
+
+    public void goNextScene(String sceneIDName) {
+        this.rootTimeline.goNextScene(sceneIDName);
+    }
+
+    public void goNextScene(String sceneIDName, Dissolve dissolve) {
+        this.rootTimeline.goNextScene(sceneIDName, dissolve);
+    }
+
+    public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime) {
+        this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime);
+    }
+
+    public void goNextScene(String sceneIDName, DissolveMode mode, double dissolveTime, TweenEquation equation) {
+        this.rootTimeline.goNextScene(sceneIDName, mode, dissolveTime, equation);
+    }
+
+    public PopupMenu getPopupMenu() {
+        return rootTimeline.getPopup();
+    }
+
     abstract public void keyEvent(casmi.KeyEvent e);
 
     abstract public void mouseEvent(casmi.MouseEvent e,  MouseButton b);
 
-	public boolean isHasDissolve() {
-		return hasDissolve;
-	}
+    public boolean isHasDissolve() {
+        return hasDissolve;
+    }
 
-	public void setHasDissolve(boolean hasDissolve) {
-		this.hasDissolve = hasDissolve;
-	}
+    public void setHasDissolve(boolean hasDissolve) {
+        this.hasDissolve = hasDissolve;
+    }
 
-	public Dissolve getDissolve() {
-		return dissolve;
-	}
+    public Dissolve getDissolve() {
+        return dissolve;
+    }
 
-	public void setDissolve(Dissolve dissolve) {
-		this.dissolve = dissolve;
-	}
-	
-	   private TweenManager getTweenManager() {
-			if (tweenManager == null) {
-	    		tweenManager = new TweenManager();
-	    		this.addTweenManager(tweenManager);
-	    	}
-	    	
-	    	return tweenManager;
-	    }
-	    
-	    public void addTween(Tween t) {
-	    	getTweenManager().add(t);
-	    }
-	    
-	    public void addTween(TweenSerialGroup g) {
-	    	getTweenManager().add(g);
-	    }
+    public void setDissolve(Dissolve dissolve) {
+        this.dissolve = dissolve;
+    }
 
-	    public void addTween(TweenParallelGroup g) {
-	    	getTweenManager().add(g);
-	    }
-	    
-	    public void clearTween(){
-	    	tweenManager = null;
-	    	this.clearTweenManager();
-	    }
-	    
+    private TweenManager getTweenManager() {
+        if (tweenManager == null) {
+            tweenManager = new TweenManager();
+            this.addTweenManager(tweenManager);
+        }
 
-	    
-	    public void setPerspective() {
-			this.addPerse(new Perspective());
-		}
+        return tweenManager;
+    }
 
-		public void setPerspective(double fov, double aspect, double zNear,	double zFar) {
-			this.addPerse(new Perspective(fov, aspect, zNear, zFar));
-		}
+    public void addTween(Tween t) {
+        getTweenManager().add(t);
+    }
 
-		public void setPerspective(Perspective perspective) {
-			this.addPerse(perspective);
-		}
+    public void addTween(TweenSerialGroup g) {
+        getTweenManager().add(g);
+    }
 
-		public void setOrtho() {
-			this.addPerse(new Ortho());
-		}
+    public void addTween(TweenParallelGroup g) {
+        getTweenManager().add(g);
+    }
 
-		public void setOrtho(double left, double right, double bottom, double top,
-				double near, double far) {
-			this.addPerse(new Ortho(left, right, bottom, top, near, far));
-		}
+    public void clearTween(){
+        tweenManager = null;
+        this.clearTweenManager();
+    }
 
-		public void setOrtho(Ortho ortho) {
-			this.addPerse(ortho);
-		}
+    public void setPerspective() {
+        this.addPerse(new Perspective());
+    }
 
-		public void setFrustum() {
-			this.addPerse(new Frustum());
-		}
+    public void setPerspective(double fov, double aspect, double zNear,	double zFar) {
+        this.addPerse(new Perspective(fov, aspect, zNear, zFar));
+    }
 
-		public void setFrustum(double left, double right, double bottom,
-				double top, double near, double far) {
-			this.addPerse(new Frustum(left, right, bottom, top, near, far));
-		}
+    public void setPerspective(Perspective perspective) {
+        this.addPerse(perspective);
+    }
 
-		public void setFrustum(Frustum frustum) {
-			this.addPerse(frustum);
-		}
+    public void setOrtho() {
+        this.addPerse(new Ortho());
+    }
 
-		public void setCamera() {
-			this.addCamera(new Camera());
-		}
+    public void setOrtho(double left, double right,
+                         double bottom, double top,
+                         double near, double far) {
+        this.addPerse(new Ortho(left, right, bottom, top, near, far));
+    }
 
-		public void setCamera(double eyeX, double eyeY, double eyeZ,
-				double centerX, double centerY, double centerZ, double upX,
-				double upY, double upZ) {
-			this.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY,
-					centerZ, upX, upY, upZ));
-		}
+    public void setOrtho(Ortho ortho) {
+        this.addPerse(ortho);
+    }
 
-		public void setCamera(Camera camera) {
-			this.addCamera(camera);
-		}
-		
-		public Mask getMask(){
-			if(mask==null){
-				mask = new Mask();
-				this.setMask(mask);
-			}
-			return mask;
-		}
+    public void setFrustum() {
+        this.addPerse(new Frustum());
+    }
 
-	    public void EnteredSceneCallback() {
-	    	
-	    }
-	    
-	    public void ExitedSceneCallback() {
-	    	
-	    }
+    public void setFrustum(double left, double right, double bottom,
+                           double top, double near, double far) {
+        this.addPerse(new Frustum(left, right, bottom, top, near, far));
+    }
 
+    public void setFrustum(Frustum frustum) {
+        this.addPerse(frustum);
+    }
+
+    public void setCamera() {
+        this.addCamera(new Camera());
+    }
+
+    public void setCamera(double eyeX, double eyeY, double eyeZ,
+                          double centerX, double centerY, double centerZ,
+                          double upX, double upY, double upZ) {
+        this.addCamera(
+            new Camera(eyeX, eyeY, eyeZ,
+                       centerX, centerY, centerZ,
+                       upX, upY, upZ));
+    }
+
+    public void setCamera(Camera camera) {
+        this.addCamera(camera);
+    }
+
+    public Mask getMask() {
+        if (mask == null) {
+            mask = new Mask();
+            this.setMask(mask);
+        }
+        return mask;
+    }
+
+    public void EnteredSceneCallback() {
+
+    }
+
+    public void ExitedSceneCallback() {
+
+    }
 }

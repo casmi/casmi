@@ -45,7 +45,6 @@ public class LoadData2D {
     	int count = 0;
     	
         try {
-        	System.out.println("open " + filePath);
         	CSV csv = new CSV(filePath);
         	String[] col;
         	
@@ -70,7 +69,6 @@ public class LoadData2D {
     	MatrixData2D m = new MatrixData2D();
     	
         try {
-        	System.out.println("open " + filePath);
         	CSV csv = new CSV(filePath);
         	String[] col;
         	

@@ -94,14 +94,12 @@ public class Image {
      * Creates a new Image object using the Image url.
      * 
      * @param url
-     * 					The url of this Image.
+     *            The URL of this Image.
      */
     public Image(URL url) {
         try {
             BufferedImage preimg = ImageIO.read(url);
-            if (preimg == null)
-            	System.out.println("null");
-            img =  convertByteToInt(preimg);
+            img = convertByteToInt(preimg);
          } catch (IOException e) {
             e.printStackTrace();
          }

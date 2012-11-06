@@ -56,7 +56,6 @@ public enum DissolveMode {
     /** Change from bottom dissolve  */
     CURTAIN_BOTTOM,
     
-    /**MyDissolve */
+    /** MyDissolve */
     ORIGINAL
-    
 }
