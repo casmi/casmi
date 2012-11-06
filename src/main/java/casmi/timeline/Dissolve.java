@@ -5,17 +5,17 @@ import casmi.graphics.element.Rect;
 import casmi.tween.TweenEquation;
 import casmi.tween.equations.Linear;
 
-public     class Dissolve {
+public class Dissolve {
 
     private double time;
-    private boolean nowDissolve = false;
+    protected boolean nowDissolve = false;
     private Scene nowScene= null, nextScene=null;
     private Rect maskRect;
 
     private DissolveMode mode = DissolveMode.CROSS;
     
     private TweenEquation equation = Linear.INOUT;
-	private double width,height;
+	protected double width,height;
 
     public Dissolve(DissolveMode mode, double time) {
         this.setTime(time);
@@ -68,7 +68,13 @@ public     class Dissolve {
 		case CURTAIN_BOTTOM:
 			startRectDissolve(width, 0.1, width/2.0, 0);
 			break;
+		case ORIGINAL:
+			startMyDissolve(nowScene, nextScene);
 		}
+	}
+	
+	protected void startMyDissolve(Scene nowScene, Scene nextScene) {
+		
 	}
 	
 	private void startRectDissolve(double width, double height, double x, double y) {
@@ -97,8 +103,15 @@ public     class Dissolve {
 	}
 	
 	protected void end() {
+		if(getMode()==DissolveMode.ORIGINAL)
+			endMyDissolve(this.nowScene, this.nextScene);
 		this.nowScene.disableMask();
 		this.nextScene.disableMask();
+			
+	}
+	
+	protected void endMyDissolve(Scene nowScene, Scene nextScene) {
+		
 	}
 	
 	protected void render(Scene nowScene, Scene nextScene, double nowDissolveRate, Graphics g){
@@ -147,10 +160,16 @@ public     class Dissolve {
         	break;
         case CURTAIN_BOTTOM:
         	setRectDissolve(width, height * nowDissolveRate, width/2.0, height * nowDissolveRate/2.0, g);
+        case ORIGINAL:
+        	setMyDissolve(nowScene, nextScene, nowDissolveRate, g);
             	
 
         	
         }
+	}
+	
+	protected void setMyDissolve(Scene nowScene, Scene nextScene, double nowDissolveRate, Graphics g) {
+		
 	}
 	
     private void setSlideDissolve(double x1, double y1, double x2, double y2, Graphics g) {

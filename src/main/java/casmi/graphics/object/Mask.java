@@ -57,6 +57,24 @@ public class Mask extends Element implements ObjectRender {
     public void add(Element element) {
         elements.add(element);
     }
+    
+    /**
+     * Adds a Graphics Object for stencil mask.
+     * 
+     * @param graphicsObject
+     *            Graphics Object for mask.
+     */
+    public void add(GraphicsObject graphicsObject) {
+    	for (Object obj : graphicsObject.getObjectList()){
+    		if (obj instanceof Element) {
+				Element el = (Element)obj;
+				elements.add(el);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				add(go);
+			}
+    	}
+    }
 
     /**
      * Adds a Graphics Element for stencil mask.

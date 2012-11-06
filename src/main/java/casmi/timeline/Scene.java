@@ -230,6 +230,10 @@ abstract public class Scene extends RootObject {
 		return rootTimeline.getKeyboard().isTyped();
 	}
 	
+	public Scene getSceneWithId(String sceneIDName) {
+		return this.rootTimeline.getSceneWithId(sceneIDName);
+	}
+	
 	public void goNextScene() {
 		this.rootTimeline.goNextSceneWithCallback();
 	}

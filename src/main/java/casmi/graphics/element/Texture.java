@@ -591,13 +591,13 @@ public class Texture extends Element implements Renderable, Reset {
 		return corner[index1][index2];
 	}
 	
-	public void enableMask(){
-		masking = true;
-	}
+//	public void enableMask(){
+//		masking = true;
+//	}
 	
-	public void disableMask(){
-		masking = false;
-	}
+//	public void disableMask(){
+//		masking = false;
+//	}
 
 	public void setReloadFlag(boolean reloadFlag) {
 	    this.reloadFlag = reloadFlag;

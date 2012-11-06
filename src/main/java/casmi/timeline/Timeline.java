@@ -188,6 +188,14 @@ public class Timeline implements TimelineRender, Reset {
         if(diss.getMode()==DissolveMode.CROSS)
         	sceneList.get(nextSceneID).EnteredSceneCallback();
     }
+    
+	public Scene getSceneWithId(String idName) {
+		try {
+            return sceneList.get(this.map.get(idName));
+        } catch (java.lang.IndexOutOfBoundsException e) {
+            return null;
+        }
+	}
 
     public void goNextSceneWithCallback() {
         sceneList.get(nowSceneID).ExitedSceneCallback();
@@ -262,12 +270,10 @@ public class Timeline implements TimelineRender, Reset {
         s.setHasDissolve(true);
     }
 
-    public void removeScene(int i) {
-        this.sceneList.remove(i);
-    }
     
     public void removeScene(String idName) {
     	this.sceneList.remove(this.map.get(idName));
+    	this.map.remove(idName);
     }
 
     public void startTimer() {
@@ -396,5 +402,8 @@ public class Timeline implements TimelineRender, Reset {
 	public int getHeight() {
 		return this.getApplet().getHeight();
 	}
+
+
+
 	
 }
