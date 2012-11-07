@@ -354,7 +354,6 @@ public class Texture extends Element implements Renderable, Reset {
         }
         if (reloadFlag) {
             image.reloadTexture(gl);
-//            Graphics.reloadTextures(gl);
             reloadFlag = false;
         }
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())

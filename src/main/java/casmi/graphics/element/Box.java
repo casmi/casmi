@@ -183,11 +183,11 @@ public class Box extends Element implements Renderable, Reset {
 				        textures[i].loadFlag = false;
 				    }
 					if (textures[i].reloadFlag) {
-//						Graphics.reloadTextures(gl);
 					    textures[i].getImage().reloadTexture(gl);
 						textures[i].reloadFlag = false;
 					}
 					textures[i].enableTexture();
+					textures[i].enableTexture(gl);
 				}
 			}
 			gl.glBegin(type);
@@ -237,6 +237,7 @@ public class Box extends Element implements Renderable, Reset {
 
 			if (this.enableTexture && type == GL2.GL_QUADS) {
 				textures[i].disableTexture();
+				textures[i].disableTexture(gl);
 			}
 			gl.glEnd();
 		}
