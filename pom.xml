@@ -80,16 +80,6 @@
             <version>1.6.0</version>
         </dependency>
         <dependency>
-            <groupId>org.OpenNI</groupId>
-            <artifactId>OpenNI</artifactId>
-            <version>1.5.2.23</version>
-        </dependency>
-        <dependency>
-            <groupId>com.primesense</groupId>
-            <artifactId>NITE</artifactId>
-            <version>1.5.2.21</version>
-        </dependency>
-        <dependency>
             <groupId>ddf</groupId>
             <artifactId>minim-java</artifactId>
             <version>2.0.2</version>
