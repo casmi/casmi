@@ -26,11 +26,6 @@
             <name>jogamp test mirror</name>
             <url>http://jogamp.org/deployment/maven/</url>
         </repository>
-        <repository>
-            <id>xuggle</id>
-            <name>xuggle</name>
-            <url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -111,20 +106,24 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.8.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <source>1.6</source>
-                            <charset>UTF-8</charset>
-                            <encoding>UTF-8</encoding>
-                            <docencoding>UTF-8</docencoding>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <docletArtifact>
+                        <groupId>com.google.doclava</groupId>
+                        <artifactId>doclava</artifactId>
+                        <version>1.0.5</version>
+                    </docletArtifact>
+                    <doclet>com.google.doclava.Doclava</doclet>
+                    <bootclasspath>${sun.boot.class.path}</bootclasspath>
+                    <additionalparam>
+                        -quiet
+                        -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+                        -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+                        -hdf project.name "${project.name}"
+                        -d ${project.build.directory}/apidocs
+                    </additionalparam>
+                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                    <additionalJOption>-J-Xmx1024m</additionalJOption>
+                </configuration>
             </plugin>
         </plugins>
     </build>
