@@ -229,7 +229,7 @@ public class Cylinder extends Element implements Renderable {
       /**
        * Sets the radius of this Cylinder.
        * 
-       * @param base
+       * @param radius
        *            The radius of the Cylinder.      
        */
       public void setRadius(double radius) {

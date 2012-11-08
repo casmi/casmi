@@ -483,10 +483,10 @@ public class Texture extends Element implements Renderable, Reset {
     }
 
     /**
-     * Sets the width of this Texture.
+     * Sets the height of this Texture.
      * 
-     * @param width
-     * 			The width of the Texture.
+     * @param height
+     * 			The height of the Texture.
      */
     public final void setHeight(double height) {
         this.height = height;
@@ -507,11 +507,15 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Sets the corner of this Texture.
      * 
-     * @param x1,x2
-     * 			The x-coordinate of the corner.
-     * @param y1,y2
-     * 			The y-coordinate of the corner.
-     */
+     * @param x1
+     *            The x-coordinates for the first corner.
+     * @param y1
+     *            The y-coordinates for the first corner.
+     * @param x2
+     *            The x-coordinates for the second corner.
+     * @param y2
+     *            The y-coordinates for the second corner.
+     */   
     public final void setCorner(double x1, double y1, double x2, double y2) {
         this.x = (x1 + x2) / 2.0;
         this.y = (y1 + y2) / 2.0;

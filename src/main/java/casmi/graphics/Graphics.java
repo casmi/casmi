@@ -156,8 +156,12 @@ public class Graphics {
 	/**
      *Sets the background to a RGB and value.
      *
-     * @param x,y,z 
-     *            The RGB value of the background.
+     * @param x
+     *            The R value of the background.
+     * @param y 
+     *            The G value of the background.
+     * @param z 
+     *            The B value of the background.
      */
 	public void background(float x, float y, float z) {
 		gl.glClearColor(x / 255, y / 255, z / 255, 1);
@@ -166,9 +170,13 @@ public class Graphics {
 	/**
      *Sets the background to a RGB and alpha value.
      *
-     * @param x,y,z 
-     *            The RGB value of the background.
-     * @param alpha
+     * @param x
+     *            The R value of the background.
+     * @param y 
+     *            The G value of the background.
+     * @param z 
+     *            The B value of the background.
+     * @param a
      *            The alpha opacity of the background.           
      */
 	public void background(float x, float y, float z, float a) {

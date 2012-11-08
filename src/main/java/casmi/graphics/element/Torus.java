@@ -63,7 +63,7 @@ public class Torus extends Element implements Renderable {
      *            The inner radius of the torus.
      * @param outerRad
      *            The outer radius of the torus.
-     * @param nsides
+     * @param nside
      *            The number of side of each radial section.
      * @param rings
      *            The number of radial divisions for torus.                                 
@@ -113,7 +113,7 @@ public class Torus extends Element implements Renderable {
      *            The y-coordinate of the torus.
      * @param z                      
      *            The z-coordinate of the torus.            
-     * @param nsides
+     * @param nside
      *            The number of side of each radial section.
      * @param rings
      *            The number of radial divisions for torus.                                 

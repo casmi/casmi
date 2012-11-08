@@ -318,7 +318,7 @@ public class Lines extends Element implements Renderable {
 	/**
 	 * Sets the point's color for gradation.
 	 * 
-	 * @index index
+	 * @param index
 	 * 				The index number of the point.
 	 * @param color
 	 * 				The color of the point.
@@ -333,7 +333,7 @@ public class Lines extends Element implements Renderable {
 	/**
 	 * Sets the point's color for gradation.
 	 * 
-	 * @index index
+	 * @param index
 	 * 				The index number of the point.
 	 * @param colorSet
 	 * 				The colorSet of the point.

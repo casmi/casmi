@@ -739,8 +739,8 @@ public class RootObject extends GraphicsObject {
 	/**
 	 * Sets the color of this Element's stroke.
 	 * 
-	 * @param strokeColor
-	 *            The color of the Element's stroke.
+	 * @param colorSet
+	 *            The colorSet of the Element's stroke.
 	 */
 	@Override
 	public void setStrokeColor(ColorSet colorSet) {

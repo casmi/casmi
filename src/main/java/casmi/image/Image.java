@@ -227,7 +227,7 @@ public class Image {
      * @param mode
      * 					The Image mode of this Image.
      * 
-     * @see casmi.garaphics.image.ImageMode
+     * @see casmi.image.ImageMode
      */
     public void imageMode(ImageMode mode) {
         this.mode = mode;
@@ -422,7 +422,7 @@ public class Image {
      * @return
      * 					The ImageMode of the Image.
      * 
-     * @see casmi.graphics.image.ImageMode
+     * @see casmi.image.ImageMode
      */
     public final ImageMode getMode() {
         return mode;
@@ -434,7 +434,7 @@ public class Image {
      * @param mode
      * 					The ImageMode of the Image.
      * 
-     * @see casmi.graphics.image.ImageMode
+     * @see casmi.image.ImageMode
      */
     public final void setMode(ImageMode mode) {
         this.mode = mode;

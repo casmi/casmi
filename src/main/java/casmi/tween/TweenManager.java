@@ -45,7 +45,7 @@ public class TweenManager {
 	/**
 	 * Adds a new tween to the manager and starts it.
 	 * 
-	 * @param green
+	 * @param tween
 	 *            A tween. Does nothing if it is already present.
 	 * @return The manager, for instruction chaining.
 	 */

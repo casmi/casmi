@@ -728,7 +728,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	/**
 	 * Sets the color of this Element's stroke.
 	 * 
-	 * @param strokeColor
+	 * @param colorSet
 	 *            The color of the Element's stroke.
 	 */
 	@Override

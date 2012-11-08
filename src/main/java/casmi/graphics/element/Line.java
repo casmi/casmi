@@ -62,10 +62,14 @@ public class Line extends Element implements Renderable {
     /**
      * Creates a new Line object using coordinates for the first and second point.
      * 
-     * @param x1,y1
-     *            The coordinates for the first point.
-     * @param x2,y2
-     *            The coordinates for the second point.
+     * @param x1
+     *            The x-coordinates for the first point.
+     * @param y1
+     *            The y-coordinates for the first point.
+     * @param x2
+     *            The x-coordinates for the second point.
+     * @param y2
+     *            The y-coordinates for the second point.
      */            
     public Line(double x1, double y1, double x2, double y2) {
         this.MODE = LINES_3D;
@@ -89,7 +93,7 @@ public class Line extends Element implements Renderable {
      * 
      * @param v1
      *            The coordinates for the first point.
-     * @param V2
+     * @param v2
      *            The coordinates for the second point.
      */            
     public Line(Vertex v1, Vertex v2) {
@@ -112,11 +116,19 @@ public class Line extends Element implements Renderable {
     /**
      * Creates a new Line object using coordinates for the first and second point.
      * 
-     * @param x1,y1,z1
-     *            The coordinates for the first point.
-     * @param x2,y2,z2
-     *            The coordinates for the second point.
-     */            
+     * @param x1
+     *            The x-coordinates for the first point.
+     * @param y1
+     *            The y-coordinates for the first point.
+     * @param z1
+     *            The z-coordinates for the first point.
+     * @param x2
+     *            The x-coordinates for the second point.
+     * @param y2
+     *            The y-coordinates for the second point.
+     * @param z2
+     *            The z-coordinates for the second point.
+     */               
     public Line(double x1, double y1, double z1, double x2, double y2, double z2) {
         this.MODE = LINES_3D;
         this.x1 = x1;
@@ -137,11 +149,19 @@ public class Line extends Element implements Renderable {
     /**
      * Sets the coordinates for the first and second point.
      * 
-     * @param x1,y1,z1
-     *            The coordinates for the first point.
-     * @param x2,y2,z2
-     *            The coordinates for the second point.
-     */                        
+     * @param x1
+     *            The x-coordinates for the first point.
+     * @param y1
+     *            The y-coordinates for the first point.
+     * @param z1
+     *            The z-coordinates for the first point.
+     * @param x2
+     *            The x-coordinates for the second point.
+     * @param y2
+     *            The y-coordinates for the second point.
+     * @param z2
+     *            The z-coordinates for the second point.
+     */                           
     public void set(double x1, double y1, double z1, double x2, double y2, double z2) {
         this.MODE = LINES_3D;
         this.x1 = x1;
@@ -162,11 +182,15 @@ public class Line extends Element implements Renderable {
     /**
      * Sets the coordinates for the first and second point.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     */            
+     * @param x1
+     *            The x-coordinates for the first point.
+     * @param y1
+     *            The y-coordinates for the first point.
+     * @param x2
+     *            The x-coordinates for the second point.
+     * @param y2
+     *            The y-coordinates for the second point.
+     */         
     public void set(double x1, double y1, double x2, double y2) {
         this.MODE = LINES;
         this.x1 = x1;

@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * @author Y. Ban
  * 
  * @see Tween
- * @see Group
+ * @see casmi.graphics.group.Group
  */
 public abstract class TweenGroup implements Groupable {
 

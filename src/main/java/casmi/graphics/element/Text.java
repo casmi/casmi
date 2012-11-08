@@ -511,7 +511,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Sets the Font of this Text.
      * 
-     * @param
+     * @param font
      *           The Font of the Text.
      */
     public final void setFont(Font font) {

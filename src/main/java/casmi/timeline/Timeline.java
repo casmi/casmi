@@ -127,6 +127,9 @@ public class Timeline implements TimelineRender, Reset {
         }
     }
 
+    /**
+     * Jump to the next Scene.
+     */
     public void goNextScene() {
     	firstCallback = true;
         nowSceneID = nextSceneID;
@@ -189,6 +192,13 @@ public class Timeline implements TimelineRender, Reset {
         	sceneList.get(nextSceneID).EnteredSceneCallback();
     }
     
+    /**
+     * Gets the Scene with name Id. 
+     * @param idName
+     * 					The id Name of the Scene
+     * @return
+     * 					The Scene
+     */
 	public Scene getSceneWithId(String idName) {
 		try {
             return sceneList.get(this.map.get(idName));
@@ -203,6 +213,11 @@ public class Timeline implements TimelineRender, Reset {
         goNextScene();
     }
     
+    /**
+     * Jump to the next Scene with the name ID.
+     * @param idName
+     * 					The id Name of the Scene
+     */
     public void goNextScene(String idName) {
         nextSceneID = this.map.get(idName);
         try {
@@ -216,10 +231,30 @@ public class Timeline implements TimelineRender, Reset {
         	goDissolve();
     }
     
+    /**
+     * Jump to the next Scene with name ID and set the dissolve with DissolveMode and time.
+     * @param idName
+     * 					The id Name of the Scene
+     * @param mode
+     * 					The dissolve mode 
+     * @param time	
+     * 					The dissolve time.
+     */
     public void goNextScene(String idName, DissolveMode mode, double time) {
         goNextScene(idName, mode, time, Linear.INOUT);
     }
     
+    /**
+     * Jump to the next Scene with name ID and set the dissolve with DissolveMode, time and equation.
+     * @param idName 
+     * 					The name of Scene
+     * @param mode
+     * 					The dissolve mode 
+     * @param time	
+     * 					The dissolve time
+     * @param equation
+     * 					The equation of the dissolve's tween
+     */
     public void goNextScene(String idName, DissolveMode mode, double time, TweenEquation equation) {
         nextSceneID = this.map.get(idName);
         try {
@@ -232,6 +267,13 @@ public class Timeline implements TimelineRender, Reset {
         goDissolve();
     }
     
+    /**
+     * Jump to the next Scene with name ID and set the dissolve.
+     * @param idName
+     * 					The name of Scene
+     * @param dissolve
+     * 					The dissolve of Scene
+     */
     public void goNextScene(String idName, Dissolve dissolve) {
         nextSceneID = this.map.get(idName);
         try {
@@ -244,38 +286,78 @@ public class Timeline implements TimelineRender, Reset {
         goDissolve();
     }
 
-    public void appendScene(Scene s) {
-    	s.setRootTimeline(this);
-        this.sceneList.add(s);
-        this.map.put(s.getIdName(), this.sceneList.size()-1);
+    /**
+     * Appends Scene to Timeline.
+     * @param scene
+     */
+    public void appendScene(Scene scene) {
+    	scene.setRootTimeline(this);
+        this.sceneList.add(scene);
+        this.map.put(scene.getIdName(), this.sceneList.size()-1);
     }
     
-    public void appendScene(Scene s, Dissolve dissolve) {
-    	s.setRootTimeline(this);
-        this.sceneList.add(s);
-        this.map.put(s.getIdName(), this.sceneList.size()-1);
-        s.setDissolve(dissolve);
-        s.setHasDissolve(true);
+    /**
+     * Appends Scene to Timeline with dissolve.
+     * @param scene
+     * 
+     * @param dissolve
+     * 					
+     */
+    public void appendScene(Scene scene, Dissolve dissolve) {
+    	scene.setRootTimeline(this);
+        this.sceneList.add(scene);
+        this.map.put(scene.getIdName(), this.sceneList.size()-1);
+        scene.setDissolve(dissolve);
+        scene.setHasDissolve(true);
     }
     
-    public void appendScene(Scene s, DissolveMode mode, double dissolveTime) {
-    	appendScene(s, mode, dissolveTime, Linear.INOUT);
+    /**
+     * Appends Scene to Timeline with dissolve.
+     * @param scene
+     * 
+     * @param mode
+     * 					The DissolveMode
+     * @param dissolveTime	
+     * 					The dissolve time
+     * 					
+     */
+    public void appendScene(Scene scene, DissolveMode mode, double dissolveTime) {
+    	appendScene(scene, mode, dissolveTime, Linear.INOUT);
     }
     
-    public void appendScene(Scene s, DissolveMode mode, double dissolveTime, TweenEquation equation) {
-    	s.setRootTimeline(this);
-        this.sceneList.add(s);
-        this.map.put(s.getIdName(), this.sceneList.size()-1);
-        s.setDissolve(new Dissolve(mode, dissolveTime, equation));
-        s.setHasDissolve(true);
+    /**
+     * Appends Scene to Timeline with dissolve.
+     * @param scene
+     * 
+     * @param mode
+     * 					The DissolveMode
+     * @param dissolveTime	
+     * 					The dissolve time
+     * @param equation
+     * 					The equation of the dissolve's tween
+     * 					
+     */
+    public void appendScene(Scene scene, DissolveMode mode, double dissolveTime, TweenEquation equation) {
+    	scene.setRootTimeline(this);
+        this.sceneList.add(scene);
+        this.map.put(scene.getIdName(), this.sceneList.size()-1);
+        scene.setDissolve(new Dissolve(mode, dissolveTime, equation));
+        scene.setHasDissolve(true);
     }
 
-    
+    /**
+     * Removes the Scene with ID from TimeLine
+     * @param idName
+     * 					The name of the scene
+     */
     public void removeScene(String idName) {
     	this.sceneList.remove(this.map.get(idName));
     	this.map.remove(idName);
     }
 
+    /**
+     * Starts the timer of the Timeline.
+     */
     public void startTimer() {
         timer = new Timer(true);
         double halfd = 0;

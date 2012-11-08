@@ -140,6 +140,12 @@ abstract public class Element implements Cloneable, Renderable {
 		this.tAS = color.getAlpha();
 	}
 	
+	/**
+	 * Sets the alpha of this Element's stroke.
+	 * 
+	 * @param alpha
+	 *            The color of the Element's stroke.
+	 */
 	public void setStrokeColorAlpha(double alpha) {
 		this.strokeColor.setAlpha(alpha);
 		this.tAS = alpha;
@@ -148,13 +154,21 @@ abstract public class Element implements Cloneable, Renderable {
 	/**
 	 * Sets the color of this Element's stroke.
 	 * 
-	 * @param strokeColor
-	 *            The color of the Element's stroke.
+	 * @param colorSet
+	 *            The colorSet of the Element's stroke.
 	 */
 	public void setStrokeColor(ColorSet colorSet) {
 		strokeColor = new RGBColor(colorSet);
 	}
 
+	/**
+	 * Sets the color of this Element's stroke.
+	 * 
+	 * @param colorSet
+	 *            The colorSet of the Element's stroke.
+	 * @param alpha
+	 * 			  The alpha of the Element's stroke.
+	 */
 	public void setStrokeColor(ColorSet colorSet, double alpha) {
 	    strokeColor = new RGBColor(colorSet);
 	    this.tAS = alpha;
@@ -291,10 +305,20 @@ abstract public class Element implements Cloneable, Renderable {
 		return sceneFillColor;
 	}
 
+	/**Decides the Element has the tween or not.
+	 * 
+	 * @param tween
+	 * 				
+	 */
 	public void setTween(boolean tween) {
 		this.tween = tween;
 	}
 
+	/**Gets that the Element has has the tween or not.
+	 * 
+	 * @return
+	 * 			Returns the tween prediction.
+	 */
 	public boolean isTween() {
 		return this.tween;
 	}
@@ -323,52 +347,116 @@ abstract public class Element implements Cloneable, Renderable {
 		this.tAF = tAF;
 	}
 
+	/**Gets x-coordinate of the Element.
+	 * 
+	 * @return
+	 * 				x-coordinate
+	 */
 	public double getX() {
 		return this.x;
 	}
 
+	/**Gets y-coordinate of the Element.
+	 * 
+	 * @return
+	 * 				y-coordinate
+	 */
 	public double getY() {
 		return this.y;
 	}
 
+	/**Gets z-coordinate of the Element.
+	 * 
+	 * @return
+	 * 				z-coordinate
+	 */
 	public double getZ() {
 		return this.z;
 	}
 	
+	/**Gets the position of the Element.
+	 * 
+	 * @return
+	 * 				the position of the Element
+	 */
 	public Vertex getPosition() {
 		Vertex v = new Vertex(x, y, z);
 		return v;
 	}
 
+	/**Sets x-coordinate of the Element.
+	 * 
+	 * @param x
+	 * 				x-coordinate to set.
+	 */
 	public void setX(double x) {
 		this.x = x;
 	}
 
+	/**Sets y-coordinate of the Element.
+	 * 
+	 * @param y
+	 * 				y-coordinate to set.
+	 */
 	public void setY(double y) {
 		this.y = y;
 	}
 
+	/**Sets z-coordinate of the Element.
+	 * 
+	 * @param z
+	 * 				z-coordinate to set.
+	 */
 	public void setZ(double z) {
 		this.z = z;
 	}
 
+	/**Sets the position of the Element in 2D.
+	 * 
+	 * @param x
+	 * 				x-coordinate
+	 * @param y
+	 * 				y-coordinate
+	 */
 	public void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
+	/**Sets the position of the Element in 3D.
+	 * 
+	 * @param x
+	 * 				x-coordinate
+	 * @param y
+	 * 				y-coordinate
+	 * @param z 
+	 * 				z-coordinate
+	 */
 	public void setPosition(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**Sets the position of the Element in 2D.
+	 * 
+	 * @param v
+	 * 				the vertex of the position of the Element
+	 */
 	public void setPosition(Vertex v) {
 		this.x = v.getX();
 		this.y = v.getY();
 		this.z = v.getZ();
 	}
 	
+	/**Flips the Element. You can choose the way of flip with 0 or 1.
+	 * 
+	 * @param mode
+	 * 				You can choose the way of flip with 0 or 1.
+	 * 				If you choose 0, the Element flips round on y-axis.
+	 * 				If you choose 1, the Element flips round on x-axis.
+	 * 				If you choose other numbers, the Element flips round on z-axis.
+	 */
 	public void flip(int mode) {
 		switch (mode) {
 		case 0:
@@ -383,99 +471,219 @@ abstract public class Element implements Cloneable, Renderable {
 		}
 	}
 
+	/**Sets the rotation angle of the Element round on z-axis.
+	 * 
+	 * @param angle
+	 * 					The angle of rotation
+	 */
 	public void setRotation(double angle) {
 		this.rotate = angle;
 	}
 
+	/**Sets the rotation angle of the Element.
+	 * This method wraps the glRotate method.
+	 * 
+	 * @param angle
+	 * 					The angle of rotation
+	 * @param x
+	 * 					The rate of rotation angle round x-axis
+	 * @param y
+	 * 					The rate of rotation angle round x-axis
+	 * @param z
+	 * 					The rate of rotation angle round x-axis
+	 */
 	public void setRotation(double angle, double x, double y, double z) {
 		this.rotateX = angle * x;
 		this.rotateY = angle * y;
 		this.rotate  = angle * z;
 	}
 
+	/**Sets the rotation angle of the Element.
+	 * 
+	 * @param x
+	 * 					The rotation angle round x-axis
+	 * @param y
+	 * 					The rotation angle round x-axis
+	 * @param z
+	 * 					The rotation angle round x-axis
+	 */
 	public void setRotation(double x, double y, double z) {
 		this.rotateX = x;
 		this.rotateY = y;
 		this.rotate  = z;
 	}
 
+	/**Gets the rotation angle round on z-axis.
+	 * 
+	 * @return
+	 * 				The rotation angle round on z-axis
+	 */
 	public double getRotation() {
 		return this.rotate;
 	}
 
+	/**Sets the rotation angle of the Element round on x-axis.
+	 * 
+	 * @param angle
+	 * 					The angle of rotation round on x-axis
+	 */
 	public void setRotationX(double angle) {
 		this.rotateX = angle;
 	}
 
+	/**Gets the rotation angle round x-axis.
+	 * 
+	 * @return
+	 * 				The rotation angle round on x-axis
+	 */
 	public double getRotationX() {
 		return this.rotateX;
 	}
 
+	/**Sets the rotation angle of the Element round on y-axis.
+	 * 
+	 * @param angle
+	 * 					The angle of rotation round on y-axis
+	 */
 	public void setRotationY(double angle) {
 		this.rotateY = angle;
 	}
-
+	
+	/**Gets the rotation angle round y-axis.
+	 * 
+	 * @return
+	 * 				The rotation angle round on y-axis
+	 */
 	public double getRotationY() {
 		return this.rotateY;
 	}
 
+	/**Sets the rotation angle of the Element round on z-axis.
+	 * 
+	 * @param angle
+	 * 					The angle of rotation round on z-axis
+	 */
 	public void setRotationZ(double angle) {
 		this.rotate = angle;
 	}
 
+	/**Gets the rotation angle round z-axis.
+	 * 
+	 * @return
+	 * 				The rotation angle round on z-axis
+	 */
 	public double getRotationZ() {
 		return this.rotate;
 	}
 
+	/**Gets the scale of x-axis.
+	 * 
+	 * @return
+	 * 				The scale of x-axis
+	 */
 	public double getScaleX() {
 		return this.scaleX;
 	}
 
+	/**Gets the scale of y-axis.
+	 * 
+	 * @return
+	 * 				The scale of y-axis
+	 */
 	public double getScaleY() {
 		return this.scaleY;
 	}
 
+	/**Gets the scale of z-axis.
+	 * 
+	 * @return
+	 * 				The scale of z-axis
+	 */
 	public double getScaleZ() {
 		return this.scaleZ;
 	}
 	
+	/**Sets the scale of the Element 
+	 * 
+	 * @param scale
+	 * 					The scale of the Element
+	 */
 	public void setScale(double scale) {
 		this.scaleX = scale;
 		this.scaleY = scale;
 		this.scaleZ = scale;
 	}
 	
+	/**Sets the scale of the Element 
+	 * 
+	 * @param scaleX
+	 * 					The scale of the Element of x-axis direction
+	 * @param scaleY
+	 * 					The scale of the Element of y-axis direction
+	 * @param scaleZ
+	 * 					The scale of the Element of z-axis direction
+	 */
 	public void setScale(double scaleX, double scaleY, double scaleZ) {
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 		this.scaleZ = scaleZ;
 	}
 
+	/**Sets the scale of the Element of x-axis direction.
+	 * 
+	 * @param scaleX
+	 * 					The scale of the Element of x-axis direction
+	 */
 	public void setScaleX(double scaleX) {
 		this.scaleX = scaleX;
 	}
 
+	/**Sets the scale of the Element of y-axis direction.
+	 * 
+	 * @param scaleY
+	 * 					The scale of the Element of y-axis direction
+	 */
 	public void setScaleY(double scaleY) {
 		this.scaleY = scaleY;
 	}
 
+	/**Sets the scale of the Element of z-axis direction.
+	 * 
+	 * @param scaleZ
+	 * 					The scale of the Element of z-axis direction
+	 */
 	public void setScaleZ(double scaleZ) {
 		this.scaleZ = scaleZ;
 	}
 
+	/**Sets the texture to the Element.
+	 * 
+	 * @param texture
+	 */
 	public void setTexture(Texture texture) {
 		this.texture = texture;
 		this.enableTexture = true;
 	}
 
+	/**Enables the texture.
+	 * 
+	 */
 	public void enableTexture() {
 		this.enableTexture = true;
 	}
 
+	/**Disables the texture.
+	 * 
+	 */
 	public void disableTexture() {
 		this.enableTexture = false;
 	}
 
+	/**Adds the mosueEventCallback to the Element
+	 * 
+	 * @param callback
+	 * 					mouseEventCallback
+	 */
 	public void addMouseEventCallback(MouseEventCallback callback) {
 		if (mouseEventCallbacks == null) {
 			mouseEventCallbacks = new ArrayList<MouseEventCallback>(3);
@@ -494,6 +702,11 @@ abstract public class Element implements Cloneable, Renderable {
 		}
 	}
 
+	/**Returns the callbacks that are added to the Element. 
+	 * 
+	 * @return
+	 * 				The callbacks that are added to the Element.
+	 */
 	public List<MouseEventCallback> getMouseOverCallback() {
 	    return mouseEventCallbacks;
 	}
