@@ -22,7 +22,10 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.Graphics;
+import casmi.graphics.color.Color;
+import casmi.graphics.color.ColorSet;
+import casmi.graphics.color.RGBColor;
+
 
 /**
  * Box class. 
@@ -30,7 +33,7 @@ import casmi.graphics.Graphics;
  * 
  * @author Y. Ban
  */
-public class Box extends Element implements Renderable {
+public class Box extends Element implements Renderable, Reset {
 
 	private static final double STROKE_BIAS_RATIO = 1.00;
 
@@ -40,21 +43,46 @@ public class Box extends Element implements Renderable {
 
 	private Texture[] textures = new Texture[6];
 
+    private Color[] cornerColor = new Color[8];
+    
+    
+    private Color startColor;
+    private Color endColor;
+    private GradationMode3D mode;
+
+	/**
+	 * Creates a new Box whose shape is square using size.
+	 * 
+	 * @param size
+	 * 				The size of the Box.
+	 */
 	public Box(double size) {
 		width  = size;
 		depth  = size;
 		height = size;
+		this.setThreeD(true);
 	}
 	
+	/**
+	 * Creates a new Box using width, height and depth.
+	 * 
+     * @param width
+     *              The width of the box.
+     * @param height 
+     *              The height of the box.
+     * @param depth
+     * 				The depth of the box. 
+	 */
 	public Box(double width, double height, double depth) {
 	    this.width  = width;
 	    this.height = height;
 	    this.depth  = depth;
+		this.setThreeD(true);
 	}
 
 	@Override
 	public void render(GL2 gl, GLU glu, int width, int height) {
-		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+		if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
 			gl.glDisable(GL2.GL_DEPTH_TEST);
 		}
 		
@@ -107,7 +135,7 @@ public class Box extends Element implements Renderable {
 
 		gl.glDisable(GL2.GL_DEPTH_TEST);
         
-		if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+		if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
@@ -150,11 +178,16 @@ public class Box extends Element implements Renderable {
 		for (int i = 5; 0 <= i; i--) {
 			if (type == GL2.GL_QUADS) {
 				if (this.enableTexture) {
+				    if (textures[i].loadFlag) {
+				        textures[i].getImage().loadTexture();
+				        textures[i].loadFlag = false;
+				    }
 					if (textures[i].reloadFlag) {
-						Graphics.reloadTextures(gl);
+					    textures[i].getImage().reloadTexture(gl);
 						textures[i].reloadFlag = false;
 					}
 					textures[i].enableTexture();
+					textures[i].enableTexture(gl);
 				}
 			}
 			gl.glBegin(type);
@@ -162,6 +195,8 @@ public class Box extends Element implements Renderable {
 
 			float[] vt = v[faces[i][0]];
 
+			if (isGradation())
+                getSceneColor(cornerColor[faces[i][0]]).setup(gl);
 			if (this.enableTexture) {
 				gl.glTexCoord2f(textures[i].getTextureCorner(0, 0),
 						        textures[i].getTextureCorner(0, 1));
@@ -169,6 +204,8 @@ public class Box extends Element implements Renderable {
 			gl.glVertex3d(vt[0] * width, vt[1] * height, vt[2] * depth);
 
 			vt = v[faces[i][1]];
+			if (isGradation())
+                getSceneColor(cornerColor[faces[i][1]]).setup(gl);
 			if (this.enableTexture) {
 				gl.glTexCoord2f(textures[i].getTextureCorner(1, 0),
                                 textures[i].getTextureCorner(1, 1));
@@ -176,6 +213,8 @@ public class Box extends Element implements Renderable {
 			gl.glVertex3d(vt[0] * width, vt[1] * height, vt[2] * depth);
 
 			vt = v[faces[i][2]];
+			if (isGradation())
+                getSceneColor(cornerColor[faces[i][2]]).setup(gl);
 			if (this.enableTexture) {
 				gl.glTexCoord2f(textures[i].getTextureCorner(2, 0),
 						textures[i].getTextureCorner(2, 1));
@@ -183,6 +222,8 @@ public class Box extends Element implements Renderable {
 			gl.glVertex3d(vt[0] * width, vt[1] * height, vt[2] * depth);
 
 			vt = v[faces[i][3]];
+			if (isGradation())
+                getSceneColor(cornerColor[faces[i][3]]).setup(gl);
 			if (this.enableTexture) {
 				gl.glTexCoord2f(textures[i].getTextureCorner(3, 0),
 						        textures[i].getTextureCorner(3, 1));
@@ -196,43 +237,214 @@ public class Box extends Element implements Renderable {
 
 			if (this.enableTexture && type == GL2.GL_QUADS) {
 				textures[i].disableTexture();
+				textures[i].disableTexture(gl);
 			}
 			gl.glEnd();
 		}
 	}
 
+    /**
+     * Gets the width of this Box.
+     * 
+     * @return
+     * 			The width of the Box.
+     */
 	public double getWidth() {
 		return width;
 	}
 
+	/**
+     * Sets the width of this Box.
+     * 
+     * @param width
+     * 				The width of the Box.
+     */
 	public void setWidth(double width) {
 		this.width = width;
 	}
 	
+	/**
+     * Gets the height of this Box.
+     * 
+     * @return
+     * 			The height of the Box.
+     */
 	public double getHeight() {
 		return height;
 	}
 
+	/**
+     * Sets the height of this Box.
+     * 
+     * @param height
+     * 				The height of the Box.
+     */
 	public void setHeight(double height) {
 		this.height = height;
 	}
 	
+	/**
+     * Gets the depth of this Box.
+     * 
+     * @return
+     * 			The depth of the Box.
+     */
 	public double getDepth() {
 	    return depth;
 	}
 	
+	/**
+     * Sets the depth of this Box.
+     * 
+     * @param depth
+     * 			The depth of the Box.
+     */
 	public void setDepth(double depth) {
 	    this.depth = depth;
 	}
 
+	/**
+     * Sets the size of this Box whose shape is square.
+     * 
+     * @param size
+     * 			The size of the Box whose shape is square .
+     */
 	public void setSize(double size) {
 	    width  = size;
 		height = size;
 		depth  = size;
 	}
 
+	/**
+     * Sets the texture of this Box.
+     * 
+     * @param index
+     * 			The index of the surface of the Box.
+     * @param texture
+     * 			The texture of the Box.
+     * 
+     * @see casmi.graphics.element.Texture
+     */
 	public void setTexture(int index, Texture texture) {
 		this.enableTexture = true;
 		textures[index] = texture;
+		textures[index].loadFlag = true;
+	}
+	
+    /**
+     * Sets the color of a corner for gradation.
+     * 
+     * @param index
+     * 					The index of a corner.
+     * @param color
+     * 					The color of a corner.
+     */
+    public void setCornerColor(int index, Color color) {
+        if (!isGradation()) {
+            for (int i = 0; i < 4; i++) {
+                cornerColor[i] = new RGBColor(0.0, 0.0, 0.0);
+                cornerColor[i] = this.fillColor;
+            }
+            setGradation(true);
+        }
+        cornerColor[index] = color;
+    }
+    
+    /**
+     * Sets the color of a corner for gradation.
+     * 
+     * @param index
+     * 					The index of a corner.
+     * @param colorSet
+     * 					The colorSet of a corner.
+     */
+    public void setCornerColor(int index, ColorSet colorSet) {
+        setCornerColor(index, new RGBColor(colorSet));
+	}
+    
+    
+    private void setGradationCorner(){
+    	switch(mode){
+    	case X_AXIS:
+            for(int i = 0 ; i < 8; i++){
+            	if(i/4==0)
+            		cornerColor[i] = startColor;
+            	else
+            		cornerColor[i] = endColor;
+            }
+            break;
+    	case Y_AXIS:
+    		for(int i = 0 ; i < 8; i++){
+            	if(i==0||i==1||i==4||i==5)
+            		cornerColor[i] = startColor;
+            	else
+            		cornerColor[i] = endColor;
+            }
+            break;
+    	case Z_AXIS:
+    		for(int i = 0 ; i < 8; i++){
+            	if(i==0||i==3||i==4||i==7)
+            		cornerColor[i] = startColor;
+            	else
+            		cornerColor[i] = endColor;
+            }
+            break;
+    		
+    	}
+    }
+    
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     * @param color1
+     * 					The color for gradation.
+     * @param color2
+     * 					The color for gradation.
+     * 
+     * @see casmi.graphics.element.GradationMode2D
+     */
+    public void setGradationColor(GradationMode3D mode, Color color1, Color color2) {
+        setGradation(true);
+        if (startColor == null || endColor == null) {
+            startColor = new RGBColor(0.0, 0.0, 0.0);
+            endColor   = new RGBColor(0.0, 0.0, 0.0);
+        }
+        startColor = color1;
+        endColor   = color2;
+        this.mode = mode;
+        
+        setGradationCorner();
+	}
+	
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     * @param colorSet1
+     * 					The colorSet for gradation.
+     * @param colorSet2
+     * 					The colorSet for gradation.
+     * 
+     * @see casmi.graphics.element.GradationMode2D
+     */
+	public void setGradationColor(GradationMode3D mode, ColorSet colorSet1, ColorSet colorSet2){
+	    setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
+	}
+
+
+	@Override
+	public void reset(GL2 gl) {
+		if(this.enableTexture)
+			for(Texture tex : textures){
+				if(init)
+					tex.loadImage();
+				else
+					tex.reloadImage(gl);
+			}
+		init = false;
+		
 	}
 }

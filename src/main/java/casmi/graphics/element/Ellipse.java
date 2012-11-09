@@ -271,14 +271,6 @@ public class Ellipse extends Element implements Renderable {
     public double getHeight() {
     	return this.height;
     }
-    
-    public double getRotate() {
-    	return this.rotate;
-    }
-    
-    public void setRotate(double rotate) {
-    	this.rotate = rotate;
-    }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
@@ -338,7 +330,7 @@ public class Ellipse extends Element implements Renderable {
     }
 
     /**
-     * Sets the detail  of this Ellipse.
+     * Sets the detail of this Ellipse.
      * 
      * @param detail
      *             The precision of the Ellipse.
@@ -347,6 +339,12 @@ public class Ellipse extends Element implements Renderable {
         this.detailAngle = 360.0 / detail;
     }
     
+    /**
+     * Sets the color of this Ellipse's center.
+     * 
+     * @param color
+     * 				The color of the Ellipse's center.
+     */
     public void setCenterColor(Color color) {
         if(centerColor == null) {
             centerColor = new RGBColor(0.0, 0.0, 0.0);
@@ -355,10 +353,22 @@ public class Ellipse extends Element implements Renderable {
         this.centerColor = color;
     }
     
+    /**
+     * Sets the color of this Ellipse's center.
+     * 
+     * @param colorSet
+     * 				The colorSet of the Ellipse's center.
+     */
     public void setCenterColor(ColorSet colorSet) {
         setCenterColor(new RGBColor(colorSet));
     }
-
+    
+    /**
+     * Sets the color of this Ellipse's edge.
+     * 
+     * @param color
+     * 				The color of the Ellipse's edge.
+     */
     public void setEdgeColor(Color color) {
         if(edgeColor == null) {
             edgeColor = new RGBColor(0.0, 0.0, 0.0);
@@ -367,6 +377,12 @@ public class Ellipse extends Element implements Renderable {
         this.edgeColor = color;
     }
     
+    /**
+     * Sets the color of this Ellipse's edge.
+     * 
+     * @param colorSet
+     * 				The colorSet of the Ellipse's edge.
+     */
     public void setEdgeColor(ColorSet colorSet) {
         setEdgeColor(new RGBColor(colorSet));
     }

@@ -32,6 +32,14 @@ import casmi.tween.TweenType;
  */
 public class TweenInt implements SimpleTweenable {
 	private int value;
+	
+	public TweenInt(int f){
+		value = f;
+	}
+	
+	public TweenInt(){
+		value = 0;
+	}
 
 	@Override
 	public List<Float> getTweenValues(TweenType tweenType) {

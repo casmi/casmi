@@ -45,7 +45,7 @@ public class TweenManager {
 	/**
 	 * Adds a new tween to the manager and starts it.
 	 * 
-	 * @param green
+	 * @param tween
 	 *            A tween. Does nothing if it is already present.
 	 * @return The manager, for instruction chaining.
 	 */
@@ -155,6 +155,16 @@ public class TweenManager {
 			if (t.getTarget() == target &&
 					!t.isFinished())
 				t.kill();
+		}
+	}
+	
+	public final void remove(Tween target) {
+		for (Tween t : tweens ) {
+			if (t == target ){
+				if(!t.isFinished())
+					t.kill();
+				tweens.remove(t);
+			}
 		}
 	}
 

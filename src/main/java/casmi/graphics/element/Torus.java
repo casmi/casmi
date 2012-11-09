@@ -63,7 +63,7 @@ public class Torus extends Element implements Renderable {
      *            The inner radius of the torus.
      * @param outerRad
      *            The outer radius of the torus.
-     * @param nsides
+     * @param nside
      *            The number of side of each radial section.
      * @param rings
      *            The number of radial divisions for torus.                                 
@@ -113,7 +113,7 @@ public class Torus extends Element implements Renderable {
      *            The y-coordinate of the torus.
      * @param z                      
      *            The z-coordinate of the torus.            
-     * @param nsides
+     * @param nside
      *            The number of side of each radial section.
      * @param rings
      *            The number of radial divisions for torus.                                 
@@ -159,7 +159,7 @@ public class Torus extends Element implements Renderable {
     
 
     
-    public void drawWireTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
+    private void drawWireTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
         int nsides, int rings) {
             gl.glPushAttrib(GL2.GL_POLYGON_BIT);
             gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
@@ -167,7 +167,7 @@ public class Torus extends Element implements Renderable {
             gl.glPopAttrib();
     }
 
-    public void drawSolidTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
+    private void drawSolidTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
          int nsides, int rings) {
         doughnut(gl, innerRadius, outerRadius, nsides, rings);
     }

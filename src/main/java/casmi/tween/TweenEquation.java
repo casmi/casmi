@@ -34,7 +34,7 @@ public abstract class TweenEquation {
 	 * @param b Initial value.
 	 * @param c Offset to the initial value.
 	 * @param d Total duration, in seconds.
-	 * @return
+	 * @return float
 	 */
     public abstract float compute(float t, float b, float c, float d);
 

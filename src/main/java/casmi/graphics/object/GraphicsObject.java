@@ -1,22 +1,3 @@
-/*
- *   casmi
- *   http://casmi.github.com/
- *   Copyright (C) 2011, Xcoo, Inc.
- *
- *  casmi is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package casmi.graphics.object;
 
 import java.nio.DoubleBuffer;
@@ -24,79 +5,73 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.Iterator;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-
-
+import casmi.MouseEvent;
+import casmi.Updatable;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
+import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-//import com.sun.opengl.util.BufferUtil;
-import com.jogamp.common.nio.Buffers;
+public class GraphicsObject  extends Element implements Updatable, ObjectRender {
 
-/**
- * GrapicsObject.
- * 
- * @author Y. Ban
- */
-public class GraphicsObject extends Element implements ObjectRender {
+    protected Graphics g;
 
-	private Graphics g;
+    protected double tmpAs, tmpAf;
+
+    protected List<Object>       objectList;
+    protected List<Light>        lightList;
+    protected List<Camera>       cameraList;
+    protected List<Perse>        perseList;
+    protected List<TweenManager> tmList;
+    protected List<Integer> selectionList;
+    protected List<MouseEvent> mouseEventList;
+
+    //private BackGround bg;
+
+    protected enum MatrixMode {
+        APPLY, LOAD, NONE
+    };
+
+    protected MatrixMode mode = MatrixMode.NONE;
+    protected DoubleBuffer matrix;
+    protected boolean selectionbuff = false;
 	
-	private double tmpAs, tmpAf;
+	public final int NO_SELECTIONBUFF = 10;
 	
-	private List<Object> objectList;
-	private List<Light> lightList;
-	private List<Camera> cameraList;
-	private List<Perse> perseList;
-	private List<TweenManager> tmList;
-	private List<Integer> selectionList;
+	protected boolean removeObject;
+	protected boolean resetObject = false;
 	
-	private BackGround bg;
-
-	private enum MatrixMode {
-		APPLY, LOAD, NONE
-	};
-
-	private MatrixMode mode = MatrixMode.NONE;
-	private DoubleBuffer matrix;
-	private boolean selectionbuff = false;
-	private int selectionbufsize = 1024*1024;
-	private int selectedIndex = -1;
-	private IntBuffer selectBuffer;
-	private int selectBuff[];
+	protected MouseEvent mouseEvent;
 	
-	private boolean removeObject;
-	private boolean resetObject = false;
-
+	protected int selectionBufSize = 1024*1024;
+	
 	public GraphicsObject() {
-	    objectList    = new CopyOnWriteArrayList<Object>();
+		objectList    = new CopyOnWriteArrayList<Object>();
 		lightList     = new CopyOnWriteArrayList<Light>();
 		cameraList    = new CopyOnWriteArrayList<Camera>();
 		perseList     = new CopyOnWriteArrayList<Perse>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
-		selectBuffer =  Buffers.newDirectIntBuffer(selectionbufsize);
-		//selectBuffer  = BufferUtil.newIntBuffer(selectionbufsize);
-		selectBuff    =  new int[selectionbufsize];
+		
 		this.setDepthTest(false);
 	}
-
+	
 	public void add(Object object) {
-		   if(object instanceof Element || object instanceof Group || object instanceof TimelineRender)
-			   	objectList.add(object);
+	    if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
+	        objectList.add(object);
 	}
 	
 	public void addAll(Collection<? extends Object> c) {
@@ -204,43 +179,38 @@ public class GraphicsObject extends Element implements ObjectRender {
 	/**
 	 * Applies the transformation matrix.
 	 */
-	public void applyMatrix(double matrix[]) {
+	public void applyMatrix(double[] matrix) {
 		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode = MatrixMode.APPLY;
+		this.mode   = MatrixMode.APPLY;
 	}
 
 	public void applyMatrix(DoubleBuffer matrix) {
 		this.matrix = matrix;
-		this.mode = MatrixMode.APPLY;
+		this.mode   = MatrixMode.APPLY;
 	}
 
-	public void loadMatrix(double matrix[]) {
-
-		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode = MatrixMode.LOAD;
+	public void loadMatrix(double[] matrix) {
+	    this.matrix = java.nio.DoubleBuffer.wrap(matrix);
+		this.mode   = MatrixMode.LOAD;
 	}
 
 	public void loadMatrix(DoubleBuffer matrix) {
-		this.matrix = matrix;
-		this.mode = MatrixMode.LOAD;
+	    this.matrix = matrix;
+	    this.mode   = MatrixMode.LOAD;
 	}
 
-	public void setBackGroundColor(BackGround bg) {
-		this.bg = bg;
-	}
-
-	public void selectionbufRender(Graphics g, double mouseX, double mouseY,
-			int index) {
-		if (selectionbuff == true || this.isSelectionbuffer() == true) {
-			
-			
-			Arrays.fill(selectBuff,0);
+	
+	public double selectionbufRender(Graphics g, double mouseX, double mouseY, int index, int[] selectBuff, IntBuffer selectBuffer, int selectedIndex) {
+		
+	    if (selectionbuff || isSelectionbuffer()) {
+						
+			Arrays.fill(selectBuff, 0);
 			selectBuffer.position(0);
 			int hits;
 			int viewport[] = new int[4];
 
 			g.getGL().glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-			g.getGL().glSelectBuffer(selectionbufsize, selectBuffer);
+			g.getGL().glSelectBuffer(selectionBufSize, selectBuffer);
 			g.getGL().glRenderMode(GL2.GL_SELECT);
 
 			g.getGL().glInitNames();
@@ -257,8 +227,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 			g.getGL().glLoadIdentity();
 			drawPerse(g, true);
 			drawCamera(g);
-			if (bg != null)
-				bg.render(g);
 			drawLight(g);
 			g.pushMatrix();
 			setMatrix(g);
@@ -268,27 +236,33 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 			hits = g.getGL().glRenderMode(GL2.GL_RENDER);
 			selectBuffer.get(selectBuff);
-			processHits(hits, selectBuff);
+			selectedIndex = processHits(hits, selectBuff, selectedIndex);
 			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
 
 		}
-		if(removeObject){
+	    
+		if (removeObject) {
 			Iterator<Object> itr = objectList.iterator();
-			while(itr.hasNext()){
+			while (itr.hasNext()) {
 				Object obj = itr.next();
-				if(obj instanceof Element )
-					if(((Element) obj).isRemove())
-					objectList.remove(obj);
+				if (obj instanceof Element)
+					if (((Element)obj).isRemove())
+					    objectList.remove(obj);
 			}
 		}
+		
+		return selectedIndex;
 	}
 
-	private void processHits(int hits, int buffer[]) {
+
+
+	private int processHits(int hits, int[] buffer, int selectedIndex) {
 		if (hits > 0) {
 			selectedIndex = buffer[4 * hits - 1];
 		} else {
 			selectedIndex = -1;
 		}
+		return selectedIndex;
 	}
 
 	@Override
@@ -301,10 +275,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 			drawPerse(g, false);
 			
 			drawCamera(g);
-			
-			if (bg != null)
-				bg.render(g);
-			
+						
 			drawLight(g);
 			
 			g.pushMatrix();
@@ -315,7 +286,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 			g.popMatrix();
 
 			if (this instanceof Group) {
-				update(g);
+				update();
 			}
 		}
 	}
@@ -324,9 +295,9 @@ public class GraphicsObject extends Element implements ObjectRender {
 		if (this.isVisible()) {
 			this.g = g;
 			
-			if(removeObject){
-				for(Object obj : objectList){
-					if(obj instanceof Element && ((Element) obj).isRemove())
+			if (removeObject) {
+				for (Object obj : objectList) {
+					if(obj instanceof Element && ((Element)obj).isRemove())
 						objectList.remove(obj);
 				}
 				removeObject = false;
@@ -338,9 +309,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 			    drawPerse(g, bool);
 
 			drawCamera(g);
-			
-			if (bg != null)
-				bg.render(g);
 			
 			drawLight(g);
 			
@@ -360,7 +328,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		}
 	}
 
-	private int bufRender(Graphics g, double mouseX, double mouseY,
+	protected int bufRender(Graphics g, double mouseX, double mouseY,
 			boolean bool, int index, int selectedIndex) {
 		int sIndex = -1;
 		if (this.isVisible() == true) {
@@ -370,8 +338,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 				drawPerse(g, bool);
 
 			drawCamera(g);
-			if (bg != null)
-				bg.render(g);
 			drawLight(g);
 			g.pushMatrix();
 			setMatrix(g);
@@ -392,14 +358,11 @@ public class GraphicsObject extends Element implements ObjectRender {
 				el.getMask().render(g);
 			}
 			
-			if (el.getPosition().getZ()==0){
+			if (el.getPosition().getZ() == 0) {
 				el.setDepthTest(false);
 			} else {
 				this.setDepthTest(true);
 			}
-			
-			if(this.isDepthTest())
-				el.setDepthTest(true);
 			
 			g.pushMatrix();
 			{
@@ -442,18 +405,18 @@ public class GraphicsObject extends Element implements ObjectRender {
 			if (obj instanceof GraphicsObject) {
 				GraphicsObject o = (GraphicsObject)obj;
 				if (!selection) {
-					if(o.isRemove())
+					if (o.isRemove())
 						removeObject = true;
-					if (((Element) o).getMask() != null) {
+					if (((Element) o).isMasked()) {
 						((Element) o).getMask().render(g);
 					}
 					if (o.getMouseOverCallback() != null) {
 						selectionbuff = true;
 					}
 					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
-					if(o.isSelectionbuff()==true)
+					if (o.isSelectionbuff())
 						selectionbuff = true;
-					if (((Element) o).getMask() != null)
+					if (((Element)o).isMasked())
 						g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
@@ -486,26 +449,24 @@ public class GraphicsObject extends Element implements ObjectRender {
 				o.setPreMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
-				System.out.println("test");
 				tr.render(g);
 			} else if (obj instanceof TweenManager) {
 				TweenManager tm = (TweenManager) obj;
 				if (!selection)
 					tm.render(g);
 			} else {
-				Element e = (Element) obj;
+				Element e = (Element)obj;
 				if (!selection) {
 					if (e.isRemove())
 						removeObject = true;
-					if (e.isReset()){
+					if (e.isReset()) {
 						resetObject = true;
 						e.setReset(false);
 					}
 					if (e.getMouseOverCallback() != null) {
-						selectionbuff = true;
-						
+						selectionbuff = true;						
 					}
-					this.render((Element) obj);
+					this.render((Element)obj);
 				} else {
 					if (e.getMouseOverCallback() != null) {
 						g.getGL().glLoadName(selectionIndex);
@@ -514,6 +475,11 @@ public class GraphicsObject extends Element implements ObjectRender {
 						}
 						if (selectionIndex == selectedIndex) {
 							e.callMouseOverCallback(true);
+						//	if(mouseEventList.size()!=0){
+								e.callMouseClickCallback(mouseEvent);
+						//		e.callMouseClickCallback(mouseEventList.get(0));
+						//		mouseEventList.remove(0);
+						//	}
 						} else {
 							e.setMouseover(false);
 						}
@@ -535,11 +501,29 @@ public class GraphicsObject extends Element implements ObjectRender {
 
 	public void callMouseClickCallbackOfChildren(casmi.MouseEvent e) {
 		for (Object obj : objectList) {
-			if (obj instanceof Element) {
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.callMouseClickCallbackOfChildren(e);
+			}
+			else if (obj instanceof Element) {
 				Element el = (Element)obj;
 				if (el.isMouseover()) {
 					el.callMouseClickCallback(e);
 				}
+			} 
+		}
+	}
+	
+	public void setMouseEvent(casmi.MouseEvent e){
+	//	if(mouseEventList==null)
+	//		mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
+	//	if(e!=null&&(e!=mouseEvent||mouseEventList.size()==0))
+	//		mouseEventList.add(e);
+		mouseEvent = e;
+		for (Object obj : objectList) {
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject) obj;
+				go.setMouseEvent(mouseEvent);
 			}
 		}
 	}
@@ -606,6 +590,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 		update();
 	}
 
+	@Override
 	public void update() {
 
 	}
@@ -626,13 +611,6 @@ public class GraphicsObject extends Element implements ObjectRender {
 		this.selectionbuff = selectionbuff;
 	}
 
-	public int getSelectionbuffsize() {
-		return selectionbufsize;
-	}
-
-	public void setSelectionbuffsize(int selectionbuffsize) {
-		this.selectionbufsize = selectionbuffsize;
-	}
 
 	public List<Integer> getSelectionList() {
 		return selectionList;
@@ -647,6 +625,15 @@ public class GraphicsObject extends Element implements ObjectRender {
 	}
 
 	public boolean isResetObject() {
+		for (Object obj : objectList) {
+			if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				if(go.isResetObject()){
+					resetObject = true;
+					go.setResetObject(false);
+				}
+			}
+		}
 		return resetObject;
 	}
 
@@ -741,7 +728,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	/**
 	 * Sets the color of this Element's stroke.
 	 * 
-	 * @param strokeColor
+	 * @param colorSet
 	 *            The color of the Element's stroke.
 	 */
 	@Override
@@ -845,4 +832,55 @@ public class GraphicsObject extends Element implements ObjectRender {
 			}
 		}
 	}
+	
+	public void resetObjects() {
+		for (Object obj : objectList) {
+			if (obj instanceof Reset) {
+				Reset el = (Reset)obj;
+				if (g != null)
+				    el.reset(g.getGL());
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.resetObjects();
+			}
+		}
+	}
+	
+	public void setMask(Mask mask) {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.setMask(mask);
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.setMask(mask);
+			}
+		}
+	}
+	
+	public void enableMask() {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.enableMask();
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.enableMask();
+			}
+		}
+	}
+	
+	public void disableMask() {
+		for (Object obj : objectList) {
+			if (obj instanceof Element) {
+				Element el = (Element)obj;
+				el.disableMask();
+			} else if (obj instanceof GraphicsObject) {
+				GraphicsObject go = (GraphicsObject)obj;
+				go.disableMask();
+			}
+		}
+	}
 }
+
+

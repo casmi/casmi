@@ -130,6 +130,7 @@ public class Cylinder extends Element implements Renderable {
         this.setHeight(height);
     }
 
+    @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         
     	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
@@ -176,7 +177,7 @@ public class Cylinder extends Element implements Renderable {
         glu.gluCylinder(quadObj, radius, radius, height, slices, stacks);
       }
 
-      private void drawSolidCylinder(GL2 gl,GLU glu, double radius, double height, int slices, int stacks) {
+    private void drawSolidCylinder(GL2 gl,GLU glu, double radius, double height, int slices, int stacks) {
         
         double [] x = new double[slices];
         double [] y = new double[slices];
@@ -216,31 +217,37 @@ public class Cylinder extends Element implements Renderable {
       }
 
       /**
-       * Returns the radius of this Cylinder.
+       * Gets the radius of this Cylinder.
+       * 
+       * @return 
+       * 			The radius of the Cylinder.
        */
       public double getRadius() {
           return radius;
       }
 
       /**
-       * Set the radius of this Cylinder.
+       * Sets the radius of this Cylinder.
        * 
-       * @param base
-       *            The base of the Cylinder.      
+       * @param radius
+       *            The radius of the Cylinder.      
        */
       public void setRadius(double radius) {
           this.radius = radius;
       }
       
       /**
-       * Returns the height of this Cylinder.
+       * Gets the height of this Cylinder.
+       * 
+       * @return
+       * 			The height of the Cylinder.
        */
       public double getHeight() {
           return height;
       }
 
       /**
-       * Set the height of this Cylinder.
+       * Sets the height of this Cylinder.
        * 
        * @param height
        *            The height of the Cylinder.      
@@ -250,7 +257,7 @@ public class Cylinder extends Element implements Renderable {
       }
       
       /**
-       * Set the slices of this Cylinder.
+       * Sets the slices of this Cylinder.
        * 
        * @param slices
        *            The slices of the Cylinder.      
@@ -260,7 +267,7 @@ public class Cylinder extends Element implements Renderable {
       }
       
       /**
-       * Set the stacks of this Cylinder.
+       * Sets the stacks of this Cylinder.
        * 
        * @param stacks
        *            The stacks of the Cylinder.      

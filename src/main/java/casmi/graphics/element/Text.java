@@ -24,23 +24,20 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLContext;
 import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
-//import com.sun.opengl.util.j2d.TextRenderer;
 
 /**
  * Text class.
  * Wrap JOGL and make it easy to use.
  * 
  * @author Y. Ban, T. Takeuchi
- * 
  */
-public class Text extends Element implements Renderable {
+public class Text extends Element implements Renderable, Reset {
 
     private Font font;
     private String str;
@@ -155,70 +152,96 @@ public class Text extends Element implements Renderable {
         strArray = this.str.split("\n");
         leading = font.getSize() * 1.2;
         
-        try{
-        	if(GLContext.getCurrent()==null);
-        	  textRenderer = new TextRenderer(font.getAWTFont(), true, true);
-            frc = new FontRenderContext(new AffineTransform(), false, false);
+        try {            
+            textRenderer = new TextRenderer(font.getAWTFont(), true, true);
+        	frc = new FontRenderContext(new AffineTransform(), false, false);
             layout = new TextLayout[strArray.length];
-            for(int num = 0; num < strArray.length; num++) {
-                layout[num] = new TextLayout(strArray[num], font.getAWTFont(), frc);
+            for (int i = 0; i < strArray.length; ++i) {
+                layout[i] = new TextLayout(strArray[i], font.getAWTFont(), frc);
             }
-        } catch(java.lang.IllegalArgumentException e) {
-        	// ignore
+        } catch (java.lang.IllegalArgumentException e) {
+        	// Ignore
         }
     }
     
+	@Override
+	public void reset(GL2 gl) {
+        try {
+            textRenderer = new TextRenderer(font.getAWTFont(), true, true);
+            frc = new FontRenderContext(new AffineTransform(), false, false);
+            layout = new TextLayout[strArray.length];
+            for (int i = 0; i < strArray.length; ++i) {
+                layout[i] = new TextLayout(strArray[i], font.getAWTFont(), frc);
+            }
+        } catch (java.lang.IllegalArgumentException e) {
+        	// Ignore
+        }
+	}
+    
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
+    	if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
     		gl.glDisable(GL2.GL_DEPTH_TEST);
         
         gl.glPushMatrix();
         {
+            setTweenParameter(gl);
+            
             if (!isSelection()) {
-                this.setTextTweenParameter(gl);
                 textRenderer.begin3DRendering();
-                if (stroke) {
-                    textRenderer.setColor((float)getSceneStrokeColor().getRed(),
-                                          (float)getSceneStrokeColor().getGreen(),
-                                          (float)getSceneStrokeColor().getBlue(),
-                                          (float)getSceneStrokeColor().getAlpha());
-                } else if (fill) {
-                    textRenderer.setColor((float)getSceneFillColor().getRed(),
-                                          (float)getSceneFillColor().getGreen(),
-                                          (float)getSceneFillColor().getBlue(),
-                                          (float)getSceneFillColor().getAlpha());
-                }
-                double tmpX = 0;
-                double tmpY = 0;
-                for (int i = 0; i < strArray.length; i++) {
-                    switch (align) {
-                    default:
-                    case LEFT:
-                        break;
-                    case CENTER:
-                        tmpX = -getWidth(i) / 2.0;
-                        break;
-                    case RIGHT:
-                        tmpX = -getWidth(i);
+                {
+                    if (stroke) {
+                        textRenderer.setColor(
+                            (float)getSceneStrokeColor().getRed(),
+                            (float)getSceneStrokeColor().getGreen(),
+                            (float)getSceneStrokeColor().getBlue(),
+                            (float)getSceneStrokeColor().getAlpha()
+                        );
+                    } else if (fill) {
+                        textRenderer.setColor(
+                            (float)getSceneFillColor().getRed(),
+                            (float)getSceneFillColor().getGreen(),
+                            (float)getSceneFillColor().getBlue(),
+                            (float)getSceneFillColor().getAlpha()
+                        );
                     }
                     
-                    try {
-                        textRenderer.draw3D(strArray[i], (int)tmpX, (int)(tmpY - leading * i), (int)z, 1.0f);
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        // ignore
-                    }
+                    double tmpX = 0.0;
+                    double tmpY = 0.0;
+                    
+                    for (int i = 0; i < strArray.length; ++i) {
+                        switch (align) {
+                        case LEFT:
+                            break;
+                        case CENTER:
+                            tmpX = -getWidth(i) / 2.0;
+                            break;
+                        case RIGHT:
+                            tmpX = -getWidth(i);
+                            break;
+                        default:
+                            break;
+                        }
 
+                        try {
+                            textRenderer.draw3D(strArray[i],
+                                                (float)tmpX,
+                                                (float)(tmpY - leading * i),
+                                                (float)z,
+                                                1.0f);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            // Ignore
+                            break;
+                        }
+                    }
                 }
                 textRenderer.end3DRendering();
             } else {
-                this.setTextTweenParameter(gl);
-                double tmpX = 0;
-                double tmpY = 0;
+                double tmpX = 0.0;
+                double tmpY = 0.0;
 
-                for (int i = 0; i < strArray.length; i++) {
+                for (int i = 0; i < strArray.length; ++i) {
                     switch (align) {
-                    default:
                     case LEFT:
                         break;
                     case CENTER:
@@ -226,6 +249,9 @@ public class Text extends Element implements Renderable {
                         break;
                     case RIGHT:
                         tmpX = -getWidth(i);
+                        break;
+                    default:
+                        break;
                     }
 
                     gl.glBegin(GL2.GL_QUADS);
@@ -240,7 +266,8 @@ public class Text extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-        if (this.fillColor.getAlpha() < 1.0 || this.strokeColor.getAlpha() < 1.0 || this.isDepthTest()==false)
+        
+        if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
         	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
@@ -252,8 +279,9 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The descent of text.    
      */
-    public double getDescent(int line) {
-    	 if (layout[line] == null) return 0;
+    public final double getDescent(int line) {
+        if (layout[line] == null)
+            return 0;
         return layout[line].getDescent();
     }
 
@@ -265,8 +293,9 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The ascent of text.    
      */
-    public double getAscent(int line) {
-        if (layout[line] == null) return 0;
+    public final double getAscent(int line) {
+        if (layout[line] == null)
+            return 0;
         return layout[line].getAscent();
     }
     
@@ -276,7 +305,7 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The descent of text.    
      */
-    public double getDescent() {
+    public final double getDescent() {
         return getDescent(0);
     }
     
@@ -286,7 +315,7 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The ascent of text.    
      */
-    public double getAscent() {
+    public final double getAscent() {
         return getAscent(0);
     }
     
@@ -296,7 +325,7 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The letter's width.    
      */
-    public double getWidth() {
+    public final double getWidth() {
         return getWidth(0);
     }
     
@@ -307,7 +336,7 @@ public class Text extends Element implements Renderable {
      * @return 
      *           The letter's height.    
      */
-    public double getHeight() {
+    public final double getHeight() {
         return getHeight(0);
     }
     
@@ -318,16 +347,22 @@ public class Text extends Element implements Renderable {
      *           The number of lines.                                                     
      * @return 
      *           The letter's width.    
+     * 
+     * @throws GLException
+     *             If the textRenderer is not valid; calls the reset method and 
+     *             creates a new textRenderer.
      */
-    public double getWidth(int line) {
-       if (strArray.length == 0) return 0.0;
-      //  return layout[line].getBounds().getWidth();
-    	 try{
-    		return textRenderer.getBounds(strArray[line]).getWidth();
-    	 }catch (GLException e){
-    		 reset = true;
-    		 return 0;
-    	 }
+    public final double getWidth(int line) {
+       if (strArray.length == 0)
+           return 0.0;
+
+       try {
+           return textRenderer.getBounds(strArray[line]).getWidth();
+       } catch (GLException e) {
+           reset = true;
+       }
+       
+       return 0.0;
     }
     
     /**
@@ -336,17 +371,23 @@ public class Text extends Element implements Renderable {
      * @param line
      *           The number of lines.                                                     
      * @return 
-     *           The letter's height.    
+     *           The letter's height.  
+     *            
+     * @throws GLException
+     *             If the textRenderer is not valid; calls the reset method and 
+     *             creates a new textRenderer. 
      */
-    public double getHeight(int line) {
-        if (strArray.length == 0) return 0.0;
+    public final double getHeight(int line) {
+        if (strArray.length == 0)
+            return 0.0;
+
         try {
-        return textRenderer.getBounds(strArray[line]).getHeight();
-        }catch (GLException e){
-        	reset = true;
-        	return 0;
+            return textRenderer.getBounds(strArray[line]).getHeight();
+        } catch (GLException e) {
+        	reset = true;        	
         }
-        //return layout[line].getBounds().getHeight();
+        
+        return 0.0;
     }
     
     /**
@@ -355,7 +396,7 @@ public class Text extends Element implements Renderable {
      * @return
      *           The TextLayout of this Text.
      */
-    public TextLayout getLayout() {
+    public final TextLayout getLayout() {
         return layout[0];
     }
     
@@ -367,7 +408,7 @@ public class Text extends Element implements Renderable {
      * @return
      *           The TextLayout of the i line.
      */
-    public TextLayout getLayout(int line) {
+    public final TextLayout getLayout(int line) {
         return layout[line];
     }
     
@@ -380,8 +421,7 @@ public class Text extends Element implements Renderable {
      * @return
      *        The TextAlign of the text.   
      */
-    public TextAlign getAlign() {
-        
+    public final TextAlign getAlign() {        
         return align;
     }
     
@@ -458,20 +498,32 @@ public class Text extends Element implements Renderable {
         return textRenderer;
     }
         
-    public Font getFont() {
+    /**
+     * Returns the Font of this Text.
+     * 
+     * @return
+     *           The Font of the Text.
+     */
+    public final Font getFont() {
         return font;
     }
     
-    public void setFont(Font font) {
+    /**
+     * Sets the Font of this Text.
+     * 
+     * @param font
+     *           The Font of the Text.
+     */
+    public final void setFont(Font font) {
         this.font = font;
         textRenderer = new TextRenderer(font.getAWTFont(), true, true);
     }
 
-	public boolean isSelection() {
+	public final boolean isSelection() {
 		return selection;
 	}
 
-	public void setSelection(boolean selection) {
+	public final void setSelection(boolean selection) {
 		this.selection = selection;
 	}
 }

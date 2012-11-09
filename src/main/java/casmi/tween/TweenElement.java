@@ -26,8 +26,11 @@ import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
 
 /**
+ * TweenElement class.
  * 
  * @author Y. Ban
+ * 
+ * @see Tweenable
  */
 public class TweenElement implements Tweenable {
 	
@@ -99,6 +102,8 @@ public class TweenElement implements Tweenable {
 		case SCALE_Z:
 			result.add( (float) scaleZ );
 			break;
+		default:
+		    throw new IllegalArgumentException();
 		}
 		
 		return result;
@@ -107,54 +112,58 @@ public class TweenElement implements Tweenable {
 	@Override
 	public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
 		g.pushMatrix();
-		switch (tweenType) {
-			case POSITION:
-				positionX = newValues.get(0);
-				positionY = newValues.get(1);
-				break;
-			case POSITION_3D:
-				positionX = newValues.get(0);
-				positionY = newValues.get(1);
-				positionZ = newValues.get(2);
-				break;
-			case ROTATION_2D:
-				rotationZ = newValues.get(0);
-				break;
-			case ROTATION_3D:
-				rotationX = newValues.get(0);
-				rotationY = newValues.get(1);
-				rotationZ = newValues.get(2);
-				break;
-			case ALPHA:
-				strokeAlpha = newValues.get(0);
-				fillAlpha = newValues.get(0);
-				break;
-			case ALPHA_STROKE:
-				strokeAlpha = newValues.get(0);
-				break;
-			case ALPHA_FILL:
-				fillAlpha = newValues.get(0);
-				break;
-			case SCALE:
-				scaleX = newValues.get(0);
-				scaleY = newValues.get(0);
-				break;
-			case SCALE_3D:
-				scaleX = newValues.get(0);
-				scaleY = newValues.get(1);
-				scaleZ = newValues.get(2);
-				break;
-			case SCALE_X:
-				scaleX = newValues.get(0);
-				break;
-			case SCALE_Y:
-				scaleY = newValues.get(0);
-				break;
-			case SCALE_Z:
-				scaleZ = newValues.get(0);
-				break;
+		{
+		    switch (tweenType) {
+		    case POSITION:
+		        positionX = newValues.get(0);
+		        positionY = newValues.get(1);
+		        break;
+		    case POSITION_3D:
+		        positionX = newValues.get(0);
+		        positionY = newValues.get(1);
+		        positionZ = newValues.get(2);
+		        break;
+		    case ROTATION_2D:
+		        rotationZ = newValues.get(0);
+		        break;
+		    case ROTATION_3D:
+		        rotationX = newValues.get(0);
+		        rotationY = newValues.get(1);
+		        rotationZ = newValues.get(2);
+		        break;
+		    case ALPHA:
+		        strokeAlpha = newValues.get(0);
+		        fillAlpha = newValues.get(0);
+		        break;
+		    case ALPHA_STROKE:
+		        strokeAlpha = newValues.get(0);
+		        break;
+		    case ALPHA_FILL:
+		        fillAlpha = newValues.get(0);
+		        break;
+		    case SCALE:
+		        scaleX = newValues.get(0);
+		        scaleY = newValues.get(0);
+		        break;
+		    case SCALE_3D:
+		        scaleX = newValues.get(0);
+		        scaleY = newValues.get(1);
+		        scaleZ = newValues.get(2);
+		        break;
+		    case SCALE_X:
+		        scaleX = newValues.get(0);
+		        break;
+		    case SCALE_Y:
+		        scaleY = newValues.get(0);
+		        break;
+		    case SCALE_Z:
+		        scaleZ = newValues.get(0);
+		        break;
+		    default:
+		        throw new IllegalArgumentException();
+		    }
+		    render(g,tweenType);
 		}
-		render(g,tweenType);
 		g.popMatrix();
 		
 	}
@@ -199,6 +208,9 @@ public class TweenElement implements Tweenable {
 			element.setScaleY(scaleY);
 			element.setScaleZ(scaleZ);
 			break;
+			
+		default:
+		    throw new IllegalArgumentException();
 		}
 	}
 	

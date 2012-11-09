@@ -52,10 +52,6 @@ public class Lines extends Element implements Renderable {
 
 	private Vertex tmpV = new Vertex(0, 0, 0);
 
-	public enum JoinMode {
-		CORNER, CORNERS, RADIUS, CENTER
-	};
-
 	private int MODE;
 
 	private Color startColor;
@@ -64,6 +60,9 @@ public class Lines extends Element implements Renderable {
 
 	private boolean cornerGradation = false;
 
+	/**
+	 * Creates a new Lines object.
+	 */
 	public Lines() {
 		x = new ArrayList<Double>();
 		y = new ArrayList<Double>();
@@ -71,23 +70,14 @@ public class Lines extends Element implements Renderable {
 		colors = new ArrayList<Color>();
 	}
 
-	public void vertex(float x, float y) {
-		MODE = LINES;
-		this.x.add((double) x);
-		this.y.add((double) y);
-		colors.add(this.strokeColor);
-		calcG();
-	}
-
-	public void vertex(float x, float y, float z) {
-		MODE = LINES_3D;
-		this.x.add((double) x);
-		this.y.add((double) y);
-		this.z.add((double) z);
-		colors.add(this.strokeColor);
-		calcG();
-	}
-
+	/**
+	 * Adds the point to Lines.
+	 * 
+	 * @param x
+	 * 			The x-coordinate of a new added point.
+	 * @param y
+	 * 			The y-coordinate of a new added point.
+	 */
 	public void vertex(double x, double y) {
 		MODE = LINES;
 		this.x.add(x);
@@ -96,6 +86,16 @@ public class Lines extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Adds the point to Lines.
+	 * 
+	 * @param x
+	 * 			The x-coordinate of a new added point.
+	 * @param y
+	 * 			The y-coordinate of a new added point.
+	 * @param z
+	 * 			The z-coordinate of a new added point.
+	 */
 	public void vertex(double x, double y, double z) {
 		MODE = LINES_3D;
 		this.x.add(x);
@@ -105,6 +105,12 @@ public class Lines extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Adds the point to Lines.
+	 * 
+	 * @param v
+	 * 			The coordinates of a new added point.
+	 */
 	public void vertex(Vertex v) {
 		MODE = LINES_3D;
 		this.x.add(v.getX());
@@ -114,6 +120,14 @@ public class Lines extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Gets the coordinates of the point.
+	 * 
+	 * @param i
+	 * 			The index number of the point.
+	 * @return
+	 * 			The coordinates of the point.
+	 */
 	public Vertex getVertex(int i) {
 		tmpV.setX(x.get(i));
 		tmpV.setY(y.get(i));
@@ -123,6 +137,12 @@ public class Lines extends Element implements Renderable {
 		return tmpV;
 	}
 
+	/**
+	 * Removes the point from Lines.
+	 * 
+	 * @param i
+	 * 			The index number of the point.
+	 */
 	public void removeVertex(int i) {
 		this.x.remove(i);
 		this.y.remove(i);
@@ -131,6 +151,16 @@ public class Lines extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Sets the coordinates of the point.
+	 * 
+	 * @param i
+	 * 			The index number of the point.
+	 * @param x
+	 * 			The x-coordinate of the point.
+	 * @param y
+	 * 			The y-coordinate of the point.
+	 */
 	public void setVertex(int i, double x, double y) {
 		this.x.set(i, x);
 		this.y.set(i, y);
@@ -138,6 +168,18 @@ public class Lines extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Sets the coordinates of the point.
+	 * 
+	 * @param i
+	 * 			The index number of the point.
+	 * @param x
+	 * 			The x-coordinate of the point.
+	 * @param y
+	 * 			The y-coordinate of the point.
+	 * @param z
+	 * 			The z-coordinate of the point.
+	 */
 	public void setVertex(int i, double x, double y, double z) {
 		this.x.set(i, x);
 		this.y.set(i, y);
@@ -225,6 +267,12 @@ public class Lines extends Element implements Renderable {
 		setPosition(X, Y);
 	}
 
+	/**
+	 * Sets the start point's color for gradation.
+	 * 
+	 * @param color
+	 * 				The color of the start point.
+	 */
 	public void setStartCornerColor(Color color) {
 		if (startColor == null) {
 			startColor = new RGBColor(0.0, 0.0, 0.0);
@@ -233,10 +281,22 @@ public class Lines extends Element implements Renderable {
 		this.startColor = color;
 	}
 
+	/**
+	 * Sets the start point's color for gradation.
+	 * 
+	 * @param colorSet
+	 * 				The colorSet of the start point.
+	 */
 	public void setStartCornerColor(ColorSet colorSet) {
 		setStartCornerColor(new RGBColor(colorSet));
 	}
 
+	/**
+	 * Sets the end point's color for gradation.
+	 * 
+	 * @param color
+	 * 				The color of the end point.
+	 */
 	public void setEndCornerColor(Color color) {
 		if (endColor == null) {
 			endColor = new RGBColor(0.0, 0.0, 0.0);
@@ -245,10 +305,24 @@ public class Lines extends Element implements Renderable {
 		this.endColor = color;
 	}
 
+	/**
+	 * Sets the end point's color for gradation.
+	 * 
+	 * @param colorSet
+	 * 				The colorSet of the end point.
+	 */
 	public void setEndCornerColor(ColorSet colorSet) {
 		setEndCornerColor(new RGBColor(colorSet));
 	}
 
+	/**
+	 * Sets the point's color for gradation.
+	 * 
+	 * @param index
+	 * 				The index number of the point.
+	 * @param color
+	 * 				The color of the point.
+	 */
 	public void setCornerColor(int index, Color color) {
 		if (!cornerGradation) {
 			cornerGradation = true;
@@ -256,6 +330,14 @@ public class Lines extends Element implements Renderable {
 		colors.set(index, color);
 	}
 
+	/**
+	 * Sets the point's color for gradation.
+	 * 
+	 * @param index
+	 * 				The index number of the point.
+	 * @param colorSet
+	 * 				The colorSet of the point.
+	 */
 	public void setCornerColor(int index, ColorSet colorSet) {
 		setCornerColor(index, new RGBColor(colorSet));
 	}

@@ -20,6 +20,8 @@
 package casmi.matrix;
 
 /**
+ * Vertex class.
+ * 
  * @author Y. Ban
  */
 public class Vertex {
@@ -119,5 +121,22 @@ public class Vertex {
     
     public double lengthSquared() {
     	return this.x*this.x+this.y*this.y;
+    }
+    
+    public static double getDistance(Vertex a, Vertex b) {
+    	return Math.sqrt(Math.pow(a.x-b.x,2.0) + Math.pow(a.y - b.y, 2.0) + Math.pow(a.z - b.z, 2.0));
+    }
+    
+    public static double dotProduct(Vertex a, Vertex b) {
+    	return (a.x * b.x + a.y * b.y + a.z * b.z);
+    }
+    
+    public static Vertex crossProduct(Vertex a, Vertex b) {
+    	return new Vertex(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+    }
+    
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + z + ")"; 
     }
 }

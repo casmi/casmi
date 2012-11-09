@@ -29,7 +29,6 @@ import javax.media.opengl.GL2;
  * The parameters are interpreted as RGB or HSB values depending on the current colorMode(). 
  * The default mode is RGB values from 0 to 255.
  *
- * @see casmi.graphics.color.ColorMode
  * @see casmi.graphics.color.ColorSet
  * 
  * @author Y. Ban

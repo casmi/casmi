@@ -31,9 +31,6 @@ import casmi.matrix.Vertex;
  */
 public class TweenVertex extends Vertex implements Tweenable {
 	
-//	public static final int POSITION = 0;
-//	public static final int POSITION_3D = 1;
-	
 	private Renderable r;
 	private double x, y, z;
 
@@ -68,6 +65,8 @@ public class TweenVertex extends Vertex implements Tweenable {
 			returnValues.add( (float) super.getY() );
 			returnValues.add( (float) super.getZ() );
 			break;
+		default:
+			throw new IllegalArgumentException();    
 		}
 		return returnValues;
 	}
@@ -84,6 +83,8 @@ public class TweenVertex extends Vertex implements Tweenable {
 			super.setY(newValues.get(1));
 			super.setZ(newValues.get(2));
 			break;
+		default:
+		    break;
 		}
 	}
 

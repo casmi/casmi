@@ -20,6 +20,8 @@
 package casmi.graphics.element;
 
 /**
+ * Callback interface for mouseOver.
+ * 
  * @author Y. Ban
  */
 public interface MouseOverCallback extends MouseEventCallback {

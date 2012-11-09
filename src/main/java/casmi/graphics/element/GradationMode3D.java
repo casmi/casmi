@@ -16,23 +16,21 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package casmi.extension.coni.listener;
 
-import casmi.extension.coni.CONI;
-import casmi.extension.coni.CalibrationStatus;
+package casmi.graphics.element;
 
 /**
- * SkeletonListener interface.
- * <p>
- * Implement if you want to use skeleton tracking.
+ * Enum class for gradation modes.
+ * Sets the trends for the gradation.
  * 
- * @author T. Takeuchi
+ * @author Y. Ban
  */
-public interface SkeletonListener {
-    
-    void calibrationComplete(CONI coni, int userID, CalibrationStatus status);
-    
-    void calibrationInProgress(CONI coni);
-    
-    void calibrationStart(CONI coni, int userID);
+public enum GradationMode3D {
+	
+	X_AXIS,
+	
+	Y_AXIS,
+	
+	Z_AXIS
+
 }

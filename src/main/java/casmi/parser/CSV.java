@@ -98,7 +98,8 @@ public class CSV {
     /**
      * Creates CSV object from a file path string.
      * 
-     * @param file a file path string of a csv file
+     * @param pathname
+     *     a file path string of a csv file
      */
     public CSV(String pathname) {
 
@@ -108,7 +109,8 @@ public class CSV {
     /**
      * Creates CSV object from a file path URL.
      * 
-     * @param file a file path string of a csv file
+     * @param url
+     *     URL of a csv file
      */
     public CSV(URL url) {
     	this(new File( url2Uri(url) ), DEFAULT_SEPARATOR);
@@ -118,7 +120,11 @@ public class CSV {
      * Creates CSV object from a file path string.
      * Second argument is a character to separate each element.
      * 
-     * @param file a file path string of a csv file
+     * @param pathname
+     *     a file path string of a csv file
+     *     
+     * @param separator
+     *     separator character
      */
     public CSV(String pathname, char separator) {
 

@@ -53,14 +53,22 @@ public class Curve extends Element implements Renderable {
     /**
      * Creates a new Curve object using coordinates for the anchor and control points.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     * @param x3,y3
-     *            The coordinates for the second control point.
-     * @param x4,y4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
      */
     public Curve(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
         this.points[0] = x1;
@@ -81,14 +89,22 @@ public class Curve extends Element implements Renderable {
     /**
      * Creates a new Curve object using coordinates for the anchor and control points.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     * @param x3,y3
-     *            The coordinates for the second control point.
-     * @param x4,y4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
      */
     public Curve(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
         this.points[0] = (float)x1;
@@ -109,14 +125,30 @@ public class Curve extends Element implements Renderable {
     /**
      * Creates a new Curve object using coordinates for the anchor and control points.
      * 
-     * @param x1,y1,z1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2,z2
-     *            The coordinates for the first control point.
-     * @param x3,y3,z3
-     *            The coordinates for the second control point.
-     * @param x4,y4,z4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param z1
+     *            The coordinate z for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param z2
+     *            The coordinate z for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param z3
+     *            The coordinate z for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
+     * @param z4
+     *            The coordinate z for the second anchor point.
      */
     public Curve(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) {
         this.points[0] = x1;
@@ -137,14 +169,30 @@ public class Curve extends Element implements Renderable {
     /**
      * Creates a new Curve object using coordinates for the anchor and control points.
      * 
-     * @param x1,y1,z1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2,z2
-     *            The coordinates for the first control point.
-     * @param x3,y3,z3
-     *            The coordinates for the second control point.
-     * @param x4,y4,z4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param z1
+     *            The coordinate z for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param z2
+     *            The coordinate z for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param z3
+     *            The coordinate z for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
+     * @param z4
+     *            The coordinate z for the second anchor point.
      */
     public Curve(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4) {
         this.points[0] = (float)x1;
@@ -193,14 +241,22 @@ public class Curve extends Element implements Renderable {
     /**
      * Sets coordinates for the anchor and control points.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     * @param x3,y3
-     *            The coordinates for the second control point.
-     * @param x4,y4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
      */
     public void set(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
         this.points[0] = x1;
@@ -221,14 +277,22 @@ public class Curve extends Element implements Renderable {
     /**
      * Sets coordinates for the anchor and control points.
      * 
-     * @param x1,y1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2
-     *            The coordinates for the first control point.
-     * @param x3,y3
-     *            The coordinates for the second control point.
-     * @param x4,y4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
      */
     public void set(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
         this.points[0] = (float)x1;
@@ -250,14 +314,30 @@ public class Curve extends Element implements Renderable {
     /**
      * Sets coordinates for the anchor and control points.
      * 
-     * @param x1,y1,z1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2,z2
-     *            The coordinates for the first control point.
-     * @param x3,y3,z3
-     *            The coordinates for the second control point.
-     * @param x4,y4,z4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param z1
+     *            The coordinate z for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param z2
+     *            The coordinate z for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param z3
+     *            The coordinate z for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
+     * @param z4
+     *            The coordinate z for the second anchor point.
      */
     public void set(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) {
         this.points[0] = x1;
@@ -278,14 +358,30 @@ public class Curve extends Element implements Renderable {
     /**
      * Sets coordinates for the anchor and control points.
      * 
-     * @param x1,y1,z1
-     *            The coordinates for the first anchor point.
-     * @param x2,y2,z2
-     *            The coordinates for the first control point.
-     * @param x3,y3,z3
-     *            The coordinates for the second control point.
-     * @param x4,y4,z4
-     *            The coordinates for the second ancor point.
+     * @param x1
+     *            The coordinate x for the first anchor point.
+     * @param y1
+     *            The coordinate y for the first anchor point.
+     * @param z1
+     *            The coordinate z for the first anchor point.
+     * @param x2
+     *            The coordinate x for the first control point.
+     * @param y2
+     *            The coordinate y for the first control point.
+     * @param z2
+     *            The coordinate z for the first control point.
+     * @param x3
+     *            The coordinate x for the second control point.
+     * @param y3
+     *            The coordinate y for the second control point.
+     * @param z3
+     *            The coordinate z for the second control point.
+     * @param x4
+     *            The coordinate x for the second anchor point.
+     * @param y4
+     *            The coordinate y for the second anchor point.
+     * @param z4
+     *            The coordinate z for the second anchor point.
      */
     public void set(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3, double x4, double y4, double z4) {
         this.points[0] = (float)x1;
@@ -332,6 +428,19 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
+	/**
+	 * Sets x,y,z-coordinate of nodes of this Curve.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param x
+	 *            The x-coordinate of this node.
+	 * @param y
+	 *            The y-coordinate of this node.
+	 */
     public void setNode(int number, double x, double y){
     	if(number<=0)
     		number = 0;
@@ -343,6 +452,21 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
+	/**
+	 * Sets x,y,z-coordinate of nodes of this Curve.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param x
+	 *            The x-coordinate of this node.
+	 * @param y
+	 *            The y-coordinate of this node.
+	 * @param z
+	 *            The y-coordinate of this node.
+	 */
     public void setNode(int number, double x, double y, double z){
     	if(number<=0)
     		number = 0;
@@ -354,6 +478,17 @@ public class Curve extends Element implements Renderable {
     	set();
     }
     
+	/**
+	 * Sets coordinate of nodes of this Curve.
+	 * 
+	 * @param number
+	 *            The number of a node. 
+	 *            The node whose number is 0 or 3 is a anchor point,
+	 *             and the node whose number is 1 or 2 is a control point.
+	 *              
+	 * @param v
+	 *            The coordinates of this node.
+	 */
     public void setNode(int number, Vertex v) {
     	if (number <= 0) {
     		number = 0;
@@ -455,20 +590,22 @@ public class Curve extends Element implements Renderable {
     }
 
     /**
-     * Returns the detail of this Curve.
+     * Gets the detail of this Curve.
+     * 
+     * @return The detail of the Curve.
      */
     public int getDetail() {
     	return detail;
     }
     
     /**
-     * Set the detail of this Curve.
+     * Sets the detail of this Curve.
      * 
      * @param detail
      *             The detail of the Curve.
      */
-    public void setDetail(int d) {
-        detail = d;
+    public void setDetail(int detail) {
+        this.detail = detail;
     }
     
     private final void set() {
@@ -477,6 +614,16 @@ public class Curve extends Element implements Renderable {
     	z = this.points[2];
     }
     
+    /**
+     * Sets the color of the anchor point for gradation.
+     * 
+     * @param index
+     * 				The index of anchors. 
+     * 				The index of the start anchor point is 0, the index of the end anchor point is 1.
+     * 
+     * @param color
+     * 				The color of the anchor point.
+     * */
     public void setAnchorColor(int index, Color color) {
         if (index == 0) {
             if (startColor == null) {
@@ -493,6 +640,16 @@ public class Curve extends Element implements Renderable {
         }
     }
     
+    /**
+     * Sets the colorSet of the anchor point for gradation.
+     * 
+     * @param index
+     * 				The index of anchors. 
+     * 				The index of the start anchor point is 0, the index of the end anchor point is 1.
+     * 
+     * @param colorSet
+     * 				The colorSet of the anchor point.
+     * */
     public void setAnchorColor(int index, ColorSet colorSet) {
         setAnchorColor(index, new RGBColor(colorSet));
     }

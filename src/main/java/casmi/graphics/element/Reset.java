@@ -16,20 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package casmi.extension.coni.listener;
 
-import casmi.extension.coni.CONI;
+package casmi.graphics.element;
+
+import javax.media.opengl.GL2;
 
 /**
- * UserListener interface.
- * <p>
- * Implement if you want to use user tracking.
+ * Reset interface for graphics object.
  * 
- * @author T. Takeuchi
+ * @author Y. Ban
  */
-public interface UserListener {
 
-    void newUser(CONI coni, int userID);
-    
-    void lostUser(CONI coni, int userID);
+public interface Reset {
+	void reset(GL2 gl);
 }

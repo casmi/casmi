@@ -1,7 +1,7 @@
 /*
  *   casmi
  *   http://casmi.github.com/
- *   Copyright (C) 2011, Xcoo, Inc.
+ *   Copyright (C) 2012, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -17,20 +17,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graphics.element;
+package casmi.graph.view;
+
 
 /**
- * Enum class for gradation modes.
- * 
  * @author Y. Ban
  */
-public enum GradationMode {
-    
-	HORIZONTAL,
+public enum GraphTurnType {
 	
-	VERTICAL,
+	CLOCKWISE,
 	
-	LEFT_SIDEWAYS,
-	
-	RIGHT_SIDEWAYS
+	COUNTERCLOCKWISE
 }

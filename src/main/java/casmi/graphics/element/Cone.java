@@ -41,10 +41,10 @@ public class Cone extends Element implements Renderable {
     private int stacks = 30;
     
     /**
-     * Creates a new Cone object using base and height.
+     * Creates a new Cone object using base size and height.
      * 
      * @param base
-     *            The base of the Cone.
+     *            The base size of the Cone.
      * @param height
      *            The height of the Cone.
      */
@@ -54,13 +54,14 @@ public class Cone extends Element implements Renderable {
         this.z = 0.0;
         this.base = base;
         this.height = height;
+		this.setThreeD(true);
     }
 
     /**
-     * Creates a new Cone object using base, height, slices and stacks.
+     * Creates a new Cone object using base size, height, slices and stacks.
      * 
      * @param base
-     *            The base of the Cone.
+     *            The base size of the Cone.
      * @param height
      *            The height of the Cone.
      * @param slices
@@ -76,13 +77,14 @@ public class Cone extends Element implements Renderable {
         this.height = height;
         this.slices = slices;
         this.stacks = stacks;
+		this.setThreeD(true);
     }
 
     /**
-     * Creates a new Cone object using base, height and x,y,z-coordinate.
+     * Creates a new Cone object using base size, height and x,y,z-coordinate.
      * 
      * @param base
-     *            The base of the Cone.
+     *            The base size of the Cone.
      * @param height
      *            The height of the Cone.
      * @param x
@@ -98,13 +100,14 @@ public class Cone extends Element implements Renderable {
         this.z = z;
         this.base = base;
         this.height = height;
+		this.setThreeD(true);
     }
 
     /**
-     * Creates a new Cone object using base, height, slices, stacks, and x,y,z-coordinate.
+     * Creates a new Cone object using base size, height, slices, stacks, and x,y,z-coordinate.
      * 
      * @param base
-     *            The base of the Cone.
+     *            The base size of the Cone.
      * @param height
      *            The height of the Cone.
      * @param x
@@ -126,11 +129,12 @@ public class Cone extends Element implements Renderable {
         this.stacks = stacks;
         this.base = base;
         this.height = height;
+		this.setThreeD(true);
     }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+    	if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
@@ -158,7 +162,7 @@ public class Cone extends Element implements Renderable {
         }
         gl.glPopMatrix();
 
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
@@ -189,31 +193,37 @@ public class Cone extends Element implements Renderable {
     }
 
     /**
-     * Returns the base of this Cone.
+     * Gets the base size of this Cone.
+     * 
+     * @return
+     * 			The base size of the Cone.
      */
     public double getBase() {
         return base;
     }
 
     /**
-     * Set the bese of this Cone.
+     * Sets the base size of this Cone.
      * 
      * @param base
-     *            The base of the Cone.      
+     *            The base size of the Cone.      
      */
     public void setBase(double base) {
         this.base = base;
     }
     
     /**
-     * Returns the height of this Cone.
+     * Gets the height of this Cone.
+     * 
+     * @return 
+     * 			The height of the Cone.
      */
     public double getHeight() {
         return height;
     }
 
     /**
-     * Set the height of this Cone.
+     * Sets the height of this Cone.
      * 
      * @param height
      *            The height of the Cone.      
@@ -223,7 +233,7 @@ public class Cone extends Element implements Renderable {
     }
     
     /**
-     * Set the slices of this Cone.
+     * Sets the slices of this Cone.
      * 
      * @param slices
      *            The slices of the Cone.      
@@ -240,5 +250,25 @@ public class Cone extends Element implements Renderable {
      */
     public void setStacks(int stacks) {
         this.stacks = stacks;
+    }
+    
+    /**
+     * Gets the slices of this Cone.
+     * 
+     * @return
+     *            The slices of the Cone.      
+     */
+    public int getSlices() {
+        return this.slices;
+    }
+    
+    /**
+     * Gets the stacks of this Cone.
+     * 
+     * @return
+     *            The stacks of the Cone.      
+     */
+    public int getStacks() {
+        return this.stacks;
     }
 }

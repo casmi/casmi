@@ -22,7 +22,6 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -35,7 +34,7 @@ import casmi.matrix.Vertex;
  * @author Y. Ban 
  * 
  */
-public class Quad extends Element implements Renderable {
+public class Quad extends Element implements Renderable, Reset {
 
     private double x1;
     private double y1;
@@ -164,67 +163,103 @@ public class Quad extends Element implements Renderable {
     	calcG();
     }
     
-    public void setCorner(int number, double x, double y) {
-        if (number <= 0) {
+    /**
+     * Sets x,y-coordinate of a corner.
+     * 
+     * @param index
+     * 				The index of a corner.
+     * @param x
+     * 				The x-coordinate of a corner.
+     * @param y
+     * 				The y-coordinate of a corner.
+     */
+    public void setCorner(int index, double x, double y) {
+        if (index <= 0) {
             this.x1 = x;
             this.y1 = y;
-        } else if (number == 1) {
+        } else if (index == 1) {
             this.x2 = x;
             this.y2 = y;
-        } else if (number == 2) {
+        } else if (index == 2) {
             this.x3 = x;
             this.y3 = y;
-        } else if (number >= 3) {
+        } else if (index >= 3) {
             this.x4 = x;
             this.y4 = y;
         }
         calcG();
     }
     
-    public void setCorner(int number, double x, double y, double z) {
-        if (number <= 0) {
+    /**
+     * Sets x,y,z-coordinate of a corner.
+     * 
+     * @param index
+     * 				The index of a corner.
+     * @param x
+     * 				The x-coordinate of a corner.
+     * @param y
+     * 				The y-coordinate of a corner.
+     * @param z 
+     * 				The z-coordinate of a corner.
+     */
+    public void setCorner(int index, double x, double y, double z) {
+        if (index <= 0) {
             this.x1 = x;
             this.y1 = y;
-        } else if (number == 1) {
+        } else if (index == 1) {
             this.x2 = x;
             this.y2 = y;
-        } else if (number == 2) {
+        } else if (index == 2) {
             this.x3 = x;
             this.y3 = y;
-        } else if (number >= 3) {
+        } else if (index >= 3) {
             this.x4 = x;
             this.y4 = y;
         }
         calcG();
     }
     
-    public void setConer(int number, Vertex v) {
-    	if (number <= 0) {
+    /**
+     * Sets coordinates of a corner.
+     * 
+     * @param index
+     * 				The index of a corner.
+     * @param v
+     * 				The coordinates of a corner.
+     */
+    public void setConer(int index, Vertex v) {
+    	if (index <= 0) {
     		this.x1 = v.getX();
     		this.y1 = v.getY();
-    	} else if (number == 1) {
+    	} else if (index == 1) {
     		this.x2 = v.getX();
     		this.y2 = v.getY();
-    	} else if (number == 2) {
+    	} else if (index == 2) {
     		this.x3 = v.getX();
     		this.y3 = v.getY();
-    	} else if(3 <= number) {
+    	} else if(3 <= index) {
     		this.x4 = v.getX();
     		this.y4 = v.getY();
     	}
     	calcG();
     }
     
-    public Vertex getConer(int number) {
+    /**
+     * Gets coordinates of a corner.
+     * 
+     * @param index
+     * 				The index of a corner.
+     */
+    public Vertex getConer(int index) {
     	Vertex v = new Vertex(0, 0, 0);
     	
-        if (number <= 0) {
+        if (index <= 0) {
             v.set(this.x1, this.y1);
-        } else if (number == 1) {
+        } else if (index == 1) {
             v.set(this.x2, this.y2);
-        } else if (number == 2) {
+        } else if (index == 2) {
             v.set(this.x3, this.y3);
-        } else if (3 <= number) {
+        } else if (3 <= index) {
             v.set(this.x4, this.y4);
         }
     	return v;
@@ -236,10 +271,10 @@ public class Quad extends Element implements Renderable {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
         if (this.enableTexture) {
-            if (texture.reloadFlag) {
-                Graphics.reloadTextures(gl);
-                texture.reloadFlag = false;
-            }
+//            if (texture.reloadFlag) {
+//                Graphics.reloadTextures(gl);
+//                texture.reloadFlag = false;
+//            }
             texture.enableTexture(gl);
         }
 
@@ -343,6 +378,14 @@ public class Quad extends Element implements Renderable {
     	calcG();
     }
     
+    /**
+     * Sets the color of a corner for gradation.
+     * 
+     * @param index
+     * 					The index of a corner.
+     * @param color
+     * 					The color of a corner.
+     */
     public void setCornerColor(int index, Color color) {
         if (!isGradation()) {
             for (int i = 0; i < 4; i++) {
@@ -354,7 +397,27 @@ public class Quad extends Element implements Renderable {
         cornerColor[index] = color;
     }
     
+    /**
+     * Sets the color of a corner for gradation.
+     * 
+     * @param index
+     * 					The index of a corner.
+     * @param colorSet
+     * 					The colorSet of a corner.
+     */
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
+	}
+
+	@Override
+	public void reset(GL2 gl) {
+		if(this.enableTexture)
+			if(init){
+				texture.loadImage();
+				init = false;
+			}else{
+				texture.reloadImage(gl);
+			}
+		
 	}
 }

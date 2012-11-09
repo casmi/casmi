@@ -20,8 +20,6 @@
 package casmi.graphics;
 
 import java.nio.DoubleBuffer;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -49,18 +47,18 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 public class Graphics {
 
-	private GL2   gl;
+	private GL2  gl;
 	private GLU  glu;
 	private GLUT glut;
 
 	private int width;
 	private int height;
+	
 	private double sceneAlpha = 1.0;
-
-	private static List<Image> textureImages = new CopyOnWriteArrayList<Image>();
 
     public void render(Renderable r) {
         r.setAlpha(sceneAlpha);
+    
         if (r instanceof GroupRender) {
             GroupRender gr = (GroupRender)r;
             gr.render(this);
@@ -72,10 +70,6 @@ public class Graphics {
         }
 	}
 	
-//	public void render(ObjectRender or, boolean b){
-//		or.render(this,b);
-//	}
-	
 	public void render(TimelineRender tr) {
 		tr.render(this);
 	}
@@ -85,33 +79,27 @@ public class Graphics {
 	}
 	
 
-	public Graphics(GL2 g, GLU Glu, GLUT Glut, int width, int height) {
-		this.gl = g;
-		this.glu = Glu;
-		this.glut = Glut;
+	public Graphics(GL2 gl, GLU glu, GLUT glut, int width, int height) {
+		this.gl   = gl;
+		this.glu  = glu;
+		this.glut = glut;
 
-		this.width = width;
+		this.width  = width;
 		this.height = height;
 	}
 
-	public GL2 getGL(){
+	public GL2 getGL() {
 	    return gl;
 	}
 	
-	public GLU getGLU(){
+	public GLU getGLU() {
 	    return glu;
 	}
 	
-	public GLUT getGLUT(){
+	public GLUT getGLUT() {
 	    return glut;
 	}
 	
-	public void init() {
-//		for (Image img : textureImages) {
-//			img.unloadTexture();
-//			img.loadTexture();
-//		}
-	}
 
 	/**
 	 * Returns the width of the display window. 
@@ -168,8 +156,12 @@ public class Graphics {
 	/**
      *Sets the background to a RGB and value.
      *
-     * @param x,y,z 
-     *            The RGB value of the background.
+     * @param x
+     *            The R value of the background.
+     * @param y 
+     *            The G value of the background.
+     * @param z 
+     *            The B value of the background.
      */
 	public void background(float x, float y, float z) {
 		gl.glClearColor(x / 255, y / 255, z / 255, 1);
@@ -178,9 +170,13 @@ public class Graphics {
 	/**
      *Sets the background to a RGB and alpha value.
      *
-     * @param x,y,z 
-     *            The RGB value of the background.
-     * @param alpha
+     * @param x
+     *            The R value of the background.
+     * @param y 
+     *            The G value of the background.
+     * @param z 
+     *            The B value of the background.
+     * @param a
      *            The alpha opacity of the background.           
      */
 	public void background(float x, float y, float z, float a) {
@@ -256,22 +252,22 @@ public class Graphics {
 	/**
 	 * Applies the transformation matrix.
 	 */
-	public void applyMatrix(double n[]) {
+	public void applyMatrix(double[] n) {
 		gl.glMultMatrixd(java.nio.DoubleBuffer.wrap(n));
 	}
 	
-	public void applyMatrix(DoubleBuffer n){
+	public void applyMatrix(DoubleBuffer n) {
 		gl.glMultMatrixd(n);
 	}
 
 	/**
 	 * Loads the transformation matrix.
 	 */
-	public void loadMatrix(double n[]) {
+	public void loadMatrix(double[] n) {
 		gl.glLoadMatrixd(java.nio.DoubleBuffer.wrap(n));
 	}
 	
-	public void loadMatrix(DoubleBuffer n){
+	public void loadMatrix(DoubleBuffer n) {
 		gl.glLoadMatrixd(n);
 	}
 
@@ -806,7 +802,7 @@ public class Graphics {
 		}
 
 	}
-
+/*
 	// textures
 	public static void addTextureImage(Image img) {
 		textureImages.add(img);
@@ -814,10 +810,11 @@ public class Graphics {
 	
 	public static void reloadTextures(GL2 gl) {
 	    for (Image img : textureImages) {
-            img.unloadTexture();
             img.loadTexture();
         }
 	}
+*/	
+	
 	// camera
 	/**
 	 * Sets a perspective projection applying foreshortening, making distant objects appear smaller 

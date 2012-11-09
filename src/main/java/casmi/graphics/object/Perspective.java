@@ -26,6 +26,9 @@ import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
 
 /**
+ * Perspective class. Works like glFrustum.
+ * Wrap JOGL and make it easy to use.
+ * 
  * @author Y. Ban
  */
 public class Perspective extends Element implements ObjectRender,Perse {
@@ -36,6 +39,19 @@ public class Perspective extends Element implements ObjectRender,Perse {
 	private double zFar;
 	private boolean def = false;
 	
+	/**
+	 * Creates a new Perspective object applying foreshortening,
+	 *  making distant objects appear smaller than closer ones.
+	 * 
+	 * @param fov
+	 * 					The field-of-view angle (in radians) for vertical direction.
+	 * @param aspect
+	 * 					The ratio of width to height.
+	 * @param zNear
+	 * 					The z-position of nearest clipping plane.
+	 * @param zFar 
+	 * 					The z-position of nearest farthest plane.
+	 */
 	public Perspective(double fov, double aspect, double zNear, double zFar) {
 		this.fov = fov;
 		this.aspect = aspect;
@@ -43,10 +59,30 @@ public class Perspective extends Element implements ObjectRender,Perse {
 		this.zFar = zFar;
     }
 	
+	/**
+	 * Creates a Perspective object with default values.
+	 * The default values are: 
+	 * Perspective(PI/3.0, width/height, cameraZ/10.0, cameraZ*10.0) 
+	 * where cameraZ is ((height/2.0) / tan(PI*60.0/360.0))
+	 * 
+	 */
 	public Perspective() {
 		def = true;
 	}
 	
+	/**
+	 * Sets a perspective projection applying foreshortening,
+	 *  making distant objects appear smaller than closer ones.
+	 * 
+	 * @param fov
+	 * 					The field-of-view angle (in radians) for vertical direction.
+	 * @param aspect
+	 * 					The ratio of width to height.
+	 * @param zNear
+	 * 					The z-position of nearest clipping plane.
+	 * @param zFar 
+	 * 					The z-position of nearest farthest plane.
+	 */
 	public void set(double fov, double aspect, double zNear, double zFar) {
 		this.fov = fov;
 		this.aspect = aspect;

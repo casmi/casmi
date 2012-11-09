@@ -25,6 +25,8 @@ import java.util.List;
 import casmi.graphics.Graphics;
 
 /**
+ * Tween class.
+ * 
  * @author Y. Ban
  */
 public class Tween implements Groupable {
@@ -500,7 +502,7 @@ public class Tween implements Groupable {
 	 * @param count
 	 *            The number of desired repetition. For infinite repetition, use
 	 *            Tween.INFINITY, or a negative number.
-	 * @param millis
+	 * @param delayMillis
 	 *            A delay before each repetition.
 	 * @return The current tween for chaining instructions.
 	 */

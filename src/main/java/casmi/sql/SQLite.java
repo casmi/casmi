@@ -411,7 +411,7 @@ public class SQLite extends SQL {
      * Retrieves the value of the designated column in the current row as
      * java.util.Date object.
      * 
-     * @param column
+     * @param field
      *            The first column is 1, the second is 2, ...
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
@@ -470,7 +470,7 @@ public class SQLite extends SQL {
      * Retrieves the value of the designated column in the current row as a
      * double in the Java programming language.
      * 
-     * @param column
+     * @param field
      *            The first column is 1, the second is 2, ...
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
@@ -514,7 +514,7 @@ public class SQLite extends SQL {
      * Retrieves the value of the designated column in the current row as a
      * float in the Java programming language.
      * 
-     * @param column
+     * @param field
      *            The first column is 1, the second is 2, ...
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
@@ -558,7 +558,7 @@ public class SQLite extends SQL {
      * Retrieves the value of the designated column in the current row as a int
      * in the Java programming language.
      * 
-     * @param column
+     * @param field
      *            The first column is 1, the second is 2, ...
      * 
      * @return The column value; if the value is SQL NULL, the value returned is
@@ -602,7 +602,7 @@ public class SQLite extends SQL {
      * Retrieves the value of the designated column in the current row as a
      * String in the Java programming language.
      * 
-     * @param column
+     * @param field
      *            The first column is 1, the second is 2, ...
      * 
      * @return The column value; if the value is SQL NULL, the value returned is

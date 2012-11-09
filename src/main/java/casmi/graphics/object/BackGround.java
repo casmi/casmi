@@ -28,6 +28,9 @@ import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
 
 /**
+ * Material class.
+ * Wrap JOGL and make it easy to use.
+ * 
  * @author Y. Ban
  */
 public class BackGround extends Element implements ObjectRender{
@@ -43,25 +46,57 @@ public class BackGround extends Element implements ObjectRender{
 	
 	private colorMode mode;
 	
+	/**
+	 * Creates BackGround object using gray scale.
+	 * 
+	 * @param gray
+	 * 				The gray-scale value of the BackGround.
+	 */
 	public BackGround(double gray) {
 		this.gray = gray;
 		mode = colorMode.Gray;
     }
 	
-	public BackGround(double r,double g,double b){
-		this.red = r;
-		this.green = g;
-		this.blue = b;
+	/**
+	 * Creates BackGround object using red, green, blue color values.
+	 * 
+	 * @param red
+	 * 				The red color value of the BackGround.
+	 * @param green
+	 * 				The green color value of the BackGround.
+	 * @param blue
+	 * 				The blue color value of the BackGround.
+	 */
+	public BackGround(double red,double green,double blue){
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
 		mode = colorMode.RGB;
 	}
 	
-	public BackGround(Color c){
-		this.c = c;
+	/**
+	 * Creates BackGround object using color
+	 * 
+	 * @param color
+	 * 				The Color of the BackGround.
+	 * 
+	 * @see casmi.graphics.color.Color
+	 */
+	public BackGround(Color color){
+		this.c = color;
 		mode = colorMode.Color;
 	}
 	
-	public BackGround(ColorSet cset){
-		this.cset = cset;
+	/**
+	 * Creates BackGround object using color
+	 *
+	 * @param colorSet
+	 * 				The ColorSet of the BackGround.
+	 * 
+	 * @see casmi.graphics.color.ColorSet
+	 */
+	public BackGround(ColorSet colorSet){
+		this.cset = colorSet;
 		mode = colorMode.ColorSet;
 	}
 

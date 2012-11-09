@@ -22,7 +22,6 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -298,10 +297,10 @@ public class Triangle extends Element implements Renderable {
 		}
 		
 		if (this.enableTexture) {
-			if (texture.reloadFlag) {
-                Graphics.reloadTextures(gl);
-                texture.reloadFlag = false;
-            }
+//			if (texture.reloadFlag) {
+//                Graphics.reloadTextures(gl);
+//                texture.reloadFlag = false;
+//            }
             texture.enableTexture();
         }
 
@@ -442,6 +441,14 @@ public class Triangle extends Element implements Renderable {
 		calcG();
 	}
 
+	/**
+	 * Sets the color of the corner for gradation.
+	 * 
+	 * @param index
+	 * 				The index of the corner.
+	 * @param color
+	 * 				The color of the corner.
+	 */
 	public void setCornerColor(int index, Color color) {
 		if (!isGradation()) {
 			for (int i = 0; i < 3; i++) {
@@ -453,6 +460,14 @@ public class Triangle extends Element implements Renderable {
 		cornerColor[index] = color;
 	}
 
+	/**
+	 * Sets the color of the corner for gradation.
+	 * 
+	 * @param index
+	 * 				The index of the corner.
+	 * @param colorSet
+	 * 				The colorSet of the corner.
+	 */
 	public void setCornerColor(int index, ColorSet colorSet) {
 	    setCornerColor(index, new RGBColor(colorSet));
 	}

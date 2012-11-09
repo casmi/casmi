@@ -172,7 +172,9 @@ public class FileUtil {
      * Check file existence
      * 
      * @param filePath
+     * 
      * @return
+     *     Return <code>true</code> if the file is exist, otherwise return <code>false</code>
      */
     public static boolean exist(String filePath) {
     	

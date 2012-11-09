@@ -17,21 +17,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.extension.coni.exception;
+package casmi.graphics.element;
 
-import casmi.exception.CasmiRuntimeException;
+/**
+ * Enum class for gradation modes.
+ * Sets the trends for the gradation.
+ * 
+ * @author Y. Ban
+ */
+public enum GradationMode2D {
+	
+    /** The horizontal direction constant. */
+	HORIZONTAL,
 
-public class CONIRuntimeException extends CasmiRuntimeException {
+    /** The vertical direction constant. */
+	VERTICAL,
 
-    public CONIRuntimeException() {
-        super();
-    }
+    /** The left sideways direction constant. */
+	LEFT_SIDEWAYS,
 
-    public CONIRuntimeException(String message) {
-        super(message);
-    }
-    
-    public CONIRuntimeException(Throwable cause) {
-        super(cause);
-    }
+    /** The right sideways direction constant. */
+	RIGHT_SIDEWAYS
 }

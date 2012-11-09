@@ -49,53 +49,77 @@ public class Rect extends Element implements Renderable {
     private Color startColor;
     private Color endColor;
     private Color gradationColor = new RGBColor(0.0, 0.0, 0.0);
-    private GradationMode mode = GradationMode.HORIZONTAL;
+    private GradationMode2D mode = GradationMode2D.HORIZONTAL;
 
     /**
      * Creates a new Rect object using width and height.
      *
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public Rect(double w, double h) {
-        this.w = w;
-        this.h = h;
+    public Rect(double width, double height) {
+        this.w = width;
+        this.h = height;
     }
     
-    public Rect(double x, double y, double w, double h) {
-        this.w = w;
-        this.h = h;
+    public Rect(double x, double y, double width, double height) {
+        this.w = width;
+        this.h = height;
         this.x = x;
         this.y = y;
     }
     
     /**
-     * Sets a Rect's position of the upper-left corner, width and height.
+     * Sets width and height of this Rect.
      *
-     * @param w
+     * @param width
      *              The width of the rectangle.
-     * @param h 
+     * @param height 
      *              The height of the rectangle.                          
      */
-    public void set(double w, double h) {
-    	this.w = w;
-    	this.h = h;
+    public void set(double width, double height) {
+    	this.w = width;
+    	this.h = height;
     }
     
-    public void setWidth(double w) {
-    	this.w = w;
+    /**
+     * Sets width of this Rect.
+     *
+     * @param width
+     *              The width of the rectangle.                          
+     */
+    public void setWidth(double width) {
+    	this.w = width;
     }
     
-    public void setHeight(double h) {
-    	this.h = h;
+    /**
+     * Sets height of this Rect.
+     *
+     * @param height 
+     *              The height of the rectangle.                          
+     */
+    public void setHeight(double height) {
+    	this.h = height;
     }
     
+    /**
+     * Gets width of this Rect.
+     * 
+     * @return
+     * 			The width of the Rect.
+     */
     public double getWidth() {
     	return this.w;
     }
     
+    /**
+     * Gets height of this Rect.
+     * 
+     * @return
+     * 			The height of the Rect.
+     */
     public double getHeight() {
     	return this.h;
     }
@@ -115,14 +139,15 @@ public class Rect extends Element implements Renderable {
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         calcRect();
-        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+        
+        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || !isDepthTest())
           	gl.glDisable(GL2.GL_DEPTH_TEST);
-
+        
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
-            
-            if (this.fill) {
+            setTweenParameter(gl);
+
+            if (fill) {
                 getSceneFillColor().setup(gl);
                 gl.glBegin(GL2.GL_QUADS);
                 if (!isGradation()) {
@@ -179,24 +204,39 @@ public class Rect extends Element implements Renderable {
                 gl.glEnd();
             }
 
-            if (this.stroke) {
+            if (stroke) {
                 gl.glLineWidth(this.strokeWidth);
                 getSceneStrokeColor().setup(gl);
                 gl.glBegin(GL2.GL_LINE_STRIP);
-                gl.glVertex2d(x1, y1);
-                gl.glVertex2d(x2, y2);
-                gl.glVertex2d(x3, y3);
-                gl.glVertex2d(x4, y4);
-                gl.glVertex2d(x1, y1);
+                {
+                    gl.glVertex2d(x1, y1);
+                    gl.glVertex2d(x2, y2);
+                    gl.glVertex2d(x3, y3);
+                    gl.glVertex2d(x4, y4);
+                    gl.glVertex2d(x1, y1);
+                }
                 gl.glEnd();
             }
         }
         gl.glPopMatrix();
-        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || this.isDepthTest()==false)
+        
+        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || !isDepthTest())
         	gl.glEnable(GL2.GL_DEPTH_TEST);
     }
     
-    public void setGradationColor(GradationMode mode, Color color1, Color color2) {
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     * @param color1
+     * 					The color for gradation.
+     * @param color2
+     * 					The color for gradation.
+     * 
+     * @see casmi.graphics.element.GradationMode2D
+     */
+    public void setGradationColor(GradationMode2D mode, Color color1, Color color2) {
         setGradation(true);
         if (startColor == null || endColor == null) {
             startColor = new RGBColor(0.0, 0.0, 0.0);
@@ -207,11 +247,28 @@ public class Rect extends Element implements Renderable {
         this.mode  = mode;
 	}
 	
-	public void setGradationColor(GradationMode mode, ColorSet colorSet1, ColorSet colorSet2){
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     * @param colorSet1
+     * 					The colorSet for gradation.
+     * @param colorSet2
+     * 					The colorSet for gradation.
+     * 
+     * @see casmi.graphics.element.GradationMode2D
+     */
+	public void setGradationColor(GradationMode2D mode, ColorSet colorSet1, ColorSet colorSet2){
 	    setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
 	}
-	
-	public void setGradationMode(GradationMode mode) {
+    /**
+     * Sets the gradation mode and colors.
+     * 
+     * @param mode
+     * 					The mode of gradation.
+     */
+	public void setGradationMode(GradationMode2D mode) {
 		this.mode = mode;
 	}
 }

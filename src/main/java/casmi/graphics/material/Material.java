@@ -50,41 +50,60 @@ public class Material {
     
     /**
      * Sets the amount of gloss in the surface of shapes. 
+     * 
+     * @param shininess
+     * 				The amount of gloss in the surface of shapes of this Material.
      */
-    public void shininess(float s){
-        shininess[0] = s;
+    public void shininess(float shininess){
+        this.shininess[0] = shininess;
         Sh = true;
     }
     
     /**
      * Sets the amount of gloss in the surface of shapes. 
+     * 
+     * @param shininess
+     * 				The amount of gloss in the surface of shapes of this Material.
      */
-    public void shininess(float s[]){
-        shininess[0] = s[0];
+    public void shininess(float shininess[]){
+        this.shininess[0] = shininess[0];
         Sh = true;
     }
     
     /**
      * Sets the ambient reflectance for shapes drawn to the screen. 
+     * 
+     * @param ambient
+     * 				The ambient reflectance of this Material.
      */
-    public void ambient(float a[]){
-        for(int i = 0; i<a.length;i++)
-            ambient[i]=a[i];
+    public void ambient(float ambient[]){
+        for(int i = 0; i<ambient.length;i++)
+            this.ambient[i]=ambient[i];
         Am = true;
     }
     
     /**
      * Sets the ambient reflectance for shapes drawn to the screen. 
+     * 
+     * @param red
+     * 				The red color of the ambient reflectance.
+     * @param green
+     * 				The green color of the ambient reflectance.
+     * @param blue
+     * 				The blue color of the ambient reflectance.
      */
-    public void ambient(float r, float g, float b){
-        ambient[0]=r;
-        ambient[1]=g;
-        ambient[2]=b;
+    public void ambient(float red, float green, float blue){
+        ambient[0]=red;
+        ambient[1]=green;
+        ambient[2]=blue;
         Am = true;
     }
     
     /**
      * Sets the ambient reflectance for shapes drawn to the screen. 
+     * 
+     * @param gray
+     * 				The gray-scale value of the ambient reflectance.
      */
     public void ambient(float gray){
         ambient[0]=gray;
@@ -95,25 +114,38 @@ public class Material {
     
     /**
      * Sets the diffuse color of the materials used for shapes drawn to the screen.
+     * 
+     * @param diffuse
+     * 				The diffuse color of the materials
      */
-    public void diffuse(float d[]){
-        for(int i = 0; i<d.length;i++)
-            diffuse[i]=d[i];
+    public void diffuse(float diffuse[]){
+        for(int i = 0; i<diffuse.length;i++)
+            this.diffuse[i]=diffuse[i];
         Di = true;
     }
     
     /**
      * Sets the diffuse color of the materials used for shapes drawn to the screen.
+     * 
+     * @param red
+     * 				The red color of the diffuse.
+     * @param green
+     * 				The green color of the diffuse.
+     * @param blue 
+     * 				The blue color of the diffuse.
      */
-    public void diffuse(float r, float g, float b){
-        diffuse[0] = r;
-        diffuse[1] = g;
-        diffuse[2] = b;
+    public void diffuse(float red, float green, float blue){
+        diffuse[0] = red;
+        diffuse[1] = green;
+        diffuse[2] = blue;
         Di = true;
     }
     
     /**
      * Sets the diffuse color of the materials used for shapes drawn to the screen.
+     * 
+     * @param gray
+     * 				The gray-scale value scale of the diffuse.
      */
     public void diffuse(float gray){
         diffuse[0] = gray;
@@ -124,25 +156,38 @@ public class Material {
     
     /**
      * Sets the specular color of the materials used for shapes drawn to the screen.
+     * 
+     * 	@param specular
+     * 				The specular color of the Material.
      */
-    public void specular(float s[]){
-        for(int i = 0; i<s.length;i++)
-            diffuse[i]=s[i];
+    public void specular(float specular[]){
+        for(int i = 0; i<specular.length;i++)
+            this.specular[i]=specular[i];
         Sp = true;
     }
     
     /**
      * Sets the specular color of the materials used for shapes drawn to the screen.
+     * 
+     * @param red
+     * 				The red color of the specular.
+     * @param green
+     * 				The green color of the specular.
+     * @param blue 
+     * 				The blue color of the specular.
      */
-    public void specular(float r, float g, float b){
-        specular[0] = r;
-        specular[1] = g;
-        specular[2] = b;
+    public void specular(float red, float green, float blue){
+        specular[0] = red;
+        specular[1] = green;
+        specular[2] = blue;
         Sp = true;
     }
     
     /**
      * Sets the specular color of the materials used for shapes drawn to the screen.
+     * 
+     * @param gray
+     * 				The gray-scale value of the specular.
      */
     public void specular(float gray){
         specular[0] = gray;
@@ -152,26 +197,39 @@ public class Material {
     }
     
     /**
-     *Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     * Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     *
+     * @param emissive
+     * 				The emissive color of the Material.
      */
-    public void emissive(float e[]){
-        for(int i = 0; i<e.length;i++)
-            emissive[i]=e[i];
+    public void emissive(float emissive[]){
+        for(int i = 0; i<emissive.length;i++)
+            this.emissive[i]=emissive[i];
+        Em = true;
+    }
+    
+    /**
+     * Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     *
+     * @param red
+     * 				The red color of the emissive.
+     * @param green
+     * 				The green color of the emissive.
+     * @param blue
+     * 				The blue color of the emissive.
+     */
+    public void emissive(float red, float green, float blue){
+        emissive[0] = red;
+        emissive[1] = green;
+        emissive[2] = blue;
         Em = true;
     }
     
     /**
      *Sets the emissive color of the material used for drawing shapes drawn to the screen.
-     */
-    public void emissive(float r, float g, float b){
-        emissive[0] = r;
-        emissive[1] = g;
-        emissive[2] = b;
-        Em = true;
-    }
-    
-    /**
-     *Sets the emissive color of the material used for drawing shapes drawn to the screen.
+     *
+     *@param gray
+     *				The gray-scale value of the emissive.
      */
     public void emissive(float gray){
         emissive[0] = gray;
@@ -179,19 +237,7 @@ public class Material {
         emissive[2] = gray;
         Em = true;
     }
-    
-    /**
-     * Returns the array normalized from 0-255 to 0-1.0.
-     */
-    public float[] normalize(float in[]){
-        float out[] = new float[in.length];
-        for(int i= 0; i<in.length;i++){
-            out[i]=(float)(in[i]/255.0f);
-        }
-        return out;
-    }
-    
-    
+        
     public void setup(GL2 gl) {
         if(Sh==true)
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininess,0);
