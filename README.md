@@ -48,15 +48,6 @@ Archetype catalog is http://casmi.github.com/maven-repo/archetype-catalog.xml
 You can download Quickstart Eclipse project template from http://casmi.github.com/download/
 
 
-# Reference
-  https://github.com/casmi/casmi/wiki/Reference
-  
-# Milestones
-  https://github.com/casmi/casmi/wiki/Milestone
-
-# Changelog
-  https://github.com/casmi/casmi/wiki/ChangeLog
-
 # License
 
 casmi is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by
