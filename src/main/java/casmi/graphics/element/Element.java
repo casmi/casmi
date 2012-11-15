@@ -781,10 +781,32 @@ abstract public class Element implements Cloneable, Renderable {
 		preMouseOver = bool;
 	}
 
+	/**
+	 * Modify visibility of the Element.
+	 * 
+	 * @param visible {@code true} to make the Element visible, {@code false} to
+	 *     hide the Element.
+	 */
+	public void setVisible(boolean visible) {
+	    this.visible = visible;
+	}
+	
+	/**
+	 * Make the Element visible.
+	 * 
+	 * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
+	 *     instead.
+	 */
 	public void visible() {
 		visible = true;
 	}
 
+	/**
+	 * Hide the Element.
+	 * 
+	 * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
+	 *     instead.
+	 */
 	public void hidden() {
         visible = false;
     }
