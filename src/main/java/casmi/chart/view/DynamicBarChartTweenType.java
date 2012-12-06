@@ -17,12 +17,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph.view;
+package casmi.chart.view;
 
 /**
  * @author Y. Ban
  */
-public enum DynamicBarGraphTweenType {
+public enum DynamicBarChartTweenType {
 	
 	AT_ONCE,
 	
