@@ -17,11 +17,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph.view;
+package casmi.chart.view;
 
 import java.util.List;
 
-import casmi.graph.data.MatrixData2D;
+import casmi.chart.data.MatrixData2D;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Line;
 import casmi.graphics.element.Text;
@@ -30,13 +30,13 @@ import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;
 
 /**
- * Axis Class for Graph.
+ * Axis Class for Chart.
  * 
  * @author Y.Ban
  */
 public class Axis extends Group {
 
-    private GraphAxis axis; // true:x false:y
+    private ChartAxis axis; // true:x false:y
     private double minValue, maxValue;
     private double length;
     private Line ax;
@@ -51,14 +51,14 @@ public class Axis extends Group {
     private MatrixData2D datas;
     private double offset = 0.0;
 
-    public Axis(GraphAxis axis, double length, MatrixData2D datas) {
+    public Axis(ChartAxis axis, double length, MatrixData2D datas) {
         this.axis = axis;
         this.length = length;
         nameFont = new Font("San-Serif");
         nameFont.setSize(15);
         divFont = new Font("San-Serif");
         divFont.setSize(10);
-        if (this.axis == GraphAxis.HORIZONTAL) {
+        if (this.axis == ChartAxis.HORIZONTAL) {
             ax = new Line(0, 0, this.length, 0);
             name = new Text(datas.getFirstAxis(), nameFont);
             this.divisionDiff = 1.0;
@@ -73,14 +73,14 @@ public class Axis extends Group {
         setData(datas);
     }
 
-    public Axis(GraphAxis axis, double length, MatrixData2D datas, double max, double min) {
+    public Axis(ChartAxis axis, double length, MatrixData2D datas, double max, double min) {
         this.axis = axis;
         this.length = length;
         nameFont = new Font("San-Serif");
         nameFont.setSize(15);
         divFont = new Font("San-Serif");
         divFont.setSize(10);
-        if (this.axis == GraphAxis.HORIZONTAL) {
+        if (this.axis == ChartAxis.HORIZONTAL) {
             ax = new Line(0, 0, this.length, 0);
             name = new Text(datas.getFirstAxis(), nameFont);
             this.divisionDiff = 1.0;
@@ -159,7 +159,7 @@ public class Axis extends Group {
     }
 
     public void draw() {
-        if (axis == GraphAxis.HORIZONTAL) {
+        if (axis == ChartAxis.HORIZONTAL) {
             add(ax);
             name.setPosition(length / 2, -50);
             name.setAlign(TextAlign.CENTER);
