@@ -17,13 +17,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph.view;
+package casmi.chart.view;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import casmi.graph.data.MatrixData2D;
-import casmi.graph.data.PairData;
+import casmi.chart.data.MatrixData2D;
+import casmi.chart.data.PairData;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -42,11 +42,11 @@ import casmi.tween.simpletweenables.TweenDouble;
 import casmi.util.Random;
 
 /**
- * DynamicCircleGraph Class.
+ * DynamicCircleChart Class.
  * 
  * @author Y.Ban
  */
-public class DynamicCircleGraph extends Group {
+public class DynamicCircleChart extends Group {
 
     private TweenDouble tw;
     private List<Arc> arclist = new ArrayList<Arc>();
@@ -57,25 +57,25 @@ public class DynamicCircleGraph extends Group {
     private TweenManager manager;
     private MatrixData2D data;
     private double radius;
-    private GraphTurnType turn = GraphTurnType.CLOCKWISE;
+    private ChartTurnType turn = ChartTurnType.CLOCKWISE;
     private int tweenMilliSecond = 1500;
     TweenCallback tweencallback;
     private boolean animation = true;
 
-    public DynamicCircleGraph(MatrixData2D m, double radius) {
+    public DynamicCircleChart(MatrixData2D m, double radius) {
         init(m, radius, true);
     }
 
-    public DynamicCircleGraph(MatrixData2D m, double radius, GraphTurnType turn) {
+    public DynamicCircleChart(MatrixData2D m, double radius, ChartTurnType turn) {
         this.setTweenType(turn);
         init(m, radius, true);
     }
 
-    public DynamicCircleGraph(MatrixData2D m, double radius, boolean animation) {
+    public DynamicCircleChart(MatrixData2D m, double radius, boolean animation) {
         init(m, radius, animation);
     }
 
-    public DynamicCircleGraph(MatrixData2D m, double radius, GraphTurnType turn, boolean animation) {
+    public DynamicCircleChart(MatrixData2D m, double radius, ChartTurnType turn, boolean animation) {
         this.setTweenType(turn);
         init(m, radius, animation);
     }
@@ -113,7 +113,7 @@ public class DynamicCircleGraph extends Group {
         if (tw.getValue() != 0 && tw.getValue() <= 360) {
             for (int i = 0; i < arclist.size(); i++) {
                 if (arclist.get(i).getStart() - 90 < tw.getValue()) {
-                    arclist.get(i).visible();
+                    arclist.get(i).setVisible(true);
                     double maxRad = 0;
                     if (i == arclist.size() - 1) maxRad = 360;
                     else maxRad = arclist.get(i + 1).getStart() - 90;
@@ -143,7 +143,7 @@ public class DynamicCircleGraph extends Group {
     public void resetTween() {
         for (Arc arc : arclist) {
             arc.setEnd(arc.getStart() + 0.1);
-            arc.hidden();
+            arc.setVisible(false);
         }
         tw.setValue(0);
     }
@@ -166,10 +166,10 @@ public class DynamicCircleGraph extends Group {
             arc.setFillColor(colorList.get(count));
             arc.setStroke(false);
             arc.setDetail(180);
-            if (turn == GraphTurnType.CLOCKWISE)
+            if (turn == ChartTurnType.CLOCKWISE)
                 arc.flip(0);
             if (animation)
-                arc.hidden();
+            	arc.setVisible(false);
             arclist.add(arc);
             add(arclist.get(count));
             count++;
@@ -276,11 +276,11 @@ public class DynamicCircleGraph extends Group {
         this.tweenMilliSecond = tweenMilliSecond;
     }
 
-    public GraphTurnType getTweenType() {
+    public ChartTurnType getTweenType() {
         return turn;
     }
 
-    public void setTweenType(GraphTurnType turn) {
+    public void setTweenType(ChartTurnType turn) {
         this.turn = turn;
     }
 }

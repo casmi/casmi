@@ -17,13 +17,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph.view;
+package casmi.chart.view;
 
 
 /**
  * @author Y. Ban
  */
-public enum GraphTurnType {
+public enum ChartTurnType {
 	
 	CLOCKWISE,
 	

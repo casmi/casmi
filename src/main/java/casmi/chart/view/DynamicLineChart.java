@@ -17,12 +17,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph.view;
+package casmi.chart.view;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import casmi.graph.data.MatrixData2D;
+import casmi.chart.data.MatrixData2D;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Line;
@@ -34,11 +34,11 @@ import casmi.tween.equations.Linear;
 import casmi.tween.simpletweenables.TweenDouble;
 
 /**
- * DynamicLineGraph Class.
+ * DynamicLineChart Class.
  * 
  * @author Y.Ban
  */
-public class DynamicLineGraph extends Graph {
+public class DynamicLineChart extends Chart {
 
     private List<Line> lines;
     private List<Vertex> vertexs;
@@ -51,22 +51,22 @@ public class DynamicLineGraph extends Graph {
     private boolean animation = true;
     private TweenDouble td;
 
-    public DynamicLineGraph(double width, double height, MatrixData2D m, boolean animation) {
+    public DynamicLineChart(double width, double height, MatrixData2D m, boolean animation) {
         super(width, height, m);
         setupGraph(animation);
     }
 
-    public DynamicLineGraph(double width, double height, MatrixData2D m, double maxY, double minY, boolean animation) {
+    public DynamicLineChart(double width, double height, MatrixData2D m, double maxY, double minY, boolean animation) {
         super(width, height, m, maxY, minY);
         setupGraph(animation);
     }
 
-    public DynamicLineGraph(double width, double height, MatrixData2D m) {
+    public DynamicLineChart(double width, double height, MatrixData2D m) {
         super(width, height, m);
         setupGraph(true);
     }
 
-    public DynamicLineGraph(double width, double height, MatrixData2D m, double maxY, double minY) {
+    public DynamicLineChart(double width, double height, MatrixData2D m, double maxY, double minY) {
         super(width, height, m, maxY, minY);
         setupGraph(true);
     }

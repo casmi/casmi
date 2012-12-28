@@ -17,12 +17,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graph.view;
+package casmi.chart.view;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import casmi.graph.data.MatrixData2D;
+import casmi.chart.data.MatrixData2D;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.font.Font;
@@ -31,11 +31,11 @@ import casmi.tween.TweenElement;
 import casmi.tween.TweenManager;
 
 /**
- * Graph Class.
+ * Chart Class.
  * 
  * @author Y.Ban
  */
-public class Graph extends Group {
+public class Chart extends Group {
 
     protected MatrixData2D m;
     protected Axis axisHolizontal;
@@ -49,24 +49,24 @@ public class Graph extends Group {
     protected TweenElement tw;
     protected List<TweenElement> twlist = new ArrayList<TweenElement>();
 
-    public Graph(double width, double height, MatrixData2D m) {
+    public Chart(double width, double height, MatrixData2D m) {
         setSize(width, height);
         setMatrixData2D(m);
         minY = m.getMin();
         maxY = m.getMax();
-        axisHolizontal = new Axis(GraphAxis.HORIZONTAL, this.width, this.m);
-        axisVertical = new Axis(GraphAxis.VERTICAL, this.height, this.m);
+        axisHolizontal = new Axis(ChartAxis.HORIZONTAL, this.width, this.m);
+        axisVertical = new Axis(ChartAxis.VERTICAL, this.height, this.m);
         add(axisHolizontal);
         add(axisVertical);
     }
 
-    public Graph(double width, double height, MatrixData2D m, double max, double min) {
+    public Chart(double width, double height, MatrixData2D m, double max, double min) {
         setSize(width, height);
         setMatrixData2D(m);
         this.minY = min;
         this.maxY = max;
-        axisHolizontal = new Axis(GraphAxis.HORIZONTAL, this.width, this.m);
-        axisVertical = new Axis(GraphAxis.VERTICAL, this.height, this.m, max, min);
+        axisHolizontal = new Axis(ChartAxis.HORIZONTAL, this.width, this.m);
+        axisVertical = new Axis(ChartAxis.VERTICAL, this.height, this.m, max, min);
         add(axisHolizontal);
         add(axisVertical);
     }
@@ -104,7 +104,7 @@ public class Graph extends Group {
         axisVertical.setStrokeColor(color);
     }
 
-    public void setAxisName(GraphAxis axis, String name) {
+    public void setAxisName(ChartAxis axis, String name) {
         switch (axis) {
         case HORIZONTAL:
             this.axisHolizontal.setAxisName(name);
@@ -136,7 +136,7 @@ public class Graph extends Group {
         return m;
     }
 
-    public void setDivisionSpace(GraphAxis axis, double space) {
+    public void setDivisionSpace(ChartAxis axis, double space) {
         switch (axis) {
         case HORIZONTAL:
             this.axisHolizontal.setDivisionDiff(space);

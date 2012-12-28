@@ -35,61 +35,57 @@ import javax.swing.JPopupMenu;
  */
 public class PopupMenu extends JPopupMenu {
 
-	private final Applet target;
+    private final Applet target;
 
-	public PopupMenu(Applet target) {
-		this.target = target;
-	}
+    public PopupMenu(Applet target) {
+        this.target = target;
+    }
 
-	public void show(MouseEvent event) {
-		show(event.getComponent(), event.getX(), event.getY());
-	}
+    public void show(MouseEvent event) {
+        show(event.getComponent(), event.getX(), event.getY());
+    }
 
-	public void show(int x, int y) {
-		show(target, x, y);
-	}
+    public void show(int x, int y) {
+        show(target, x, y);
+    }
 
-	@Override
-	public void show() {
-		show(target, target.getMouseX(),
-				target.getHeight() - target.getMouseY());
-	}
+    @Override
+    public void show() {
+        show(target, target.getMouseX(), target.getHeight() - target.getMouseY());
+    }
 
-	public void addMenuItem(final String buttonName, final String methodName,
-			final Object... args) {
-	    
-		JMenuItem menuItem = new JMenuItem(buttonName);
-		
-		menuItem.addActionListener(new ActionListener() {
-		    
-			public void actionPerformed(ActionEvent event) {
-				Method method;
-				try {
-					int length = args.length;
-					Class<?>[] c = new Class[length];
-					for (int i = 0; i < length; i++) {
-						c[i] = args[i].getClass();
-					}
-					method = target.getClass().getMethod(methodName, c);
-				} catch (SecurityException exception) {
-					throw new RuntimeException(exception);
-				} catch (NoSuchMethodException exception) {
-					throw new RuntimeException(exception);
-				}
-//				Object ret = null;
-				try {
-//					ret = method.invoke(target, args);
-					method.invoke(target, args);
-				} catch (IllegalArgumentException exception) {
-					throw new RuntimeException(exception);
-				} catch (IllegalAccessException exception) {
-					throw new RuntimeException(exception);
-				} catch (InvocationTargetException exception) {
-					throw new RuntimeException(exception);
-				}
-			}
-		});
-		
-		add(menuItem);
-	}
+    public void addMenuItem(final String buttonName, final String methodName, final Object... args) {
+
+        JMenuItem menuItem = new JMenuItem(buttonName);
+
+        menuItem.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                Method method;
+                try {
+                    int length = args.length;
+                    Class<?>[] c = new Class[length];
+                    for (int i = 0; i < length; i++) {
+                        c[i] = args[i].getClass();
+                    }
+                    method = target.getClass().getMethod(methodName, c);
+                } catch (SecurityException exception) {
+                    throw new RuntimeException(exception);
+                } catch (NoSuchMethodException exception) {
+                    throw new RuntimeException(exception);
+                }
+                try {
+                    method.invoke(target, args);
+                } catch (IllegalArgumentException exception) {
+                    throw new RuntimeException(exception);
+                } catch (IllegalAccessException exception) {
+                    throw new RuntimeException(exception);
+                } catch (InvocationTargetException exception) {
+                    throw new RuntimeException(exception);
+                }
+            }
+        });
+
+        add(menuItem);
+    }
 }

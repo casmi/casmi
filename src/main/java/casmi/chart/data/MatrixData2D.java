@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package casmi.graph.data;
+package casmi.chart.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import casmi.graph.data.PairData;
+import casmi.chart.data.PairData;
 
 /**
  * MatrixData2D Class.
