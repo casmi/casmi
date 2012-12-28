@@ -105,6 +105,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     private final Mouse     mouse     = new Mouse();
     private final Keyboard  keyboard  = new Keyboard();    
+    private final MenuBar   menuBar   = new MenuBar();
     private final PopupMenu popupMenu = new PopupMenu(this);
     private MouseButton mouseButton;
     private MouseEvent mouseEvent;
@@ -218,6 +219,12 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		add(panel);
 		setFocusable(false);
 		panel.setFocusable(true);
+		
+		if (runAsApplication) {
+		    AppletRunner.frame.setJMenuBar(menuBar.getJMenuBar());
+		} else {
+		    setJMenuBar(menuBar.getJMenuBar());
+		}
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
@@ -776,7 +783,13 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		return keyboard.isTyped();
 	}
 	
-	// PopupMenu
+	// MenuBar -----
+	
+	public MenuBar getMenuBar() {
+	    return menuBar;
+	}
+	
+	// PopupMenu -----
 	
 	public PopupMenu getPopupMenu() {
 	    return popupMenu;

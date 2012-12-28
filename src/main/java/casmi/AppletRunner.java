@@ -26,6 +26,10 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+
+import casmi.util.OS;
+import casmi.util.SystemUtil;
 
 /**
  * @author T. Aoki
@@ -39,13 +43,28 @@ public class AppletRunner {
 
         final Applet applet;
         try {
-            Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(className);
+            Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(className);            
+            initBeforeCreateApplet(title);
             applet = (Applet)c.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         runApplet(applet, title);
+    }
+    
+    private static void initBeforeCreateApplet(String title) {
+        OS os = SystemUtil.getOS(); 
+        if (os == OS.MAC || os == OS.MAC_64) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", title);
+        }
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // Ignore and use Swing UI.
+        }
     }
 
     private static void runApplet(Applet applet, String title) {
