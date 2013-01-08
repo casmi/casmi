@@ -53,6 +53,15 @@ public class Line extends Element implements Renderable {
     private Color endColor;
 
     private int MODE;
+    
+    private boolean dashed = false;
+    private double dashedLineLength;
+    private double dashedLineInterval;
+    
+    private double[] dashedIntervalD = new double[3];
+    private double[] dashedLengthD = new double[3];
+    private double[] dashedRestD = new double[3];
+    private double dashedRepeatNum;
 
     /**
      * Creates a new Line object
@@ -177,6 +186,8 @@ public class Line extends Element implements Renderable {
         dy[1] = y2 - y;
         dz[0] = z1 - z;
         dz[1] = z2 - z;
+        if(dashed)
+        	calcDashedLine();
     }
     
     /**
@@ -205,6 +216,8 @@ public class Line extends Element implements Renderable {
         dy[1] = y2 - y;
         dz[0] = z1 - 0;
         dz[1] = z2 - 0;
+        if(dashed)
+        	calcDashedLine();
     }
     
     /**
@@ -234,6 +247,8 @@ public class Line extends Element implements Renderable {
         dy[1] = y2 - this.y;
         dz[0] = z1 - 0;
         dz[1] = z2 - 0;
+        if(dashed)
+        	calcDashedLine();
     }
     
     /**
@@ -267,6 +282,8 @@ public class Line extends Element implements Renderable {
         dy[1] = y2 - this.y;
         dz[0] = z1 - this.z;
         dz[1] = z2 - this.z;
+        if(dashed)
+        	calcDashedLine();
     }
     
     /**
@@ -292,8 +309,147 @@ public class Line extends Element implements Renderable {
         dy[1] = y2 - this.y;
         dz[0] = z1 - this.z;
         dz[1] = z2 - this.z;
+        if(dashed)
+        	calcDashedLine();
+    }
+    
+    public void setDashedLine(boolean dashed) {
+    	this.dashed = dashed;
+    }
+    
+    /**
+     * Sets the parameter for the dashed line.
+     * 
+     * @param length
+     *            The length of the dashed lines.
+     * @param interval
+     *            The interval of the dashed lines.
+     */  
+    public void setDashedLinePram(double length, double interval) {
+    	this.dashedLineLength = length;
+    	this.dashedLineInterval = interval;
+    	this.dashed = true;
+    	calcDashedLine();
+    }
+    
+    public double getDashedLinelength(){
+    	return this.dashedLineLength;
+    }
+    
+    public double getDashedLineInterval(){
+    	return this.dashedLineInterval;
+    }
+    
+    private double getLineLength(){
+    	return Math.sqrt(Math.pow((this.x2-this.x1), 2)+Math.pow((this.y2-this.y1), 2)+Math.pow((this.y2-this.y1), 2));
+    }
+    
+    private void calcDashedLine(){
+    	double len = getLineLength();
+    	dashedRepeatNum = (int)(((len-this.dashedLineInterval)/(this.dashedLineInterval+this.dashedLineLength))/2);
+    	double rest = ((len-this.dashedLineInterval)-(this.dashedLineInterval+this.dashedLineLength)*(dashedRepeatNum*2))/2.0;
+    	if(rest > dashedLineLength)
+    		rest = dashedLineLength;
+    	switch(MODE){
+    	case LINES_3D:
+    		dashedLengthD[2] = this.dashedLineLength/len*(this.z2-this.z1);
+    		dashedIntervalD[2] = this.dashedLineInterval/len*(this.z2-this.z1);
+    		dashedRestD[2] = rest/len*(this.z2-this.z1);  		
+    	case LINES:
+    		dashedLengthD[0] = this.dashedLineLength/len*(this.x2-this.x1);
+    		dashedLengthD[1] = this.dashedLineLength/len*(this.y2-this.y1);
+    		dashedIntervalD[0] = this.dashedLineInterval/len*(this.x2-this.x1);
+    		dashedIntervalD[1] = this.dashedLineInterval/len*(this.y2-this.y1);
+    		dashedRestD[0] = rest/len*(this.x2-this.x1);
+    		dashedRestD[1] = rest/len*(this.y2-this.y1);
+    		break;
+    	}
+    }
+    
+    private void drawDashedLine(GL2 gl){
+        int sign = 1;
+    	switch (MODE) {
+        case LINES:
+            gl.glLineWidth(this.strokeWidth);
+            for(int j=0; j<2; j++){
+            	if(j==0)
+            		sign = 1;
+            	else
+            		sign = -1;
+            for(int i=0; i<dashedRepeatNum; i++){
+                gl.glBegin(GL2.GL_LINES);
+            	gl.glVertex2d(sign*(this.dashedIntervalD[0]/2.0+(this.dashedIntervalD[0]+this.dashedLengthD[0])*i), sign*(this.dashedIntervalD[1]/2.0+(this.dashedIntervalD[1]+this.dashedLengthD[1])*i));
+                gl.glVertex2d(sign*(this.dashedIntervalD[0]/2.0+this.dashedLengthD[0]+(this.dashedIntervalD[0]+this.dashedLengthD[0])*i), sign*(this.dashedIntervalD[1]/2.0+this.dashedLengthD[1]+(this.dashedIntervalD[1]+this.dashedLengthD[1])*i));
+                gl.glEnd();
+            }
+            gl.glBegin(GL2.GL_LINES);
+        	gl.glVertex2d(sign*(this.dashedIntervalD[0]/2.0+(this.dashedIntervalD[0]+this.dashedLengthD[0])*dashedRepeatNum), sign*(this.dashedIntervalD[1]/2.0+(this.dashedIntervalD[1]+this.dashedLengthD[1])*dashedRepeatNum));
+            gl.glVertex2d(sign*(this.dashedIntervalD[0]/2.0+this.dashedRestD[0]+(this.dashedIntervalD[0]+this.dashedLengthD[0])*dashedRepeatNum), sign*(this.dashedIntervalD[1]/2.0+this.dashedRestD[1]+(this.dashedIntervalD[1]+this.dashedLengthD[1])*dashedRepeatNum));
+            gl.glEnd();
+            }
+            break;
+        case LINES_3D:
+        	 gl.glLineWidth(this.strokeWidth);
+             for(int j=0; j<2; j++){
+             	if(j==0)
+             		sign = 1;
+             	else
+             		sign = -1;
+             for(int i=0; i<dashedRepeatNum; i++){
+                 gl.glBegin(GL2.GL_LINES);
+             	gl.glVertex3d(sign*(this.dashedIntervalD[0]/2.0+(this.dashedIntervalD[0]+this.dashedLengthD[0])*i), sign*(this.dashedIntervalD[1]/2.0+(this.dashedIntervalD[1]+this.dashedLengthD[1])*i),sign*(this.dashedIntervalD[1]/2.0+(this.dashedIntervalD[2]+this.dashedLengthD[2])*i));
+                 gl.glVertex3d(sign*(this.dashedIntervalD[0]/2.0+this.dashedLengthD[0]+(this.dashedIntervalD[0]+this.dashedLengthD[0])*i), sign*(this.dashedIntervalD[1]/2.0+this.dashedLengthD[1]+(this.dashedIntervalD[1]+this.dashedLengthD[1])*i), sign*(this.dashedIntervalD[2]/2.0+this.dashedLengthD[2]+(this.dashedIntervalD[2]+this.dashedLengthD[2])*i));
+                 gl.glEnd();
+             }
+             gl.glBegin(GL2.GL_LINES);
+         	gl.glVertex3d(sign*(this.dashedIntervalD[0]/2.0+(this.dashedIntervalD[0]+this.dashedLengthD[0])*dashedRepeatNum), sign*(this.dashedIntervalD[1]/2.0+(this.dashedIntervalD[1]+this.dashedLengthD[1])*dashedRepeatNum), sign*(this.dashedIntervalD[2]/2.0+(this.dashedIntervalD[2]+this.dashedLengthD[2])*dashedRepeatNum));
+             gl.glVertex3d(sign*(this.dashedIntervalD[0]/2.0+this.dashedRestD[0]+(this.dashedIntervalD[0]+this.dashedLengthD[0])*dashedRepeatNum), sign*(this.dashedIntervalD[1]/2.0+this.dashedRestD[1]+(this.dashedIntervalD[1]+this.dashedLengthD[1])*dashedRepeatNum), sign*(this.dashedIntervalD[2]/2.0+this.dashedRestD[2]+(this.dashedIntervalD[2]+this.dashedLengthD[2])*dashedRepeatNum));
+             gl.glEnd();
+             }
+            break;
+        default:
+            break;
+        }
     }
    
+    private void drawLine(GL2 gl){
+    	 switch (MODE) {
+         case LINES:
+             gl.glLineWidth(this.strokeWidth);
+             gl.glBegin(GL2.GL_LINES);
+             {
+                 if (isGradation() && startColor != null)
+                     getSceneColor(startColor).setup(gl);
+                 
+                 gl.glVertex2d(this.dx[0], this.dy[0]);
+                 
+                 if (isGradation() && endColor != null)
+                     getSceneColor(endColor).setup(gl);
+                 
+                 gl.glVertex2d(this.dx[1], this.dy[1]);
+             }
+             gl.glEnd();
+             break;
+         case LINES_3D:
+             gl.glLineWidth(this.strokeWidth);
+             gl.glBegin(GL2.GL_LINES);
+             {
+                 if (isGradation() && startColor != null)
+                     getSceneColor(startColor).setup(gl);
+                 
+                 gl.glVertex3d(this.dx[0], this.dy[0], this.dz[0]);
+                 
+                 if (isGradation() && endColor != null)
+                     getSceneColor(endColor).setup(gl);
+                 
+                 gl.glVertex3d(this.dx[1], this.dy[1], this.dz[1]);
+             }
+             gl.glEnd();
+             break;
+         default:
+             break;
+         }
+    }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
@@ -307,44 +463,13 @@ public class Line extends Element implements Renderable {
 
         {
             this.setTweenParameter(gl);
-
-
-            switch (MODE) {
-            case LINES:
-                gl.glLineWidth(this.strokeWidth);
-                gl.glBegin(GL2.GL_LINES);
-                {
-                    if (isGradation() && startColor != null)
-                        getSceneColor(startColor).setup(gl);
-                    
-                    gl.glVertex2d(this.dx[0], this.dy[0]);
-                    
-                    if (isGradation() && endColor != null)
-                        getSceneColor(endColor).setup(gl);
-                    
-                    gl.glVertex2d(this.dx[1], this.dy[1]);
-                }
-                gl.glEnd();
-                break;
-            case LINES_3D:
-                gl.glLineWidth(this.strokeWidth);
-                gl.glBegin(GL2.GL_LINES);
-                {
-                    if (isGradation() && startColor != null)
-                        getSceneColor(startColor).setup(gl);
-                    
-                    gl.glVertex3d(this.dx[0], this.dy[0], this.dz[0]);
-                    
-                    if (isGradation() && endColor != null)
-                        getSceneColor(endColor).setup(gl);
-                    
-                    gl.glVertex3d(this.dx[1], this.dy[1], this.dz[1]);
-                }
-                gl.glEnd();
-                break;
-            default:
-                break;
+            if(dashed){
+            	drawDashedLine(gl);
+            }else{
+            	drawLine(gl);
             }
+
+           
         }
         gl.glPopMatrix();
         
