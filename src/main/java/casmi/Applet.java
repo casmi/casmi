@@ -632,6 +632,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	        }
 			frame.setLocationRelativeTo(null);
 		}
+		
+		setFPS(getFPS());
 	}
 
 	@Override
