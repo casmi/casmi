@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>casmi</groupId>
@@ -11,6 +10,21 @@
     <url>http://casmi.github.com/</url>
     <description>casmi is an opensource free software and is Java based library with OpenGL that is using in production or development of 2D/3D visualization systems. It can support programmers with simple and intuitive interfaces for their implementation. It can work on cross platform (GNU/Linux, Mac OS X, and Windows). casmi is sutable for visualization, because it originaly desinged for information visualization, especially with huge data set.</description>
 
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License (LGPL)</name>
+            <url>http://www.gnu.org/licenses/lgpl.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/casmi/casmi</url>
+        <connection>scm:git:git://github.com/casmi/casmi.git</connection>
+        <developerConnection>scm:git:git://github.com/casmi/casmi.git
+        </developerConnection>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -21,12 +35,12 @@
             <name>casmi</name>
             <url>http://casmi.github.com/maven-repo/</url>
         </repository>
-        <repository>
-            <id>jogamp</id>
-            <name>jogamp test mirror</name>
-            <url>http://jogamp.org/deployment/maven/</url>
-        </repository>
     </repositories>
+    
+    <organization>
+        <name>Xcoo, Inc.</name>
+        <url>http://www.xcoo.jp/</url>
+    </organization>
 
     <dependencies>
         <dependency>
@@ -76,19 +90,19 @@
             <version>2.0.2</version>
         </dependency>
         <dependency>
-            <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt-main</artifactId>
-            <version>2.0-rc9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jogamp.jogl</groupId>
-            <artifactId>jogl-all-main</artifactId>
-            <version>2.0-rc9</version>
-        </dependency>
-        <dependency>
             <groupId>net.arnx</groupId>
             <artifactId>jsonic</artifactId>
             <version>1.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt</artifactId>
+            <version>2.0-rc11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
+            <version>2.0-rc11</version>
         </dependency>
     </dependencies>
 
