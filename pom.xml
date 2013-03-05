@@ -56,11 +56,6 @@
             <version>3.7.2</version>
         </dependency>
         <dependency>
-            <groupId>jsonic</groupId>
-            <artifactId>jsonic</artifactId>
-            <version>1.2.5</version>
-        </dependency>
-        <dependency>
             <groupId>cron4j</groupId>
             <artifactId>cron4j</artifactId>
             <version>2.2.3</version>
@@ -89,6 +84,11 @@
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
             <version>2.0-rc9</version>
+        </dependency>
+        <dependency>
+            <groupId>net.arnx</groupId>
+            <artifactId>jsonic</artifactId>
+            <version>1.2.11</version>
         </dependency>
     </dependencies>
 
