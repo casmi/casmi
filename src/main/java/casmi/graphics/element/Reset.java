@@ -23,10 +23,10 @@ import javax.media.opengl.GL2;
 
 /**
  * Reset interface for graphics object.
- * 
+ *
  * @author Y. Ban
  */
-
 public interface Reset {
-	void reset(GL2 gl);
+
+    void reset(GL2 gl);
 }

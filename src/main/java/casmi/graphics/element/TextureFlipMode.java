@@ -21,13 +21,12 @@ package casmi.graphics.element;
 
 /**
  * Enum for texture flip modes.
- * 
+ *
  * @author Y. Ban
  */
 public enum TextureFlipMode {
 
     HORIZONTAL,
-    
+
     VERTICAL,
-    
 }

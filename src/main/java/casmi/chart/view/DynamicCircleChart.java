@@ -43,7 +43,7 @@ import casmi.util.Random;
 
 /**
  * DynamicCircleChart Class.
- * 
+ *
  * @author Y.Ban
  */
 public class DynamicCircleChart extends Group {

@@ -20,19 +20,18 @@
 package casmi.graphics.element;
 
 /**
- * Enum for texture rotation modes. 
- * 
+ * Enum for texture rotation modes.
+ *
  * @author Y. Ban
  */
 public enum TextureRotationMode {
 
-	/** The rotation style to turn 180 degrees constant */
+    /** The rotation style to turn 180 degrees constant */
     HALF,
 
-	/** The rotation style to turn 90 degrees in a clockwise direction constant */
+    /** The rotation style to turn 90 degrees in a clockwise direction constant */
     CLOCKWIZE,
 
-	/** The rotation style to turn 90 degrees in a counterclockwise direction constant */
-    COUNTERCLOCKWIZE,
-    
+    /** The rotation style to turn 90 degrees in a counterclockwise direction constant */
+    COUNTERCLOCKWIZE
 }

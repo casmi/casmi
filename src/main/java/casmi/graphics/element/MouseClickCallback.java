@@ -21,7 +21,7 @@ package casmi.graphics.element;
 
 /**
  * Callback interface for mouseClick.
- * 
+ *
  * @author Y. Ban
  */
 public interface MouseClickCallback extends MouseEventCallback {

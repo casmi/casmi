@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
@@ -24,13 +24,10 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-
 /**
- * Cone class.
- * Wrap JOGL and make it easy to use.
- * 
+ * Cone class. Wrap JOGL and make it easy to use.
+ *
  * @author Y. Ban
- * 
  */
 public class Cone extends Element implements Renderable {
 
@@ -39,14 +36,12 @@ public class Cone extends Element implements Renderable {
 
     private int slices = 30;
     private int stacks = 30;
-    
+
     /**
      * Creates a new Cone object using base size and height.
-     * 
-     * @param base
-     *            The base size of the Cone.
-     * @param height
-     *            The height of the Cone.
+     *
+     * @param base The base size of the Cone.
+     * @param height The height of the Cone.
      */
     public Cone(double base, double height) {
         this.x = 0.0;
@@ -54,20 +49,16 @@ public class Cone extends Element implements Renderable {
         this.z = 0.0;
         this.base = base;
         this.height = height;
-		this.setThreeD(true);
+        this.setThreeD(true);
     }
 
     /**
      * Creates a new Cone object using base size, height, slices and stacks.
-     * 
-     * @param base
-     *            The base size of the Cone.
-     * @param height
-     *            The height of the Cone.
-     * @param slices
-     *            The slices of the Cone.
-     * @param stacks
-     *            The stacks of the Cone.
+     *
+     * @param base The base size of the Cone.
+     * @param height The height of the Cone.
+     * @param slices The slices of the Cone.
+     * @param stacks The stacks of the Cone.
      */
     public Cone(double base, double height, int slices, int stacks) {
         this.x = 0;
@@ -77,22 +68,17 @@ public class Cone extends Element implements Renderable {
         this.height = height;
         this.slices = slices;
         this.stacks = stacks;
-		this.setThreeD(true);
+        this.setThreeD(true);
     }
 
     /**
      * Creates a new Cone object using base size, height and x,y,z-coordinate.
-     * 
-     * @param base
-     *            The base size of the Cone.
-     * @param height
-     *            The height of the Cone.
-     * @param x
-     *             The x-coordinate of the Cone.
-     * @param y
-     *             The y-coordinate of the Cone. 
-     * @param z
-     *             The z-coordinate of the Cone.
+     *
+     * @param base The base size of the Cone.
+     * @param height The height of the Cone.
+     * @param x The x-coordinate of the Cone.
+     * @param y The y-coordinate of the Cone.
+     * @param z The z-coordinate of the Cone.
      */
     public Cone(double base, double height, double x, double y, double z) {
         this.x = x;
@@ -100,26 +86,19 @@ public class Cone extends Element implements Renderable {
         this.z = z;
         this.base = base;
         this.height = height;
-		this.setThreeD(true);
+        this.setThreeD(true);
     }
 
     /**
      * Creates a new Cone object using base size, height, slices, stacks, and x,y,z-coordinate.
-     * 
-     * @param base
-     *            The base size of the Cone.
-     * @param height
-     *            The height of the Cone.
-     * @param x
-     *             The x-coordinate of the Cone.
-     * @param y
-     *             The y-coordinate of the Cone. 
-     * @param z
-     *             The z-coordinate of the Cone.
-     * @param slices
-     *            The slices of the Cone.
-     * @param stacks
-     *            The stacks of the Cone.     
+     *
+     * @param base The base size of the Cone.
+     * @param height The height of the Cone.
+     * @param x The x-coordinate of the Cone.
+     * @param y The y-coordinate of the Cone.
+     * @param z The z-coordinate of the Cone.
+     * @param slices The slices of the Cone.
+     * @param stacks The stacks of the Cone.
      */
     public Cone(double base, double height, double x, double y, double z, int slices, int stacks) {
         this.x = x;
@@ -129,12 +108,13 @@ public class Cone extends Element implements Renderable {
         this.stacks = stacks;
         this.base = base;
         this.height = height;
-		this.setThreeD(true);
+        this.setThreeD(true);
     }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) &&
+            !this.isThreeD()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
@@ -162,27 +142,28 @@ public class Cone extends Element implements Renderable {
         }
         gl.glPopMatrix();
 
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) &&
+            !this.isThreeD()) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
-    
+
     private GLUquadric quadObj;
-    
+
     private void quadObjInit(GLU glu) {
-      if (quadObj == null) {
-        quadObj = glu.gluNewQuadric();
-      }
-      if (quadObj == null) {
-        throw new GLException("Out of memory");
-      }
+        if (quadObj == null) {
+            quadObj = glu.gluNewQuadric();
+        }
+        if (quadObj == null) {
+            throw new GLException("Out of memory");
+        }
     }
-    
+
     private void drawWireCone(GLU glu, double base, double height, int slices, int stacks) {
-            quadObjInit(glu);
-            glu.gluQuadricDrawStyle(quadObj, GLU.GLU_LINE);
-            glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
-            glu.gluCylinder(quadObj, base, 0.0, height, slices, stacks);
+        quadObjInit(glu);
+        glu.gluQuadricDrawStyle(quadObj, GLU.GLU_LINE);
+        glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
+        glu.gluCylinder(quadObj, base, 0.0, height, slices, stacks);
     }
 
     private void drawSolidCone(GLU glu, double base, double height, int slices, int stacks) {
@@ -194,9 +175,8 @@ public class Cone extends Element implements Renderable {
 
     /**
      * Gets the base size of this Cone.
-     * 
-     * @return
-     * 			The base size of the Cone.
+     *
+     * @return The base size of the Cone.
      */
     public double getBase() {
         return base;
@@ -204,19 +184,17 @@ public class Cone extends Element implements Renderable {
 
     /**
      * Sets the base size of this Cone.
-     * 
-     * @param base
-     *            The base size of the Cone.      
+     *
+     * @param base The base size of the Cone.
      */
     public void setBase(double base) {
         this.base = base;
     }
-    
+
     /**
      * Gets the height of this Cone.
-     * 
-     * @return 
-     * 			The height of the Cone.
+     *
+     * @return The height of the Cone.
      */
     public double getHeight() {
         return height;
@@ -224,49 +202,44 @@ public class Cone extends Element implements Renderable {
 
     /**
      * Sets the height of this Cone.
-     * 
-     * @param height
-     *            The height of the Cone.      
+     *
+     * @param height The height of the Cone.
      */
     public void setHeight(double height) {
         this.height = height;
     }
-    
+
     /**
      * Sets the slices of this Cone.
-     * 
-     * @param slices
-     *            The slices of the Cone.      
+     *
+     * @param slices The slices of the Cone.
      */
     public void setSlices(int slices) {
         this.slices = slices;
     }
-    
+
     /**
      * Set the stacks of this Cone.
-     * 
-     * @param stacks
-     *            The stacks of the Cone.      
+     *
+     * @param stacks The stacks of the Cone.
      */
     public void setStacks(int stacks) {
         this.stacks = stacks;
     }
-    
+
     /**
      * Gets the slices of this Cone.
-     * 
-     * @return
-     *            The slices of the Cone.      
+     *
+     * @return The slices of the Cone.
      */
     public int getSlices() {
         return this.slices;
     }
-    
+
     /**
      * Gets the stacks of this Cone.
-     * 
-     * @return
-     *            The stacks of the Cone.      
+     *
+     * @return The stacks of the Cone.
      */
     public int getStacks() {
         return this.stacks;

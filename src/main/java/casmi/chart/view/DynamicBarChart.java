@@ -38,7 +38,7 @@ import casmi.tween.equations.Linear;
 
 /**
  * DynamicBarChart Class.
- * 
+ *
  * @author Y.Ban
  */
 public class DynamicBarChart extends Chart {
@@ -96,7 +96,7 @@ public class DynamicBarChart extends Chart {
         for (Rect r : rlist)
             r.remove();
         rlist.clear();
-        double barSize = (double)width / (double)m.getSize();
+        double barSize = width / m.getSize();
         this.axisHolizontal.setOffset(0.5 * barSize);
         for (PairData p : m.getData()) {
             // setting graph bars
@@ -140,7 +140,6 @@ public class DynamicBarChart extends Chart {
     }
 
     private void animationUpdate() {
-
         if (tweenreset) {
             tweenreset = false;
             for (TweenElement t : twlist) {
@@ -150,7 +149,7 @@ public class DynamicBarChart extends Chart {
 
         if (tweenstart) {
             tweenstart = false;
-            double barSize = (double)width / (double)m.getSize();
+            double barSize = width / m.getSize();
             tweenstart = false;
             manager = new TweenManager();
             addTweenManager(manager);

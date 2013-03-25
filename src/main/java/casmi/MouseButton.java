@@ -23,14 +23,14 @@ package casmi;
  * @author Y. Ban
  */
 public enum MouseButton {
-    
+
     NONE,
-    
-	LEFT,
-	
-	MIDDLE,
-	
-	RIGHT,
-	
-	UNKNOWN,
+
+    LEFT,
+
+    MIDDLE,
+
+    RIGHT,
+
+    UNKNOWN,
 }

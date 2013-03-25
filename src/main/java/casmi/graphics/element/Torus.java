@@ -16,21 +16,19 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 /**
- * Torus class.
- * Wrap JOGL and make it easy to use.
- * 
+ * Torus class. Wrap JOGL and make it easy to use.
+ *
  * @author Y. Ban
- * 
  */
 public class Torus extends Element implements Renderable {
-    
+
     private double x;
     private double y;
     private double z;
@@ -42,11 +40,9 @@ public class Torus extends Element implements Renderable {
 
     /**
      * Creates a new Torus object using inner radius and outer radius.
-     * 
-     * @param innerRad
-     *            The inner radius of the torus.
-     * @param outerRad
-     *            The outer radius of the torus.           
+     *
+     * @param innerRad The inner radius of the torus.
+     * @param outerRad The outer radius of the torus.
      */
     public Torus(double innerRad, double outerRad) {
         this.x = 0;
@@ -58,15 +54,11 @@ public class Torus extends Element implements Renderable {
 
     /**
      * Creates a new Torus object using inner radius, outer radius, nsides and rings.
-     * 
-     * @param innerRad
-     *            The inner radius of the torus.
-     * @param outerRad
-     *            The outer radius of the torus.
-     * @param nside
-     *            The number of side of each radial section.
-     * @param rings
-     *            The number of radial divisions for torus.                                 
+     *
+     * @param innerRad The inner radius of the torus.
+     * @param outerRad The outer radius of the torus.
+     * @param nside The number of side of each radial section.
+     * @param rings The number of radial divisions for torus.
      */
     public Torus(double innerRad, double outerRad, int nside, int rings) {
         this.x = 0;
@@ -80,17 +72,12 @@ public class Torus extends Element implements Renderable {
 
     /**
      * Creates a new Torus object using inner radius, outer radius and x,y,z-coordinate.
-     * 
-     * @param innerRad
-     *            The inner radius of the torus.
-     * @param outerRad
-     *            The outer radius of the torus.
-     * @param x
-     *            The x-coordinate of the torus.
-     * @param y
-     *            The y-coordinate of the torus.
-     * @param z                      
-     *            The z-coordinate of the torus.
+     *
+     * @param innerRad The inner radius of the torus.
+     * @param outerRad The outer radius of the torus.
+     * @param x The x-coordinate of the torus.
+     * @param y The y-coordinate of the torus.
+     * @param z The z-coordinate of the torus.
      */
     public Torus(double innerRad, double outerRad, double x, double y, double z) {
         this.x = x;
@@ -101,22 +88,16 @@ public class Torus extends Element implements Renderable {
     }
 
     /**
-     * Creates a new Torus object using inner radius, outer radius, nsides, rings and x,y,z-coordinate.
-     * 
-     * @param innerRad
-     *            The inner radius of the torus.
-     * @param outerRad
-     *            The outer radius of the torus.
-     * @param x
-     *            The x-coordinate of the torus.
-     * @param y
-     *            The y-coordinate of the torus.
-     * @param z                      
-     *            The z-coordinate of the torus.            
-     * @param nside
-     *            The number of side of each radial section.
-     * @param rings
-     *            The number of radial divisions for torus.                                 
+     * Creates a new Torus object using inner radius, outer radius, nsides, rings and
+     * x,y,z-coordinate.
+     *
+     * @param innerRad The inner radius of the torus.
+     * @param outerRad The outer radius of the torus.
+     * @param x The x-coordinate of the torus.
+     * @param y The y-coordinate of the torus.
+     * @param z The z-coordinate of the torus.
+     * @param nside The number of side of each radial section.
+     * @param rings The number of radial divisions for torus.
      */
     public Torus(double innerRad, double outerRad, double x, double y, double z, int nside, int rings) {
         this.x = x;
@@ -130,10 +111,10 @@ public class Torus extends Element implements Renderable {
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
-        
+
         gl.glPushMatrix();
         {
             gl.glTranslated(x, y, z);
@@ -151,27 +132,23 @@ public class Torus extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-        
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
-    
 
-    
-    private void drawWireTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
-        int nsides, int rings) {
-            gl.glPushAttrib(GL2.GL_POLYGON_BIT);
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-            doughnut(gl, innerRadius, outerRadius, nsides, rings);
-            gl.glPopAttrib();
+    private void drawWireTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius, int nsides, int rings) {
+        gl.glPushAttrib(GL2.GL_POLYGON_BIT);
+        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+        doughnut(gl, innerRadius, outerRadius, nsides, rings);
+        gl.glPopAttrib();
     }
 
-    private void drawSolidTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius,
-         int nsides, int rings) {
+    private void drawSolidTorus(GL2 gl, GLU glu, double innerRadius, double outerRadius, int nsides, int rings) {
         doughnut(gl, innerRadius, outerRadius, nsides, rings);
     }
-    
+
     private static void doughnut(GL2 gl, double r, double R, int nsides, int rings) {
         int i, j;
         float theta, phi, theta1;
@@ -179,35 +156,35 @@ public class Torus extends Element implements Renderable {
         float cosTheta1, sinTheta1;
         float ringDelta, sideDelta;
 
-        ringDelta = (float) (2.0 * Math.PI / rings);
-        sideDelta = (float) (2.0 * Math.PI / nsides);
+        ringDelta = (float)(2.0 * Math.PI / rings);
+        sideDelta = (float)(2.0 * Math.PI / nsides);
 
         theta = 0.0f;
         cosTheta = 1.0f;
         sinTheta = 0.0f;
         for (i = rings - 1; i >= 0; i--) {
-          theta1 = theta + ringDelta;
-          cosTheta1 = (float) Math.cos(theta1);
-          sinTheta1 = (float) Math.sin(theta1);
-          gl.glBegin(GL2.GL_QUAD_STRIP);
-          phi = 0.0f;
-          for (j = nsides; j >= 0; j--) {
-            float cosPhi, sinPhi, dist;
+            theta1 = theta + ringDelta;
+            cosTheta1 = (float)Math.cos(theta1);
+            sinTheta1 = (float)Math.sin(theta1);
+            gl.glBegin(GL2.GL_QUAD_STRIP);
+            phi = 0.0f;
+            for (j = nsides; j >= 0; j--) {
+                float cosPhi, sinPhi, dist;
 
-            phi += sideDelta;
-            cosPhi = (float) Math.cos(phi);
-            sinPhi = (float) Math.sin(phi);
-            dist = (float) (R + r * cosPhi);
+                phi += sideDelta;
+                cosPhi = (float)Math.cos(phi);
+                sinPhi = (float)Math.sin(phi);
+                dist = (float)(R + r * cosPhi);
 
-            gl.glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
-            gl.glVertex3f(cosTheta1 * dist,   -sinTheta1 * dist,   (float) r * sinPhi);
-            gl.glNormal3f(cosTheta  * cosPhi, -sinTheta  * cosPhi, sinPhi);
-            gl.glVertex3f(cosTheta  * dist,   -sinTheta  * dist,   (float) r * sinPhi);
-          }
-          gl.glEnd();
-          theta = theta1;
-          cosTheta = cosTheta1;
-          sinTheta = sinTheta1;
+                gl.glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
+                gl.glVertex3f(cosTheta1 * dist, -sinTheta1 * dist, (float)r * sinPhi);
+                gl.glNormal3f(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
+                gl.glVertex3f(cosTheta * dist, -sinTheta * dist, (float)r * sinPhi);
+            }
+            gl.glEnd();
+            theta = theta1;
+            cosTheta = cosTheta1;
+            sinTheta = sinTheta1;
         }
-      }
+    }
 }
