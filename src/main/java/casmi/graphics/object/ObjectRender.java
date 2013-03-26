@@ -23,10 +23,10 @@ import casmi.graphics.Graphics;
 
 /**
  * ObjectRender interface for GraphicsObject
- * 
+ *
  * @author Y. Ban
  */
 public interface ObjectRender {
-   
+
     void render(Graphics g);
 }

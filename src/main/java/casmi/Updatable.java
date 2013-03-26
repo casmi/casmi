@@ -21,7 +21,7 @@ package casmi;
 
 /**
  * Updatable interface.
- * 
+ *
  * @author T. Takeuchi
  */
 public interface Updatable {

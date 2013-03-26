@@ -26,6 +26,10 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+
+import casmi.util.OS;
+import casmi.util.SystemUtil;
 
 /**
  * @author T. Aoki
@@ -40,6 +44,7 @@ public class AppletRunner {
         final Applet applet;
         try {
             Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(className);
+            initBeforeCreateApplet(title);
             applet = (Applet)c.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -48,13 +53,26 @@ public class AppletRunner {
         runApplet(applet, title);
     }
 
+    private static void initBeforeCreateApplet(String title) {
+        OS os = SystemUtil.getOS();
+        if (os == OS.MAC || os == OS.MAC_64) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", title);
+        }
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // Ignore and use Swing UI.
+        }
+    }
+
     private static void runApplet(Applet applet, String title) {
 
         applet.setRunAsApplication(true);
 
         if (displayDevice == null) {
-            GraphicsEnvironment environment =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
             displayDevice = environment.getDefaultScreenDevice();
         }
 
@@ -62,21 +80,21 @@ public class AppletRunner {
         frame.setTitle(title);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         frame.setResizable(true);
 
         frame.setLayout(new BorderLayout());
 
         frame.add(applet, BorderLayout.CENTER);
-        
+
         applet.init();
 
         frame.pack();
-        
+
         if (!applet.isFullScreen()) {
             Insets insets = frame.getInsets();
-            frame.setSize(applet.getWidth() + insets.left + insets.right,
-                applet.getHeight() + insets.top + insets.bottom);
+            frame.setSize(applet.getWidth() + insets.left + insets.right, applet.getHeight()
+                + insets.top + insets.bottom);
         } else {
             frame.setSize(applet.getWidth(), applet.getHeight());
         }

@@ -26,40 +26,40 @@ import casmi.tween.TweenEquation;
  * http://robertpenner.com/easing/
  */
 public class Cubic {
-	public static final TweenEquation IN = new TweenEquation() {
-		@Override
-		public final float compute(float t, float b, float c, float d) {
-			return c*(t/=d)*t*t + b;
-		}
+    public static final TweenEquation IN = new TweenEquation() {
+        @Override
+        public final float compute(float t, float b, float c, float d) {
+            return c*(t/=d)*t*t + b;
+        }
 
-		@Override
-		public String toString() {
-			return "Cubic.IN";
-		}
-	};
+        @Override
+        public String toString() {
+            return "Cubic.IN";
+        }
+    };
 
-	public static final TweenEquation OUT = new TweenEquation() {
-		@Override
-		public final float compute(float t, float b, float c, float d) {
-			return c*((t=t/d-1)*t*t + 1) + b;
-		}
+    public static final TweenEquation OUT = new TweenEquation() {
+        @Override
+        public final float compute(float t, float b, float c, float d) {
+            return c*((t=t/d-1)*t*t + 1) + b;
+        }
 
-		@Override
-		public String toString() {
-			return "Cubic.OUT";
-		}
-	};
+        @Override
+        public String toString() {
+            return "Cubic.OUT";
+        }
+    };
 
-	public static final TweenEquation INOUT = new TweenEquation() {
-		@Override
-		public final float compute(float t, float b, float c, float d) {
-			if ((t/=d/2) < 1) return c/2*t*t*t + b;
-			return c/2*((t-=2)*t*t + 2) + b;
-		}
+    public static final TweenEquation INOUT = new TweenEquation() {
+        @Override
+        public final float compute(float t, float b, float c, float d) {
+            if ((t/=d/2) < 1) return c/2*t*t*t + b;
+            return c/2*((t-=2)*t*t + 2) + b;
+        }
 
-		@Override
-		public String toString() {
-			return "Cubic.INOUT";
-		}
-	};
+        @Override
+        public String toString() {
+            return "Cubic.INOUT";
+        }
+    };
 }

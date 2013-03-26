@@ -9,8 +9,8 @@ casmi is sutable for visualization, because it originaly desinged for informatio
 ## Setup casmi
 
 ### Using maven (we recommend to use maven)
-   
-Add following settings to your pom.xml
+
+Add following settings to your `pom.xml`
 
 ```xml
 <repository>
@@ -24,7 +24,7 @@ Add following settings to your pom.xml
 <dependency>
     <groupId>casmi</groupId>
 	<artifactId>casmi</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1</version>
 </dependency>
 ```
 
@@ -43,10 +43,15 @@ If you use Eclipse, you can create casmi project easily.
 You can use maven archetype for casmi project.
 Archetype catalog is http://casmi.github.com/maven-repo/archetype-catalog.xml
 
+You can create Eclipse project by the following command.
+
+```
+$ mvn archetype:generate -DarchetypeCatalog=http://casmi.github.com/maven-repo/archetype-catalog.xml
+```
+
 ### Quickstart Project
 
 You can download Quickstart Eclipse project template from http://casmi.github.com/download/
-
 
 # License
 

@@ -24,10 +24,9 @@ package casmi.exception;
  */
 public class ParserException extends CasmiException {
 
-	public ParserException() {
-	}
+    public ParserException() {}
 
-	public ParserException(String message) {
-		super(message);
-	}
+    public ParserException(String message) {
+        super(message);
+    }
 }

@@ -30,14 +30,14 @@ import casmi.io.Writer;
 
 /**
  * XML class.
- * 
+ *
  * <p>
  * Extends XMLElement.class and expresses top of XML structure. Use this class
  * when you want to read or write a XML file.
  * </p>
- * 
+ *
  * @see casmi.exception.ParserException
- * 
+ *
  * @author T. Takeuchi
  */
 public class XML extends XMLElement {
@@ -61,7 +61,7 @@ public class XML extends XMLElement {
 
     /**
      * Creates the XML object with the specified indent string.
-     * 
+     *
      * @param indent The indent string to output a XML file.
      */
     public XML(String indent) {
@@ -72,9 +72,9 @@ public class XML extends XMLElement {
 
     /**
      * Parse a XML file.
-     * 
+     *
      * @param file The XML file.
-     * 
+     *
      * @throws ParserException
      *             If an error is occurred while parsing the
      *             read data.
@@ -97,9 +97,9 @@ public class XML extends XMLElement {
 
     /**
      * Parse a XML string.
-     * 
+     *
      * @param xml The XML string.
-     * 
+     *
      * @throws ParserException
      *             If an error is occurred while i/o processing or parsing the
      *             read data.
@@ -115,14 +115,14 @@ public class XML extends XMLElement {
 
     /**
      * Parse a XML from Reader.
-     * 
+     *
      * @param reader The Reader.
-     * 
+     *
      * @throws ParserException
      *             If an error is occurred while i/o processing or parsing the
      *             read data.
-     * @throws IOException 
-     * 			   If an I/O error is occurred.
+     * @throws IOException
+     *                If an I/O error is occurred.
      */
     public void parseReader(Reader reader) throws ParserException, IOException {
 
@@ -132,12 +132,12 @@ public class XML extends XMLElement {
             throw new ParserException(e.getMessage());
         }
     }
-    
+
     /**
      * Save this XML object as a XML file.
-     * 
+     *
      * @param file The output XML file.
-     * 
+     *
      * @throws IOException
      *             If an I/O error is occurred.
      */
@@ -155,7 +155,7 @@ public class XML extends XMLElement {
 
     /**
      * Set the indent string.
-     * 
+     *
      * @param indent The indent string.
      */
     public void setIndent(String indent) {
@@ -165,7 +165,7 @@ public class XML extends XMLElement {
 
     /**
      * Returns this XML object as a formatted string using the indent.
-     * 
+     *
      * @return The formatted XML string.
      */
     public String toPrettyString() {
@@ -224,7 +224,7 @@ public class XML extends XMLElement {
 
         return sb;
     }
-    
+
     public static String replaceEntityReference(String value) {
         if (value == null) {
             return value;

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
@@ -28,11 +28,9 @@ import casmi.graphics.color.RGBColor;
 import casmi.matrix.Vertex;
 
 /**
- * Quad class.
- * Wrap JOGL and make it easy to use.
- * 
- * @author Y. Ban 
- * 
+ * Quad class. Wrap JOGL and make it easy to use.
+ *
+ * @author Y. Ban
  */
 public class Quad extends Element implements Renderable, Reset {
 
@@ -53,25 +51,18 @@ public class Quad extends Element implements Renderable, Reset {
 
     /**
      * Creates a new Quad object using x,y-coordinate of corners.
-     * 
-     * @param x1
-     *              The x-coordinate of the first corner.
-     * @param y1
-     *              The y-coordinate of the first corner.
-     * @param x2
-     *              The x-coordinate of the second corner.
-     * @param y2
-     *              The y-coordinate of the second corner.
-     * @param x3
-     *              The x-coordinate of the third corner.
-     * @param y3
-     *              The y-coordinate of the third corner.
-     * @param x4
-     *              The x-coordinate of the fourth corner.
-     * @param y4
-     *              The y-coordinate of the fourth corner.
+     *
+     * @param x1 The x-coordinate of the first corner.
+     * @param y1 The y-coordinate of the first corner.
+     * @param x2 The x-coordinate of the second corner.
+     * @param y2 The y-coordinate of the second corner.
+     * @param x3 The x-coordinate of the third corner.
+     * @param y3 The y-coordinate of the third corner.
+     * @param x4 The x-coordinate of the fourth corner.
+     * @param y4 The y-coordinate of the fourth corner.
      */
-    public Quad(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
+    public Quad(double x1, double y1, double x2, double y2, double x3, double y3, double x4,
+        double y4) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -80,20 +71,16 @@ public class Quad extends Element implements Renderable, Reset {
         this.y3 = y3;
         this.x4 = x4;
         this.y4 = y4;
-    	calcG();
+        calcG();
     }
-    
+
     /**
      * Creates a new Quad object using x,y-coordinate of corners.
-     * 
-     * @param v1
-     *              The coordinates of the first corner.
-     * @param v2
-     *              The coordinates of the second corner.
-     * @param v3
-     *              The coordinates of the third corner.
-     * @param v4
-     *              The coordinates of the fourth corner.
+     *
+     * @param v1 The coordinates of the first corner.
+     * @param v2 The coordinates of the second corner.
+     * @param v3 The coordinates of the third corner.
+     * @param v4 The coordinates of the fourth corner.
      */
     public Quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
         this.x1 = (float)v1.getX();
@@ -104,28 +91,20 @@ public class Quad extends Element implements Renderable, Reset {
         this.y3 = (float)v3.getY();
         this.x4 = (float)v4.getX();
         this.y4 = (float)v4.getY();
-    	calcG();
+        calcG();
     }
-    
+
     /**
      * Sets x,y-coordinate of corners.
-     * 
-     * @param x1
-     *              The x-coordinate of the first corner.
-     * @param y1
-     *              The y-coordinate of the first corner.
-     * @param x2
-     *              The x-coordinate of the second corner.
-     * @param y2
-     *              The y-coordinate of the second corner.
-     * @param x3
-     *              The x-coordinate of the third corner.
-     * @param y3
-     *              The y-coordinate of the third corner.
-     * @param x4
-     *              The x-coordinate of the fourth corner.
-     * @param y4
-     *              The y-coordinate of the fourth corner.
+     *
+     * @param x1 The x-coordinate of the first corner.
+     * @param y1 The y-coordinate of the first corner.
+     * @param x2 The x-coordinate of the second corner.
+     * @param y2 The y-coordinate of the second corner.
+     * @param x3 The x-coordinate of the third corner.
+     * @param y3 The y-coordinate of the third corner.
+     * @param x4 The x-coordinate of the fourth corner.
+     * @param y4 The y-coordinate of the fourth corner.
      */
     public void set(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
         this.x1 = x1;
@@ -136,20 +115,16 @@ public class Quad extends Element implements Renderable, Reset {
         this.y3 = x3;
         this.x4 = x4;
         this.y4 = y4;
-    	calcG();
+        calcG();
     }
-    
+
     /**
      * Sets x,y-coordinate of corners.
-     * 
-     * @param v1
-     *              The coordinates of the first corner.
-     * @param v2
-     *              The coordinates of the second corner.
-     * @param v3
-     *              The coordinates of the third corner.
-     * @param v4
-     *              The coordinates of the fourth corner.
+     *
+     * @param v1 The coordinates of the first corner.
+     * @param v2 The coordinates of the second corner.
+     * @param v3 The coordinates of the third corner.
+     * @param v4 The coordinates of the fourth corner.
      */
     public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
         this.x1 = (float)v1.getX();
@@ -160,18 +135,15 @@ public class Quad extends Element implements Renderable, Reset {
         this.y3 = (float)v3.getY();
         this.x4 = (float)v4.getX();
         this.y4 = (float)v4.getY();
-    	calcG();
+        calcG();
     }
-    
+
     /**
      * Sets x,y-coordinate of a corner.
-     * 
-     * @param index
-     * 				The index of a corner.
-     * @param x
-     * 				The x-coordinate of a corner.
-     * @param y
-     * 				The y-coordinate of a corner.
+     *
+     * @param index The index of a corner.
+     * @param x The x-coordinate of a corner.
+     * @param y The y-coordinate of a corner.
      */
     public void setCorner(int index, double x, double y) {
         if (index <= 0) {
@@ -189,18 +161,14 @@ public class Quad extends Element implements Renderable, Reset {
         }
         calcG();
     }
-    
+
     /**
      * Sets x,y,z-coordinate of a corner.
-     * 
-     * @param index
-     * 				The index of a corner.
-     * @param x
-     * 				The x-coordinate of a corner.
-     * @param y
-     * 				The y-coordinate of a corner.
-     * @param z 
-     * 				The z-coordinate of a corner.
+     *
+     * @param index The index of a corner.
+     * @param x The x-coordinate of a corner.
+     * @param y The y-coordinate of a corner.
+     * @param z The z-coordinate of a corner.
      */
     public void setCorner(int index, double x, double y, double z) {
         if (index <= 0) {
@@ -218,41 +186,38 @@ public class Quad extends Element implements Renderable, Reset {
         }
         calcG();
     }
-    
+
     /**
      * Sets coordinates of a corner.
-     * 
-     * @param index
-     * 				The index of a corner.
-     * @param v
-     * 				The coordinates of a corner.
+     *
+     * @param index The index of a corner.
+     * @param v The coordinates of a corner.
      */
     public void setConer(int index, Vertex v) {
-    	if (index <= 0) {
-    		this.x1 = v.getX();
-    		this.y1 = v.getY();
-    	} else if (index == 1) {
-    		this.x2 = v.getX();
-    		this.y2 = v.getY();
-    	} else if (index == 2) {
-    		this.x3 = v.getX();
-    		this.y3 = v.getY();
-    	} else if(3 <= index) {
-    		this.x4 = v.getX();
-    		this.y4 = v.getY();
-    	}
-    	calcG();
+        if (index <= 0) {
+            this.x1 = v.getX();
+            this.y1 = v.getY();
+        } else if (index == 1) {
+            this.x2 = v.getX();
+            this.y2 = v.getY();
+        } else if (index == 2) {
+            this.x3 = v.getX();
+            this.y3 = v.getY();
+        } else if (3 <= index) {
+            this.x4 = v.getX();
+            this.y4 = v.getY();
+        }
+        calcG();
     }
-    
+
     /**
      * Gets coordinates of a corner.
-     * 
-     * @param index
-     * 				The index of a corner.
+     *
+     * @param index The index of a corner.
      */
     public Vertex getConer(int index) {
-    	Vertex v = new Vertex(0, 0, 0);
-    	
+        Vertex v = new Vertex(0, 0, 0);
+
         if (index <= 0) {
             v.set(this.x1, this.y1);
         } else if (index == 1) {
@@ -262,19 +227,20 @@ public class Quad extends Element implements Renderable, Reset {
         } else if (3 <= index) {
             v.set(this.x4, this.y4);
         }
-    	return v;
+        return v;
     }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
+
         if (this.enableTexture) {
-//            if (texture.reloadFlag) {
-//                Graphics.reloadTextures(gl);
-//                texture.reloadFlag = false;
-//            }
+            // if (texture.reloadFlag) {
+            // Graphics.reloadTextures(gl);
+            // texture.reloadFlag = false;
+            // }
             texture.enableTexture(gl);
         }
 
@@ -285,23 +251,19 @@ public class Quad extends Element implements Renderable, Reset {
                 getSceneFillColor().setup(gl);
                 gl.glBegin(GL2.GL_QUADS);
                 {
-                    if (isGradation())
-                        getSceneColor(cornerColor[0]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[0]).setup(gl);
                     if (this.enableTexture)
                         gl.glTexCoord2f(texture.getTextureCorner(0, 0), texture.getTextureCorner(0, 1));
                     gl.glVertex2d(x1 - x, y1 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[1]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[1]).setup(gl);
                     if (this.enableTexture)
                         gl.glTexCoord2f(texture.getTextureCorner(1, 0), texture.getTextureCorner(1, 1));
                     gl.glVertex2d(x2 - x, y2 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[2]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[2]).setup(gl);
                     if (this.enableTexture)
                         gl.glTexCoord2f(texture.getTextureCorner(2, 0), texture.getTextureCorner(2, 1));
                     gl.glVertex2d(x3 - x, y3 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[3]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[3]).setup(gl);
                     if (this.enableTexture)
                         gl.glTexCoord2f(texture.getTextureCorner(3, 0), texture.getTextureCorner(3, 1));
                     gl.glVertex2d(x4 - x, y4 - y);
@@ -314,77 +276,70 @@ public class Quad extends Element implements Renderable, Reset {
                 getSceneStrokeColor().setup(gl);
                 gl.glBegin(GL2.GL_LINES);
                 {
-                    if (isGradation())
-                        getSceneColor(cornerColor[0]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[0]).setup(gl);
                     gl.glVertex2d(x1 - x, y1 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[1]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[1]).setup(gl);
                     gl.glVertex2d(x2 - x, y2 - y);
                     gl.glEnd();
                     gl.glBegin(GL2.GL_LINES);
                     gl.glVertex2d(x2 - x, y2 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[2]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[2]).setup(gl);
                     gl.glVertex2d(x3 - x, y3 - y);
                     gl.glEnd();
                     gl.glBegin(GL2.GL_LINES);
                     gl.glVertex2d(x3 - x, y3 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[3]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[3]).setup(gl);
                     gl.glVertex2d(x4 - x, y4 - y);
                     gl.glEnd();
                     gl.glBegin(GL2.GL_LINES);
                     gl.glVertex2d(x4 - x, y4 - y);
-                    if (isGradation())
-                        getSceneColor(cornerColor[0]).setup(gl);
+                    if (isGradation()) getSceneColor(cornerColor[0]).setup(gl);
                     gl.glVertex2d(x1 - x, y1 - y);
                 }
                 gl.glEnd();
             }
         }
         gl.glPopMatrix();
-        if (this.enableTexture)
-            texture.disableTexture(gl);
-        
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) {
+
+        if (this.enableTexture) texture.disableTexture(gl);
+
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
-    
-    private void calcG(){
-    	this.x = (x1+x2+x3+x4)/4.0;
-    	this.y = (y1+y2+y3+y4)/4.0;
+
+    private void calcG() {
+        this.x = (x1 + x2 + x3 + x4) / 4.0;
+        this.y = (y1 + y2 + y3 + y4) / 4.0;
     }
-    
+
     @Override
     public void setPosition(double x, double y) {
-    	setPosition(x, y, this.z);
+        setPosition(x, y, this.z);
     }
-    
+
     @Override
     public void setPosition(double x, double y, double z) {
-    	x1 = x1 + x - this.x;
-    	y1 = y1 + y - this.y;
-    	z1 = z1 + z - this.z;
-    	x2 = x2 + x - this.x;
-    	y2 = y2 + y - this.y;
-    	z2 = z2 + z - this.z;
-    	x3 = x3 + x - this.x;
-    	y3 = y3 + y - this.y;
-    	z3 = z3 + z - this.z;
-    	x4 = x4 + x - this.x;
-    	y4 = y4 + y - this.y;
-    	z4 = z4 + z - this.z;
-    	calcG();
+        x1 = x1 + x - this.x;
+        y1 = y1 + y - this.y;
+        z1 = z1 + z - this.z;
+        x2 = x2 + x - this.x;
+        y2 = y2 + y - this.y;
+        z2 = z2 + z - this.z;
+        x3 = x3 + x - this.x;
+        y3 = y3 + y - this.y;
+        z3 = z3 + z - this.z;
+        x4 = x4 + x - this.x;
+        y4 = y4 + y - this.y;
+        z4 = z4 + z - this.z;
+        calcG();
     }
-    
+
     /**
      * Sets the color of a corner for gradation.
-     * 
-     * @param index
-     * 					The index of a corner.
-     * @param color
-     * 					The color of a corner.
+     *
+     * @param index The index of a corner.
+     * @param color The color of a corner.
      */
     public void setCornerColor(int index, Color color) {
         if (!isGradation()) {
@@ -396,28 +351,26 @@ public class Quad extends Element implements Renderable, Reset {
         }
         cornerColor[index] = color;
     }
-    
+
     /**
      * Sets the color of a corner for gradation.
-     * 
-     * @param index
-     * 					The index of a corner.
-     * @param colorSet
-     * 					The colorSet of a corner.
+     *
+     * @param index The index of a corner.
+     * @param colorSet The colorSet of a corner.
      */
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
-	}
+    }
 
-	@Override
-	public void reset(GL2 gl) {
-		if(this.enableTexture)
-			if(init){
-				texture.loadImage();
-				init = false;
-			}else{
-				texture.reloadImage(gl);
-			}
-		
-	}
+    @Override
+    public void reset(GL2 gl) {
+        if (this.enableTexture) {
+            if (init) {
+                texture.loadImage();
+                init = false;
+            } else {
+                texture.reloadImage(gl);
+            }
+        }
+    }
 }

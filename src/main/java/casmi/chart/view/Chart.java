@@ -32,7 +32,7 @@ import casmi.tween.TweenManager;
 
 /**
  * Chart Class.
- * 
+ *
  * @author Y.Ban
  */
 public class Chart extends Group {

@@ -31,24 +31,24 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * CSV parser class.
- * 
+ *
  * <p>
  * This class uses <a href="http://opencsv.sourceforge.net/">opencsv-2.1</a>
  * library (licensed by Apache 2.0).
  * </p>
- * 
+ *
  * <p>
  * If you want to parse other separated files (e.g. TSV file), you can also use
  * this CSV class. Use a constructor "CSV(String pathname, char separator)"
  * like,
- * 
+ *
  * <pre>
  * CSV tsv = new CSV(&quot;file.tsv&quot;, &quot;\t&quot;);
  * </pre>
  * </p>
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class CSV {
 
@@ -77,7 +77,7 @@ public class CSV {
 
     /**
      * Creates CSV object from a File.
-     * 
+     *
      * @param file a File object of a csv file
      */
     public CSV(File file) {
@@ -87,7 +87,7 @@ public class CSV {
     /**
      * Creates CSV object from a File.
      * Second argument is a character to separate each element.
-     * 
+     *
      * @param file a File object of a csv file
      */
     public CSV(File file, char separator) {
@@ -97,7 +97,7 @@ public class CSV {
 
     /**
      * Creates CSV object from a file path string.
-     * 
+     *
      * @param pathname
      *     a file path string of a csv file
      */
@@ -108,21 +108,21 @@ public class CSV {
 
     /**
      * Creates CSV object from a file path URL.
-     * 
+     *
      * @param url
      *     URL of a csv file
      */
     public CSV(URL url) {
-    	this(new File( url2Uri(url) ), DEFAULT_SEPARATOR);
+        this(new File( url2Uri(url) ), DEFAULT_SEPARATOR);
     }
-    
+
     /**
      * Creates CSV object from a file path string.
      * Second argument is a character to separate each element.
-     * 
+     *
      * @param pathname
      *     a file path string of a csv file
-     *     
+     *
      * @param separator
      *     separator character
      */
@@ -137,7 +137,7 @@ public class CSV {
 
     /**
      * Returns the character to separate each element.
-     * 
+     *
      * @return the separator <code>char</code>.
      */
     public char getSeparator() {
@@ -151,11 +151,11 @@ public class CSV {
 
     /**
      * Reads the next line from the buffer and converts to a string array.
-     * 
+     *
      * @return
      *         a string array with each comma-separated element as a separate
      *         entry
-     * 
+     *
      * @throws IOException
      *             if bad things happen during the read
      */
@@ -168,11 +168,11 @@ public class CSV {
     /**
      * Reads the entire file into a List with each element being a String[] of
      * tokens.
-     * 
+     *
      * @return
      *         a List of String[], with each String[] representing a line of the
      *         file
-     * 
+     *
      * @throws IOException
      *             if bad things happen during the read
      */
@@ -184,12 +184,12 @@ public class CSV {
 
     /**
      * Writes the next line to the file.
-     * 
+     *
      * @param elements
      *            element strings or a string array with each comma-separated
      *            element
      *            as a separate entry
-     * 
+     *
      * @throws IOException
      *             if an I/O error occurs
      */
@@ -202,11 +202,11 @@ public class CSV {
     /**
      * Writes the entire list to a CSV file.
      * The list is assumed to be a String[].
-     * 
+     *
      * @param allLines
      *            a List of String[], with each String[] representing a line of
      *            the file.
-     * 
+     *
      * @throws IOException
      *             if an I/O error occurs
      */
@@ -242,7 +242,7 @@ public class CSV {
                 // Ignore.
             }
         }
-        
+
         if (csvWriter != null) {
             try {
                 csvWriter.close();
@@ -251,13 +251,13 @@ public class CSV {
             }
         }
     }
-    
+
     private static URI url2Uri(URL url) {
-    	try {
-    		return new URI(url.toString());
-    	} catch (URISyntaxException e) {
-    		e.printStackTrace();
-    		return null;
-		}
+        try {
+            return new URI(url.toString());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

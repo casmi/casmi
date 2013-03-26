@@ -26,7 +26,7 @@ import casmi.tween.equations.Linear;
 
 /**
  * Dissolve class.
- * 
+ *
  * @author Y. Ban
  */
 public class Dissolve {

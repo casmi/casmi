@@ -32,52 +32,44 @@ import casmi.tween.TweenType;
  * @see SimpleTweenable
  */
 public class TweenShort implements SimpleTweenable {
-	private short value;
-	
-	public TweenShort(short f){
-		value = f;
-	}
-	
-	public TweenShort(){
-		value = 0;
-	}
 
-	@Override
-	public List<Float> getTweenValues(TweenType tweenType) {
-		List<Float> returnValues = new ArrayList<Float>();
-		returnValues.add((float) value);
-		return returnValues;
-	}
+    private short value;
 
-	@Override
-	public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
-		value = newValues.get(0).shortValue();
-	}
-	
-	public void end(Graphics g, int tweenType) {
-	}
-	
-	public void render(Graphics g, int tweenType) {
-	}
-	
-	public short getValue(){
-		return value;
-	}
-	
-	public void setValue(short value){
-		this.value = value;
-	}
+    public TweenShort(short f) {
+        value = f;
+    }
 
-	@Override
-	public void end(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    public TweenShort() {
+        value = 0;
+    }
 
-	@Override
-	public void render(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public List<Float> getTweenValues(TweenType tweenType) {
+        List<Float> returnValues = new ArrayList<Float>();
+        returnValues.add((float)value);
+        return returnValues;
+    }
+
+    @Override
+    public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
+        value = newValues.get(0).shortValue();
+    }
+
+    public void end(Graphics g, int tweenType) {}
+
+    public void render(Graphics g, int tweenType) {}
+
+    public short getValue() {
+        return value;
+    }
+
+    public void setValue(short value) {
+        this.value = value;
+    }
+
+    @Override
+    public void end(Graphics g, TweenType tweenType) {}
+
+    @Override
+    public void render(Graphics g, TweenType tweenType) {}
 }
-

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
@@ -25,14 +25,12 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 /**
- * Sphere class.
- * Wrap JOGL and make it easy to use.
- * 
+ * Sphere class. Wrap JOGL and make it easy to use.
+ *
  * @author Y. Ban
- * 
  */
 public class Sphere extends Element implements Renderable, Reset {
-    
+
     private double r;
 
     private int slices = 30;
@@ -40,100 +38,91 @@ public class Sphere extends Element implements Renderable, Reset {
 
     /**
      * Creates a new Sphere object using radius.
-     * 
-     * @param radius
-     *           The radius of the Sphere.              
+     *
+     * @param radius The radius of the Sphere.
      */
     public Sphere(double radius) {
         this.r = radius;
-		this.setThreeD(true);
+        this.setThreeD(true);
     }
 
     /**
      * Creates a new Sphere object using radius, slices and stacks.
-     * 
-     * @param radius
-     *           The radius of the Sphere.  
-     * @param slices
-     * 			 The sliced division number.
-     * @param stacks
-     * 			 The stacks division number.            
+     *
+     * @param radius The radius of the Sphere.
+     * @param slices The sliced division number.
+     * @param stacks The stacks division number.
      */
     public Sphere(double radius, int slices, int stacks) {
         this.r = radius;
         this.slices = slices;
         this.stacks = stacks;
-		this.setThreeD(true);
+        this.setThreeD(true);
     }
-    
+
     /**
      * Sets radius of this Sphere.
-     * 
-     * @param radius
-     * 			The radius of the Sphere.
+     *
+     * @param radius The radius of the Sphere.
      */
     public final void setRadius(double radius) {
-    	this.r = radius;
+        this.r = radius;
     }
-    
+
     /**
      * Sets the division number.
-     * 
-     * @param slices
-     * 			 The sliced division number.
-     * @param stacks
-     * 			 The stacks division number.            
+     *
+     * @param slices The sliced division number.
+     * @param stacks The stacks division number.
      */
     public final void setDetail(int slices, int stacks) {
-    	this.slices = slices;
-    	this.stacks = stacks;
+        this.slices = slices;
+        this.stacks = stacks;
     }
-    
+
     /**
      * Sets the sliced division number.
-     * 
-     * @param slices
-     * 			 The sliced division number.           
+     *
+     * @param slices The sliced division number.
      */
     public final void setSlices(int slices) {
-    	this.slices = slices;
+        this.slices = slices;
     }
-    
+
     /**
      * Sets the stacked division number.
-     * 
-     * @param stacks
-     * 			 The stacks division number.            
+     *
+     * @param stacks The stacks division number.
      */
     public final void setStacks(int stacks) {
-    	this.stacks = stacks;
+        this.stacks = stacks;
     }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         if (this.enableTexture) {
-//            if (texture.reloadFlag) {
-//                Graphics.reloadTextures(gl);
-//                texture.reloadFlag = false;
-//            }
+            // if (texture.reloadFlag) {
+            // Graphics.reloadTextures(gl);
+            // texture.reloadFlag = false;
+            // }
         }
 
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false){
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
+            && !this.isThreeD()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
-        
+
         if (this.enableTexture) {
-        	texture.enableTexture(gl);
+            texture.enableTexture(gl);
         }
-        
+
         gl.glPushMatrix();
         {
             gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
             gl.glPolygonOffset(1f, 1f);
             gl.glEnable(GL2.GL_CULL_FACE);
             this.setTweenParameter(gl);
-            if(this.ismaterial)
-            	material.setup(gl);
+            if (this.ismaterial) material.setup(gl);
 
             if (this.fill) {
                 getSceneFillColor().setup(gl);
@@ -147,51 +136,53 @@ public class Sphere extends Element implements Renderable, Reset {
         }
         gl.glPopMatrix();
         gl.glDisable(GL2.GL_CULL_FACE);
-        gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL); 
+        gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
 
         if (this.enableTexture) {
-        	texture.disableTexture(gl);
+            texture.disableTexture(gl);
         }
-        
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {
+
+        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
+            && !this.isThreeD()) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
         }
     }
-    
+
     private GLUquadric quadObj;
-    
+
     private final void quadObjInit(GLU glu) {
-      if (quadObj == null) {
-        quadObj = glu.gluNewQuadric();
-      }
-      if (quadObj == null) {
-        throw new GLException("Out of memory");
-      }
+        if (quadObj == null) {
+            quadObj = glu.gluNewQuadric();
+        }
+        if (quadObj == null) {
+            throw new GLException("Out of memory");
+        }
     }
-    
-    private final void drawSolidSphere(GLU glu,float radius,int slices,int stacks) {
+
+    private final void drawSolidSphere(GLU glu, float radius, int slices, int stacks) {
         quadObjInit(glu);
         glu.gluQuadricDrawStyle(quadObj, GLU.GLU_FILL);
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
         glu.gluQuadricTexture(quadObj, true);
-        glu.gluSphere(quadObj, radius, slices, stacks);   
+        glu.gluSphere(quadObj, radius, slices, stacks);
     }
-    
-    private final void drawWireSphere(GLU glu,float radius,int slices,int stacks) {
+
+    private final void drawWireSphere(GLU glu, float radius, int slices, int stacks) {
         quadObjInit(glu);
         glu.gluQuadricDrawStyle(quadObj, GLU.GLU_LINE);
         glu.gluQuadricNormals(quadObj, GLU.GLU_SMOOTH);
-        glu.gluSphere(quadObj, radius, slices, stacks);   
+        glu.gluSphere(quadObj, radius, slices, stacks);
     }
 
-	@Override
-	public void reset(GL2 gl) {
-		if(this.enableTexture)
-			if(init){
-				texture.loadImage();
-				init = false;
-			}else{
-				texture.reloadImage(gl);
-			}
-	}
+    @Override
+    public void reset(GL2 gl) {
+        if (this.enableTexture) {
+            if (init) {
+                texture.loadImage();
+                init = false;
+            } else {
+                texture.reloadImage(gl);
+            }
+        }
+    }
 }

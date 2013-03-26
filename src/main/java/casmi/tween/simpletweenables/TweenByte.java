@@ -32,51 +32,51 @@ import casmi.tween.TweenType;
  * @see SimpleTweenable
  */
 public class TweenByte implements SimpleTweenable {
-	private byte value;
-	
-	public TweenByte(byte f){
-		value = f;
-	}
-	
-	public TweenByte(){
-		value = 0;
-	}
 
-	@Override
-	public List<Float> getTweenValues(TweenType tweenType) {
-		List<Float> returnValues = new ArrayList<Float>();
-		return returnValues;
-	}
+    private byte value;
 
-	@Override
-	public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
-		value = (byte) Math.round(newValues.get(0));
-	}
+    public TweenByte(byte f) {
+        value = f;
+    }
 
-	public void end(Graphics g, int tweenType) {
-	}
-	
-	public void render(Graphics g, int tweenType) {
-	}
-	
-	public byte getValue(){
-		return value;
-	}
-	
-	public void setValue(byte value){
-		this.value = value;
-	}
+    public TweenByte() {
+        value = 0;
+    }
 
-	@Override
-	public void end(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public List<Float> getTweenValues(TweenType tweenType) {
+        List<Float> returnValues = new ArrayList<Float>();
+        return returnValues;
+    }
 
-	@Override
-	public void render(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
+        value = (byte) Math.round(newValues.get(0));
+    }
 
+    public void end(Graphics g, int tweenType) {
+    }
+
+    public void render(Graphics g, int tweenType) {
+    }
+
+    public byte getValue(){
+        return value;
+    }
+
+    public void setValue(byte value){
+        this.value = value;
+    }
+
+    @Override
+    public void end(Graphics g, TweenType tweenType) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void render(Graphics g, TweenType tweenType) {
+        // TODO Auto-generated method stub
+
+    }
 }

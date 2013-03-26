@@ -23,8 +23,8 @@ package casmi.chart.view;
  * @author Y. Ban
  */
 public enum DynamicBarChartTweenType {
-	
-	AT_ONCE,
-	
-	ORDER
+
+    AT_ONCE,
+
+    ORDER
 }

@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
@@ -27,11 +27,9 @@ import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 
 /**
- * Rect class.
- * Wrap JOGL and make it easy to use.
- * 
+ * Rect class. Wrap JOGL and make it easy to use.
+ *
  * @author Y. Ban
- * 
  */
 public class Rect extends Element implements Renderable {
 
@@ -54,95 +52,87 @@ public class Rect extends Element implements Renderable {
     /**
      * Creates a new Rect object using width and height.
      *
-     * @param width
-     *              The width of the rectangle.
-     * @param height 
-     *              The height of the rectangle.                          
+     * @param width The width of the rectangle.
+     * @param height The height of the rectangle.
      */
     public Rect(double width, double height) {
         this.w = width;
         this.h = height;
     }
-    
+
     public Rect(double x, double y, double width, double height) {
         this.w = width;
         this.h = height;
         this.x = x;
         this.y = y;
     }
-    
+
     /**
      * Sets width and height of this Rect.
      *
-     * @param width
-     *              The width of the rectangle.
-     * @param height 
-     *              The height of the rectangle.                          
+     * @param width The width of the rectangle.
+     * @param height The height of the rectangle.
      */
     public void set(double width, double height) {
-    	this.w = width;
-    	this.h = height;
+        this.w = width;
+        this.h = height;
     }
-    
+
     /**
      * Sets width of this Rect.
      *
-     * @param width
-     *              The width of the rectangle.                          
+     * @param width The width of the rectangle.
      */
     public void setWidth(double width) {
-    	this.w = width;
+        this.w = width;
     }
-    
+
     /**
      * Sets height of this Rect.
      *
-     * @param height 
-     *              The height of the rectangle.                          
+     * @param height The height of the rectangle.
      */
     public void setHeight(double height) {
-    	this.h = height;
+        this.h = height;
     }
-    
+
     /**
      * Gets width of this Rect.
-     * 
-     * @return
-     * 			The width of the Rect.
+     *
+     * @return The width of the Rect.
      */
     public double getWidth() {
-    	return this.w;
+        return this.w;
     }
-    
+
     /**
      * Gets height of this Rect.
-     * 
-     * @return
-     * 			The height of the Rect.
+     *
+     * @return The height of the Rect.
      */
     public double getHeight() {
-    	return this.h;
+        return this.h;
     }
-    
 
     private final void calcRect() {
-        this.x1 = - w / 2;
-        this.y1 =   h / 2;
-        this.x2 = - w / 2;
-        this.y2 = - h / 2;
-        this.x3 =   w / 2;
-        this.y3 = - h / 2;
-        this.x4 =   w / 2;
-        this.y4 =   h / 2;
+        this.x1 = -w / 2;
+        this.y1 = h / 2;
+        this.x2 = -w / 2;
+        this.y2 = -h / 2;
+        this.x3 = w / 2;
+        this.y3 = -h / 2;
+        this.x4 = w / 2;
+        this.y4 = h / 2;
     }
-    
+
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         calcRect();
-        
-        if (getSceneStrokeColor().getAlpha() < 1.000 || getSceneFillColor().getAlpha() < 1.00 || !isDepthTest())
-          	gl.glDisable(GL2.GL_DEPTH_TEST);
-        
+
+        if (getSceneStrokeColor().getAlpha() < 1.0 || getSceneFillColor().getAlpha() < 1.0
+            || !isDepthTest())
+            gl.glDisable(GL2.GL_DEPTH_TEST);
+
         gl.glPushMatrix();
         {
             setTweenParameter(gl);
@@ -156,9 +146,9 @@ public class Rect extends Element implements Renderable {
                     gl.glVertex2d(x3, y3);
                     gl.glVertex2d(x4, y4);
                 } else {
-                    this.gradationColor.setRed((this.startColor.getRed()     + this.endColor.getRed())   / 2);
+                    this.gradationColor.setRed((this.startColor.getRed() + this.endColor.getRed()) / 2);
                     this.gradationColor.setGreen((this.startColor.getGreen() + this.endColor.getGreen()) / 2);
-                    this.gradationColor.setBlue((this.startColor.getBlue()   + this.endColor.getBlue())  / 2);
+                    this.gradationColor.setBlue((this.startColor.getBlue() + this.endColor.getBlue()) / 2);
                     this.gradationColor.setAlpha((this.startColor.getAlpha() + this.endColor.getAlpha()) / 2);
                     switch (mode) {
                     case HORIZONTAL:
@@ -219,56 +209,51 @@ public class Rect extends Element implements Renderable {
             }
         }
         gl.glPopMatrix();
-        
-        if (getSceneStrokeColor().getAlpha() < 1.00 || getSceneFillColor().getAlpha() < 1.00 || !isDepthTest())
-        	gl.glEnable(GL2.GL_DEPTH_TEST);
+
+        if (getSceneStrokeColor().getAlpha() < 1.0 || getSceneFillColor().getAlpha() < 1.0
+            || !isDepthTest())
+            gl.glEnable(GL2.GL_DEPTH_TEST);
     }
-    
+
     /**
      * Sets the gradation mode and colors.
-     * 
-     * @param mode
-     * 					The mode of gradation.
-     * @param color1
-     * 					The color for gradation.
-     * @param color2
-     * 					The color for gradation.
-     * 
+     *
+     * @param mode The mode of gradation.
+     * @param color1 The color for gradation.
+     * @param color2 The color for gradation.
+     *
      * @see casmi.graphics.element.GradationMode2D
      */
     public void setGradationColor(GradationMode2D mode, Color color1, Color color2) {
         setGradation(true);
         if (startColor == null || endColor == null) {
             startColor = new RGBColor(0.0, 0.0, 0.0);
-            endColor   = new RGBColor(0.0, 0.0, 0.0);
+            endColor = new RGBColor(0.0, 0.0, 0.0);
         }
         startColor = color1;
-        endColor   = color2;
-        this.mode  = mode;
-	}
-	
+        endColor = color2;
+        this.mode = mode;
+    }
+
     /**
      * Sets the gradation mode and colors.
-     * 
-     * @param mode
-     * 					The mode of gradation.
-     * @param colorSet1
-     * 					The colorSet for gradation.
-     * @param colorSet2
-     * 					The colorSet for gradation.
-     * 
+     *
+     * @param mode The mode of gradation.
+     * @param colorSet1 The colorSet for gradation.
+     * @param colorSet2 The colorSet for gradation.
+     *
      * @see casmi.graphics.element.GradationMode2D
      */
-	public void setGradationColor(GradationMode2D mode, ColorSet colorSet1, ColorSet colorSet2){
-	    setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
-	}
+    public void setGradationColor(GradationMode2D mode, ColorSet colorSet1, ColorSet colorSet2) {
+        setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));
+    }
+
     /**
      * Sets the gradation mode and colors.
-     * 
-     * @param mode
-     * 					The mode of gradation.
+     *
+     * @param mode The mode of gradation.
      */
-	public void setGradationMode(GradationMode2D mode) {
-		this.mode = mode;
-	}
+    public void setGradationMode(GradationMode2D mode) {
+        this.mode = mode;
+    }
 }

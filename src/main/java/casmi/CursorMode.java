@@ -25,75 +25,75 @@ import java.awt.image.BufferedImage;
 
 /**
  * Cursor types.
- * 
+ *
  * @author Y. Ban, T. Takeuchi
  */
 public enum CursorMode {
-	
+
     DEFAULT,
-    
+
     CROSS,
-    
-    HAND, 
-    
-    MOVE, 
-    
+
+    HAND,
+
+    MOVE,
+
     TEXT,
-    
+
     WAIT,
-    
+
     RESIZE_NORTH,
-    
+
     RESIZE_NORTH_EAST,
-    
+
     RESIZE_EAST,
-    
+
     RESIZE_SOUTH_EAST,
-    
+
     RESIZE_SOUTH,
-    
+
     RESIZE_SOUTH_WEST,
-    
+
     RESIZE_WEST,
-    
+
     RESIZE_NORTH_WEST,
-    
+
     NONE;
-    
+
     public static CursorMode getCursorMode(java.awt.Cursor awtCursor) {
         switch (awtCursor.getType()) {
-		case java.awt.Cursor.DEFAULT_CURSOR:
-		default:
-			return DEFAULT;
-		case java.awt.Cursor.CROSSHAIR_CURSOR:
-			return CROSS;
-		case java.awt.Cursor.HAND_CURSOR:
-			return HAND;
-		case java.awt.Cursor.TEXT_CURSOR:
-			return TEXT;
-		case java.awt.Cursor.WAIT_CURSOR:
-		    return WAIT;
-		case java.awt.Cursor.MOVE_CURSOR:
-		    return MOVE;
-		case java.awt.Cursor.N_RESIZE_CURSOR:
-			return RESIZE_NORTH;
-		case java.awt.Cursor.NE_RESIZE_CURSOR:
-			return RESIZE_NORTH_EAST;
-		case java.awt.Cursor.E_RESIZE_CURSOR:
-			return RESIZE_EAST;
-		case java.awt.Cursor.SE_RESIZE_CURSOR:
-		    return RESIZE_SOUTH_EAST;
-		case java.awt.Cursor.S_RESIZE_CURSOR:
-		    return RESIZE_SOUTH;
-		case java.awt.Cursor.SW_RESIZE_CURSOR:
-			return RESIZE_SOUTH_WEST;
-		case java.awt.Cursor.W_RESIZE_CURSOR:
-			return RESIZE_WEST;
-		case java.awt.Cursor.NW_RESIZE_CURSOR:
-			return RESIZE_NORTH_WEST;
-		}
+        case java.awt.Cursor.DEFAULT_CURSOR:
+        default:
+            return DEFAULT;
+        case java.awt.Cursor.CROSSHAIR_CURSOR:
+            return CROSS;
+        case java.awt.Cursor.HAND_CURSOR:
+            return HAND;
+        case java.awt.Cursor.TEXT_CURSOR:
+            return TEXT;
+        case java.awt.Cursor.WAIT_CURSOR:
+            return WAIT;
+        case java.awt.Cursor.MOVE_CURSOR:
+            return MOVE;
+        case java.awt.Cursor.N_RESIZE_CURSOR:
+            return RESIZE_NORTH;
+        case java.awt.Cursor.NE_RESIZE_CURSOR:
+            return RESIZE_NORTH_EAST;
+        case java.awt.Cursor.E_RESIZE_CURSOR:
+            return RESIZE_EAST;
+        case java.awt.Cursor.SE_RESIZE_CURSOR:
+            return RESIZE_SOUTH_EAST;
+        case java.awt.Cursor.S_RESIZE_CURSOR:
+            return RESIZE_SOUTH;
+        case java.awt.Cursor.SW_RESIZE_CURSOR:
+            return RESIZE_SOUTH_WEST;
+        case java.awt.Cursor.W_RESIZE_CURSOR:
+            return RESIZE_WEST;
+        case java.awt.Cursor.NW_RESIZE_CURSOR:
+            return RESIZE_NORTH_WEST;
+        }
     }
-    
+
     public static java.awt.Cursor getAWTCursor(CursorMode cursorMode) {
         switch (cursorMode) {
         case DEFAULT:
@@ -101,9 +101,9 @@ public enum CursorMode {
             return new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
         case CROSS:
             return new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR);
-        case HAND: 
+        case HAND:
             return new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR);
-        case MOVE: 
+        case MOVE:
             return new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR);
         case TEXT:
             return new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR);

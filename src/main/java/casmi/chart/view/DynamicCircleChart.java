@@ -43,7 +43,7 @@ import casmi.util.Random;
 
 /**
  * DynamicCircleChart Class.
- * 
+ *
  * @author Y.Ban
  */
 public class DynamicCircleChart extends Group {
@@ -169,7 +169,7 @@ public class DynamicCircleChart extends Group {
             if (turn == ChartTurnType.CLOCKWISE)
                 arc.flip(0);
             if (animation)
-            	arc.setVisible(false);
+                arc.setVisible(false);
             arclist.add(arc);
             add(arclist.get(count));
             count++;

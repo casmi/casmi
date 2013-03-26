@@ -1,7 +1,7 @@
 /*
  *   casmi
  *   http://casmi.github.com/
- *   Copyright (C) 2011, Xcoo, Inc.
+ *   Copyright (C) 2012, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -17,42 +17,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.util;
+package casmi.ui;
 
-import static org.junit.Assert.fail;
-
-import org.junit.Test;
+import casmi.graphics.group.Group;
 
 /**
+ * Progress bar.
+ *
  * @author T. Takeuchi
  */
-public class CronTest {
+public class ProgressBar extends Group {
 
-    @Test
-    public void test() {
+    @Override
+    public void update() {
+        // TODO Auto-generated method stub
 
-        Cron cron = new Cron("* * * * *", new Runnable() {
-
-            int cnt = 0;
-
-            @Override
-            public void run() {
-                System.out.println("cron says " + cnt++);
-            }
-        });
-
-        System.out.println(cron);
-        
-        cron.start();
-
-        try {
-            Thread.sleep(60 * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            fail("Sleep failed.");
-        }
-
-        cron.stop();
     }
 
 }

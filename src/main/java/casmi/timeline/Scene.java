@@ -42,7 +42,7 @@ import casmi.tween.TweenSerialGroup;
 
 /**
  * Scene class for time line animation.
- * 
+ *
  * @author Y. Ban
  */
 abstract public class Scene extends RootObject {
@@ -303,7 +303,7 @@ abstract public class Scene extends RootObject {
         this.addPerse(new Perspective());
     }
 
-    public void setPerspective(double fov, double aspect, double zNear,	double zFar) {
+    public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
         this.addPerse(new Perspective(fov, aspect, zNear, zFar));
     }
 

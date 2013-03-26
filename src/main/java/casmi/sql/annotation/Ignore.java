@@ -27,9 +27,9 @@ import java.lang.annotation.Target;
 /**
  * Indicates the field is ignored by O/R mapping.
  * Must be used in a sub class of casmi.sql.Entity only.
- * 
+ *
  * @see casmi.sql.Entity
- * 
+ *
  * @author T. Takeuchi
  */
 @Target(ElementType.FIELD)

@@ -20,17 +20,15 @@
 package casmi.graphics.element;
 
 /**
- * Enum class for gradation modes.
- * Sets the trends for the gradation.
- * 
+ * Enum class for gradation modes. Sets the trends for the gradation.
+ *
  * @author Y. Ban
  */
 public enum GradationMode3D {
-	
-	X_AXIS,
-	
-	Y_AXIS,
-	
-	Z_AXIS
 
+    X_AXIS,
+
+    Y_AXIS,
+
+    Z_AXIS
 }

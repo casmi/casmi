@@ -37,16 +37,16 @@ import casmi.io.Writer;
 
 /**
  * JSON parser class.
- * 
+ *
  * <p>
  * This class uses JSONIC library
  * (jsonic-1.2.5) licensed by Apache 2.0 license.
  * </p>
- * 
+ *
  * @see casmi.exception.ParserException
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class JSON {
 
@@ -57,7 +57,7 @@ public class JSON {
 
     /**
      * Encodes a object into a JSON string.
-     * 
+     *
      * @param source A object to encode.
      * @return A JSON string.
      */
@@ -68,10 +68,10 @@ public class JSON {
 
     /**
      * Encodes a object into a JSON string and outputs a file.
-     * 
+     *
      * @param source A object to encode.
      * @param file An output file.
-     * 
+     *
      * @throws IOException
      *             If an I/O error is occurred.
      * @throws ParserException
@@ -93,12 +93,12 @@ public class JSON {
 
     /**
      * Convert a XML object to a JSON string.
-     * 
+     *
      * @param xml
-     * 
+     *
      * @return
      *     JSON string
-     * 
+     *
      * @throws ParserException
      * @throws SAXException
      * @throws IOException
@@ -123,10 +123,10 @@ public class JSON {
 
     /**
      * Decodes a JSON string into a typed object.
-     * 
+     *
      * @param source A Json string to decode.
      * @param cls Class for converting.
-     * 
+     *
      * @return A decoded object.
      */
     public <T> T decode(String source, Class<? extends T> cls) {
@@ -136,39 +136,39 @@ public class JSON {
 
     /**
      * Decodes a JSON file into a typed object.
-     * 
+     *
      * @param file A JSON file to decode.
      * @param cls Class for converting.
-     * 
+     *
      * @return A decoded object.
-     * 
+     *
      * @throws ParserException
      *             If an error is occurred while parsing the read data.
      * @throws IOException
      *             If an I/O error is occurred.
      */
-    public <T> T decode(File file, Class<? extends T> cls) 
+    public <T> T decode(File file, Class<? extends T> cls)
         throws ParserException, IOException {
 
         return decode(new Reader(file), cls);
     }
-    
+
     /**
      * Decodes a JSON reader into a typed object.
-     * 
+     *
      * @param reader A JSON reader to decode.
      * @param cls Class for converting.
-     * 
+     *
      * @return A decoded object.
-     * 
+     *
      * @throws ParserException
      *             If an error is occurred while parsing the read data.
      * @throws IOException
      *             If an I/O error is occurred.
      */
-    public <T> T decode(Reader reader, Class<? extends T> cls) 
+    public <T> T decode(Reader reader, Class<? extends T> cls)
         throws ParserException, IOException {
-        
+
         try {
             return net.arnx.jsonic.JSON.decode(reader, cls);
         } catch (net.arnx.jsonic.JSONException e) {

@@ -25,57 +25,52 @@ import java.util.List;
 import casmi.graphics.Graphics;
 import casmi.tween.SimpleTweenable;
 import casmi.tween.TweenType;
+
+
 /**
  * Defines a long value on which tweens can be applied.
  *
  * @see SimpleTweenable
  */
 public class TweenLong implements SimpleTweenable {
-	private long value;
-	
-	public TweenLong(long f){
-		value = f;
-	}
-	
-	public TweenLong(){
-		value = 0;
-	}
 
-	@Override
-	public List<Float> getTweenValues(TweenType tweenType) {
-		List<Float> returnValues = new ArrayList<Float>();
-		returnValues.add((float) value);
-		return returnValues;
-	}
+    private long value;
 
-	@Override
-	public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
-		value = newValues.get(0).longValue();
-	}
-	
-	public void end(Graphics g, int tweenType) {
-	}
-	
-	public void render(Graphics g, int tweenType) {
-	}
-	
-	public long getValue(){
-		return value;
-	}
-	
-	public void setValue(long value){
-		this.value = value;
-	}
+    public TweenLong(long f) {
+        value = f;
+    }
 
-	@Override
-	public void end(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    public TweenLong() {
+        value = 0;
+    }
 
-	@Override
-	public void render(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public List<Float> getTweenValues(TweenType tweenType) {
+        List<Float> returnValues = new ArrayList<Float>();
+        returnValues.add((float)value);
+        return returnValues;
+    }
+
+    @Override
+    public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
+        value = newValues.get(0).longValue();
+    }
+
+    public void end(Graphics g, int tweenType) {}
+
+    public void render(Graphics g, int tweenType) {}
+
+    public long getValue() {
+        return value;
+    }
+
+    public void setValue(long value) {
+        this.value = value;
+    }
+
+    @Override
+    public void end(Graphics g, TweenType tweenType) {}
+
+    @Override
+    public void render(Graphics g, TweenType tweenType) {}
 }

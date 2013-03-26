@@ -21,59 +21,59 @@ package casmi;
 
 /**
  * Keyboard class.
- * 
- * @author T. Takeuchi rw
+ *
+ * @author T. Takeuchi
  */
 public class Keyboard {
 
     private char key;
-    
+
     private int keyCode;
-    
-    private boolean pressed  = false;
+
+    private boolean pressed = false;
     private boolean released = false;
-    private boolean typed    = false;
-    
+    private boolean typed = false;
+
     Keyboard() {}
 
     public char getKey() {
         return key;
     }
-    
+
     void setKey(char key) {
         this.key = key;
     }
-    
+
     public int getKeyCode() {
         return keyCode;
     }
-    
+
     void setKeyCode(int keycode) {
         this.keyCode = keycode;
     }
-    
+
     public boolean isPressed() {
         return pressed;
     }
-    
+
     void setPressed(boolean pressed) {
         this.pressed = pressed;
     }
-    
+
     public boolean isReleased() {
         return released;
     }
-    
+
     void setReleased(boolean released) {
         this.released = released;
     }
-    
+
     public boolean isTyped() {
         return typed;
     }
-    
+
     void setTyped(boolean typed) {
         this.typed = typed;
     }
-    
+
 }

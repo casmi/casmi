@@ -29,15 +29,15 @@ import java.util.List;
 
 /**
  * Reader class extends BufferedReader.
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class Reader extends java.io.BufferedReader {
 
     /**
      * Creates Reader object from java.io.Reader.
-     * 
+     *
      * @param reader java.io.Reader object.
      */
     public Reader(java.io.Reader reader) {
@@ -47,7 +47,7 @@ public class Reader extends java.io.BufferedReader {
 
     /**
      * Creates Reader object from java.io.InputStream.
-     * 
+     *
      * @param is java.io.InputStream object.
      */
     public Reader(java.io.InputStream is) {
@@ -57,9 +57,9 @@ public class Reader extends java.io.BufferedReader {
 
     /**
      * Creates Reader object from File.
-     * 
+     *
      * @param file File object.
-     * 
+     *
      * @throws FileNotFoundException
      *             If the file does not exist, is a directory rather than a
      *             regular
@@ -72,9 +72,9 @@ public class Reader extends java.io.BufferedReader {
 
     /**
      * Creates Reader object from file path.
-     * 
+     *
      * @param pathname The file path string.
-     * 
+     *
      * @throws FileNotFoundException
      *             If the file does not exist, is a directory rather than a
      *             regular
@@ -84,9 +84,9 @@ public class Reader extends java.io.BufferedReader {
 
         this(new java.io.FileReader(new File(pathname)));
     }
-    
+
     public Reader(URL pathurl) throws FileNotFoundException, URISyntaxException {
-    	this(new java.io.FileReader(new File(pathurl.toURI())));
+        this(new java.io.FileReader(new File(pathurl.toURI())));
     }
 
     public void close() {
@@ -100,9 +100,9 @@ public class Reader extends java.io.BufferedReader {
 
     /**
      * Reads all lines and return as a String array.
-     * 
+     *
      * @return The String array.
-     * 
+     *
      * @throws IOException If an I/O error occurs.
      */
     public String[] readLines() throws IOException {
@@ -118,9 +118,9 @@ public class Reader extends java.io.BufferedReader {
 
     /**
      * Reads all lines and return as a String.
-     * 
+     *
      * @return The String.
-     * 
+     *
      * @throws IOException If an I/O error occurs.
      */
     public String readAll() throws IOException {

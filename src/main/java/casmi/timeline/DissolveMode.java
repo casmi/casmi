@@ -21,20 +21,20 @@ package casmi.timeline;
 
 /**
  * Modes of dissolving in timeline.
- *  
+ *
  * @author Y. Ban
  */
 public enum DissolveMode {
-    
+
     /** Normal dissolve. */
     BLACK,
-    
+
     /** Cross dissolve. */
-    CROSS, 
-    
+    CROSS,
+
     /** Slide to left dissolve  */
     SLIDE_LEFT,
-    
+
     /** Slide to right dissolve  */
     SLIDE_RIGHT,
 
@@ -43,19 +43,19 @@ public enum DissolveMode {
 
     /** Slide to bottom dissolve  */
     SLIDE_BOTTOM,
-    
+
     /** Change from left dissolve  */
     CURTAIN_LEFT,
-    
+
     /** Change from right dissolve  */
     CURTAIN_RIGHT,
-    
+
     /** Change from top dissolve  */
     CURTAIN_TOP,
-    
+
     /** Change from bottom dissolve  */
     CURTAIN_BOTTOM,
-    
+
     /** MyDissolve */
     ORIGINAL
 }

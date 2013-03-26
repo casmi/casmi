@@ -27,9 +27,9 @@ import casmi.exception.NetException;
 
 /**
  * OAuth class.
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class OAuth {
 
@@ -39,12 +39,12 @@ public class OAuth {
     public OAuth() {}
 
     public void setConsumer(String consumerKey, String consumerSecret) {
-       
+
         consumer = new oauth.signpost.basic.DefaultOAuthConsumer(consumerKey, consumerSecret);
     }
 
     public void setProvider(String requestTokenEndpointUrl, String accessTokenEndpointUrl,
-      
+
         String authorizationWebsiteUrl) {
         provider = new oauth.signpost.basic.DefaultOAuthProvider(
             requestTokenEndpointUrl,
@@ -53,7 +53,7 @@ public class OAuth {
     }
 
     public String retrieveRequestToken() throws NetException {
-      
+
         try {
             return provider.retrieveRequestToken(consumer, oauth.signpost.OAuth.OUT_OF_BAND);
         } catch (OAuthMessageSignerException e) {
@@ -68,7 +68,7 @@ public class OAuth {
     }
 
     public void retrieveAccessToken(String pin) throws NetException {
-       
+
         try {
             provider.retrieveAccessToken(consumer, pin);
         } catch (OAuthMessageSignerException e) {
@@ -81,9 +81,9 @@ public class OAuth {
             throw new NetException(e);
         }
     }
-    
+
     public void sign(HTTP http) throws NetException {
-        
+
         try {
             consumer.sign(http.getConnection());
         } catch (OAuthMessageSignerException e) {
@@ -94,26 +94,26 @@ public class OAuth {
             throw new NetException(e);
         }
     }
-    
+
     public String getConsumerKey() {
-        
+
         return consumer.getConsumerKey();
     }
-    
+
     public String getConsumerSecret() {
-        
+
         return consumer.getConsumerSecret();
     }
-    
+
     public String getToken() {
-    
+
         return consumer.getToken();
     }
-    
+
     public String getTokenSecret() {
         return consumer.getTokenSecret();
     }
-    
+
     public void setTokenWithSecret(String token, String tokenSecret) {
         consumer.setTokenWithSecret(token, tokenSecret);
     }

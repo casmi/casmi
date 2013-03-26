@@ -20,22 +20,21 @@
 package casmi.graphics.element;
 
 /**
- * Enum class for gradation modes.
- * Sets the trends for the gradation.
- * 
+ * Enum class for gradation modes. Sets the trends for the gradation.
+ *
  * @author Y. Ban
  */
 public enum GradationMode2D {
-	
+
     /** The horizontal direction constant. */
-	HORIZONTAL,
+    HORIZONTAL,
 
     /** The vertical direction constant. */
-	VERTICAL,
+    VERTICAL,
 
     /** The left sideways direction constant. */
-	LEFT_SIDEWAYS,
+    LEFT_SIDEWAYS,
 
     /** The right sideways direction constant. */
-	RIGHT_SIDEWAYS
+    RIGHT_SIDEWAYS
 }

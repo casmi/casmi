@@ -23,22 +23,22 @@ package casmi;
  * @author Y. Ban
  */
 public enum MouseEvent {
-	
+
     PRESSED,
-    
+
     CLICKED,
-    
+
     DOUBLE_CLICKED,
-    
+
     ENTERED,
-    
+
     EXITED,
-    
+
     RELEASED,
-    
+
     DRAGGED,
-    
+
     MOVED,
-    
+
     WHEEL_ROTATED
 }

@@ -22,10 +22,10 @@ package casmi.sql;
 enum SQLType {
 
     SQLITE_3,
-    
+
     MYSQL_5,
-    
+
     // PostgreSQL,
-    
+
     // OracleDB,
 }

@@ -31,7 +31,7 @@ import casmi.graphics.group.Group;
 
 /**
  * Axis Class for Chart.
- * 
+ *
  * @author Y.Ban
  */
 public class Axis extends Group {
@@ -165,7 +165,7 @@ public class Axis extends Group {
             name.setAlign(TextAlign.CENTER);
             name.setStrokeColor(ColorSet.WHITE);
             add(name);
-            double diff = length / (double)(datas.getSize() / divisionDiff);
+            double diff = length / (datas.getSize() / divisionDiff);
             for (int i = 0; i * divisionDiff < datas.getSize(); i++) {
                 Line l = new Line(i * diff + offset, 0, i * diff + offset, -10);
                 l.setStrokeColor(ColorSet.WHITE);
@@ -184,7 +184,7 @@ public class Axis extends Group {
             name.setRotation(90);
             name.setStrokeColor(ColorSet.WHITE);
             add(name);
-            double diff = length / (double)((maxValue - minValue) / divisionDiff);
+            double diff = length / ((maxValue - minValue) / divisionDiff);
             for (int i = 0; this.minValue + i * divisionDiff <= this.maxValue; i++) {
                 Line l = new Line(0, i * diff + offset, -10, i * diff + offset);
                 l.setStrokeColor(ColorSet.WHITE);

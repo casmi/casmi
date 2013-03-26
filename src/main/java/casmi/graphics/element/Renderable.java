@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.graphics.element;
 
 import javax.media.opengl.GL2;
@@ -24,12 +24,12 @@ import javax.media.opengl.glu.GLU;
 
 /**
  * Renderable interface for graphics object.
- * 
+ *
  * @author Y. Ban
  */
 public interface Renderable {
-    
+
     void render(GL2 gl, GLU glu, int width, int height);
-    
+
     void setAlpha(double alpha);
 }

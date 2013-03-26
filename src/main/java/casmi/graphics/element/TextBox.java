@@ -1,18 +1,20 @@
-/*   casmi examples
+/*
+ *   casmi
  *   http://casmi.github.com/
  *   Copyright (C) 2011, Xcoo, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package casmi.graphics.element;
@@ -30,9 +32,8 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 /**
  * Text class.
  * Wrap JOGL and make it easy to use.
- * 
- * @author  T. Takeuchi,Y. Ban
- * 
+ *
+ * @author  T. Takeuchi, Y. Ban
  */
 public class TextBox extends Element implements Renderable, Reset {
 
@@ -40,83 +41,83 @@ public class TextBox extends Element implements Renderable, Reset {
     private static final Color   DEFAULT_FILL_COLOR   = new RGBColor(ColorSet.BLACK);
     private static final boolean DEFAULT_STROKE       = false;
     private static final Color   DEFAULT_STROKE_COLOR = new RGBColor(ColorSet.WHITE);
-    
+
     private Text text;
     private double width = 0.0;
     private double height = 0.0;
-    
+
     /**
      * Creates a new TextBox using Text, width and height.
-     * 
+     *
      * @param text
-     * 				The content of the TextBox.
+     *                 The content of the TextBox.
      * @param width
-     * 				The width of the TextBox.
+     *                 The width of the TextBox.
      * @param height
-     * 				The height of the TextBox.
-     */  
+     *                 The height of the TextBox.
+     */
     public TextBox(Text text, double width, double height) {
-    	this(text, 0.0, 0.0, 0.0, width, height);
+        this(text, 0.0, 0.0, 0.0, width, height);
     }
-    
+
     /**
      * Creates a new TextBox using Text, x,y-coordinate, width and height.
-     * 
+     *
      * @param text
-     * 				The content of the TextBox.
+     *                 The content of the TextBox.
      * @param x
-     * 				The x-coordinate of the TextBox.
+     *                 The x-coordinate of the TextBox.
      * @param y
-     * 				The y-coordinate of the TextBox.
+     *                 The y-coordinate of the TextBox.
      * @param width
-     * 				The width of the TextBox.
+     *                 The width of the TextBox.
      * @param height
-     * 				The height of the TextBox.
-     */
-    public TextBox(Text text, 
-                   double x, double y,
-                   double width, double height) {
-        
-        this(text, x, y, 0.0, width, height);
-    }
-    
-    /**
-     * Creates a new TextBox using Text, x,y,z-coordinate, width and height.
-     * 
-     * @param text
-     * 				The content of the TextBox.
-     * @param x
-     * 				The x-coordinate of the TextBox.
-     * @param y
-     * 				The y-coordinate of the TextBox.
-     * @param z
-     * 				The y-coordinate of the TextBox.
-     * @param width
-     * 				The width of the TextBox.
-     * @param height
-     * 				The height of the TextBox.
+     *                 The height of the TextBox.
      */
     public TextBox(Text text,
-                   double x, double y, double z, 
+                   double x, double y,
                    double width, double height) {
-        
+
+        this(text, x, y, 0.0, width, height);
+    }
+
+    /**
+     * Creates a new TextBox using Text, x,y,z-coordinate, width and height.
+     *
+     * @param text
+     *                 The content of the TextBox.
+     * @param x
+     *                 The x-coordinate of the TextBox.
+     * @param y
+     *                 The y-coordinate of the TextBox.
+     * @param z
+     *                 The y-coordinate of the TextBox.
+     * @param width
+     *                 The width of the TextBox.
+     * @param height
+     *                 The height of the TextBox.
+     */
+    public TextBox(Text text,
+                   double x, double y, double z,
+                   double width, double height) {
+
         this.text   = text;
         this.x      = x;
         this.y      = y;
         this.z      = z;
         this.width  = width;
         this.height = height;
-        
+
         init();
         format();
     }
-    
+
     @Override
-	public void reset(GL2 gl) {
-	    text.reset(gl);
-		format();
-	}
-    
+    public void reset(GL2 gl) {
+        text.reset(gl);
+        format();
+    }
+
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
         double x1 = - this.width  / 2.0;
@@ -127,13 +128,13 @@ public class TextBox extends Element implements Renderable, Reset {
         double y3 = - this.height / 2.0;
         double x4 =   this.width  / 2.0;
         double y4 =   this.height / 2.0;
-        
+
         gl.glDisable(GL2.GL_DEPTH_TEST);
-        
+
         gl.glPushMatrix();
         {
             setTweenParameter(gl);
-            
+
             // fill
             if (fill) {
                 getSceneFillColor().setup(gl);
@@ -146,7 +147,7 @@ public class TextBox extends Element implements Renderable, Reset {
                 }
                 gl.glEnd();
             }
-            
+
             // stroke
             if (stroke) {
                 gl.glLineWidth(this.strokeWidth);
@@ -161,7 +162,7 @@ public class TextBox extends Element implements Renderable, Reset {
                 }
                 gl.glEnd();
             }
-            
+
             // text
             switch (text.getAlign()) {
             case CENTER:
@@ -180,18 +181,18 @@ public class TextBox extends Element implements Renderable, Reset {
             text.render(gl, glu, width, height);
         }
         gl.glPopMatrix();
-        
+
         gl.glEnable(GL2.GL_DEPTH_TEST);
     }
-    
+
     private final void init() {
         this.fill        = DEFAULT_FILL;
         this.fillColor   = DEFAULT_FILL_COLOR;
         this.stroke      = DEFAULT_STROKE;
         this.strokeColor = DEFAULT_STROKE_COLOR;
     }
-    
-    private final void format() {        
+
+    private final void format() {
         String[] strs = text.getArrayText();
         TextRenderer tr = text.getRenderer();
         StringBuilder sb = new StringBuilder();
@@ -216,39 +217,32 @@ public class TextBox extends Element implements Renderable, Reset {
     }
 
     public final Text getText() {
-    
         return text;
     }
 
     public final void setText(Text text) {
-    
         this.text = text;
         format();
     }
 
+    @Override
     public final double getX() {
-    
         return x;
     }
 
     public final double getWidth() {
-    
         return width;
     }
 
     public final void setWidth(double width) {
-    
         this.width = width;
     }
 
     public final double getHeight() {
-    
         return height;
     }
 
     public final void setHeight(double height) {
-    
         this.height = height;
     }
-
 }

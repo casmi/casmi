@@ -24,33 +24,30 @@ package casmi.exception;
  */
 public class CasmiException extends java.lang.Exception {
 
-	/**
-	 * For subclasses only.
-	 */
-	protected CasmiException() {}
+    /**
+     * For subclasses only.
+     */
+    protected CasmiException() {}
 
-	/**
-	 * @param message
-	 */
-	public CasmiException(String message) {
-		
-	    super(message);
-	}
+    /**
+     * @param message
+     */
+    public CasmiException(String message) {
+        super(message);
+    }
 
-	/**
-	 * @param cause
-	 */
-	public CasmiException(Throwable cause) {
-		
-	    super(cause);
-	}
+    /**
+     * @param cause
+     */
+    public CasmiException(Throwable cause) {
+        super(cause);
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public CasmiException(String message, Throwable cause) {
-		
-	    super(message, cause);
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public CasmiException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

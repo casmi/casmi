@@ -23,9 +23,9 @@ package casmi.graphics.color;
  * ColorSet by keywords.
  * <p>
  * http://www.w3.org/TR/css3-color/
- * 
+ *
  * @author K. Nishimura
- * 
+ *
  * @see casmi.graphics.color.Color
  */
 public enum ColorSet {
@@ -35,454 +35,454 @@ public enum ColorSet {
 
     /** (250, 235, 215). */
     ANTIQUE_WHITE,
-    
+
     /** (0, 255, 255). */
     AQUA,
-    
+
     /** (127, 255, 212). */
     AQUAMARINE,
-    
+
     /** (240, 255, 255). */
     AZURE,
-    
+
     /** (245, 245, 220). */
     BEIGE,
-    
+
     /** (255, 228, 196). */
     BISQUE,
-    
+
     /** (0, 0, 0). */
     BLACK,
-    
+
     /** (255, 235, 205). */
     BLANCHED_ALMOND,
-    
+
     /** (0, 0, 255). */
     BLUE,
-    
+
     /** (138, 43, 226). */
     BLUE_VIOLET,
-    
+
     /** (165, 42, 42). */
     BROWN,
-    
+
     /** (222, 184, 135). */
     BURLY_WOOD,
-    
+
     /** (95, 158, 160). */
     CADET_BLUE,
-    
+
     /** (127, 255, 0). */
     CHARTREUSE,
-    
+
     /** (210, 105, 30). */
     CHOCOLATE,
-    
+
     /** (255, 127, 80). */
     CORAL,
-    
+
     /** (100, 149, 237). */
     CORNFLOWER_BLUE,
-    
+
     /** (255, 248, 220). */
     CORNSILK,
-    
+
     /** (220, 20, 60). */
     CRIMSON,
-    
+
     /** (0, 255, 255). */
     CYAN,
-    
+
     /** (0, 0, 139). */
     DARK_BLUE,
-    
+
     /** (0, 139, 139). */
     DARK_CYAN,
-    
+
     /** (184, 134, 11). */
     DARK_GOLDENROD,
-    
+
     /** (169, 169, 169). */
     DARK_GRAY,
-    
+
     /** (0, 100, 0). */
     DARK_GREEN,
-    
+
     /** (169, 169, 169). */
     DARK_GREY,
-    
+
     /** (189, 183, 107). */
     DARK_KHAKI,
-    
+
     /** (139, 0, 139). */
     DARK_MAGENTA,
-    
+
     /** (85, 107, 47). */
     DARK_OLIVE_GREEN,
-    
+
     /** (255, 140, 0). */
     DARK_ORANGE,
-    
+
     /** (153, 50, 204). */
     DARK_ORCHID,
-    
+
     /** (139, 0, 0). */
     DARK_RED,
-    
+
     /** (233, 150, 122). */
     DARK_SALMON,
-    
+
     /** (143, 188, 143). */
     DARK_SEA_GREEN,
-    
+
     /** (72, 61, 139). */
     DARK_SLATE_BLUE,
-    
+
     /** (47, 79, 79). */
     DARK_SLATE_GRAY,
-    
+
     /** (47, 79, 79). */
     DARK_SLATE_GREY,
-    
+
     /** (0, 206, 209). */
     DARK_TURQUOISE,
-    
+
     /** (148, 0, 211). */
     DARK_VIOLET,
-    
+
     /** (255, 20, 147). */
     DEEP_PINK,
-    
+
     /** (0, 191, 255). */
     DEEP_SKY_BLUE,
-    
+
     /** (105, 105, 105). */
     DIM_GRAY,
-    
+
     /** (105, 105, 105). */
     DIM_GREY,
-    
+
     /** (30, 144, 255). */
     DODGER_BLUE,
-    
+
     /** (178, 34, 34). */
     FIREBRICK,
-    
+
     /** (255, 250, 240). */
     FLORAL_WHITE,
-    
+
     /** (34, 139, 34). */
     FOREST_GREEN,
-    
+
     /** (255, 0, 255). */
     FUCHSIA,
-    
+
     /** (220, 220, 220). */
     GAINSBORO,
-    
+
     /** (248, 248, 255). */
     GHOST_WHITE,
-    
+
     /** (255, 215, 0). */
     GOLD,
-    
+
     /** (218, 165, 32). */
     GOLDENROD,
-    
+
     /** (128, 128, 128). */
     GRAY,
-    
+
     /** (0, 128, 0). */
     GREEN,
-    
+
     /** (173, 255, 47). */
     GREEN_YELLOW,
-    
+
     /** (128, 128, 128). */
     GREY,
-    
+
     /** (240, 255, 240). */
     HONEYDEW,
-    
+
     /** (255, 105, 180). */
     HOT_PINK,
-    
+
     /** (205, 92, 92). */
     INDIAN_RED,
-    
+
     /** (75, 0, 130). */
     INDIGO,
-    
+
     /** (255, 255, 240). */
     IVORY,
-    
+
     /** (240, 230, 140). */
     KHAKI,
-    
+
     /** (230, 230, 250). */
     LAVENDER,
-    
+
     /** (255, 240, 245). */
     LAVENDER_BLUSH,
-    
+
     /** (124, 252, 0). */
     LAWN_GREEN,
-    
+
     /** (255, 250, 205). */
     LEMON_CHIFFON,
-    
+
     /** (173, 216, 230). */
     LIGHT_BLUE,
-    
+
     /** (240, 128, 128). */
     LIGHT_CORAL,
-    
+
     /** (224, 255, 255). */
     LIGHT_CYAN,
-    
+
     /** (250, 250, 210). */
     LIGHT_GOLDENROD_YELLOW,
-    
+
     /** (211, 211, 211). */
     LIGHT_GRAY,
-    
+
     /** (144, 238, 144). */
     LIGHT_GREEN,
-    
+
     /** (211, 211, 211). */
     LIGHT_GREY,
-    
+
     /** (255, 182, 193). */
     LIGHT_PINK,
-    
+
     /** (255, 160, 122). */
     LIGHT_SALMON,
-    
+
     /** (32, 178, 170). */
     LIGHT_SEA_GREEN,
-    
+
     /** (135, 206, 250). */
     LIGHT_SKY_BLUE,
-    
+
     /** (119, 136, 153). */
     LIGHT_SLATE_GRAY,
 
     /** (119, 136, 153). */
     LIGHT_SLATE_GREY,
-    
+
     /** (176, 196, 222). */
     LIGHT_STEEL_BLUE,
-    
+
     /** (255, 255, 224). */
     LIGHT_YELLOW,
-    
+
     /** (0, 255, 0). */
     LIME,
-    
+
     /** (50, 205, 50). */
     LIME_GREEN,
-    
+
     /** (250, 240, 230). */
     LINEN,
-    
+
     /** (255, 0, 255). */
     MAGENTA,
-    
+
     /** (128, 0, 0). */
     MAROON,
-    
+
     /** (102, 205, 170). */
     MEDIUM_AQUAMARINE,
-    
+
     /** (0, 0, 205). */
     MEDIUM_BLUE,
-    
+
     /** (186, 85, 211). */
     MEDIUM_ORCHID,
-    
+
     /** (147, 112, 219). */
     MEDIUM_PURPLE,
-    
+
     /** (60, 179, 114). */
     MEDIUM_SEA_GREEN,
-    
+
     /** (123, 104, 238). */
     MEDIUM_SLATE_BLUE,
-    
+
     /** (0, 250, 154). */
     MEDIUM_SPRING_GREEN,
-    
+
     /** (72, 209, 204). */
     MEDIUM_TURQUOISE,
-    
+
     /** (199, 21, 133). */
     MEDIUM_VIOLET_RED,
-    
+
     /** (25, 25, 112). */
     MIDNIGHT_BLUE,
-    
+
     /** (245, 255, 250). */
     MINT_CREAM,
-    
+
     /** (255, 228, 225). */
     MISTY_ROSE,
-    
+
     /** (255, 228, 181). */
     MOCCASIN,
-    
+
     /** (255, 222, 173). */
     NAVAJO_WHITE,
-    
+
     /** (0, 0, 128). */
     NAVY,
-    
+
     /** (253, 245, 230). */
     OLD_LACE,
-    
+
     /** (128, 128, 0). */
     OLIVE,
-    
+
     /** (107, 142, 35). */
     OLIVE_DRAB,
-    
+
     /** (255, 165, 0). */
     ORANGE,
-    
+
     /** (255, 69, 0). */
     ORANGE_RED,
-    
+
     /** (218, 112, 214). */
     ORCHID,
-    
+
     /** (238, 232, 170). */
     PALE_GOLDENROD,
-    
+
     /** (152, 251, 154). */
     PALE_GREEN,
-    
+
     /** (175, 238, 238). */
     PALE_TURQUOISE,
-    
+
     /** (219, 112, 147). */
     PALE_VIOLET_RED,
-    
+
     /** (255, 239, 213). */
     PAPAYA_WHIP,
-    
+
     /** (255, 218, 185). */
     PEACH_PUFF,
-    
+
     /** (205, 133, 63). */
     PERU,
-    
+
     /** (255, 192, 203). */
     PINK,
-    
+
     /** (221, 160, 221). */
     PLUM,
-    
+
     /** (176, 224, 230). */
     POWDER_BLUE,
-    
+
     /** (128, 0, 128). */
     PURPLE,
-    
+
     /** (255, 0, 0). */
     RED,
-    
+
     /** (188, 136, 153). */
     ROSY_BROWN,
-    
+
     /** (65, 105, 255). */
     ROYAL_BLUE,
-    
+
     /** (139, 69, 19). */
     SADDLE_BROWN,
-    
+
     /** (250, 128, 114). */
     SALMON,
-    
+
     /** (244, 164, 96). */
     SANDY_BROWN,
-    
+
     /** (46, 139, 87). */
     SEA_GREEN,
-    
+
     /** (255, 245, 238) */
     SEA_SHELL,
-    
+
     /** (160, 82, 45) */
     SIENNA,
-    
+
     /** (192, 192, 192) */
     SILVER,
-    
+
     /** (135, 206, 235) */
     SKY_BLUE,
-    
+
     /** (106, 90, 205) */
     SLATE_BLUE,
-    
+
     /** (112, 128, 144). */
     SLATE_GRAY,
-    
+
     /** (112, 128, 144). */
     SLATE_GREY,
-    
+
     /** (255, 250, 250). */
     SNOW,
-    
+
     /** (0, 255, 127). */
     SPRING_GREEN,
-    
+
     /** (70, 130, 180). */
     STEEL_BLUE,
-    
+
     /** (210, 180, 140). */
     TAN,
-    
+
     /** (0, 128, 128). */
     TEAL,
-    
+
     /** (216, 191, 216). */
     THISTLE,
-    
+
     /** (255, 99, 71). */
     TOMATO,
-    
+
     /** (64, 224, 208). */
     TURQUOISE,
-    
+
     /** (238, 130, 238). */
     VIOLET,
-    
+
     /** (245, 222, 179). */
     WHEAT,
-    
+
     /** (255, 255, 255). */
     WHITE,
-    
+
     /** (245, 245, 245). */
     WHITE_SMOKE,
-    
+
     /** (255, 255, 0). */
     YELLOW,
-    
+
     /** (154, 205, 50). */
     YELLOW_GREEN;
-    
+
     /**
      * Returns RGB values from ColorSet.
-     * 
+     *
      * @param colorSet
      *            The ColorSet.
-     * 
+     *
      * @return
      *            Array of RGB values from 0 to 255.
      */
     static final int[] getRGB(ColorSet colorSet) {
         int[] ret = {0, 0, 0};
-        
+
         switch (colorSet) {
         case ALICE_BLUE:
             ret[0] = 240;
@@ -1217,7 +1217,7 @@ public enum ColorSet {
         default:
             break;
         }
-        
+
         return ret;
     }
 }

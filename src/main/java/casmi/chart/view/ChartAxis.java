@@ -23,8 +23,8 @@ package casmi.chart.view;
  * @author Y. Ban
  */
 public enum ChartAxis {
-	
-	HORIZONTAL,
-	
-	VERTICAL
+
+    HORIZONTAL,
+
+    VERTICAL
 }
