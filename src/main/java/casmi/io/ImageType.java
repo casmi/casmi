@@ -20,18 +20,18 @@ package casmi.io;
 
 /**
  * Types of output image.
- * 
+ *
  * @author T. Takeuchi
  */
 public enum ImageType {
 
     JPG,
-    
+
     PNG,
-    
+
     BMP,
-    
+
     GIF,
-    
+
     PDF,
 }

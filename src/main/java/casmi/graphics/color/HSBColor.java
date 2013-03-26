@@ -84,7 +84,7 @@ public class HSBColor implements Color {
      * @param colorSet
      *            ColorSet.
      * @param alpha
-     *			  alpha value. 0.0 - 1.0.
+     *              alpha value. 0.0 - 1.0.
      *
      * @see casmi.graphics.color.ColorSet
      */

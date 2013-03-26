@@ -23,7 +23,7 @@ import casmi.graphics.group.Group;
 
 /**
  * Progress bar.
- * 
+ *
  * @author T. Takeuchi
  */
 public class ProgressBar extends Group {
@@ -31,7 +31,7 @@ public class ProgressBar extends Group {
     @Override
     public void update() {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

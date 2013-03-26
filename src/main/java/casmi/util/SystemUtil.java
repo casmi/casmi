@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.util;
 
 import java.awt.Desktop;
@@ -30,9 +30,9 @@ import casmi.exception.NetException;
 
 /**
  * Utility class to access system properties easily.
- * 
+ *
  * @author Xcoo Inc.
- * 
+ *
  */
 public class SystemUtil {
 
@@ -53,7 +53,7 @@ public class SystemUtil {
     public static final String JAVA_VERSION = System.getProperty("java.version");
     /** Java temp dir. */
     public static final String JAVA_TMP_PATH = System.getProperty("java.io.tmpdir");
-    
+
     // JVM
     /** JVM name. */
     public static final String JVM_NAME = System.getProperty("java.vm.name");
@@ -67,7 +67,7 @@ public class SystemUtil {
     public static final String JVM_SPEC_VENDOR = System.getProperty("java.vm.specification.vendor");
     /** JVM version in specification. */
     public static final String JVM_SPEC_VERSION = System.getProperty("java.vm.specification.version");
-    
+
     // OS
     /** OS name (e.g. "Mac OS X", "Linux", etc.). */
     public static final String OS_NAME = System.getProperty("os.name");
@@ -91,10 +91,10 @@ public class SystemUtil {
     public static final String PATH_SEPARATOR = System.getProperty("path.separator");
     /** Line separator string of the system. */
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    
+
     /**
      * Get all property names.
-     * 
+     *
      * @return String array of all property names.
      */
     static public String[] getAllProperties() {
@@ -106,17 +106,17 @@ public class SystemUtil {
         }
         return list.toArray(new String[0]);
     }
-    
+
     /**
      * Get information of OS environment.
      * Detects OS name (e.g. Mac OS X) and architecture (e.g. x86_64).
-     * 
+     *
      * @return OSEnv enum object.
      */
     public static OS getOS() {
         String osname = SystemUtil.OS_NAME;
         String osarch = SystemUtil.OS_ARCH;
-        
+
         if (osname.indexOf("Mac") != -1) {
             if (osarch.equals("x86")) return OS.MAC;
             else if (osarch.equals("x86_64")) return OS.MAC_64;
@@ -130,18 +130,18 @@ public class SystemUtil {
 
         return OS.OTHER;
     }
-    
+
     /**
-     * Launches the default browser to display a URL. 
-     * 
-     * @param url 
+     * Launches the default browser to display a URL.
+     *
+     * @param url
      *            The URL to be displayed in the user default browser.
-     * 
+     *
      * @throws NetException
      *            If errors occur
      */
     public static void browse(URL url) throws NetException {
-        
+
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.browse(new URI(url.toString()));

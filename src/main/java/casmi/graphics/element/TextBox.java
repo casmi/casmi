@@ -50,29 +50,29 @@ public class TextBox extends Element implements Renderable, Reset {
      * Creates a new TextBox using Text, width and height.
      *
      * @param text
-     * 				The content of the TextBox.
+     *                 The content of the TextBox.
      * @param width
-     * 				The width of the TextBox.
+     *                 The width of the TextBox.
      * @param height
-     * 				The height of the TextBox.
+     *                 The height of the TextBox.
      */
     public TextBox(Text text, double width, double height) {
-    	this(text, 0.0, 0.0, 0.0, width, height);
+        this(text, 0.0, 0.0, 0.0, width, height);
     }
 
     /**
      * Creates a new TextBox using Text, x,y-coordinate, width and height.
      *
      * @param text
-     * 				The content of the TextBox.
+     *                 The content of the TextBox.
      * @param x
-     * 				The x-coordinate of the TextBox.
+     *                 The x-coordinate of the TextBox.
      * @param y
-     * 				The y-coordinate of the TextBox.
+     *                 The y-coordinate of the TextBox.
      * @param width
-     * 				The width of the TextBox.
+     *                 The width of the TextBox.
      * @param height
-     * 				The height of the TextBox.
+     *                 The height of the TextBox.
      */
     public TextBox(Text text,
                    double x, double y,
@@ -85,17 +85,17 @@ public class TextBox extends Element implements Renderable, Reset {
      * Creates a new TextBox using Text, x,y,z-coordinate, width and height.
      *
      * @param text
-     * 				The content of the TextBox.
+     *                 The content of the TextBox.
      * @param x
-     * 				The x-coordinate of the TextBox.
+     *                 The x-coordinate of the TextBox.
      * @param y
-     * 				The y-coordinate of the TextBox.
+     *                 The y-coordinate of the TextBox.
      * @param z
-     * 				The y-coordinate of the TextBox.
+     *                 The y-coordinate of the TextBox.
      * @param width
-     * 				The width of the TextBox.
+     *                 The width of the TextBox.
      * @param height
-     * 				The height of the TextBox.
+     *                 The height of the TextBox.
      */
     public TextBox(Text text,
                    double x, double y, double z,

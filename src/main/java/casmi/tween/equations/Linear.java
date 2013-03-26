@@ -26,15 +26,15 @@ import casmi.tween.TweenEquation;
  * http://robertpenner.com/easing/
  */
 public class Linear {
-	public static final TweenEquation INOUT = new TweenEquation() {
-		@Override
-		public final float compute(float t, float b, float c, float d) {
-			return c * t/d + b;
-		}
+    public static final TweenEquation INOUT = new TweenEquation() {
+        @Override
+        public final float compute(float t, float b, float c, float d) {
+            return c * t/d + b;
+        }
 
-		@Override
-		public String toString() {
-			return "Linear.INOUT";
-		}
-	};
+        @Override
+        public String toString() {
+            return "Linear.INOUT";
+        }
+    };
 }

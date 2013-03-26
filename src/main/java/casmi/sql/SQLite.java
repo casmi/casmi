@@ -39,9 +39,9 @@ import casmi.util.FileUtil;
 
 /**
  * SQLite class.
- * 
+ *
  * @see casmi.sql.Entity
- * 
+ *
  * @author T. Takeuchi
  */
 public class SQLite extends SQL {
@@ -84,13 +84,13 @@ public class SQLite extends SQL {
 
     /**
      * Creates new SQLite object from the specified database file.
-     * 
+     *
      * @param dbFile
      *            The SQLite3 database file.
      */
     public SQLite(File dbFile) {
         super(SQL_TYPE);
-        
+
         String path = null;
         if (dbFile.isFile()) {
             path = dbFile.getAbsolutePath();
@@ -100,10 +100,10 @@ public class SQLite extends SQL {
 
         url = "jdbc:sqlite:" + path;
     }
-    
+
     /**
      * Creates new SQLite object from the specified database file path.
-     * 
+     *
      * @param dbPath
      *            The SQLite3 database file's path.
      */
@@ -113,7 +113,7 @@ public class SQLite extends SQL {
 
     /**
      * Create SQLite3 database file.
-     * 
+     *
      * @param dbFile
      *            the database file.
      * @throws IOException
@@ -122,10 +122,10 @@ public class SQLite extends SQL {
         InputStream is = SQLite.class.getResourceAsStream("template.sqlite3");
         FileUtil.createFileFromInputStream(dbFile, is);
     }
-    
+
     /**
      * Create SQLite3 database file.
-     * 
+     *
      * @param dbPath
      *            database file path.
      * @throws IOException
@@ -199,7 +199,7 @@ public class SQLite extends SQL {
 
     /**
      * Return true if the SQL is a query.
-     * 
+     *
      * @param sql
      * @return
      */
@@ -214,7 +214,7 @@ public class SQLite extends SQL {
 
     /**
      * Set parameter on a prepared statement.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param param
@@ -293,11 +293,11 @@ public class SQLite extends SQL {
         return resultSet.next();
     }
 
-    
+
     // -------------------------------------------------------------------------
     // Getters from resultSet.
     // -------------------------------------------------------------------------
-    
+
     @Override
     @SuppressWarnings("unchecked")
     <T> T get(ResultSet resultSet, Class<T> type, String field) throws SQLException {
@@ -310,10 +310,10 @@ public class SQLite extends SQL {
         } else if (type == long.class ||
                    type == Long.class) {
             return (T)(Long)resultSet.getLong(field);
-        } else if (type == double.class || 
+        } else if (type == double.class ||
                    type == Double.class) {
             return (T)(Double)resultSet.getDouble(field);
-        } else if (type == float.class || 
+        } else if (type == float.class ||
                    type == Float.class) {
             return (T)(Float)resultSet.getFloat(field);
         } else if (type == java.util.Date.class) {
@@ -330,21 +330,21 @@ public class SQLite extends SQL {
         } else if (type == Blob.class) {
             return (T)(Blob)resultSet.getBlob(field);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Retrieves the value of the designated column in the current row as a Blob
      * object in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return
      *         a Blob object representing the SQL BLOB value in the specified
      *         column.
-     * 
+     *
      * @throws SQLException
      *             if the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -360,14 +360,14 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a Blob
      * object in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return
      *         a Blob object representing the SQL BLOB value in the specified
      *         column.
-     * 
+     *
      * @throws SQLException
      *             if the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -383,13 +383,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as
      * java.util.Date object.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the column index is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -410,13 +410,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as
      * java.util.Date object.
-     * 
+     *
      * @param field
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the column index is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -432,28 +432,28 @@ public class SQLite extends SQL {
             throw new SQLException(e);
         }
     }
-    
+
     private java.util.Date parseDate(String dateStr) throws ParseException {
-        
+
         for (int i = 0; i < DATE_FORMATS.length; i++) {
             if (dateStr.matches(DATE_FORMATS[i][0])) {
                 return DateUtil.parse(dateStr, DATE_FORMATS[i][1]);
             }
         }
-        
+
         return null;
     }
 
     /**
      * Retrieves the value of the designated column in the current row as a
      * double in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -469,13 +469,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * double in the Java programming language.
-     * 
+     *
      * @param field
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -491,13 +491,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * float in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0f.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -513,13 +513,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * float in the Java programming language.
-     * 
+     *
      * @param field
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0f.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -535,13 +535,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as int in
      * the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -557,13 +557,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a int
      * in the Java programming language.
-     * 
+     *
      * @param field
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -579,13 +579,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * String in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -601,13 +601,13 @@ public class SQLite extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * String in the Java programming language.
-     * 
+     *
      * @param field
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -626,7 +626,7 @@ public class SQLite extends SQL {
 
     /**
      * Returns a string representation of the record.
-     * 
+     *
      * @return a string representation of the record.
      * @throws SQLException
      */
@@ -647,7 +647,7 @@ public class SQLite extends SQL {
 
     /**
      * Prints a record string and then terminate the line simply.
-     * 
+     *
      * @throws SQLException
      */
     public void println() throws SQLException {
@@ -661,7 +661,7 @@ public class SQLite extends SQL {
 
     /**
      * Return a database's URL.
-     * 
+     *
      * @return A database's URL string.
      */
     public String getURL() {
@@ -671,7 +671,7 @@ public class SQLite extends SQL {
 
     /**
      * Return java.sql.Statement object.
-     * 
+     *
      * @return java.sql.Statement object.
      */
     public Statement getStatement() {
@@ -681,7 +681,7 @@ public class SQLite extends SQL {
 
     /**
      * Return java.sql.PreparedStatement object.
-     * 
+     *
      * @return java.sql.PreparedStatement object.
      */
     public PreparedStatement getPreparedStatement() {
@@ -691,7 +691,7 @@ public class SQLite extends SQL {
 
     /**
      * Return java.sql.ResultSet object.
-     * 
+     *
      * @return java.sql.ResultSet object.
      */
     public ResultSet getResultSet() {

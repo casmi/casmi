@@ -16,16 +16,16 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 package casmi.timeline;
 
 import casmi.graphics.Graphics;
 
 /**
  * TimelineRender interface for Timeline.
- * 
+ *
  * @author Y. Ban
- * 
+ *
  * @see Timeline
  */
 public interface TimelineRender {

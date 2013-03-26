@@ -20,7 +20,7 @@
 package casmi.graphics.font;
 
 /**
- * The FontSyle enum represents styles of a Font.
+ * The FontStyle enum represents styles of a Font.
  *
  * @author T. Takeuchi
  */

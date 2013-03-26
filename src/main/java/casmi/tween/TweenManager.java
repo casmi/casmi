@@ -25,218 +25,218 @@ import casmi.graphics.Graphics;
 
 /**
  * A TweenManager let you pack many tweens together, and update them at once.
- * 
+ *
  * @author Y. Ban
- * 
+ *
  * @see Tween
  * @see TweenSerialGroup
  */
 public class TweenManager {
 
-	private final ArrayList<Tween> tweens;
+    private final ArrayList<Tween> tweens;
 
-	/**
-	 * Instantiates a new manager.
-	 */
-	public TweenManager() {
-		this.tweens = new ArrayList<Tween>();
-	}
-	
-	/**
-	 * Adds a new tween to the manager and starts it.
-	 * 
-	 * @param tween
-	 *            A tween. Does nothing if it is already present.
-	 * @return The manager, for instruction chaining.
-	 */
-	public final TweenManager add(Tween tween) {
-		tweens.add(tween);
-		tween.start(System.currentTimeMillis(), false);
-		return this;
-	}
+    /**
+     * Instantiates a new manager.
+     */
+    public TweenManager() {
+        this.tweens = new ArrayList<Tween>();
+    }
 
-	/**
-	 * Adds every tween from a tween group to the manager, and starts them. Note
-	 * that the group will be cleared, as says its specification. Therefore,
-	 * only call this method as the last one!
-	 * 
-	 * @param group
-	 *            A tween group.
-	 * @return The manager, for instruction chaining.
-	 */
-	public final TweenManager add(TweenGroup group) {
-		long currentMillis = System.currentTimeMillis();
+    /**
+     * Adds a new tween to the manager and starts it.
+     *
+     * @param tween
+     *            A tween. Does nothing if it is already present.
+     * @return The manager, for instruction chaining.
+     */
+    public final TweenManager add(Tween tween) {
+        tweens.add(tween);
+        tween.start(System.currentTimeMillis(), false);
+        return this;
+    }
 
-		for (Groupable g : group.getGroupables()) {
-			if (g instanceof Tween) {
-				Tween tween = (Tween) g;
-				tweens.add(tween);
-				tween.start(currentMillis, false);
-			} else if (g instanceof TweenSerialGroup) {
-				this.add((TweenSerialGroup) g);
-			} else if (g instanceof TweenParallelGroup) {
-				this.add((TweenParallelGroup) g);
-			}
-		}
+    /**
+     * Adds every tween from a tween group to the manager, and starts them. Note
+     * that the group will be cleared, as says its specification. Therefore,
+     * only call this method as the last one!
+     *
+     * @param group
+     *            A tween group.
+     * @return The manager, for instruction chaining.
+     */
+    public final TweenManager add(TweenGroup group) {
+        long currentMillis = System.currentTimeMillis();
 
-		group.reset();
+        for (Groupable g : group.getGroupables()) {
+            if (g instanceof Tween) {
+                Tween tween = (Tween) g;
+                tweens.add(tween);
+                tween.start(currentMillis, false);
+            } else if (g instanceof TweenSerialGroup) {
+                this.add((TweenSerialGroup) g);
+            } else if (g instanceof TweenParallelGroup) {
+                this.add((TweenParallelGroup) g);
+            }
+        }
 
-		return this;
-	}
+        group.reset();
 
-//	/**
-//	 * Adds every tween from a tween group to the manager, and starts them. Note
-//	 * that the group will be cleared, as says its specification. Therefore,
-//	 * only call this method as the last one!
-//	 * 
-//	 * @param group
-//	 *            A tween group.
-//	 * @return The manager, for instruction chaining.
-//	 */
-//	public final TweenManager add(TweenSerialGroup group) {
-//		long currentMillis = System.currentTimeMillis();
+        return this;
+    }
+
+//    /**
+//     * Adds every tween from a tween group to the manager, and starts them. Note
+//     * that the group will be cleared, as says its specification. Therefore,
+//     * only call this method as the last one!
+//     *
+//     * @param group
+//     *            A tween group.
+//     * @return The manager, for instruction chaining.
+//     */
+//    public final TweenManager add(TweenSerialGroup group) {
+//        long currentMillis = System.currentTimeMillis();
 //
-//		for (Groupable g : group.getGroupables()) {
-//			if (g instanceof Tween) {
-//				Tween tween = (Tween) g;
-//				tweens.add(tween);
-//				tween.start(currentMillis, false);
-//			} else if (g instanceof TweenSerialGroup) {
-//				this.add((TweenSerialGroup) g);
-//			} else if (g instanceof TweenParallelGroup) {
-//				this.add((TweenParallelGroup) g);
-//			}
-//		}
+//        for (Groupable g : group.getGroupables()) {
+//            if (g instanceof Tween) {
+//                Tween tween = (Tween) g;
+//                tweens.add(tween);
+//                tween.start(currentMillis, false);
+//            } else if (g instanceof TweenSerialGroup) {
+//                this.add((TweenSerialGroup) g);
+//            } else if (g instanceof TweenParallelGroup) {
+//                this.add((TweenParallelGroup) g);
+//            }
+//        }
 //
-//		group.reset();
+//        group.reset();
 //
-//		return this;
-//	}
+//        return this;
+//    }
 
-	/**
-	 * Clears the manager from every tween.
-	 */
-	public void clear() {
-		tweens.clear();
-	}
+    /**
+     * Clears the manager from every tween.
+     */
+    public void clear() {
+        tweens.clear();
+    }
 
-	/**
-	 * Returns true if the manager contains any valid tween associated to the
-	 * given target.
-	 */
-	public final boolean contains(Tweenable target) {
-		for (Tween t : tweens) {
-			if (t.getTarget() == target &&
-					!t.isFinished())
-				return true;
-		}
-		return false;
-	}
+    /**
+     * Returns true if the manager contains any valid tween associated to the
+     * given target.
+     */
+    public final boolean contains(Tweenable target) {
+        for (Tween t : tweens) {
+            if (t.getTarget() == target &&
+                    !t.isFinished())
+                return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Returns true if the manager contains any valid tween associated to the
-	 * given target and tween type.
-	 */
-	public final boolean contains(Tweenable target, TweenType tweenType) {
-		for (Tween t : tweens) {
-			if (t.getTarget() == target &&
-					t.getTweenType() == tweenType &&
-					!t.isFinished())
-				return true;
-		}
-		return false;
-	}
+    /**
+     * Returns true if the manager contains any valid tween associated to the
+     * given target and tween type.
+     */
+    public final boolean contains(Tweenable target, TweenType tweenType) {
+        for (Tween t : tweens) {
+            if (t.getTarget() == target &&
+                    t.getTweenType() == tweenType &&
+                    !t.isFinished())
+                return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Kills every valid tween associated to the given target.
-	 */
-	public final void remove(Tweenable target) {
-		for (Tween t : tweens ) {
-			if (t.getTarget() == target &&
-					!t.isFinished())
-				t.kill();
-		}
-	}
-	
-	public final void remove(Tween target) {
-		for (Tween t : tweens ) {
-			if (t == target ){
-				if(!t.isFinished())
-					t.kill();
-				tweens.remove(t);
-			}
-		}
-	}
+    /**
+     * Kills every valid tween associated to the given target.
+     */
+    public final void remove(Tweenable target) {
+        for (Tween t : tweens ) {
+            if (t.getTarget() == target &&
+                    !t.isFinished())
+                t.kill();
+        }
+    }
 
-	/**
-	 * Kills every valid tween associated to the given target and tween type.
-	 */
-	public final void remove(Tweenable target, TweenType tweenType) {
-		for (Tween t : tweens ) {
-			if (t.getTarget() == target &&
-					t.getTweenType() == tweenType && 
-					!t.isFinished())
-				t.kill();
-		}
-	}
+    public final void remove(Tween target) {
+        for (Tween t : tweens ) {
+            if (t == target ){
+                if(!t.isFinished())
+                    t.kill();
+                tweens.remove(t);
+            }
+        }
+    }
 
-	/**
-	 * Gets the number of tweens managed by this manager.
-	 * 
-	 * @return The number of tweens in the manager.
-	 */
-	public int getTweenCount() {
-		return tweens.size();
-	}
+    /**
+     * Kills every valid tween associated to the given target and tween type.
+     */
+    public final void remove(Tweenable target, TweenType tweenType) {
+        for (Tween t : tweens ) {
+            if (t.getTarget() == target &&
+                    t.getTweenType() == tweenType &&
+                    !t.isFinished())
+                t.kill();
+        }
+    }
 
-	/**
-	 * Gets an array containing every tween in the manager.
-	 */
-	public Tween[] getTweens() {
-		return tweens.toArray(new Tween[tweens.size()]);
-	}
+    /**
+     * Gets the number of tweens managed by this manager.
+     *
+     * @return The number of tweens in the manager.
+     */
+    public int getTweenCount() {
+        return tweens.size();
+    }
 
-	/**
-	 * Gets an array containing every tween in the manager dedicated to the
-	 * given target.
-	 */
-	public Tween[] getTweens(Tweenable target) {
-		ArrayList<Tween> selectedTweens = new ArrayList<Tween>();
-		for (Tween t : tweens) {
-			if (t.getTarget() == target &&
-					!t.isFinished())
-				selectedTweens.add(t);
-		}
-		return selectedTweens.toArray(new Tween[selectedTweens.size()]);
-	}
+    /**
+     * Gets an array containing every tween in the manager.
+     */
+    public Tween[] getTweens() {
+        return tweens.toArray(new Tween[tweens.size()]);
+    }
 
-	/**
-	 * Gets an array containing every tween in the manager dedicated to the
-	 * given target and tween type.
-	 */
-	public Tween[] getTweens(Tweenable target, TweenType tweenType) {
-		ArrayList<Tween> selectedTweens = new ArrayList<Tween>();
-		for (Tween t : tweens) {
-			if (t.getTarget() == target &&
-					t.getTweenType() == tweenType && 
-					!t.isFinished())
-				selectedTweens.add(t);
-		}
-		return selectedTweens.toArray(new Tween[selectedTweens.size()]);
-	}
+    /**
+     * Gets an array containing every tween in the manager dedicated to the
+     * given target.
+     */
+    public Tween[] getTweens(Tweenable target) {
+        ArrayList<Tween> selectedTweens = new ArrayList<Tween>();
+        for (Tween t : tweens) {
+            if (t.getTarget() == target &&
+                    !t.isFinished())
+                selectedTweens.add(t);
+        }
+        return selectedTweens.toArray(new Tween[selectedTweens.size()]);
+    }
 
-	public final void render(Graphics g) {
-		long currentMillis = System.currentTimeMillis();
+    /**
+     * Gets an array containing every tween in the manager dedicated to the
+     * given target and tween type.
+     */
+    public Tween[] getTweens(Tweenable target, TweenType tweenType) {
+        ArrayList<Tween> selectedTweens = new ArrayList<Tween>();
+        for (Tween t : tweens) {
+            if (t.getTarget() == target &&
+                    t.getTweenType() == tweenType &&
+                    !t.isFinished())
+                selectedTweens.add(t);
+        }
+        return selectedTweens.toArray(new Tween[selectedTweens.size()]);
+    }
 
-		for (Tween t : tweens) {
-			t.render(g, currentMillis);
-		}
-		//TODO delete completed tweens
-		for (Tween t : tweens) {
-			if (t.isFinished()){
-				tweens.remove(t);
-				break;}
-		}
+    public final void render(Graphics g) {
+        long currentMillis = System.currentTimeMillis();
 
-	}
+        for (Tween t : tweens) {
+            t.render(g, currentMillis);
+        }
+        //TODO delete completed tweens
+        for (Tween t : tweens) {
+            if (t.isFinished()){
+                tweens.remove(t);
+                break;}
+        }
+
+    }
 }

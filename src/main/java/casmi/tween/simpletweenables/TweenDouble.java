@@ -19,66 +19,57 @@
 
 package casmi.tween.simpletweenables;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import casmi.graphics.Graphics;
 import casmi.tween.SimpleTweenable;
 import casmi.tween.TweenType;
+
 /**
  * Defines a double value on which tweens can be applied.
  *
  * @see SimpleTweenable
  */
 public class TweenDouble implements SimpleTweenable {
-	private double value;
-	
-	public TweenDouble(double f){
-		value = f;
-	}
-	
-	public TweenDouble(){
-		value = 0;
-	}
 
-	@Override
-	public List<Float> getTweenValues(TweenType tweenType) {
-		List<Float> returnValues = new ArrayList<Float>();
-		returnValues.add((float) value);
-		return returnValues;
-	}
+    private double value;
 
-	@Override
-	public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
-		value = newValues.get(0);
-	}
-	
-	public void end(Graphics g, int tweenType) {
-	}
-	
-	public void render(Graphics g, int tweenType) {
-	}
-	
-	public double getValue(){
-		return value;
-	}
-	
-	public void setValue(double value){
-		this.value = value;
-	}
+    public TweenDouble(double f) {
+        value = f;
+    }
 
+    public TweenDouble() {
+        value = 0;
+    }
 
-	@Override
-	public void end(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public List<Float> getTweenValues(TweenType tweenType) {
+        List<Float> returnValues = new ArrayList<Float>();
+        returnValues.add((float)value);
+        return returnValues;
+    }
 
-	@Override
-	public void render(Graphics g, TweenType tweenType) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
+        value = newValues.get(0);
+    }
+
+    public void end(Graphics g, int tweenType) {}
+
+    public void render(Graphics g, int tweenType) {}
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public void end(Graphics g, TweenType tweenType) {}
+
+    @Override
+    public void render(Graphics g, TweenType tweenType) {}
 }
-

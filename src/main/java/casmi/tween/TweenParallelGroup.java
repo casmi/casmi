@@ -30,35 +30,35 @@ package casmi.tween;
  */
 public class TweenParallelGroup extends TweenGroup {
 
-	/**
-	 * Convenience method to create a group with its elements running all in
-	 * parallel. Both following calls lead to the same result:<br/>
-	 * TweenGroup.parallel(...);
-	 * TweenGroup.getNew().addInParallel(...);
-	 * </pre>
-	 * @param objs A list of objects made of Tweens and/or TweenGroups.
-	 * @return The TweenGroup created.
-	 */
-	public static TweenParallelGroup create(Groupable... objs) {
-		TweenParallelGroup group = new TweenParallelGroup();
-		for (Groupable o : objs)
-			group.append(o);
-		return group;
-	}
+    /**
+     * Convenience method to create a group with its elements running all in
+     * parallel. Both following calls lead to the same result:<br/>
+     * TweenGroup.parallel(...);
+     * TweenGroup.getNew().addInParallel(...);
+     * </pre>
+     * @param objs A list of objects made of Tweens and/or TweenGroups.
+     * @return The TweenGroup created.
+     */
+    public static TweenParallelGroup create(Groupable... objs) {
+        TweenParallelGroup group = new TweenParallelGroup();
+        for (Groupable o : objs)
+            group.append(o);
+        return group;
+    }
 
-	/**
-	 * Adds a list of Tweens and/or TweenGroups and make them run in parallel
-	 * to the current ones.
-	 * @param objs A list of objects made of Tweens and/or TweenGroups.
-	 * @return The group, for instruction chaining.
-	 */
-	public TweenParallelGroup append(Groupable... objs) {
-		for (Groupable o : objs) {
-			if (o != null) {
-				getGroupables().add(o);
-				setDuration( Math.max(getDuration(), o.getDelay() + o.getDuration()) );
-			}
-		}
-		return this;
-	}
+    /**
+     * Adds a list of Tweens and/or TweenGroups and make them run in parallel
+     * to the current ones.
+     * @param objs A list of objects made of Tweens and/or TweenGroups.
+     * @return The group, for instruction chaining.
+     */
+    public TweenParallelGroup append(Groupable... objs) {
+        for (Groupable o : objs) {
+            if (o != null) {
+                getGroupables().add(o);
+                setDuration( Math.max(getDuration(), o.getDelay() + o.getDuration()) );
+            }
+        }
+        return this;
+    }
 }

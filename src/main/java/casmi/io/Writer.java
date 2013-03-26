@@ -25,15 +25,15 @@ import java.io.IOException;
 
 /**
  * Writer class extends java.io.PrintWriter.
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class Writer extends java.io.PrintWriter {
 
     /**
      * Creates Writer object from java.io.Writer.
-     * 
+     *
      * @param writer java.io.Writer object.
      */
     public Writer(java.io.Writer writer) {
@@ -43,7 +43,7 @@ public class Writer extends java.io.PrintWriter {
 
     /**
      * Creates Writer object from java.io.OutputStream.
-     * 
+     *
      * @param os java.io.OutputStream object.
      */
     public Writer(java.io.OutputStream os) {
@@ -53,10 +53,10 @@ public class Writer extends java.io.PrintWriter {
 
     /**
      * Creates Writer object from File.
-     * 
+     *
      * @param file
      *            a File object to write to
-     * 
+     *
      * @throws IOException
      *             If the file exists but is a directory rather than a regular file,
      *             does not exist but cannot be created, or cannot be opened for
@@ -71,13 +71,13 @@ public class Writer extends java.io.PrintWriter {
      * Creates Writer object from File.
      * If the second argument is <code>true</code>, then bytes will be written to
      * the end of the file rather than the beginning.
-     * 
+     *
      * @param file
      *            a File object to write to
      * @param append
      *            If <code>true</code>, then bytes will be written to the end of
      *            the file rather than the beginning.
-     * 
+     *
      * @throws IOException
      *             If the file exists but is a directory rather than a regular file,
      *             does not exist but cannot be created, or cannot be opened for
@@ -90,9 +90,9 @@ public class Writer extends java.io.PrintWriter {
 
     /**
      * Creates Writer object from a file path.
-     * 
+     *
      * @param pathname the file path string
-     * 
+     *
      * @throws IOException
      *             if the file exists but is a directory rather than a regular file,
      *             does not exist but cannot be created, or cannot be opened for
@@ -107,12 +107,12 @@ public class Writer extends java.io.PrintWriter {
      * Creates Writer object from a file path.
      * If the second argument is <code>true</code>, then bytes will be written to
      * the end of the file rather than the beginning.
-     * 
+     *
      * @param pathname the file path string
      * @param append
      *            If <code>true</code>, then bytes will be written to the end of
      *            the file rather than the beginning.
-     * 
+     *
      * @throws IOException
      *             if the file exists but is a directory rather than a regular file,
      *             does not exist but cannot be created, or cannot be opened for

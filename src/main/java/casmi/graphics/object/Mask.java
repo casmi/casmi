@@ -31,7 +31,7 @@ import casmi.graphics.element.Element;
 
 /**
  * Maxk class.
- * 
+ *
  * @author Y. Ban
  */
 public class Mask extends Element implements ObjectRender {
@@ -50,39 +50,39 @@ public class Mask extends Element implements ObjectRender {
 
     /**
      * Adds a Graphics Element for stencil mask.
-     * 
+     *
      * @param element
      *            Graphics Element for mask.
      */
     public void add(Element element) {
         elements.add(element);
     }
-    
+
     /**
      * Adds a Graphics Object for stencil mask.
-     * 
+     *
      * @param graphicsObject
      *            Graphics Object for mask.
      */
     public void add(GraphicsObject graphicsObject) {
-    	for (Object obj : graphicsObject.getObjectList()){
-    		if (obj instanceof Element) {
-				Element el = (Element)obj;
-				elements.add(el);
-			} else if (obj instanceof GraphicsObject) {
-				GraphicsObject go = (GraphicsObject)obj;
-				add(go);
-			}
-    	}
+        for (Object obj : graphicsObject.getObjectList()){
+            if (obj instanceof Element) {
+                Element el = (Element)obj;
+                elements.add(el);
+            } else if (obj instanceof GraphicsObject) {
+                GraphicsObject go = (GraphicsObject)obj;
+                add(go);
+            }
+        }
     }
 
     /**
      * Adds a Graphics Element for stencil mask.
-     * 
+     *
      * @param element
      *            Graphics Element for mask.
      * @param index
-     * 			  The index of the Mask.
+     *               The index of the Mask.
      */
     public void add(Element element, int index) {
         elements.add(index, element);
@@ -90,9 +90,9 @@ public class Mask extends Element implements ObjectRender {
 
     /**
      * Removes the Element for Mask using index.
-     * 
+     *
      * @param index
-     * 			  The index of the Element.
+     *               The index of the Element.
      */
     public void remove(int index) {
         elements.remove(index);
@@ -100,9 +100,9 @@ public class Mask extends Element implements ObjectRender {
 
     /**
      * Removes the Element for Mask using index.
-     * 
+     *
      * @param element
-     * 			  The element for Mask
+     *               The element for Mask
      */
     public void remove(Element element) {
         elements.remove(element);
@@ -160,16 +160,16 @@ public class Mask extends Element implements ObjectRender {
         gl.glDepthMask(true);
         gl.glStencilOp(GL2.GL_KEEP, GL2.GL_KEEP, GL2.GL_KEEP);
         if(maskFlip)
-        	gl.glStencilFunc(GL2.GL_NOTEQUAL, 1, ~0);
+            gl.glStencilFunc(GL2.GL_NOTEQUAL, 1, ~0);
         else
-        	gl.glStencilFunc(GL2.GL_EQUAL, 1, ~0);
+            gl.glStencilFunc(GL2.GL_EQUAL, 1, ~0);
     }
 
     /**
      * Returns the Mask Image.
-     * 
+     *
      * @return
-     * 				The Image for Mask
+     *                 The Image for Mask
      */
     public BufferedImage getMaskBuff() {
         return maskBuff;
@@ -177,25 +177,25 @@ public class Mask extends Element implements ObjectRender {
 
     /**
      * Sets the Mask Image.
-     * 
+     *
      * @param maskBuff
-     * 				The Image for Mask
+     *                 The Image for Mask
      */
     public void setMaskBuff(BufferedImage maskBuff) {
         this.maskBuff = maskBuff;
     }
-    
+
     /**
      * Sets Mask mode; masking the area where Elements draw.
      */
     public void setNormalMask(){
-    	this.maskFlip = false;
+        this.maskFlip = false;
     }
-    
+
     /**
      * Sets Mask mode; masking the ex-area where Elements draw.
      */
     public void setInverseMask(){
-    	this.maskFlip = true;
+        this.maskFlip = true;
     }
 }

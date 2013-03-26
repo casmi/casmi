@@ -23,10 +23,10 @@ package casmi.tween;
  * @author Y. Ban
  */
 public interface Groupable {
-	
+
     long getDuration();
-	
+
     long getDelay();
-	
+
     Groupable addDelay(long millis);
 }

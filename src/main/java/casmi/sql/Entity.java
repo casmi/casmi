@@ -45,37 +45,37 @@ import casmi.sql.annotation.Tablename;
  * This class is used for an Active Record function in casmi.
  * Defines an original class that extends this Entity class.
  * </p>
- * 
+ *
  * <p>
  * Example:
  * <pre><code>
  *     import casmi.sql.Entity;
  *     import casmi.sql.annotation.Fieldname;
  *     import casmi.sql.annotation.Ignore;
- * 
+ *
  *     public class MyEntity extends Entity {
- *     
+ *
  *         public  String text;
- *         
+ *
  *         {@code @Fieldname}(NUM_1)
  *         private int    num1;
- *         
+ *
  *         public  double num2;
- *         
+ *
  *         {@code @Ignore}
  *         public  float  num3;
- *         
+ *
  *         public int getNum1() {
  *             return num1;
  *         }
- *         
+ *
  *         public void setNum1(int num1) {
  *             this.num1 = num1;
  *         }
  *     }
  * </code></pre>
  * </p>
- * 
+ *
  * @see casmi.sql.SQLite
  * @see casmi.sql.MySQL
  * @see casmi.sql.Query
@@ -83,28 +83,28 @@ import casmi.sql.annotation.Tablename;
  * @see casmi.sql.annotation.Ignore
  * @see casmi.sql.annotation.PrimaryKey
  * @see casmi.sql.annotation.Tablename
- * 
+ *
  * @author T. Takeuchi
  */
 abstract public class Entity {
 
     /** A table name. */
     String tablename;
-    
+
     /** SQL instance. */
     SQL sql;
 
     private Class<? extends Entity> type;
 
     private boolean newEntity = true;
-    
+
     boolean autoPrimaryKey = false;
 
     Column primaryKey;
-    
+
     /** Columns. */
     Column[] columns;
-    
+
     final <T extends Entity> void init(SQL sql, Class<T> type) {
 
         this.sql  = sql;
@@ -161,7 +161,7 @@ abstract public class Entity {
         StringBuilder sb1 = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
         List<Object> list = new ArrayList<Object>();
-        
+
         if (!autoPrimaryKey) {
             sb1.append(primaryKey.getField());
             sb2.append('?');
@@ -196,11 +196,11 @@ abstract public class Entity {
             sb.append("=?");
             list.add(column.getValue());
         }
-        
+
         list.add(primaryKey.getValue());
-        
+
         sqlStr = sqlStr.replaceAll(":sets", sb.toString());
-        
+
         sqlStr = sqlStr.replaceAll(":key", primaryKey.getField());
         sqlStr = sqlStr.replaceAll(":key_value", "?");
 
@@ -212,39 +212,39 @@ abstract public class Entity {
         if (newEntity) {
             throw new SQLException("This record has not been in a database yet.");
         }
-        
+
         String where = primaryKey.getField() + "=" + primaryKey.getValue();
         String stmt = StatementGenerator.delete(sql.getSQLType(), tablename, where);
         sql.execute(stmt);
     }
-    
+
     private final Column searchPrimaryKey() {
-        Column  c    = null; 
+        Column  c    = null;
         boolean flag = false;
-        
+
         for (Field f : type.getDeclaredFields()) {
             try {
                 String   name  = f.getName();
                 String   field;
                 Class<?> type  = f.getType();
-                
+
                 // "this$0" is a tacit field generated automatically if the class
-                // is an inner class. 
+                // is an inner class.
                 // It expresses a declared class object, so should be ignored.
                 if (name.equals("this$0")) continue;
-                
+
                 if (f.getAnnotation(Ignore.class)     != null) continue;
                 if (f.getAnnotation(PrimaryKey.class) == null) continue;
-                
+
                 flag = true;
-                
+
                 Fieldname FieldnameAnnot = f.getAnnotation(Fieldname.class);
                 if (FieldnameAnnot != null) {
                     field = FieldnameAnnot.value();
                 } else {
                     field = name;
                 }
-                
+
                 if (Modifier.isPublic(f.getModifiers())) {
                     // access directly
                     Object value = f.get(this);
@@ -315,10 +315,10 @@ abstract public class Entity {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-            
+
             break;
         }
-        
+
         if (!flag) {
             c = new Column("id", "id", -1, int.class);
             autoPrimaryKey = true;
@@ -333,27 +333,27 @@ abstract public class Entity {
 
         for (Field f : type.getDeclaredFields()) {
             Column c = null;
-            
+
             try {
                 String   name  = f.getName();
                 String   field;
                 Class<?> type  = f.getType();
-                
+
                 // "this$0" is a tacit field generated automatically if the class
-                // is an inner class. 
+                // is an inner class.
                 // It expresses a declared class object, so should be ignored.
                 if (name.equals("this$0")) continue;
-                
+
                 if (f.getAnnotation(Ignore.class)     != null) continue;
                 if (f.getAnnotation(PrimaryKey.class) != null) continue;
-                
+
                 Fieldname FieldnameAnnot = f.getAnnotation(Fieldname.class);
                 if (FieldnameAnnot != null) {
                     field = FieldnameAnnot.value();
                 } else {
                     field = name;
                 }
-                
+
                 if (Modifier.isPublic(f.getModifiers())) {
                     // access directly
                     Object value = f.get(this);
@@ -434,7 +434,7 @@ abstract public class Entity {
 
         return list.toArray(new Column[list.size()]);
     }
-    
+
     private final void columnsToFields() {
         Field f;
 
@@ -469,12 +469,12 @@ abstract public class Entity {
         for (Column c : columns) {
             try {
                 f = this.type.getDeclaredField(c.getName());
-                
+
                 // "this$0" is a tacit field generated automatically if the class
-                // is an inner class. 
+                // is an inner class.
                 // It expresses a declared class object, so should be ignored.
                 if (f.getName().equals("this$0")) continue;
-                
+
                 if (Modifier.isPublic(f.getModifiers())) {
                     f.set(this, c.getValue());
                 } else {
@@ -497,27 +497,27 @@ abstract public class Entity {
             }
         }
     }
-    
+
     final void setValuesFromResultSet(ResultSet resultSet) throws SQLException {
         Object value;
-        
+
         value = sql.get(resultSet, primaryKey.getType(), primaryKey.getField());
         primaryKey.setValue(value);
         newEntity = false;
-        
+
         for (Column column : columns) {
             value = sql.get(resultSet, column.getType(), column.getField());
             column.setValue(value);
         }
-        
+
         columnsToFields();
     }
-    
-    final void setValuesFromReslutSet(ResultSet resultSet, String... fields) 
+
+    final void setValuesFromReslutSet(ResultSet resultSet, String... fields)
         throws SQLException {
         Object value;
         boolean flag;
-        
+
         flag = false;
         for (String field : fields) {
             if (primaryKey.getField().equals(field)) flag = true;
@@ -527,22 +527,22 @@ abstract public class Entity {
             primaryKey.setValue(value);
             newEntity = false;
         }
-        
+
         for (Column column : columns) {
             flag = false;
             for (String field : fields) {
                 if (column.getField().equals(field)) flag = true;
             }
-            
+
             if (flag) {
                 value = sql.get(resultSet, column.getType(), column.getField());
                 column.setValue(value);
             }
         }
-        
+
         columnsToFields();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -558,26 +558,26 @@ abstract public class Entity {
             sb.append(column.getValue());
         }
         sb.append('}');
-        
+
         return sb.toString();
     }
-    
-    static final <T extends Entity> String getTablename(Class<T> type) {        
+
+    static final <T extends Entity> String getTablename(Class<T> type) {
         Tablename annotation = type.getAnnotation(Tablename.class);
         if (annotation != null) {
             return annotation.value();
         }
-        
+
         return type.getSimpleName();
     }
 
     public String getTablename() {
         return tablename;
     }
-    
+
     static final <T extends Entity> boolean isAutoPrimaryKey(Class<T> type) {
         boolean autoPrimaryKey = true;
-        
+
         for (Field f : type.getDeclaredFields()) {
             if (f.getAnnotation(Ignore.class)     == null &&
                 f.getAnnotation(PrimaryKey.class) != null) {
@@ -588,21 +588,21 @@ abstract public class Entity {
 
         return autoPrimaryKey;
     }
-    
+
     static final <T extends Entity> String getPrimaryKeyField(Class<T> type) {
         String field;
-        
+
         for (Field f : type.getDeclaredFields()) {
             try {
                 String name  = f.getName();
-                
+
                 // "this$0" is a tacit field generated automatically if the class
-                // is an inner class. 
+                // is an inner class.
                 // It expresses a declared class object, so should be ignored.
                 if (name.equals("this$0")) continue;
-                
+
                 if (f.getAnnotation(Ignore.class)     != null) continue;
-                
+
                 if (f.getAnnotation(PrimaryKey.class) != null) {
                     Fieldname FieldnameAnnot = f.getAnnotation(Fieldname.class);
                     if (FieldnameAnnot != null) {
@@ -618,7 +618,7 @@ abstract public class Entity {
                 e.printStackTrace();
             }
         }
-        
+
         return "id";
     }
 }

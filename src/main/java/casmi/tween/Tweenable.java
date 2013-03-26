@@ -27,19 +27,19 @@ import casmi.graphics.Graphics;
  * The Tweenable interface lets you interpolate any attribute from any object.
  * Just implement it as you want and let the engine do the interpolation for
  * you.
- * 
+ *
  * @author Y. Ban
- * 
+ *
  * @see Tween
  * @see TweenElement
  */
 public interface Tweenable {
 
-	List<Float> getTweenValues(TweenType tweenType);
+    List<Float> getTweenValues(TweenType tweenType);
 
-	void update(Graphics g, TweenType tweenType, List<Float> newValues);
-	
-	void end(Graphics g, TweenType tweenType);
-	
-	void render(Graphics g, TweenType tweenType);
+    void update(Graphics g, TweenType tweenType, List<Float> newValues);
+
+    void end(Graphics g, TweenType tweenType);
+
+    void render(Graphics g, TweenType tweenType);
 }

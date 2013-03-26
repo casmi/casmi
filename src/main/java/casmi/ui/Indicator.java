@@ -30,25 +30,25 @@ import casmi.graphics.group.Group;
 
 /**
  * Indicator UI.
- * 
+ *
  * @author T. Takeuchi
  */
 public class Indicator extends Group {
 
-    private List<Rect> rectList = new ArrayList<Rect>();    
-    
+    private List<Rect> rectList = new ArrayList<Rect>();
+
     private int[]   highlight = {-1, -1, -1};
-    
-    private boolean isAnimating = false;    
+
+    private boolean isAnimating = false;
     private boolean hideWhenStopped = false;
-    
+
     private Timer timer;
-    
+
     public Indicator() {
-        super();        
+        super();
         setup();
     }
-    
+
     public void setup() {
         for (int i = 0; i < 12; ++i) {
             Rect el = new Rect(13, 4);
@@ -56,19 +56,19 @@ public class Indicator extends Group {
             el.setStroke(false);
             add(el);
             rectList.add(el);
-                                  
+
             el.setX(19.0 * Math.cos(Math.toRadians((90.0 - i * 30.0))));
             el.setY(19.0 * Math.sin(Math.toRadians((90.0 - i * 30.0))));
             el.setRotation(90.0 - i * 30.0);
         }
-                
+
         highlight[0] =  0;
         highlight[1] = -1;
         highlight[2] = -1;
-        
+
         timer = new Timer();
         timer.schedule(new TimerTask() {
-            
+
             @Override
             public void run() {
                 if (isAnimating) {
@@ -79,14 +79,14 @@ public class Indicator extends Group {
             }
         }, 0, 90);
     }
-    
+
     @Override
     public void update() {
         if (!isAnimating) return;
-        
+
         for (int i = 0; i < rectList.size(); ++i) {
             Rect el = rectList.get(i);
-            
+
             if (i == highlight[0]) {
                 el.setFillColor(new GrayColor(1.0));
             } else if (i == highlight[1]) {
@@ -94,36 +94,36 @@ public class Indicator extends Group {
             } else if (i == highlight[2]) {
                 el.setFillColor(new GrayColor(0.6));
             } else {
-                el.setFillColor(new GrayColor(0.4));        
+                el.setFillColor(new GrayColor(0.4));
             }
         }
     }
-    
-    public void start() {        
+
+    public void start() {
         if (hideWhenStopped) {
             setVisible(true);
         }
-        
+
         isAnimating = true;
     }
-    
+
     public void stop() {
         isAnimating = false;
-        
+
         if (hideWhenStopped) {
             setVisible(false);
         }
     }
-    
+
     public boolean isAnimating() {
         return isAnimating;
     }
-    
+
     public boolean isHideWhenStopped() {
         return hideWhenStopped;
     }
-    
+
     public void setHideWhenStopped(boolean hideWhenStopped) {
         this.hideWhenStopped = hideWhenStopped;
-    }        
+    }
 }

@@ -22,8 +22,8 @@ package casmi.matrix;
 import java.text.NumberFormat;
 
 /**
- * 3D Matrix class. 
- * 
+ * 3D Matrix class.
+ *
  * @author Y. Ban
  */
 public class Matrix3D implements Matrix {
@@ -216,7 +216,7 @@ public class Matrix3D implements Matrix {
     }
 
     //  public void invTranslate(double tx, double ty) {
-    //	    invTranslate(tx, ty, 0);
+    //        invTranslate(tx, ty, 0);
     //  }
 
     public void translate(double tx, double ty, double tz) {
@@ -672,10 +672,10 @@ public class Matrix3D implements Matrix {
 
     public void print() {
         /*
-	    System.out.println(m00 + " " + m01 + " " + m02 + " " + m03 + "\n" +
-	                       m10 + " " + m11 + " " + m12 + " " + m13 + "\n" +
-	                       m20 + " " + m21 + " " + m22 + " " + m23 + "\n" +
-	                       m30 + " " + m31 + " " + m32 + " " + m33 + "\n");
+        System.out.println(m00 + " " + m01 + " " + m02 + " " + m03 + "\n" +
+                           m10 + " " + m11 + " " + m12 + " " + m13 + "\n" +
+                           m20 + " " + m21 + " " + m22 + " " + m23 + "\n" +
+                           m30 + " " + m31 + " " + m32 + " " + m33 + "\n");
          */
         int big = (int) Math.abs(Math.max(Math.max(Math.max(Math.max(Math.abs(m00), Math.abs(m01)),
             Math.max(Math.abs(m02), Math.abs(m03))),

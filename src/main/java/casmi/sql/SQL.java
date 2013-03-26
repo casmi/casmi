@@ -31,9 +31,9 @@ import java.util.List;
 
 /**
  * An abstract class for SQL classes.
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 abstract class SQL {
 
@@ -49,7 +49,7 @@ abstract class SQL {
 
     /**
      * Returns a type of SQL database in this class.
-     * 
+     *
      * @return A type of SQL database.
      */
     public SQLType getSQLType() {
@@ -59,7 +59,7 @@ abstract class SQL {
 
     /**
      * Return java.sql.Connection object.
-     * 
+     *
      * @return java.sql.Connection object.
      */
     public Connection getConnection() {
@@ -69,14 +69,14 @@ abstract class SQL {
 
     /**
      * Connect the database.
-     * 
+     *
      * @throws SQLException
      */
     abstract void connect() throws SQLException;
 
     /**
      * Close the database.
-     * 
+     *
      * @throws SQLException
      */
     abstract void close();
@@ -91,7 +91,7 @@ abstract class SQL {
      * first result. You must then use the methods getResultSet or
      * getUpdateCount to retrieve the result, and getMoreResults to move to any
      * subsequent result(s).
-     * 
+     *
      * @param sql
      *            any SQL statement
      * @throws SQLException
@@ -100,7 +100,7 @@ abstract class SQL {
 
     /**
      * Retrieves the current auto-commit mode for this Connection object.
-     * 
+     *
      * @return the current state of this Connection object's auto-commit mode.
      * @throws SQLException
      */
@@ -113,7 +113,7 @@ abstract class SQL {
      * statements are grouped into transactions that are terminated by a call to
      * either the method commit or the method rollback. By default, new
      * connections are in auto-commit mode.
-     * 
+     *
      * @param autoCommit
      * @throws SQLException
      */
@@ -123,7 +123,7 @@ abstract class SQL {
      * Makes all changes made since the previous commit/rollback permanent and
      * releases any database locks currently held by this Connection object.
      * This method should be used only when auto-commit mode has been disabled.
-     * 
+     *
      * @throws SQLException
      */
     abstract void commit() throws SQLException;
@@ -132,7 +132,7 @@ abstract class SQL {
      * Undoes all changes made in the current transaction and releases any
      * database locks currently held by this Connection object. This method
      * should be used only when auto-commit mode has been disabled.
-     * 
+     *
      * @throws SQLException
      */
     abstract void rollback() throws SQLException;
@@ -142,14 +142,14 @@ abstract class SQL {
      * cursor is initially positioned before the first row; the first call to
      * the method next makes the first row the current row; the second call
      * makes the second row the current row, and so on.
-     * 
+     *
      * @return
      *     <code>true</code> if the new current row is valid; <code>false</code> if there are no more rows
-     * 
+     *
      * @throws SQLException
      */
     abstract boolean next() throws SQLException;
-    
+
     abstract <T> T get(ResultSet resultSet, Class<T> type, String field) throws SQLException;
 
     // -------------------------------------------------------------------------
@@ -190,41 +190,41 @@ abstract class SQL {
         String sqlStr = "SELECT * FROM " + getTablename(type);
         return find(type, sqlStr);
     }
-    
+
     public <T extends Entity> T[] all(Class<T> type, Query query) throws SQLException {
-        
+
         String sqlStr = "SELECT :select FROM :table :query";
         StringBuilder sb;
-        
+
         // select
         if (query.isSelectEnable()) {
             sb = new StringBuilder();
             boolean flag = false;
-            
+
             for (String select : query.getSelects()) {
                 if (sb.length() != 0) sb.append(',');
                 if (select.equals("id")) flag = true;
-                
+
                 sb.append(select);
             }
-            
+
             // if the entity has an automatic primary key("id") and not selected,
             // append the key automatically.
             if (!flag && Entity.isAutoPrimaryKey(type)) {
                 sb.insert(0, "id,");
             }
-            
+
             sqlStr = sqlStr.replaceAll(":select", sb.toString());
         } else {
             sqlStr = sqlStr.replaceAll(":select", "*");
         }
-        
+
         // table
         sqlStr = sqlStr.replaceAll(":table", getTablename(type));
-        
+
         // query ---------------------------------------------------------------
         sb = new StringBuilder();
-        
+
         // where
         if (query.isWhereEnable()) {
             sb.append("WHERE ");
@@ -236,37 +236,37 @@ abstract class SQL {
             sb.append(" GROUP BY ");
             sb.append(query.getGroup());
         }
-        
+
         // order by
         if (query.isOrderEnable()) {
             sb.append(" ORDER BY ");
             sb.append(query.getOrder());
         }
-        
+
         // descending
         if (query.isDesc()) {
             sb.append(" DESC");
         }
-        
+
         // limit
         if (query.isLimitEnable()) {
             sb.append(" LIMIT ");
             sb.append(query.getLimit());
         }
-        
+
         sqlStr = sqlStr.replaceAll(":query", sb.toString());
         // ---------------------------------------------------------------------
-        
+
         return find(type, sqlStr, query.getSelects());
     }
-    
+
     // TODO: this method is correct only if a primary key is not specified.
     public <T extends Entity> T find(Class<T> type, int id) throws SQLException {
         T[] entities = all(type, new Query().where("id=" + id));
         if (entities.length == 0) return null;
         return entities[0];
     }
-    
+
     // TODO: this method is correct only if a primary key is not specified.
     public <T extends Entity> T find(Class<T> type, int id, Query query) throws SQLException {
         query.andWhere("id=" + id);
@@ -274,25 +274,25 @@ abstract class SQL {
         if (entities.length == 0) return null;
         return entities[0];
     }
-    
+
     public <T extends Entity> T first(Class<T> type) throws SQLException {
         T[] entities = all(type, new Query().limit(1));
         if (entities.length == 0) return null;
         return entities[0];
     }
-    
+
     public <T extends Entity> T first(Class<T> type, Query query) throws SQLException {
         T[] entities = all(type, query.limit(1));
         if (entities.length == 0) return null;
         return entities[0];
     }
-    
+
     public <T extends Entity> T last(Class<T> type) throws SQLException {
         T[] entities = all(type, new Query().order(Entity.getPrimaryKeyField(type)).desc(true).limit(1));
         if (entities.length == 0) return null;
         return entities[entities.length - 1];
     }
-    
+
     public <T extends Entity> T last(Class<T> type, Query query) throws SQLException {
         if (!query.isOrderEnable()) {
             query.order(Entity.getPrimaryKeyField(type));
@@ -301,12 +301,12 @@ abstract class SQL {
         if (entities.length == 0) return null;
         return entities[entities.length - 1];
     }
-    
+
     @SuppressWarnings("unchecked")
     private <T extends Entity> T[] find(Class<T> type, String sqlStr, String... selects) throws SQLException {
         if (connection == null)
             throw new SQLException("Connection is not exist.");
-        
+
         List<T> list = new ArrayList<T>();
 
         Statement statement = connection.createStatement();
@@ -322,19 +322,19 @@ abstract class SQL {
             }
             list.add(entity);
         }
-        
+
         rs.close();
         statement.close();
 
         if (list.isEmpty()) return (T[])Array.newInstance(type, 0);
-        
+
         return list.toArray((T[])Array.newInstance(type, list.size()));
     }
-    
+
     public <T extends Entity> void truncate(Class<T> type) throws SQLException {
         if (connection == null)
             throw new SQLException("Connection is not exist.");
-        
+
         Statement statement = connection.createStatement();
         String stmt = StatementGenerator.truncate(sqlType, getTablename(type));
         statement.executeUpdate(stmt);
@@ -342,7 +342,7 @@ abstract class SQL {
     }
 
     public <T extends Entity> String getTablename(Class<T> type) {
-        
+
         return Entity.getTablename(type);
     }
 }

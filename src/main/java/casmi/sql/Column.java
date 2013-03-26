@@ -35,10 +35,10 @@ class Column {
     }
 
     String getName() {
-        
+
         return name;
     }
-    
+
     String getField() {
 
         return field;
@@ -55,7 +55,7 @@ class Column {
     }
 
     void setValue(Object value) {
-        
+
         this.value = value;
     }
 }

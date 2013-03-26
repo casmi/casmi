@@ -23,99 +23,99 @@ package casmi.matrix;
 
 
 /**
- * Matrix interface for Matrix2D and Matrix3D. 
- * 
+ * Matrix interface for Matrix2D and Matrix3D.
+ *
  * @author Y. Ban
- * 
+ *
  */
 
 public interface Matrix {
 
-	public void reset();
-	
-	public Matrix get();
-	
-	public double[] get(double[] target);
-	
-	public void set(Matrix src);
-	
-	public void set(double[] source);
+    public void reset();
 
-	  public void set(double m00, double m01, double m02, 
-	                  double m10, double m11, double m12);
+    public Matrix get();
 
-	  public void set(double m00, double m01, double m02, double m03,
-	                  double m10, double m11, double m12, double m13,
-	                  double m20, double m21, double m22, double m23,
-	                  double m30, double m31, double m32, double m33);
+    public double[] get(double[] target);
 
-	  
-	  public void translate(double tx, double ty);
-	  
-	  public void translate(double tx, double ty, double tz);
+    public void set(Matrix src);
 
-	  public void rotate(double angle);
+    public void set(double[] source);
 
-	  public void rotateX(double angle);
+      public void set(double m00, double m01, double m02,
+                      double m10, double m11, double m12);
 
-	  public void rotateY(double angle);
+      public void set(double m00, double m01, double m02, double m03,
+                      double m10, double m11, double m12, double m13,
+                      double m20, double m21, double m22, double m23,
+                      double m30, double m31, double m32, double m33);
 
-	  public void rotateZ(double angle);
 
-	  public void rotate(double angle, double v0, double v1, double v2);
+      public void translate(double tx, double ty);
 
-	  public void scale(double s);
+      public void translate(double tx, double ty, double tz);
 
-	  public void scale(double sx, double sy);
+      public void rotate(double angle);
 
-	  public void scale(double x, double y, double z);
-	  
-	  public void shearX(double angle);
-	  
-	  public void shearY(double angle);
+      public void rotateX(double angle);
 
-	  /** 
-	   * Multiply this matrix by another.
-	   */
-	  public void apply(Matrix source);
+      public void rotateY(double angle);
 
-	  public void apply(Matrix2D source);
+      public void rotateZ(double angle);
 
-	  public void apply(Matrix3D source);
+      public void rotate(double angle, double v0, double v1, double v2);
 
-	  public void apply(double n00, double n01, double n02, 
-	                    double n10, double n11, double n12);
+      public void scale(double s);
 
-	  public void apply(double n00, double n01, double n02, double n03,
-	                    double n10, double n11, double n12, double n13,
-	                    double n20, double n21, double n22, double n23,
-	                    double n30, double n31, double n32, double n33);
+      public void scale(double sx, double sy);
 
-	  /**
-	   * Apply another matrix to the left of this one.
-	   */
-	  public void preApply(Matrix2D left);
+      public void scale(double x, double y, double z);
 
-	  public void preApply(Matrix3D left);
+      public void shearX(double angle);
 
-	  public void preApply(double n00, double n01, double n02, 
-	                       double n10, double n11, double n12);
+      public void shearY(double angle);
 
-	  public void preApply(double n00, double n01, double n02, double n03,
-	                       double n10, double n11, double n12, double n13,
-	                       double n20, double n21, double n22, double n23,
-	                       double n30, double n31, double n32, double n33);
+      /**
+       * Multiply this matrix by another.
+       */
+      public void apply(Matrix source);
 
-	  
-	  public Vertex mult(Vertex source);
-	  
-	  public double[] mult(double[] source, double[] target);
-	  
-	  public void transpose();
+      public void apply(Matrix2D source);
 
-	  public boolean invert();
-	  
-	  public double determinant();	
-	
-	
+      public void apply(Matrix3D source);
+
+      public void apply(double n00, double n01, double n02,
+                        double n10, double n11, double n12);
+
+      public void apply(double n00, double n01, double n02, double n03,
+                        double n10, double n11, double n12, double n13,
+                        double n20, double n21, double n22, double n23,
+                        double n30, double n31, double n32, double n33);
+
+      /**
+       * Apply another matrix to the left of this one.
+       */
+      public void preApply(Matrix2D left);
+
+      public void preApply(Matrix3D left);
+
+      public void preApply(double n00, double n01, double n02,
+                           double n10, double n11, double n12);
+
+      public void preApply(double n00, double n01, double n02, double n03,
+                           double n10, double n11, double n12, double n13,
+                           double n20, double n21, double n22, double n23,
+                           double n30, double n31, double n32, double n33);
+
+
+      public Vertex mult(Vertex source);
+
+      public double[] mult(double[] source, double[] target);
+
+      public void transpose();
+
+      public boolean invert();
+
+      public double determinant();
+
+
 }
