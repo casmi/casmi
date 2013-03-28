@@ -31,13 +31,15 @@ import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
 import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.Mask;
+import casmi.graphics.shader.BlurMode;
+import casmi.graphics.shader.Shader;
 import casmi.matrix.Vertex;
 
 /**
  * Element class. Wrap JOGL and make it easy to use.
- * 
+ *
  * @author Y. Ban
- * 
+ *
  */
 abstract public class Element implements Cloneable, Renderable {
 
@@ -45,17 +47,18 @@ abstract public class Element implements Cloneable, Renderable {
 	private double strokeGreen = 0.0;
 	private double strokeBlue  = 0.0;
 	private double strokeAlpha = 1.0;
-	
+
 	private double fillRed   = 1.0;
 	private double fillGreen = 1.0;
 	private double fillBlue  = 1.0;
 	private double fillAlpha = 1.0;
-	
+
 	private double sceneA = 1.0;
-	
+
 	protected Texture texture;
+	protected Texture normalMap;
 	protected Mask mask;
-	
+
 	public boolean enableMask = true;
 
 	protected double x = 0.0;
@@ -87,7 +90,7 @@ abstract public class Element implements Cloneable, Renderable {
 	private boolean mouseOver       = false;
 	private boolean preMouseOver    = false;
 	private boolean selectionBuffer = false;
-	
+
 	private boolean depthTest = true;
 	private boolean removeElement = false;
 	private boolean threeD = false;
@@ -95,23 +98,32 @@ abstract public class Element implements Cloneable, Renderable {
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
 	protected boolean gradation = false;
-	
+
 	protected boolean reset = false;
 	protected boolean init = true;
 
+	protected Shader shader;
+	protected boolean enableShader = false;
+    protected boolean enableBump = false;
+
+    protected BlurMode blurMode = BlurMode.None;
+    protected boolean rootGlow = false;
+
+    protected double glowSize = 0.007;
+
 	/**
 	 * Returns the width of this Element's stroke.
-	 * 
+	 *
 	 * @return
 	 * 			 The width of the Element's stroke.
 	 */
 	public double getStrokeWidth() {
-		return (double) strokeWidth;
+		return strokeWidth;
 	}
 
 	/**
 	 * Sets the width of this Element's stroke.
-	 * 
+	 *
 	 * @param strokeWidth
 	 *            The width of the Element's stroke.
 	 */
@@ -121,7 +133,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Returns the color of this Element's stroke.
-	 * 
+	 *
 	 * @return
 	 * 				The color of the Element's stroke.
 	 */
@@ -131,7 +143,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Sets the color of this Element's stroke.
-	 * 
+	 *
 	 * @param color
 	 *            The color of the Element's stroke.
 	 */
@@ -139,10 +151,10 @@ abstract public class Element implements Cloneable, Renderable {
 		this.strokeColor = color;
 		this.tAS = color.getAlpha();
 	}
-	
+
 	/**
 	 * Sets the alpha of this Element's stroke.
-	 * 
+	 *
 	 * @param alpha
 	 *            The color of the Element's stroke.
 	 */
@@ -153,7 +165,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Sets the color of this Element's stroke.
-	 * 
+	 *
 	 * @param colorSet
 	 *            The colorSet of the Element's stroke.
 	 */
@@ -163,7 +175,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Sets the color of this Element's stroke.
-	 * 
+	 *
 	 * @param colorSet
 	 *            The colorSet of the Element's stroke.
 	 * @param alpha
@@ -176,8 +188,8 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Returns the color of this Element's fill.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 * 			 The color of the Element's fill.
 	 */
 	public Color getFillColor() {
@@ -186,7 +198,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Sets the color of this Element's fill.
-	 * 
+	 *
 	 * @param color
 	 *            The color of the Element's fill.
 	 */
@@ -194,10 +206,10 @@ abstract public class Element implements Cloneable, Renderable {
 		this.fillColor = color;
 		this.tAF = color.getAlpha();
 	}
-	
+
 	/**
 	 * Sets the alpha of this Element's fill.
-	 * 
+	 *
 	 * @param alpha
 	 *            The color of the Element's fill.
 	 */
@@ -208,17 +220,17 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Sets the color of this Element's fill.
-	 * 
+	 *
 	 * @param colorSet
 	 *            The color of the Element's fill.
 	 */
 	public void setFillColor(ColorSet colorSet) {
 		this.fillColor = new RGBColor(colorSet);
 	}
-	
+
 	/**
 	 * Sets the color of this Element's fill.
-	 * 
+	 *
 	 * @param colorSet
 	 *            The color of the Element's fill.
 	 * @param alpha
@@ -235,7 +247,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Enables or disables drawing the stroke (outline)
-	 * 
+	 *
 	 * @param stroke
 	 */
 	public void setStroke(boolean stroke) {
@@ -248,7 +260,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Enables or disables filling geometry
-	 * 
+	 *
 	 * @param fill
 	 */
 	public void setFill(boolean fill) {
@@ -257,7 +269,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Sets Material to this Element
-	 * 
+	 *
 	 * @param m
 	 *            The Material of this Element.
 	 */
@@ -271,7 +283,8 @@ abstract public class Element implements Cloneable, Renderable {
 		this.fillColor.setAlpha(alpha);
 	}
 
-	public void setAlpha(double alpha) {
+	@Override
+    public void setAlpha(double alpha) {
 		this.sceneA = alpha;
 	}
 
@@ -306,16 +319,16 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Decides the Element has the tween or not.
-	 * 
+	 *
 	 * @param tween
-	 * 				
+	 *
 	 */
 	public void setTween(boolean tween) {
 		this.tween = tween;
 	}
 
 	/**Gets that the Element has has the tween or not.
-	 * 
+	 *
 	 * @return
 	 * 			Returns the tween prediction.
 	 */
@@ -348,7 +361,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets x-coordinate of the Element.
-	 * 
+	 *
 	 * @return
 	 * 				x-coordinate
 	 */
@@ -357,7 +370,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets y-coordinate of the Element.
-	 * 
+	 *
 	 * @return
 	 * 				y-coordinate
 	 */
@@ -366,16 +379,16 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets z-coordinate of the Element.
-	 * 
+	 *
 	 * @return
 	 * 				z-coordinate
 	 */
 	public double getZ() {
 		return this.z;
 	}
-	
+
 	/**Gets the position of the Element.
-	 * 
+	 *
 	 * @return
 	 * 				the position of the Element
 	 */
@@ -385,7 +398,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets x-coordinate of the Element.
-	 * 
+	 *
 	 * @param x
 	 * 				x-coordinate to set.
 	 */
@@ -394,7 +407,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets y-coordinate of the Element.
-	 * 
+	 *
 	 * @param y
 	 * 				y-coordinate to set.
 	 */
@@ -403,7 +416,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets z-coordinate of the Element.
-	 * 
+	 *
 	 * @param z
 	 * 				z-coordinate to set.
 	 */
@@ -412,7 +425,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the position of the Element in 2D.
-	 * 
+	 *
 	 * @param x
 	 * 				x-coordinate
 	 * @param y
@@ -424,12 +437,12 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the position of the Element in 3D.
-	 * 
+	 *
 	 * @param x
 	 * 				x-coordinate
 	 * @param y
 	 * 				y-coordinate
-	 * @param z 
+	 * @param z
 	 * 				z-coordinate
 	 */
 	public void setPosition(double x, double y, double z) {
@@ -439,7 +452,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the position of the Element in 2D.
-	 * 
+	 *
 	 * @param v
 	 * 				the vertex of the position of the Element
 	 */
@@ -448,9 +461,9 @@ abstract public class Element implements Cloneable, Renderable {
 		this.y = v.getY();
 		this.z = v.getZ();
 	}
-	
+
 	/**Flips the Element. You can choose the way of flip with 0 or 1.
-	 * 
+	 *
 	 * @param mode
 	 * 				You can choose the way of flip with 0 or 1.
 	 * 				If you choose 0, the Element flips round on y-axis.
@@ -472,7 +485,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the rotation angle of the Element round on z-axis.
-	 * 
+	 *
 	 * @param angle
 	 * 					The angle of rotation
 	 */
@@ -482,7 +495,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**Sets the rotation angle of the Element.
 	 * This method wraps the glRotate method.
-	 * 
+	 *
 	 * @param angle
 	 * 					The angle of rotation
 	 * @param x
@@ -499,7 +512,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the rotation angle of the Element.
-	 * 
+	 *
 	 * @param x
 	 * 					The rotation angle round x-axis
 	 * @param y
@@ -514,7 +527,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets the rotation angle round on z-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The rotation angle round on z-axis
 	 */
@@ -523,7 +536,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the rotation angle of the Element round on x-axis.
-	 * 
+	 *
 	 * @param angle
 	 * 					The angle of rotation round on x-axis
 	 */
@@ -532,7 +545,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets the rotation angle round x-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The rotation angle round on x-axis
 	 */
@@ -541,16 +554,16 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the rotation angle of the Element round on y-axis.
-	 * 
+	 *
 	 * @param angle
 	 * 					The angle of rotation round on y-axis
 	 */
 	public void setRotationY(double angle) {
 		this.rotateY = angle;
 	}
-	
+
 	/**Gets the rotation angle round y-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The rotation angle round on y-axis
 	 */
@@ -559,7 +572,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the rotation angle of the Element round on z-axis.
-	 * 
+	 *
 	 * @param angle
 	 * 					The angle of rotation round on z-axis
 	 */
@@ -568,7 +581,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets the rotation angle round z-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The rotation angle round on z-axis
 	 */
@@ -577,7 +590,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets the scale of x-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The scale of x-axis
 	 */
@@ -586,7 +599,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets the scale of y-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The scale of y-axis
 	 */
@@ -595,16 +608,16 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Gets the scale of z-axis.
-	 * 
+	 *
 	 * @return
 	 * 				The scale of z-axis
 	 */
 	public double getScaleZ() {
 		return this.scaleZ;
 	}
-	
-	/**Sets the scale of the Element 
-	 * 
+
+	/**Sets the scale of the Element
+	 *
 	 * @param scale
 	 * 					The scale of the Element
 	 */
@@ -613,9 +626,9 @@ abstract public class Element implements Cloneable, Renderable {
 		this.scaleY = scale;
 		this.scaleZ = scale;
 	}
-	
-	/**Sets the scale of the Element 
-	 * 
+
+	/**Sets the scale of the Element
+	 *
 	 * @param scaleX
 	 * 					The scale of the Element of x-axis direction
 	 * @param scaleY
@@ -630,7 +643,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the scale of the Element of x-axis direction.
-	 * 
+	 *
 	 * @param scaleX
 	 * 					The scale of the Element of x-axis direction
 	 */
@@ -639,7 +652,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the scale of the Element of y-axis direction.
-	 * 
+	 *
 	 * @param scaleY
 	 * 					The scale of the Element of y-axis direction
 	 */
@@ -648,7 +661,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the scale of the Element of z-axis direction.
-	 * 
+	 *
 	 * @param scaleZ
 	 * 					The scale of the Element of z-axis direction
 	 */
@@ -657,7 +670,7 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Sets the texture to the Element.
-	 * 
+	 *
 	 * @param texture
 	 */
 	public void setTexture(Texture texture) {
@@ -666,21 +679,21 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	/**Enables the texture.
-	 * 
+	 *
 	 */
 	public void enableTexture() {
 		this.enableTexture = true;
 	}
 
 	/**Disables the texture.
-	 * 
+	 *
 	 */
 	public void disableTexture() {
 		this.enableTexture = false;
 	}
 
 	/**Adds the mosueEventCallback to the Element
-	 * 
+	 *
 	 * @param callback
 	 * 					mouseEventCallback
 	 */
@@ -689,7 +702,7 @@ abstract public class Element implements Cloneable, Renderable {
 			mouseEventCallbacks = new ArrayList<MouseEventCallback>(3);
 		}
 		mouseEventCallbacks.add(callback);
-		
+
 		if(this instanceof GraphicsObject){
 			GraphicsObject g = (GraphicsObject)this;
 			for (Object obj : g.getObjectList()) {
@@ -698,12 +711,12 @@ abstract public class Element implements Cloneable, Renderable {
 				if(obj instanceof Group)
 					((Group) obj).addMouseEventCallback(callback);
 			}
-					
+
 		}
 	}
 
-	/**Returns the callbacks that are added to the Element. 
-	 * 
+	/**Returns the callbacks that are added to the Element.
+	 *
 	 * @return
 	 * 				The callbacks that are added to the Element.
 	 */
@@ -783,34 +796,36 @@ abstract public class Element implements Cloneable, Renderable {
 
 	/**
 	 * Modify visibility of the Element.
-	 * 
+	 *
 	 * @param visible {@code true} to make the Element visible, {@code false} to
 	 *     hide the Element.
 	 */
 	public void setVisible(boolean visible) {
 	    this.visible = visible;
 	}
-	
+
 	/**
 	 * Make the Element visible.
-	 * 
+	 *
 	 * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
 	 *     instead.
 	 */
-	public void visible() {
+	@Deprecated
+    public void visible() {
 		visible = true;
 	}
 
 	/**
 	 * Hide the Element.
-	 * 
+	 *
 	 * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
 	 *     instead.
 	 */
-	public void hidden() {
+	@Deprecated
+    public void hidden() {
         visible = false;
     }
-	
+
 	public boolean isVisible() {
 		return visible;
 	}
@@ -838,11 +853,11 @@ abstract public class Element implements Cloneable, Renderable {
 	public void setMask(Mask mask) {
 		this.mask = mask;
 	}
-	
+
 	public void clearMask() {
 		this.mask = null;
 	}
-	
+
 	public boolean isMasked() {
 		if(enableMask)
 			return mask != null;
@@ -854,9 +869,25 @@ abstract public class Element implements Cloneable, Renderable {
 		return depthTest;
 	}
 
+	public BlurMode isBlur() {
+	    return this.blurMode;
+	}
+
+	public void enableBlur() {
+	    this.blurMode = BlurMode.Blur;
+	}
+
+	public void enableBlur(BlurMode blur) {
+	        this.blurMode = blur;
+    }
+
+	public void disableBlur() {
+	    this.blurMode = BlurMode.None;
+	}
+
 	public void setDepthTest(boolean depthTest) {
 		this.depthTest = depthTest;
-		
+
 		if(this instanceof GraphicsObject){
 			GraphicsObject g = (GraphicsObject)this;
 			for (Object obj : g.getObjectList()) {
@@ -865,14 +896,14 @@ abstract public class Element implements Cloneable, Renderable {
 				if(obj instanceof Group)
 					((Group) obj).setDepthTest(depthTest);
 			}
-					
+
 		}
 	}
 
 	public void remove() {
 		this.removeElement = true;
 	}
-	
+
 	public boolean isRemove() {
 		return this.removeElement;
 	}
@@ -899,5 +930,34 @@ abstract public class Element implements Cloneable, Renderable {
 
 	public void disableMask() {
 		this.enableMask = false;
+	}
+
+	public void setShader(Shader shader) {
+	    this.shader = shader;
+	    this.enableShader = true;
+	}
+
+	public void enableShader() {
+	    this.enableShader = true;
+	    if(this.normalMap!=null)
+	        this.enableBump = true;
+	}
+
+	public void disableShader() {
+	    this.enableShader = false;
+	    this.enableBump = false;
+	}
+
+	public boolean isEnableShader() {
+	    return this.enableShader;
+	}
+
+	public void setNormalMap(Texture normal) {
+	    this.normalMap = normal;
+	    this.enableBump = true;
+	}
+
+	public void setRootGlow(boolean glow) {
+	    this.rootGlow = glow;
 	}
 }

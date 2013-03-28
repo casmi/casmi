@@ -40,24 +40,24 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 /**
  * Image class.
  * Wrap javax.imageio.ImageIO and make it easy to use.
- * 
+ *
  * @author Y. Ban
  */
 public class Image {
-    
+
     private static final ImageMode DEFAULT_IMAGE_MODE = ImageMode.CENTER;
-    
+
     protected final int width;
     protected final int height;
-    
+
     protected Texture texture;
     protected ImageMode mode = DEFAULT_IMAGE_MODE;
 
     private BufferedImage img;
-    
+
     /**
      * Creates a new Image object using width and height.
-     * 
+     *
      * @param width
      * 					The width of the Image.
      * @param height
@@ -66,33 +66,33 @@ public class Image {
     public Image(int width, int height) {
         this.width  = width;
         this.height = height;
-        
+
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
-    
+
     /**
      * Creates a new Image object using the Image path.
-     * 
+     *
      * @param path
      * 					The path of this Image.
      */
     public Image(String path) {
         java.io.File imgLoc = new java.io.File(path);
-        
+
         try {
            BufferedImage preimg = ImageIO.read(imgLoc);
            img =  convertByteToInt(preimg);
         } catch (IOException e) {
            e.printStackTrace();
         }
-        
+
         this.width  = img.getWidth();
         this.height = img.getHeight();
     }
-    
+
     /**
      * Creates a new Image object using the Image url.
-     * 
+     *
      * @param url
      *            The URL of this Image.
      */
@@ -107,13 +107,13 @@ public class Image {
          this.width  = img.getWidth();
          this.height = img.getHeight();
     }
-    
+
     /**
      * Creates a new Image object using BufferedImage.
-     * 
+     *
      * @param image
      * 					The BufferedImge of this Image.
-     * 
+     *
      * @see java.awt.image.BufferedImage
      */
     public Image(BufferedImage image) {
@@ -121,24 +121,24 @@ public class Image {
          this.width  = this.img.getWidth();
          this.height = this.img.getHeight();
     }
-    
+
     /**
      * Copies a Image object using BuffedImage.
-     * 
+     *
      * @param image
      * 					The BufferedImage of this Image.
-     * 
+     *
      * @return
      * 					The copy of this Image.
      */
     public BufferedImage copyImage(BufferedImage image) {
         BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-        Graphics2D g2d = (Graphics2D)newImage.createGraphics();
+        Graphics2D g2d = newImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.dispose();
         return newImage;
     }
-    
+
     private BufferedImage convertByteToInt(BufferedImage src) {
     	BufferedImage dst = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
     	int[] pixels = ((DataBufferInt)(dst.getRaster().getDataBuffer())).getData();
@@ -158,19 +158,19 @@ public class Image {
     		for (int i = 0, j = 0; i < pixelsize; i++) {
     			b = binary[j++] & 0xff;
     			g = binary[j++] & 0xff;
-    			r = binary[j++] & 0xff;	
+    			r = binary[j++] & 0xff;
     			pixels[i] = 0xff000000 | (r<<16) | (g<<8) | b;
     		}
     	}
     	return dst;
     }
-    
+
     /**
      * Returns the clone of the input image.
-     * 
+     *
      * @param image
      * 					The image you want to clone.
-     * 
+     *
      * @return
      * 					The clone image of the input image.
      */
@@ -189,30 +189,30 @@ public class Image {
             throw new CasmiRuntimeException("Cannot load texture");
         }
     }
-    
+
     public final void reloadTexture(GL2 gl) {
         texture.updateImage(gl, AWTTextureIO.newTextureData(GLProfile.get(GLProfile.GL2), img, false));
     }
-    
+
     /**
      * Makes texture to be used.
      * This function is similar to glEnable( GL_TEXTURE_2D ) and glBindTexture() in OpenGL
-     * 
+     *
      * @param gl
      * 					The variable of GL2.
      */
     public void enableTexture(GL2 gl) {
         if( texture != null ) {
             texture.enable(gl);
-            texture.bind(gl);	 
+            texture.bind(gl);
         }
     }
-    
+
     /**
      * Makes texture not to be used.
-     * 
+     *
      * This function is similar to glDisable( GL_TEXTURE_2D ) in OpenGL
-     * 
+     *
      * @param gl
      * 					The variable of GL2.
      */
@@ -223,19 +223,19 @@ public class Image {
     }
     /**
      * Sets the ImageMode of this Image.
-     * 
+     *
      * @param mode
      * 					The Image mode of this Image.
-     * 
+     *
      * @see casmi.image.ImageMode
      */
     public void imageMode(ImageMode mode) {
         this.mode = mode;
     }
-    
+
     /**
      * Returns the pixel color of this Image.
-     * 
+     *
      * @param x
      * 					The x-coordinate of the pixel.
      * @param y
@@ -246,16 +246,16 @@ public class Image {
     public final Color getColor(int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
-        
-        return new RGBColor((pixels[idx] >> 16 & 0x000000ff) / 255.0, 
+
+        return new RGBColor((pixels[idx] >> 16 & 0x000000ff) / 255.0,
                             (pixels[idx] >> 8  & 0x000000ff) / 255.0,
                             (pixels[idx]       & 0x000000ff) / 255.0,
                             (pixels[idx] >> 24)              / 255.0);
     }
-    
+
     /**
      * Returns the red color value of the pixel data in this Image.
-     * 
+     *
      * @param x
      * 					The x-coordinate of the pixel.
      * @param y
@@ -266,13 +266,13 @@ public class Image {
     public final double getRed(int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
-        
-        return (pixels[idx] >> 16 & 0x000000ff); 
+
+        return (pixels[idx] >> 16 & 0x000000ff);
     }
-    
+
     /**
      * Returns the green color value of the pixel data in this Image.
-     * 
+     *
      * @param x
      * 					The x-coordinate of the pixel.
      * @param y
@@ -283,13 +283,13 @@ public class Image {
     public final double getGreen(int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
-        
+
         return (pixels[idx] >> 8  & 0x000000ff);
     }
-    
+
     /**
      * Returns the blue color value of the pixel data in this Image.
-     * 
+     *
      * @param x
      * 					The x-coordinate of the pixel.
      * @param y
@@ -300,13 +300,13 @@ public class Image {
     public final double getBlue(int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
-        
+
         return (pixels[idx]       & 0x000000ff);
     }
-    
+
     /**
      * Returns the gray-scale value of the pixel data in this Image.
-     * 
+     *
      * @param x
      * 					The x-coordinate of the pixel.
      * @param y
@@ -317,13 +317,13 @@ public class Image {
     public final double getGray(int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
-        
+
         return ((pixels[idx]       & 0x000000ff)+(pixels[idx] >> 8  & 0x000000ff)+(pixels[idx] >> 16 & 0x000000ff))/3;
     }
-    
+
     /**
      * Returns the alpha value of the pixel data in this Image.
-     * 
+     *
      * @param x
      * 					The x-coordinate of the pixel.
      * @param y
@@ -334,14 +334,14 @@ public class Image {
     public final double getAlpha(int x, int y) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
         int idx = x + y * width;
-        
+
         return (pixels[idx] >> 24);
     }
-    
+
     /**
      * Sets the color value of the pixel data in this Image.
      *
-     * @param color 	
+     * @param color
      * 					The color value of the pixel.
      * @param x
      * 					The x-coordinate of the pixel.
@@ -354,15 +354,15 @@ public class Image {
         int green = (int)(color.getGreen() * 255.0);
         int blue  = (int)(color.getBlue()  * 255.0);
         int alpha = (int)(color.getAlpha() * 255.0);
-        pixels[x + y * width] = alpha << 24 | 
+        pixels[x + y * width] = alpha << 24 |
                                 red   << 16 |
                                 green << 8  |
                                 blue;
     }
-    
+
     /**
      * Sets the alpha value of the pixel data in this Image.
-     * 
+     *
      * @param alpha
      * 					The alpha value of the pixel.
      * @param x
@@ -376,16 +376,16 @@ public class Image {
     	int tmpR = pixels[idx] >> 16 & 0x000000ff;
         int tmpG = pixels[idx] >> 8  & 0x000000ff;
         int tmpB = pixels[idx]       & 0x000000ff;
-        pixels[idx] = (int)alpha << 24 | 
+        pixels[idx] = (int)alpha << 24 |
         				    tmpR << 16 |
         			        tmpG << 8  |
         			        tmpB;
     }
-    
+
     /**
      * Sets the color values to this Image.
      *
-     * @param colors	
+     * @param colors
      * 					The array of Color which size is width * height of this Image.
      */
     public final void setColors(Color[] colors) {
@@ -398,7 +398,7 @@ public class Image {
                 int green = (int)(colors[idx].getGreen() * 255.0);
                 int blue  = (int)(colors[idx].getBlue()  * 255.0);
                 int alpha = (int)(colors[idx].getAlpha() * 255.0);
-                pixels[idx] = alpha << 24 | 
+                pixels[idx] = alpha << 24 |
                               red   << 16 |
                               green << 8  |
                               blue;
@@ -408,7 +408,7 @@ public class Image {
 
     /**
      * Returns Texture binded this Image
-     * 
+     *
      * @return
      * 					The Texture object binded this Image.
      */
@@ -418,10 +418,10 @@ public class Image {
 
     /**
      * Returns ImageMode of this Image.
-     * 
+     *
      * @return
      * 					The ImageMode of the Image.
-     * 
+     *
      * @see casmi.image.ImageMode
      */
     public final ImageMode getMode() {
@@ -430,10 +430,10 @@ public class Image {
 
     /**
      * Sets ImageMode of this Image.
-     * 
+     *
      * @param mode
      * 					The ImageMode of the Image.
-     * 
+     *
      * @see casmi.image.ImageMode
      */
     public final void setMode(ImageMode mode) {
@@ -442,7 +442,7 @@ public class Image {
 
     /**
      * Returns the width of this Image.
-     * 
+     *
      * @return
      * 					The width of the Image.
      */
@@ -452,12 +452,16 @@ public class Image {
 
     /**
      * Returns the height of this Image.
-     * 
+     *
      * @return
      * 					The height of the Image.
      */
     public final int getHeight() {
         return height;
     }
-    
+
+    public BufferedImage getImg() {
+        return img;
+    }
+
 }

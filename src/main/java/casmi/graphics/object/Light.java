@@ -31,44 +31,45 @@ import casmi.matrix.Vertex;
 
 /**
  * Light object class.
- * Wrap JOGL and make it easy to use. 
- * 
+ * Wrap JOGL and make it easy to use.
+ *
  * @author Y. Ban
  */
 public class Light extends Element implements ObjectRender {
-	
+
 	private Vertex dv;
 	private int index;
 	private Vertex v;
 	private Color color;
 	private double angle = 30.0;
 	private LightMode lightMode = LightMode.NONE;
-	
+
     private float shininess[] = {1.0f};
     private float ambient[] = {0,0,0,1.0f};
     private float diffuse[] = {0,0,0,1.0f};
     private float specular[] = {0,0,0,1.0f};
     private float emissive[] = {0,0,0,1.0f};
-    private Boolean Sh = false;
-    private Boolean Am = false;
-    private Boolean Di = false;
-    private Boolean Sp = false;
-    private Boolean Em = false;
-	
+    private boolean Sh = false;
+    private boolean Am = false;
+    private boolean Di = false;
+    private boolean Sp = false;
+    private boolean Em = false;
+    private boolean enableColor = false;
+
     /**
      * Creates Light object.
-     * 
+     *
      */
 	public Light() {
 	    this(LightMode.NONE);
     }
-	
+
 	/**
 	 * Creates Light object using lightMode.
-	 * 
+	 *
 	 * @param lightMode
 	 * 					The lightMode of this light.
-	 * 
+	 *
 	 * @see casmi.graphics.object.LightMode
 	 */
 	public Light(LightMode lightMode) {
@@ -77,50 +78,52 @@ public class Light extends Element implements ObjectRender {
 		this.dv        = new Vertex();
 		this.color     = new RGBColor(0.0, 0.0, 0.0);
     }
-	
+
 	/**
 	 * Returns the index of Light.
-	 * 
+	 *
 	 * @return
 	 * 					The index of Light.
 	 */
 	public int getIndex() {
 		return index;
 	}
-	
+
 	/**
 	 * Sets the index of Light.
-	 * 
+	 *
 	 * @param index
 	 * 					The index of Light.
 	 */
 	public void setIndex(int index) {
 		this.index = index;
 	}
-	
+
 	/**
 	 * Sets the color of Light.
-	 * 
+	 *
 	 * @param color
 	 * 					The color of Light.
 	 */
 	public void setColor(Color color) {
+	    this.enableColor = true;
 		this.color = color;
 	}
-	
+
 	/**
 	 * Sets the color of Light.
-	 * 
+	 *
 	 * @param colorSet
 	 * 					The ColorSet of Light.
 	 */
 	public void setColor(ColorSet colorSet) {
+	    this.enableColor = true;
 		this.color = new RGBColor(colorSet);
 	}
-	
+
 	/**
 	 * Sets the direction of Light.
-	 * 
+	 *
 	 * @param x
 	 * 					The x-direction of Light.
 	 * @param y
@@ -131,31 +134,31 @@ public class Light extends Element implements ObjectRender {
 	public void setDirection(double x,double y, double z) {
 		this.dv.set(x, y, z);
     }
-	
+
 	/**
 	 * Returns the LightMode
-	 * 
+	 *
 	 * @return
 	 * 					The LightMode of this Light.
-	 * 
+	 *
 	 * @see casmi.graphics.object.LightMode
 	 */
 	public LightMode getLightMode() {
 	    return lightMode;
 	}
- 	
+
 	/**
 	 * Sets the LightMode
-	 * 
+	 *
 	 * @param lightMode
 	 * 					The LightMode of this Light.
-	 * 
+	 *
 	 * @see casmi.graphics.object.LightMode
 	 */
 	public void setLightMode(LightMode lightMode) {
 		this.lightMode = lightMode;
 	}
-    
+
 	@Override
 	public void render(Graphics g) {
 		v.set(x, y, z);
@@ -172,33 +175,34 @@ public class Light extends Element implements ObjectRender {
 			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_EMISSION,emissive, 0);
 		if(Sh==true)
 			g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_SHININESS,shininess, 0);
-		
+
+
+
 		switch(lightMode){
 		case AMBIENT:
-			g.ambientLight(index, color, v);
+			g.ambientLight(index, color, enableColor, v);
 			break;
 		case DIRECTION:
-			g.directionalLight(index, color, dv);
+			g.directionalLight(index, color, enableColor, dv);
 			break;
 		case POINT:
-			g.pointLight(index, color, v);
+			g.pointLight(index, color, enableColor, v);
 			break;
 		case SPOT:
-			g.spotLight(index, color, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
+			g.spotLight(index, color, enableColor, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
 			break;
 		case NONE:
 			break;
-			
 		}
 	}
-	
+
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
     }
 
     /**
      * Returns the x-direction of Light
-     * 
+     *
      * @return
      * 						The x-direction of Light.
      */
@@ -208,7 +212,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
      * Sets the x-direction of Light
-     * 
+     *
      * @param directionX
      * 						The x-direction of Light.
      */
@@ -218,7 +222,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
      * Returns the x-direction of Light
-     * 
+     *
      * @return
      * 						The x-direction of Light.
      */
@@ -228,7 +232,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
      * Sets the x-direction of Light
-     * 
+     *
      * @param directionY
      * 						The y-direction of Light.
      */
@@ -238,7 +242,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
      * Returns the z-direction of Light
-     * 
+     *
      * @return
      * 						The z-direction of Light.
      */
@@ -248,7 +252,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
      * Sets the z-direction of Light
-     * 
+     *
      * @param directionZ
      * 						The z-direction of Light.
      */
@@ -258,7 +262,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Returns the spot light's angle.
-	 *  
+	 *
 	 * @return
 	 * 						The angle of the spot light.
 	 */
@@ -268,7 +272,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Sets the spot light's angle.
-	 * 
+	 *
 	 * @param angle
 	 * 						The angle of the spot light.
 	 */
@@ -278,7 +282,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Returns the shininess of Light.
-	 * 
+	 *
 	 * @return
 	 * 						The shininess of Light.
 	 */
@@ -288,7 +292,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Sets the shininess of Light.
-	 * 
+	 *
 	 * @param shininess
 	 * 						The shininess of Light.
 	 */
@@ -297,9 +301,9 @@ public class Light extends Element implements ObjectRender {
 		Sh = true;
 	}
 
-	/** 
+	/**
 	 * Returns the parameter of the ambient light.
-	 * 
+	 *
 	 * @return
 	 * 						The parameter of the ambient light.
 	 */
@@ -309,7 +313,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Sets the parameter of the ambient light.
-	 * 
+	 *
 	 * @param ambient
 	 * 						The parameter of the ambient light.
 	 */
@@ -319,8 +323,8 @@ public class Light extends Element implements ObjectRender {
 	}
 
 	/**
-	 * Returns the diffuse color of Light. 
-	 * 
+	 * Returns the diffuse color of Light.
+	 *
 	 * @return
 	 * 						The diffuse color of Light.
 	 */
@@ -330,7 +334,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Sets the diffuse color of Light.
-	 * 
+	 *
 	 * @param diffuse
 	 * 						The diffuse color of Light.
 	 */
@@ -339,9 +343,9 @@ public class Light extends Element implements ObjectRender {
 		Di = true;
 	}
 
-	/** 
+	/**
 	 * Returns the specular color of Light.
-	 * 
+	 *
 	 * @return
 	 * 						The specular color of Light.
 	 */
@@ -351,7 +355,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Sets the specular color of Light.
-	 * 
+	 *
 	 * @param specular
 	 * 						The specular color of Light.
 	 */
@@ -360,9 +364,9 @@ public class Light extends Element implements ObjectRender {
 		Sp = true;
 	}
 
-	/** 
+	/**
 	 * Returns the emissive color of Light.
-	 * 
+	 *
 	 * @return
 	 * 						The emissive color of Light.
 	 */
@@ -372,7 +376,7 @@ public class Light extends Element implements ObjectRender {
 
 	/**
 	 * Sets the emissive color of Light.
-	 * 
+	 *
 	 * @param emissive
 	 * 						The emissive color of Light.
 	 */

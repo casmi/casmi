@@ -22,6 +22,7 @@ import casmi.graphics.element.Element;
 import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
+import casmi.graphics.shader.BlurMode;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
@@ -48,16 +49,19 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
     protected MatrixMode mode = MatrixMode.NONE;
     protected DoubleBuffer matrix;
     protected boolean selectionbuff = false;
-	
+
 	public final int NO_SELECTIONBUFF = 10;
-	
+
 	protected boolean removeObject;
 	protected boolean resetObject = false;
-	
+
 	protected MouseEvent mouseEvent;
-	
+
 	protected int selectionBufSize = 1024*1024;
-	
+
+
+	private RootObject root;
+
 	public GraphicsObject() {
 		objectList    = new CopyOnWriteArrayList<Object>();
 		lightList     = new CopyOnWriteArrayList<Light>();
@@ -65,15 +69,15 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 		perseList     = new CopyOnWriteArrayList<Perse>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
-		
+
 		this.setDepthTest(false);
 	}
-	
+
 	public void add(Object object) {
 	    if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
 	        objectList.add(object);
 	}
-	
+
 	public void addAll(Collection<? extends Object> c) {
 	    objectList.addAll(c);
 	}
@@ -94,7 +98,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	public void addTweenManager(TweenManager r) {
 		tmList.add(r);
 	}
-	
+
 	public void clearAllObjects() {
 		objectList = null;
 	    objectList = new CopyOnWriteArrayList<Object>();
@@ -121,23 +125,23 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public Object get(int index) {
-		return (Object) objectList.get(index);
+		return objectList.get(index);
 	}
 
 	public Object getLight(int index) {
-		return (Object) lightList.get(index);
+		return lightList.get(index);
 	}
 
 	public Object getCamera(int index) {
-		return (Object) cameraList.get(index);
+		return cameraList.get(index);
 	}
 
 	public Object getPerse(int index) {
-		return (Object) perseList.get(index);
+		return perseList.get(index);
 	}
 
 	public TweenManager getTweenManager(int index) {
-		return (TweenManager) tmList.get(index);
+		return tmList.get(index);
 	}
 
 	public void add(int index, Object r) {
@@ -199,11 +203,11 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	    this.mode   = MatrixMode.LOAD;
 	}
 
-	
+
 	public double selectionbufRender(Graphics g, double mouseX, double mouseY, int index, int[] selectBuff, IntBuffer selectBuffer, int selectedIndex) {
-		
+
 	    if (selectionbuff || isSelectionbuffer()) {
-						
+
 			Arrays.fill(selectBuff, 0);
 			selectBuffer.position(0);
 			int hits;
@@ -240,7 +244,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
 
 		}
-	    
+
 		if (removeObject) {
 			Iterator<Object> itr = objectList.iterator();
 			while (itr.hasNext()) {
@@ -250,7 +254,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 					    objectList.remove(obj);
 			}
 		}
-		
+
 		return selectedIndex;
 	}
 
@@ -269,15 +273,15 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	public void render(Graphics g) {
 		if (this.isVisible()) {
 			this.g = g;
-			
+
 			drawTweenManager(g);
-			
+
 			drawPerse(g, false);
-			
+
 			drawCamera(g);
-						
+
 			drawLight(g);
-			
+
 			g.pushMatrix();
 			{
 			    setMatrix(g);
@@ -291,10 +295,11 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 		}
 	}
 
+
 	public void bufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
 		if (this.isVisible()) {
 			this.g = g;
-			
+
 			if (removeObject) {
 				for (Object obj : objectList) {
 					if(obj instanceof Element && ((Element)obj).isRemove())
@@ -302,16 +307,16 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				}
 				removeObject = false;
 			}
-			
+
 			drawTweenManager(g);
-			
+
 			if (!bool)
 			    drawPerse(g, bool);
 
 			drawCamera(g);
-			
+
 			drawLight(g);
-			
+
 			g.pushMatrix();
 			{
 			    setMatrix(g);
@@ -319,12 +324,12 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			    drawObject(g, bool, mouseX, mouseY, index, -1);
 			}
 			g.popMatrix();
-			
+
 			if (this instanceof Group) {
 				update(g);
 			}
-			
-			
+
+
 		}
 	}
 
@@ -357,13 +362,13 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			if (el.isMasked()) {
 				el.getMask().render(g);
 			}
-			
+
 			if (el.getPosition().getZ() == 0) {
 				el.setDepthTest(false);
 			} else {
 				this.setDepthTest(true);
 			}
-			
+
 			g.pushMatrix();
 			{
 			    if (el.isTween()) {
@@ -464,7 +469,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 						e.setReset(false);
 					}
 					if (e.getMouseOverCallback() != null) {
-						selectionbuff = true;						
+						selectionbuff = true;
 					}
 					this.render((Element)obj);
 				} else {
@@ -510,10 +515,10 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				if (el.isMouseover()) {
 					el.callMouseClickCallback(e);
 				}
-			} 
+			}
 		}
 	}
-	
+
 	public void setMouseEvent(casmi.MouseEvent e){
 	//	if(mouseEventList==null)
 	//		mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
@@ -531,7 +536,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	private final void drawCamera(Graphics g) {
 		for (Camera camera : cameraList) {
 			if (camera instanceof Camera) {
-				Camera c = (Camera) camera;
+				Camera c = camera;
 				c.render(g);
 			}
 		}
@@ -594,7 +599,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	public void update() {
 
 	}
-	
+
 	public List<Object> getObjectList() {
 		return objectList;
 	}
@@ -615,7 +620,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	public List<Integer> getSelectionList() {
 		return selectionList;
 	}
-	
+
 	public void clearSelectionList() {
 		selectionList.clear();
 	}
@@ -640,7 +645,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	public void setResetObject(boolean resetObject) {
 		this.resetObject = resetObject;
 	}
-	
+
 	@Override
 	public void setStroke(boolean setStroke) {
 		for (Object obj : objectList) {
@@ -653,7 +658,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
-	
+
 	@Override
 	public void setFill(boolean setFill) {
 		for (Object obj : objectList) {
@@ -666,11 +671,11 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
-	
+
 
 	/**
 	 * Sets the width of this Element's stroke.
-	 * 
+	 *
 	 * @param strokeWidth
 	 *            The width of the Element's stroke.
 	 */
@@ -691,7 +696,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	/**
 	 * Sets the color of this Element's stroke.
-	 * 
+	 *
 	 * @param color
 	 *            The color of the Element's stroke.
 	 */
@@ -727,7 +732,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	/**
 	 * Sets the color of this Element's stroke.
-	 * 
+	 *
 	 * @param colorSet
 	 *            The color of the Element's stroke.
 	 */
@@ -764,7 +769,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	/**
 	 * Sets the color of this Element's fill.
-	 * 
+	 *
 	 * @param color
 	 *            The color of the Element's fill.
 	 */
@@ -800,7 +805,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	/**
 	 * Sets the color of this Element's fill.
-	 * 
+	 *
 	 * @param colorSet
 	 *            The color of the Element's fill.
 	 */
@@ -832,7 +837,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
-	
+
 	public void resetObjects() {
 		for (Object obj : objectList) {
 			if (obj instanceof Reset) {
@@ -845,8 +850,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
-	
-	public void setMask(Mask mask) {
+
+	@Override
+    public void setMask(Mask mask) {
 		for (Object obj : objectList) {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
@@ -857,8 +863,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
-	
-	public void enableMask() {
+
+	@Override
+    public void enableMask() {
 		for (Object obj : objectList) {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
@@ -869,8 +876,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
-	
-	public void disableMask() {
+
+	@Override
+    public void disableMask() {
 		for (Object obj : objectList) {
 			if (obj instanceof Element) {
 				Element el = (Element)obj;
@@ -881,6 +889,21 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 			}
 		}
 	}
+
+	public void enableBlur(double glowSize) {
+	    this.blurMode = BlurMode.Blur;
+	}
+
+	public void enableBlur(BlurMode blur, double glowSize) {
+        this.blurMode = blur;
+    }
+
+	protected void setRoot(RootObject root) {
+	   this.root = root;
+	}
+
+
+
 }
 
 
