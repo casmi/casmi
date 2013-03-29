@@ -29,7 +29,6 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
 import casmi.graphics.shader.BlurMode;
-import casmi.graphics.shader.Shader;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -49,7 +48,6 @@ public class Text extends Element implements Renderable, Reset {
     private TextRenderer textRenderer;
     private TextAlign align = TextAlign.LEFT;
     private double leading = 0.0;
-    private Shader objIDShader;
 
     private boolean selection = false;
 
@@ -186,7 +184,8 @@ public class Text extends Element implements Renderable, Reset {
     	if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
     		gl.glDisable(GL2.GL_DEPTH_TEST);
 
-    	if (blurMode!=BlurMode.None && this.rootGlow){
+
+    	if (blurMode!=BlurMode.None && this.rootBlur){
     	    gl.glActiveTexture(GL2.GL_TEXTURE0);
             this.objIDShader.setUniform("sampler", 0);
     	}
@@ -535,7 +534,11 @@ public class Text extends Element implements Renderable, Reset {
 		this.selection = selection;
 	}
 
-	public void setObjIDShader(Shader shader) {
-	    this.objIDShader = shader;
-	}
+	/**Check texture is enable or not.
+    *
+    */
+   @Override
+   public boolean isEnableTexture() {
+       return true;
+   }
 }

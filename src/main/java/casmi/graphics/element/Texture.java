@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.shader.BlurMode;
 import casmi.image.Image;
 import casmi.image.ImageMode;
 import casmi.matrix.Vertex;
@@ -362,6 +363,11 @@ public class Texture extends Element implements Renderable, Reset {
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
         	gl.glDisable(GL2.GL_DEPTH_TEST);
 
+        if (blurMode!=BlurMode.None && this.rootBlur){
+            gl.glActiveTexture(GL2.GL_TEXTURE0);
+            this.objIDShader.setUniform("sampler", 0);
+        }
+
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
@@ -639,6 +645,14 @@ public class Texture extends Element implements Renderable, Reset {
 			reloadImage(gl);
 		}
 	}
+
+	/**Check texture is enable or not.
+    *
+    */
+   @Override
+   public boolean isEnableTexture() {
+       return true;
+   }
 
 
 }

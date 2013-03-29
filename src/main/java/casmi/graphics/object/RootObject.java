@@ -58,9 +58,11 @@ public class RootObject extends GraphicsObject {
     private int selectedIndex = -1;
     private IntBuffer selectBuffer;
     private int selectBuff[];
+    private boolean selectionPhase = false;
 
-    private FrameBufferObject fbo4Blur, fbo4MotionBlur;
+    private FrameBufferObject fbo4Blur, fbo4MotionBlur, fbo4MotionBlur2;
     private BlurShader blurShader;
+    private Shader motionBlurShader;
     private Shader objShader;
 
     public final int NO_SELECTIONBUFF = 10;
@@ -257,19 +259,23 @@ public class RootObject extends GraphicsObject {
     }
 
     public void enableBlur(int width, int height) {
-        this.rootGlow = true;
+        this.rootBlur = true;
         if (this.fbo4Blur == null)
-            this.fbo4Blur = new FrameBufferObject(width, height, 2);
+            this.fbo4Blur = new FrameBufferObject(width, height, 3);
         if (this.fbo4MotionBlur == null)
             this.fbo4MotionBlur = new FrameBufferObject(width, height);
+        if (this.fbo4MotionBlur2 == null)
+            this.fbo4MotionBlur2 = new FrameBufferObject(width, height);
         if (this.objShader == null)
             this.objShader = new Shader("ObjID");
         if (this.blurShader == null)
             this.blurShader = new BlurShader(width, height);
+        if (this.motionBlurShader == null)
+            this.motionBlurShader = new Shader("MotionBlur");
     }
 
     public void rootSelectionbufRender(Graphics g, double mouseX, double mouseY, int index) {
-
+        this.selectionPhase = true;
         if (selectionbuff || isSelectionbuffer()) {
 
             Arrays.fill(selectBuff, 0);
@@ -353,6 +359,7 @@ public class RootObject extends GraphicsObject {
     }
 
     public void rootBufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
+        this.selectionPhase = false;
         if (this.isVisible()) {
             this.g = g;
 
@@ -367,7 +374,7 @@ public class RootObject extends GraphicsObject {
 
             if (bg != null) bg.render(g);
 
-            if (rootGlow) {
+            if (rootBlur) {
                 GL2 gl = g.getGL();
                 if (!fbo4Blur.isInit()) fbo4Blur.init(gl);
                 objShader.initShaders(gl);
@@ -378,16 +385,10 @@ public class RootObject extends GraphicsObject {
                 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
                 objShader.setUniform("mask", 0.0f);
             }
-
             drawTweenManager(g);
-
             if (!bool) drawPerse(g, bool);
-
             drawCamera(g);
-
-
             drawLight(g);
-
             g.pushMatrix();
             {
                 setMatrix(g);
@@ -396,8 +397,9 @@ public class RootObject extends GraphicsObject {
             }
             g.popMatrix();
 
-            if (rootGlow) {
+            if (rootBlur) {
                 objShader.disableShader();
+                fbo4Blur.backDrawBuffers(g.getGL());
                 fbo4Blur.unBindFrameBuffer(g.getGL());
                 drawGlowFBO(g);
             }
@@ -405,7 +407,43 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    public void drawGlowFBO(Graphics g) {
+    private void drawMotionBlurFBO(GL2 gl, GLU glu) {
+        if (!fbo4MotionBlur.isInit()) fbo4MotionBlur.init(gl);
+        if (!fbo4MotionBlur2.isInit()) fbo4MotionBlur2.init(gl);
+        motionBlurShader.initShaders(gl);
+        gl.glActiveTexture(GL2.GL_TEXTURE0);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(2));
+        gl.glActiveTexture(GL2.GL_TEXTURE1);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4MotionBlur2.getTextureID());
+
+        this.motionBlurShader.enableShader(gl);
+        this.motionBlurShader.setUniform("sampler", 0);
+        this.motionBlurShader.setUniform("sampler2", 1);
+        this.motionBlurShader.setUniform("path", 1.0f);
+
+        fbo4MotionBlur.bindFrameBuffer(gl);
+
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+        blurShader.drawPlaneFillScreen(gl, glu);
+        fbo4MotionBlur.unBindFrameBuffer(gl);
+
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+        gl.glActiveTexture(GL2.GL_TEXTURE0);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4MotionBlur.getTextureID());
+        this.motionBlurShader.setUniform("sampler2", 0);
+        this.motionBlurShader.setUniform("path", 0.0f);
+        fbo4MotionBlur2.bindFrameBuffer(gl);
+
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+        blurShader.drawPlaneFillScreen(gl, glu);
+        fbo4MotionBlur2.unBindFrameBuffer(gl);
+
+        this.motionBlurShader.disableShader(gl);
+    }
+
+    private void drawGlowFBO(Graphics g) {
         GL2 gl = g.getGL();
         GLU glu = g.getGLU();
         gl.glEnable(GL2.GL_TEXTURE_2D);
@@ -415,30 +453,19 @@ public class RootObject extends GraphicsObject {
         gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);// ミップマップの生成
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 
+        if(rootMotionBlur)
+            drawMotionBlurFBO(gl, glu);
+
 
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
-        blurShader.blur(fbo4Blur, gl, glu);
-        // blur.shader.enableShader(gl);
-        // blur.shader.setUniform("sampler", 0);
-        // blur.shader.setUniform("path", 0.0f);
-        // gl.glActiveTexture(GL2.GL_TEXTURE0);
-        // gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo.getTextureID());
-        gl.glPushMatrix();
-        gl.glBegin(GL2.GL_QUADS);
-        gl.glColor3f(1, 1, 1);
-        gl.glTexCoord2f(1, 1);
-        gl.glVertex3f(blurShader.getWidth(), blurShader.getHeight(), 0);
-        gl.glTexCoord2f(0, 1);
-        gl.glVertex3f(0, blurShader.getHeight(), 0);
-        gl.glTexCoord2f(0, 0);
-        gl.glVertex3f(0, 0, 0);
-        gl.glTexCoord2f(1, 0);
-        gl.glVertex3f(blurShader.getWidth(), 0, 0);
-        gl.glEnd();
-        gl.glPopMatrix();
-        // blur.drawPlaneFillScreen(gl, glu);
+        if(rootMotionBlur)
+            blurShader.blur(fbo4Blur, fbo4MotionBlur2, gl, glu);
+        else
+            blurShader.blur(fbo4Blur, gl, glu);
+
+        blurShader.drawPlaneFillScreen(gl, glu);
         gl.glActiveTexture(GL2.GL_TEXTURE2);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
         gl.glActiveTexture(GL2.GL_TEXTURE1);
@@ -449,7 +476,6 @@ public class RootObject extends GraphicsObject {
         blurShader.disableShader();
 
     }
-
 
     /*
      * private int rootBufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index,
@@ -467,24 +493,26 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void render(Element el) {
-        el.setRootGlow(rootGlow);
-        if (rootGlow) {
-            if (el.isBlur() != BlurMode.MotionBlur)
+        el.setRootGlow(rootBlur);
+        this.rootMotionBlur = false;
+        if (rootBlur && selectionPhase == false) {
+            if (el.isBlur() == BlurMode.MotionBlur){
                 objShader.setUniform("mask", 2.0f);
+                this.rootMotionBlur = true;
+            }
             else if (el.isBlur() != BlurMode.None)
                 objShader.setUniform("mask", 1.0f);
             else
                 objShader.setUniform("mask", 0.0f);
 
-            if (el.isBlur() == BlurMode.Blur)
+            if (el.isBlur() == BlurMode.Blur || el.isBlur() == BlurMode.MotionBlur)
                 objShader.setUniform("draw", 0.0f);
             else
                 objShader.setUniform("draw", 1.0f);
 
             objShader.setUniform("texOn", 0.0f);
-            if (el instanceof Text) {
-                Text t = (Text)el;
-                t.setObjIDShader(objShader);
+            if (el.isEnableTexture()) {
+                el.setObjIDShader(objShader);
                 objShader.setUniform("texOn", 1.0f);
             }
         }
@@ -976,11 +1004,11 @@ public class RootObject extends GraphicsObject {
     }
 
     public boolean isRootBlur() {
-        return this.rootGlow;
+        return this.rootBlur;
     }
 
     public void setRootBlur(boolean blur) {
-        this.rootGlow = blur;
+        this.rootBlur = blur;
     }
 
 }

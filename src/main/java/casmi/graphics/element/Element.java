@@ -107,9 +107,11 @@ abstract public class Element implements Cloneable, Renderable {
     protected boolean enableBump = false;
 
     protected BlurMode blurMode = BlurMode.None;
-    protected boolean rootGlow = false;
+    protected boolean rootBlur = false;
+    protected boolean rootMotionBlur = false;
 
     protected double glowSize = 0.007;
+    protected Shader objIDShader;
 
 	/**
 	 * Returns the width of this Element's stroke.
@@ -692,6 +694,13 @@ abstract public class Element implements Cloneable, Renderable {
 		this.enableTexture = false;
 	}
 
+	/**Check texture is enable or not.
+	 *
+	 */
+	public boolean isEnableTexture() {
+	    return this.enableTexture;
+	}
+
 	/**Adds the mosueEventCallback to the Element
 	 *
 	 * @param callback
@@ -958,6 +967,15 @@ abstract public class Element implements Cloneable, Renderable {
 	}
 
 	public void setRootGlow(boolean glow) {
-	    this.rootGlow = glow;
+	    this.rootBlur = glow;
 	}
+
+	public void setRootMotionBlur(boolean glow) {
+        this.rootMotionBlur = glow;
+    }
+
+
+    public void setObjIDShader(Shader shader) {
+        this.objIDShader = shader;
+    }
 }

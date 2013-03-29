@@ -29,6 +29,8 @@ public class FrameBufferObject {
     }
 
     public FrameBufferObject(int width, int height, int texNumSize) {
+        if(this.texNumSize < 1)
+            this.texNumSize = 1;
         this.width = width;
         this.height = height;
         this.texNumSize = texNumSize;

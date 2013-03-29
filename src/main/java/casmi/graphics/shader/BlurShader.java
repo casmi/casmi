@@ -50,8 +50,13 @@ public class BlurShader {
         this.blurShader.enableShader(gl);
     }
 
-    public void normalBlur(FrameBufferObject fbo1, GL2 gl, GLU glu) {
-
+    public void blur(FrameBufferObject fbo1, FrameBufferObject fbo2, GL2 gl, GLU glu) {
+        blur(fbo1, gl, glu);
+        gl.glActiveTexture(GL2.GL_TEXTURE2);
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo2.getTextureID());
+        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);//ミップマップの生成
+        this.blurShader.setUniform("motion", 1.0f);
+        this.blurShader.setUniform("motionMask", 2);
     }
 
     public void blur(FrameBufferObject fbo1, GL2 gl, GLU glu) {
@@ -89,6 +94,7 @@ public class BlurShader {
         this.blurShader.setUniform("sampler2", 0);
         this.blurShader.setUniform("mask", 1);
         this.blurShader.setUniform("path", 1.0f);
+        this.blurShader.setUniform("motion", 0.0f);
     }
 
 
