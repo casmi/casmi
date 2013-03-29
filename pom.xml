@@ -8,7 +8,7 @@
 
     <name>casmi</name>
     <url>http://casmi.github.com/</url>
-    <description>casmi is an opensource free software and is Java based library with OpenGL that is using in production or development of 2D/3D visualization systems. It can support programmers with simple and intuitive interfaces for their implementation. It can work on cross platform (GNU/Linux, Mac OS X, and Windows). casmi is sutable for visualization, because it originaly desinged for information visualization, especially with huge data set.</description>
+    <description>A Java library for 2D/3D easy visualization</description>
 
     <licenses>
         <license>
@@ -25,22 +25,52 @@
         </developerConnection>
     </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>casmi</id>
-            <name>casmi</name>
-            <url>http://casmi.github.com/maven-repo/</url>
-        </repository>
-    </repositories>
-    
     <organization>
         <name>Xcoo, Inc.</name>
         <url>http://www.xcoo.jp/</url>
     </organization>
+
+    <developers>
+        <developer>
+            <id>kuni</id>
+            <name>Kunihiro Nishimura</name>
+            <email>kuni@xcoo.jp</email>
+            <organization>Xcoo, Inc.</organization>
+            <organizationUrl>http://www.xcoo.jp/</organizationUrl>
+        </developer>
+        <developer>
+            <id>takashi</id>
+            <name>Takashi Aoki</name>
+            <email>takashi@xcoo.jp</email>
+            <organization>Xcoo, Inc.</organization>
+            <organizationUrl>http://www.xcoo.jp/</organizationUrl>
+        </developer>
+        <developer>
+            <id>take</id>
+            <name>Toshiki Takeuchi</name>
+            <email>take@xcoo.jp</email>
+            <organization>Xcoo, Inc.</organization>
+            <organizationUrl>http://www.xcoo.jp/</organizationUrl>
+        </developer>
+        <developer>
+            <id>yuki</id>
+            <name>Yuki Ban</name>
+            <email>yuki@xcoo.jp</email>
+            <organization>Xcoo, Inc.</organization>
+            <organizationUrl>http://www.xcoo.jp/</organizationUrl>
+        </developer>
+        <developer>
+            <id>shigeodayo</id>
+            <name>Shigeo Yoshida</name>
+            <email>shigeodayo@xcoo.jp</email>
+            <organization>Xcoo, Inc.</organization>
+            <organizationUrl>http://www.xcoo.jp/</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -118,7 +148,7 @@
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>            
+            <artifactId>gluegen-rt</artifactId>
             <version>2.0-rc11</version>
             <classifier>natives-linux-i586</classifier>
             <scope>runtime</scope>
@@ -132,7 +162,7 @@
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>            
+            <artifactId>gluegen-rt</artifactId>
             <version>2.0-rc11</version>
             <classifier>natives-linux-armv6</classifier>
             <scope>runtime</scope>
@@ -146,7 +176,7 @@
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>            
+            <artifactId>gluegen-rt</artifactId>
             <version>2.0-rc11</version>
             <classifier>natives-solaris-i586</classifier>
             <scope>runtime</scope>
@@ -160,21 +190,21 @@
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>            
+            <artifactId>gluegen-rt</artifactId>
             <version>2.0-rc11</version>
             <classifier>natives-macosx-universal</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>            
+            <artifactId>gluegen-rt</artifactId>
             <version>2.0-rc11</version>
             <classifier>natives-windows-i586</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>            
+            <artifactId>gluegen-rt</artifactId>
             <version>2.0-rc11</version>
             <classifier>natives-windows-amd64</classifier>
             <scope>runtime</scope>
