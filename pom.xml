@@ -21,8 +21,7 @@
     <scm>
         <url>https://github.com/casmi/casmi</url>
         <connection>scm:git:git://github.com/casmi/casmi.git</connection>
-        <developerConnection>scm:git:git://github.com/casmi/casmi.git
-        </developerConnection>
+        <developerConnection>scm:git:git://github.com/casmi/casmi.git</developerConnection>
     </scm>
 
     <organization>
