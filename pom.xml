@@ -8,7 +8,7 @@
 
     <name>casmi</name>
     <url>http://casmi.github.com/</url>
-    <description>A Java library for 2D/3D easy visualization</description>
+    <description>A Java library for 2D/3D information visualization with simple and intuitive API for graphics, database, and analysis of data</description>
 
     <licenses>
         <license>
