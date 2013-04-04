@@ -3,7 +3,7 @@
 
     <groupId>com.github.casmi</groupId>
     <artifactId>casmi</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>casmi</name>
