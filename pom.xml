@@ -25,9 +25,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/casmi/casmi</url>
-        <connection>scm:git:git://github.com/casmi/casmi.git</connection>
-        <developerConnection>scm:git:git://github.com/casmi/casmi.git</developerConnection>
+        <url>git@github.com:casmi/casmi.git</url>
+        <connection>scm:git:git@github.com:casmi/casmi.git</connection>
+        <developerConnection>scm:git:git@github.com:casmi/casmi.git</developerConnection>
     </scm>
 
     <organization>
