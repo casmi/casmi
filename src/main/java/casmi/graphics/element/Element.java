@@ -106,7 +106,7 @@ abstract public class Element implements Cloneable, Renderable {
      *              The width of the Element's stroke.
      */
     public double getStrokeWidth() {
-        return (double) strokeWidth;
+        return strokeWidth;
     }
 
     /**
@@ -271,6 +271,7 @@ abstract public class Element implements Cloneable, Renderable {
         this.fillColor.setAlpha(alpha);
     }
 
+    @Override
     public void setAlpha(double alpha) {
         this.sceneA = alpha;
     }
@@ -797,6 +798,7 @@ abstract public class Element implements Cloneable, Renderable {
      * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
      *     instead.
      */
+    @Deprecated
     public void visible() {
         visible = true;
     }
@@ -807,6 +809,7 @@ abstract public class Element implements Cloneable, Renderable {
      * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
      *     instead.
      */
+    @Deprecated
     public void hidden() {
         visible = false;
     }

@@ -49,6 +49,7 @@ public class PopupMenu extends JPopupMenu {
         show(target, x, y);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void show() {
         show(target, target.getMouseX(), target.getHeight() - target.getMouseY());
