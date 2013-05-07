@@ -53,6 +53,10 @@ public class AppletRunner {
         runApplet(applet, title);
     }
 
+    public static void run(Applet applet, String title) {
+        runApplet(applet, title);
+    }
+
     private static void initBeforeCreateApplet(String title) {
         OS os = SystemUtil.getOS();
         if (os == OS.MAC || os == OS.MAC_64) {
