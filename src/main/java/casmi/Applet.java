@@ -813,7 +813,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.clearSelectionList();
         rootObject.rootBufRender(g, getMouseX(), getMouseY(), false,0);
         rootObject.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
-        update(g);
+        update();
     }
 
     private final void updateObjects() {
