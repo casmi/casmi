@@ -13,6 +13,4 @@ public enum BlurMode {
 
     MotionBlur,
 
-    None
-
 }

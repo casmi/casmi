@@ -106,7 +106,8 @@ abstract public class Element implements Cloneable, Renderable {
 	protected boolean enableShader = false;
     protected boolean enableBump = false;
 
-    protected BlurMode blurMode = BlurMode.None;
+    protected BlurMode blurMode = BlurMode.Blur;
+    protected boolean enableBlur = false;
     protected boolean rootBlur = false;
     protected boolean rootMotionBlur = false;
 
@@ -878,20 +879,62 @@ abstract public class Element implements Cloneable, Renderable {
 		return depthTest;
 	}
 
-	public BlurMode isBlur() {
+	public boolean isBlur() {
+	    return this.enableBlur;
+	}
+
+	public BlurMode getBlurMode() {
 	    return this.blurMode;
 	}
 
+	/**Enables the blur shader.
+    *
+    */
 	public void enableBlur() {
-	    this.blurMode = BlurMode.Blur;
-	}
-
-	public void enableBlur(BlurMode blur) {
-	        this.blurMode = blur;
+	        this.enableBlur = true;
+	        if(this instanceof GraphicsObject){
+	            GraphicsObject g = (GraphicsObject)this;
+	            for (Object obj : g.getObjectList()) {
+	                if(obj instanceof Element)
+	                    ((Element) obj).enableBlur();
+	                if(obj instanceof Group)
+	                    ((Group) obj).enableBlur();
+	            }
+	        }
     }
 
+	/**Disable the blur shader.
+    *
+    */
 	public void disableBlur() {
-	    this.blurMode = BlurMode.None;
+	    this.enableBlur = false;
+        if(this instanceof GraphicsObject){
+            GraphicsObject g = (GraphicsObject)this;
+            for (Object obj : g.getObjectList()) {
+                if(obj instanceof Element)
+                    ((Element) obj).disableBlur();
+                if(obj instanceof Group)
+                    ((Group) obj).disableBlur();
+            }
+        }
+	}
+
+	/**Sets BlurMode
+	 *
+	 *@param blur BlurMode (see casmi.graphics.shader.BlurMode)
+	 *
+	 */
+	public void setBlurMode(BlurMode blur) {
+        this.blurMode = blur;
+        if(this instanceof GraphicsObject){
+            GraphicsObject g = (GraphicsObject)this;
+            for (Object obj : g.getObjectList()) {
+                if(obj instanceof Element)
+                    ((Element) obj).setBlurMode(blur);
+                if(obj instanceof Group)
+                    ((Group) obj).setBlurMode(blur);
+            }
+        }
 	}
 
 	public void setDepthTest(boolean depthTest) {

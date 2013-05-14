@@ -64,6 +64,7 @@ public class RootObject extends GraphicsObject {
     private BlurShader blurShader;
     private Shader motionBlurShader;
     private Shader objShader;
+    private int windowWidth, windowHeight;
 
     public final int NO_SELECTIONBUFF = 10;
 
@@ -259,18 +260,19 @@ public class RootObject extends GraphicsObject {
     }
 
     public void enableBlur(int width, int height) {
+        this.windowWidth = width;
+        this.windowHeight = height;
         this.rootBlur = true;
-        if (this.fbo4Blur == null)
+        if(this.fbo4Blur==null)
+        createBlurShader(width, height);
+    }
+
+    public void createBlurShader(int width, int height) {
             this.fbo4Blur = new FrameBufferObject(width, height, 3);
-        if (this.fbo4MotionBlur == null)
             this.fbo4MotionBlur = new FrameBufferObject(width, height);
-        if (this.fbo4MotionBlur2 == null)
             this.fbo4MotionBlur2 = new FrameBufferObject(width, height);
-        if (this.objShader == null)
             this.objShader = new Shader("ObjID");
-        if (this.blurShader == null)
             this.blurShader = new BlurShader(width, height);
-        if (this.motionBlurShader == null)
             this.motionBlurShader = new Shader("MotionBlur");
     }
 
@@ -383,6 +385,7 @@ public class RootObject extends GraphicsObject {
                 fbo4Blur.drawBuffers(gl);
                 gl.glClearColor(0, 0, 0, 1);
                 gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+                objShader.enableShader(gl);
                 objShader.setUniform("mask", 0.0f);
             }
             drawTweenManager(g);
@@ -496,16 +499,16 @@ public class RootObject extends GraphicsObject {
         el.setRootGlow(rootBlur);
         this.rootMotionBlur = false;
         if (rootBlur && selectionPhase == false) {
-            if (el.isBlur() == BlurMode.MotionBlur){
+            if (el.isBlur() && el.getBlurMode() == BlurMode.MotionBlur){
                 objShader.setUniform("mask", 2.0f);
                 this.rootMotionBlur = true;
             }
-            else if (el.isBlur() != BlurMode.None)
+            else if (el.isBlur())
                 objShader.setUniform("mask", 1.0f);
             else
                 objShader.setUniform("mask", 0.0f);
 
-            if (el.isBlur() == BlurMode.Blur || el.isBlur() == BlurMode.MotionBlur)
+            if (el.isBlur() && ( el.getBlurMode() == BlurMode.Blur || el.getBlurMode() == BlurMode.MotionBlur))
                 objShader.setUniform("draw", 0.0f);
             else
                 objShader.setUniform("draw", 1.0f);
@@ -516,6 +519,7 @@ public class RootObject extends GraphicsObject {
                 objShader.setUniform("texOn", 1.0f);
             }
         }
+
         if (el.isVisible()) {
             if (el.isMasked()) {
                 el.getMask().render(g);
@@ -573,10 +577,12 @@ public class RootObject extends GraphicsObject {
                     if (o.getMouseOverCallback() != null) {
                         selectionbuff = true;
                     }
+                    o.setGraphicsObjectShader(rootBlur, objShader);
                     o.bufRender(g, mouseX, mouseY, false, selectionIndex);
                     if (o.isSelectionbuff() == true) selectionbuff = true;
                     if (((Element)o).isMasked()) g.getGL().glDisable(GL2.GL_STENCIL_TEST);
                 } else {
+                    o.setGraphicsObjectShader(rootBlur, objShader);
                     selectionIndex =
                         o.bufRender(g, mouseX, mouseY, true, selectionIndex, selectedIndex);
 
@@ -989,9 +995,15 @@ public class RootObject extends GraphicsObject {
         // blur.init(gl);
     }
 
+    public void resetShader() {
+        createBlurShader(windowWidth, windowHeight);
+        System.out.println("reset!!");
+    }
+
     @Override
     public void resetObjects() {
         resetFBO(g.getGL());
+        resetShader();
         for (Object obj : objectList) {
             if (obj instanceof Reset) {
                 Reset el = (Reset)obj;

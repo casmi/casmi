@@ -38,9 +38,6 @@ public class Sphere extends Element implements Renderable, Reset {
     private int slices = 30;
     private int stacks = 30;
 
-    private int texID;
-    private boolean start = false;
-
     /**
      * Creates a new Sphere object using radius.
      *
@@ -137,7 +134,6 @@ public class Sphere extends Element implements Renderable, Reset {
         }
 
         if (this.enableTexture) {
-            //normalMap.enableTexture(gl);
         	texture.enableTexture(gl);
         }
 
@@ -168,7 +164,7 @@ public class Sphere extends Element implements Renderable, Reset {
         gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
 
         if (this.enableTexture) {
-        //	texture.disableTexture(gl);
+        	texture.disableTexture(gl);
         }
 
         if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest()==false) && this.isThreeD() == false) {

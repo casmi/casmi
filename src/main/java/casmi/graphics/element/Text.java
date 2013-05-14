@@ -28,7 +28,6 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
-import casmi.graphics.shader.BlurMode;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -185,7 +184,7 @@ public class Text extends Element implements Renderable, Reset {
     		gl.glDisable(GL2.GL_DEPTH_TEST);
 
 
-    	if (blurMode!=BlurMode.None && this.rootBlur){
+    	if (enableBlur && this.rootBlur){
     	    gl.glActiveTexture(GL2.GL_TEXTURE0);
             this.objIDShader.setUniform("sampler", 0);
     	}
