@@ -453,10 +453,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
-
 //stuck selectionID of elements in a group
-//                    for (int j = sIndex; j < selectionIndex; j++) {
-//                        o.getSelectionList().add(j);
+//					for (int j = sIndex; j < selectionIndex; j++) {
+//						o.getSelectionList().add(j);
 //
 //					}
 					if (o.getMouseOverCallback() != null) {
@@ -930,6 +929,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	    this.rootBlur = rootBlur;
 	    this.objShader = objectShader;
 	}
+
+
+
 }
 
 

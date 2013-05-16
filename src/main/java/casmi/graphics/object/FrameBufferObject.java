@@ -16,9 +16,7 @@ public class FrameBufferObject {
 
     private boolean init;
 
-    //FBO逕ｨID
     private int fboID;
-    //RBO逕ｨID
     private int rboID;
 
     public FrameBufferObject(int width, int height) {
@@ -45,7 +43,7 @@ public class FrameBufferObject {
     }
 
     public void bindFrameBuffer(GL2 gl) {
-        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, this.fboID);
+        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, this.fboID);//描画先の切り替え
     }
 
     public void unBindFrameBuffer(GL2 gl) {
@@ -101,58 +99,42 @@ public class FrameBufferObject {
         gl.glGenTextures(this.texNumSize, this.texID, 0);
     }
 
-    //---------- 繝�け繧ｹ繝√Ε繧ｪ繝悶ず繧ｧ繧ｯ繝井ｽ懈� ---------//
     private void createTexture(GL2 gl)
     {
         genTexture(gl);
         gl.glPixelStorei(GL2.GL_UNPACK_ALIGNMENT, 1);
         for(int tex: this.texID){
-         gl.glBindTexture(GL2.GL_TEXTURE_2D, tex);
+            gl.glBindTexture(GL2.GL_TEXTURE_2D, tex);
 
-          gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
-          gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR_MIPMAP_LINEAR);
-
-          gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
-          gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
-          gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_GENERATE_MIPMAP, GL2.GL_TRUE);  //閾ｪ蜍慕噪縺ｪ繝溘ャ繝励�繝��縺ｮ菴懈�
-         // makeImage(512, 512, 4);
-          gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.width, this.height, 0, GL2.GL_RGBA, GL2.GL_FLOAT, null);
-          gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+            gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+            gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR_MIPMAP_LINEAR);
+            gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
+            gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
+            gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_GENERATE_MIPMAP, GL2.GL_TRUE);
+            gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.width, this.height, 0, GL2.GL_RGBA, GL2.GL_FLOAT, null);
+            gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
         }
 
     }
 
-
-    //---------- FBO,RBO縺ｮ菴懈� ----------------//
     public void createFBOandRBO(GL2 gl)
     {
-          //FBO菴懈�
         fboID = genFBO(gl);
-          //glGenFramebuffers(1, FboID[0]);
-          gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, fboID);
+        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, fboID);
 
+        rboID = genRB(gl);
+        gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, rboID);//バインド
 
-          //RBO縺ｮ菴懈�
-          rboID = genRB(gl);
-          //gl.glGenRenderbuffers(1, RboID[0]);//RGO菴懈�
-          gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, rboID);//繝舌う繝ｳ繝�
-          //繝｡繝｢繝ｪ遒ｺ菫�          gl.glRenderbufferStorage(GL2.GL_RENDERBUFFER, GL2.GL_DEPTH_COMPONENT, this.width, this.height);
-          gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, 0);//RBO縺ｮ繝�ヵ繧ｩ繝ｫ繝医∈繝舌う繝ｳ繝�
+        gl.glRenderbufferStorage(GL2.GL_RENDERBUFFER, GL2.GL_DEPTH_COMPONENT, this.width, this.height);
+        gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, 0);//RBOのデフォルトへバインド
 
-          /* 髢｢騾｣莉倥¢(繧｢繧ｿ繝�メ繝｡繝ｳ繝� */
+        for(int i=0; i<this.texNumSize; i++)
+            gl.glFramebufferTexture2D(GL2.GL_FRAMEBUFFER, GL2.GL_COLOR_ATTACHMENT0 + i, GL2.GL_TEXTURE_2D, texID[i], 0);
 
-          //繝�け繧ｹ繝√Ε->FBO (GL_COLOR_ATTACHMENT0縺ｫ謗･邯�
-          for(int i=0; i<this.texNumSize; i++)
-              gl.glFramebufferTexture2D(GL2.GL_FRAMEBUFFER, GL2.GL_COLOR_ATTACHMENT0 + i, GL2.GL_TEXTURE_2D, texID[i], 0);
-
-          //RBO->FBO
-          gl.glFramebufferRenderbuffer(GL2.GL_FRAMEBUFFER, GL2.GL_DEPTH_ATTACHMENT, GL2.GL_RENDERBUFFER, rboID);
-
-          gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);//FBO縺ｮ繝�ヵ繧ｩ繝ｫ繝医∈繝舌う繝ｳ繝�
-          //FBO縺後〒縺阪※縺�ｋ縺九�繝√ぉ繝�け
-          if(checkFramebufferStatus(gl) == false ){
-                  System.out.println("out");
-          }
+        gl.glFramebufferRenderbuffer(GL2.GL_FRAMEBUFFER, GL2.GL_DEPTH_ATTACHMENT, GL2.GL_RENDERBUFFER, rboID);
+        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);//FBOのデフォルトへバインド
+        if(checkFramebufferStatus(gl) == false )
+            System.out.println("failed to make framebuffer");
     }
 
     public boolean isInit()
@@ -162,10 +144,8 @@ public class FrameBufferObject {
 
     private boolean checkFramebufferStatus(GL2 gl)
     {
-          // check FBO status
-          int status = gl.glCheckFramebufferStatus(GL2.GL_FRAMEBUFFER);
-          switch(status)
-          {
+        int status = gl.glCheckFramebufferStatus(GL2.GL_FRAMEBUFFER);
+        switch(status){
           case GL2.GL_FRAMEBUFFER_COMPLETE:
                   System.out.println( "Framebuffer complete.");
                   return true;
