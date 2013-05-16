@@ -47,12 +47,12 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
+import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import casmi.util.FileUtil;
 import casmi.exception.CasmiRuntimeException;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
@@ -75,6 +75,7 @@ import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;
 import casmi.tween.TweenSerialGroup;
 import casmi.ui.PopupMenu;
+import casmi.util.FileUtil;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -82,7 +83,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 /**
  * casmi Applet.
  *
- * @author takashi, Y. Ban, T. Takeuchi
+ * @author Takashi AOKI <federkasten@me.com>, Y. Ban, T. Takeuchi
  */
 abstract public class Applet extends JApplet
 implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
@@ -103,409 +104,409 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private MouseButton mouseButton;
     private MouseEvent mouseEvent;
 
-    private GLCapabilities caps;
-    private GLJPanel panel = null;
-    private AppletGLEventListener listener = null;
+	private GLCapabilities caps;
+	private GLJPanel panel = null;
+	private AppletGLEventListener listener = null;
 
-    private Timer timer;
+	private Timer timer;
 
-    private boolean isFullScreen = false;
-    private boolean initialFullScreen = false;
-    private int normalWidth, normalHeight;
+	private boolean isFullScreen = false;
+	private boolean initialFullScreen = false;
+	private int normalWidth, normalHeight;
 
-    private boolean isInitializing = true;
+	private boolean isInitializing = true;
 
-    private boolean runAsApplication = false;
+	private boolean runAsApplication = false;
 
-    // private boolean selectionBuffer = false;
+	// private boolean selectionBuffer = false;
 
-    private boolean timeline = false;
-    private Timeline rootTimeline;
-    //private TimelineRender rootTimelineRender;
+	private boolean timeline = false;
+	private Timeline rootTimeline;
+	//private TimelineRender rootTimelineRender;
 
-    private boolean rootObjectInit = false;
-    private RootObject rootObject;
-    private List<Updatable> updateObjectList = new ArrayList<Updatable>();
+	private boolean rootObjectInit = false;
+	private RootObject rootObject;
+	private List<Updatable> updateObjectList = new ArrayList<Updatable>();
 
-    //private static final int SELECTION_BUFSIZE = 1024 * 1024;
-    // private int selectedIndex = 0;
+	//private static final int SELECTION_BUFSIZE = 1024 * 1024;
+	// private int selectedIndex = 0;
 
-    // for capturing a window
-    private ImageType imageType = ImageType.JPG;
-    private boolean saveImageFlag = false;
-    private boolean saveBackground = true;
-    private String saveFile;
+	// for capturing a window
+	private ImageType imageType = ImageType.JPG;
+	private boolean saveImageFlag = false;
+	private boolean saveBackground = true;
+	private String saveFile;
 
-    // Abstract methods.
-    // -------------------------------------------------------------------------
-    abstract public void setup();
+	// Abstract methods.
+	// -------------------------------------------------------------------------
+	abstract public void setup();
 
-    abstract public void update();
+	abstract public void update();
 
-    public void exit() {}
-    // TODO: will use abstract method from next version
-    // abstract public void exit();
+	public void exit() {}
+	// TODO: will use abstract method from next version
+	// abstract public void exit();
 
-    abstract public void mouseEvent(MouseEvent e, MouseButton b);
+	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
-    abstract public void keyEvent(KeyEvent e);
-    // -------------------------------------------------------------------------
+	abstract public void keyEvent(KeyEvent e);
+	// -------------------------------------------------------------------------
 
-    public void setGLParam(GL2 gl) {
+	public void setGLParam(GL2 gl) {
 
-    }
+	}
 
-    class GLRedisplayTask extends TimerTask {
+	class GLRedisplayTask extends TimerTask {
 
-        @Override
-        public void run() {
-            if (panel != null) { // TODO if no update, do not re-render
-                if (initialFullScreen) {
-                    setFullScreen(true);
-                    initialFullScreen = false;
-                }
+		@Override
+		public void run() {
+			if (panel != null) { // TODO if no update, do not re-render
+			    if (initialFullScreen) {
+			        setFullScreen(true);
+			        initialFullScreen = false;
+			    }
 
-                panel.display();
+				panel.display();
 
-                mouse.setPressed(false);
-                mouse.setClicked(false);
-                mouse.setDoubleClicked(false);
-                mouse.setEntered(false);
-                mouse.setExited(false);
-                mouse.setReleased(false);
-                mouse.setDragged(false);
-                mouse.setMoved(false);
+				mouse.setPressed(false);
+				mouse.setClicked(false);
+				mouse.setDoubleClicked(false);
+				mouse.setEntered(false);
+				mouse.setExited(false);
+				mouse.setReleased(false);
+				mouse.setDragged(false);
+				mouse.setMoved(false);
 
-                keyboard.setPressed(false);
-                keyboard.setReleased(false);
-                keyboard.setTyped(false);
+				keyboard.setPressed(false);
+				keyboard.setReleased(false);
+				keyboard.setTyped(false);
 
-                rootObject.setMouseEvent(null);
-            }
-        }
-    }
+				rootObject.setMouseEvent(null);
+			}
+		}
+	}
 
-    public void initRootOject() {
-        rootObject = new RootObject();
-        rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
-        rootObject.setDepthTest(false);
-    }
+	public void initRootOject() {
+		rootObject = new RootObject();
+		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
+		rootObject.setDepthTest(false);
+	}
 
-    @Override
-    public void init() {
-        initRootOject();
+	@Override
+	public void init() {
+		initRootOject();
 
-        setSize(100, 100);
+		setSize(100, 100);
 
-        // JOGL setup
-        GLProfile profile = GLProfile.get(GLProfile.GL2);
-        this.caps = new GLCapabilities(profile);
-        this.caps.setStencilBits(8);
-        this.panel = new GLJPanel(this.caps);
-        this.listener = new AppletGLEventListener(this, getWidth(), getHeight());
-        panel.addGLEventListener(listener);
-        panel.addMouseListener(this);
-        panel.addMouseMotionListener(this);
-        panel.addMouseWheelListener(this);
-        panel.addKeyListener(this);
+		// JOGL setup
+		GLProfile profile = GLProfile.get(GLProfile.GL2);
+		this.caps = new GLCapabilities(profile);
+		this.caps.setStencilBits(8);
+		this.panel = new GLJPanel(this.caps);
+		this.listener = new AppletGLEventListener(this, getWidth(), getHeight());
+		panel.addGLEventListener(listener);
+		panel.addMouseListener(this);
+		panel.addMouseMotionListener(this);
+		panel.addMouseWheelListener(this);
+		panel.addKeyListener(this);
 
-        add(panel);
-        setFocusable(false);
-        panel.setFocusable(true);
+		add(panel);
+		setFocusable(false);
+		panel.setFocusable(true);
 
-        if (runAsApplication) {
-            AppletRunner.frame.setJMenuBar(menuBar.getJMenuBar());
-        } else {
-            setJMenuBar(menuBar.getJMenuBar());
-        }
+		if (runAsApplication) {
+		    AppletRunner.frame.setJMenuBar(menuBar.getJMenuBar());
+		} else {
+		    setJMenuBar(menuBar.getJMenuBar());
+		}
 
-        timer = new Timer();
-        timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
+		timer = new Timer();
+		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
 
-            @Override
-            public void run() {
-                exit();
+		    @Override
+		    public void run() {
+		        exit();
             }
         });
-    }
+	}
 
-    @Override
-    public void setSize(int width, int height) {
-        normalWidth  = width;
-        normalHeight = height;
-        innerSetSize(width, height);
-    }
+	@Override
+	public void setSize(int width, int height) {
+	    normalWidth  = width;
+	    normalHeight = height;
+	    innerSetSize(width, height);
+	}
 
-    private void innerSetSize(int width, int height) {
-        this.width  = width;
-        this.height = height;
-        super.setSize(new Dimension(width, height));
+	private void innerSetSize(int width, int height) {
+		this.width  = width;
+		this.height = height;
+		super.setSize(new Dimension(width, height));
 
-        if (panel != null) {
-            panel.setSize(new Dimension(width, height));
-        }
-    }
+		if (panel != null) {
+			panel.setSize(new Dimension(width, height));
+		}
+	}
 
-    void setAppletSize(int w, int h) {
-        this.width = w;
-        this.height = h;
-    }
+	void setAppletSize(int w, int h) {
+	    this.width = w;
+	    this.height = h;
+	}
 
-    /**
-     * Changes a cursor image.
-     *
-     * @param cursorMode
-     *            A cursor type.
-     */
-    public void setCursor(CursorMode cursorMode) {
-        Cursor c = CursorMode.getAWTCursor(cursorMode);
-        if (c.getType() == getCursor().getType()) return;
-        setCursor(c);
-    }
+	/**
+	 * Changes a cursor image.
+	 *
+	 * @param cursorMode
+	 *            A cursor type.
+	 */
+	public void setCursor(CursorMode cursorMode) {
+	    Cursor c = CursorMode.getAWTCursor(cursorMode);
+	    if (c.getType() == getCursor().getType()) return;
+		setCursor(c);
+	}
 
-    public void setCursor(String path, int hotspotX, int hotspotY) throws IOException {
-        Image image = ImageIO.read(new java.io.File(path));
+	public void setCursor(String path, int hotspotX, int hotspotY) throws IOException {
+		Image image = ImageIO.read(new java.io.File(path));
 
-        Point hotspot = new Point(hotspotX, hotspotY);
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        Cursor cursor = tk.createCustomCursor(image, hotspot, "Custom Cursor");
-        setCursor(cursor);
-    }
+		Point hotspot = new Point(hotspotX, hotspotY);
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Cursor cursor = tk.createCustomCursor(image, hotspot, "Custom Cursor");
+		setCursor(cursor);
+	}
 
-    public void setFPS(double fps) {
-        this.fps = fps;
+	public void setFPS(double fps) {
+		this.fps = fps;
 
-        if (!isInitializing) {
-            timer.cancel();
-            timer = new Timer();
-            timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
-        }
-    }
+		if (!isInitializing) {
+		    timer.cancel();
+		    timer = new Timer();
+		    timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
+		}
+	}
 
-    public double getFPS() {
-        return fps;
-    }
+	public double getFPS() {
+		return fps;
+	}
 
-    public double getWorkingFPS() {
-        return workingFPS;
-    }
+	public double getWorkingFPS() {
+	    return workingFPS;
+	}
 
-    public void setDepthTest(boolean depthTest) {
-        rootObject.setDepthTest(depthTest);
-    }
+	public void setDepthTest(boolean depthTest) {
+		rootObject.setDepthTest(depthTest);
+	}
 
-    public boolean isDepthTest() {
-        return rootObject.isDepthTest();
-    }
+	public boolean isDepthTest() {
+		return rootObject.isDepthTest();
+	}
 
-    public boolean isFullScreen() {
+	public boolean isFullScreen() {
 
-        return isFullScreen;
-    }
+		return isFullScreen;
+	}
 
-    public void setFullScreen(boolean fullScreen) {
-        if (isInitializing) {
-            initialFullScreen = fullScreen;
-            if (fullScreen) {
-                AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
-                innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
-                             AppletRunner.displayDevice.getFullScreenWindow().getHeight());
-            }
-            return;
-        }
+	public void setFullScreen(boolean fullScreen) {
+		if (isInitializing) {
+		    initialFullScreen = fullScreen;
+		    if (fullScreen) {
+		        AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
+		        innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
+		                     AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+		    }
+		    return;
+		}
 
-        if (this.isFullScreen == fullScreen) {
-            return;
-        }
+		if (this.isFullScreen == fullScreen) {
+			return;
+		}
 
-        this.isFullScreen = fullScreen;
+		this.isFullScreen = fullScreen;
 
-        if (AppletRunner.frame.isDisplayable()) {
-            AppletRunner.frame.dispose();
-        }
+		if (AppletRunner.frame.isDisplayable()) {
+		    AppletRunner.frame.dispose();
+		}
 
-        if (fullScreen) {
-            AppletRunner.frame.setUndecorated(true);
-            AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
+		if (fullScreen) {
+		    AppletRunner.frame.setUndecorated(true);
+			AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
 
-            innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
-                         AppletRunner.displayDevice.getFullScreenWindow().getHeight());
-            AppletRunner.frame.setSize(width, height);
-        } else {
-            innerSetSize(normalWidth, normalHeight);
-            AppletRunner.frame.setUndecorated(false);
-            AppletRunner.displayDevice.setFullScreenWindow(null);
-            Insets insets = AppletRunner.frame.getInsets();
-            AppletRunner.frame.setSize(width  + insets.left + insets.right,
-                                       height + insets.top  + insets.bottom);
-        }
-        AppletRunner.frame.setVisible(true);
-    }
+			innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
+			             AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+			AppletRunner.frame.setSize(width, height);
+		} else {
+		    innerSetSize(normalWidth, normalHeight);
+		    AppletRunner.frame.setUndecorated(false);
+			AppletRunner.displayDevice.setFullScreenWindow(null);
+			Insets insets = AppletRunner.frame.getInsets();
+			AppletRunner.frame.setSize(width  + insets.left + insets.right,
+	                                   height + insets.top  + insets.bottom);
+		}
+		AppletRunner.frame.setVisible(true);
+	}
 
-    @Override
-    public void mousePressed(java.awt.event.MouseEvent e) {
-        mouse.setPressed(true);
+	@Override
+	public void mousePressed(java.awt.event.MouseEvent e) {
+		mouse.setPressed(true);
 
-        switch (e.getButton()) {
-        case java.awt.event.MouseEvent.BUTTON1:
-            mouseButton = MouseButton.LEFT;
-            break;
-        case java.awt.event.MouseEvent.BUTTON2:
-            mouseButton = MouseButton.MIDDLE;
-            break;
-        case java.awt.event.MouseEvent.BUTTON3:
-            mouseButton = MouseButton.RIGHT;
-            break;
-        }
-        mouse.setButtonPressed(mouseButton, true);
-        mouseEvent(MouseEvent.PRESSED, mouseButton);
+	    switch (e.getButton()) {
+		case java.awt.event.MouseEvent.BUTTON1:
+			mouseButton = MouseButton.LEFT;
+			break;
+		case java.awt.event.MouseEvent.BUTTON2:
+			mouseButton = MouseButton.MIDDLE;
+			break;
+		case java.awt.event.MouseEvent.BUTTON3:
+			mouseButton = MouseButton.RIGHT;
+			break;
+		}
+	    mouse.setButtonPressed(mouseButton, true);
+		mouseEvent(MouseEvent.PRESSED, mouseButton);
 
-        rootObject.setMouseEvent(MouseEvent.PRESSED);
+		rootObject.setMouseEvent(MouseEvent.PRESSED);
 
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
-            rootTimeline.getScene().setMouseEvent(MouseEvent.PRESSED);
-        }
-    }
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.PRESSED);
+		}
+	}
 
-    @Override
-    public void mouseReleased(java.awt.event.MouseEvent e) {
-        mouse.setReleased(true);
-        switch (e.getButton()) {
-        case java.awt.event.MouseEvent.BUTTON1:
-            mouseButton = MouseButton.LEFT;
-            break;
-        case java.awt.event.MouseEvent.BUTTON2:
-            mouseButton = MouseButton.MIDDLE;
-            break;
-        case java.awt.event.MouseEvent.BUTTON3:
-            mouseButton = MouseButton.RIGHT;
-            break;
-        }
+	@Override
+	public void mouseReleased(java.awt.event.MouseEvent e) {
+		mouse.setReleased(true);
+	    switch (e.getButton()) {
+		case java.awt.event.MouseEvent.BUTTON1:
+			mouseButton = MouseButton.LEFT;
+			break;
+		case java.awt.event.MouseEvent.BUTTON2:
+			mouseButton = MouseButton.MIDDLE;
+			break;
+		case java.awt.event.MouseEvent.BUTTON3:
+			mouseButton = MouseButton.RIGHT;
+			break;
+		}
 
-        mouse.setButtonPressed(mouseButton, false);
-        mouseEvent(MouseEvent.RELEASED, mouseButton);
-        rootObject.setMouseEvent(MouseEvent.RELEASED);
+	    mouse.setButtonPressed(mouseButton, false);
+	    mouseEvent(MouseEvent.RELEASED, mouseButton);
+		rootObject.setMouseEvent(MouseEvent.RELEASED);
 
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
-            rootTimeline.getScene().setMouseEvent(MouseEvent.RELEASED);
-        }
-    }
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.RELEASED);
+		}
+	}
 
-    @Override
-    public void mouseClicked(java.awt.event.MouseEvent e) {
-        mouse.setClicked(true);
+	@Override
+	public void mouseClicked(java.awt.event.MouseEvent e) {
+	    mouse.setClicked(true);
 
-        switch (e.getButton()) {
-        case java.awt.event.MouseEvent.BUTTON1:
-            mouseButton = MouseButton.LEFT;
-            mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
-            mouseEvent = MouseEvent.CLICKED;
-            if ((System.currentTimeMillis() - mouse.getMouseClickLeftTime()) < 300) {
-                mouse.setDoubleClicked(true);
-                mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
-                mouseEvent = MouseEvent.DOUBLE_CLICKED;
-            }
-            mouse.setMouseClickLeftTime(System.currentTimeMillis());
-            break;
-        case java.awt.event.MouseEvent.BUTTON2:
-            mouseButton = MouseButton.MIDDLE;
-            mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
-            mouseEvent = MouseEvent.CLICKED;
-            if ((System.currentTimeMillis() - mouse.getMouseClickMiddleTime()) < 300) {
-                mouse.setDoubleClicked(true);
-                mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
-                mouseEvent = MouseEvent.DOUBLE_CLICKED;
-            }
-            mouse.setMouseClickLeftTime(System.currentTimeMillis());
-            break;
-        case java.awt.event.MouseEvent.BUTTON3:
-            mouseButton = MouseButton.RIGHT;
-            mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
-            mouseEvent = MouseEvent.CLICKED;
-            if ((System.currentTimeMillis() - mouse.getMouseClickRightTime()) < 300) {
-                mouse.setDoubleClicked(true);
-                mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
-                mouseEvent = MouseEvent.DOUBLE_CLICKED;
-            }
-            mouse.setMouseClickLeftTime(System.currentTimeMillis());
-            break;
-        }
+		switch (e.getButton()) {
+		case java.awt.event.MouseEvent.BUTTON1:
+			mouseButton = MouseButton.LEFT;
+			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
+			mouseEvent = MouseEvent.CLICKED;
+			if ((System.currentTimeMillis() - mouse.getMouseClickLeftTime()) < 300) {
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
+				mouseEvent = MouseEvent.DOUBLE_CLICKED;
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
+			break;
+		case java.awt.event.MouseEvent.BUTTON2:
+			mouseButton = MouseButton.MIDDLE;
+			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
+			mouseEvent = MouseEvent.CLICKED;
+			if ((System.currentTimeMillis() - mouse.getMouseClickMiddleTime()) < 300) {
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
+				mouseEvent = MouseEvent.DOUBLE_CLICKED;
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
+			break;
+		case java.awt.event.MouseEvent.BUTTON3:
+			mouseButton = MouseButton.RIGHT;
+			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
+			mouseEvent = MouseEvent.CLICKED;
+			if ((System.currentTimeMillis() - mouse.getMouseClickRightTime()) < 300) {
+				mouse.setDoubleClicked(true);
+				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
+				mouseEvent = MouseEvent.DOUBLE_CLICKED;
+			}
+			mouse.setMouseClickLeftTime(System.currentTimeMillis());
+			break;
+		}
 
-        rootObject.setMouseEvent(mouseEvent);
+		rootObject.setMouseEvent(mouseEvent);
 
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
-            rootTimeline.getScene().setMouseEvent(mouseEvent);
-        }
-    }
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
+			rootTimeline.getScene().setMouseEvent(mouseEvent);
+		}
+	}
 
-    @Override
-    public void mouseEntered(java.awt.event.MouseEvent e) {
-        mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
+	@Override
+	public void mouseEntered(java.awt.event.MouseEvent e) {
+		mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
 
-        mouse.setEntered(true);
+		mouse.setEntered(true);
 
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
-        }
-    }
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
+		}
+	}
 
-    @Override
-    public void mouseExited(java.awt.event.MouseEvent e) {
-        mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
+	@Override
+	public void mouseExited(java.awt.event.MouseEvent e) {
+		mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
 
-        mouse.setEntered(false);
+		mouse.setEntered(false);
 
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
-        }
-    }
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
+		}
+	}
 
-    @Override
-    public void mouseDragged(java.awt.event.MouseEvent e) {
-        mouse.setDragged(true);
-        switch (e.getButton()) {
-        case java.awt.event.MouseEvent.BUTTON1:
-            mouseButton = MouseButton.LEFT;
-            break;
-        case java.awt.event.MouseEvent.BUTTON2:
-            mouseButton = MouseButton.MIDDLE;
-            break;
-        case java.awt.event.MouseEvent.BUTTON3:
-            mouseButton = MouseButton.RIGHT;
-            break;
-        }
-
-
-        mouse.setButtonPressed(mouseButton, true);
-        mouseEvent(MouseEvent.DRAGGED, mouseButton);
-        rootObject.setMouseEvent(MouseEvent.DRAGGED);
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
-            rootTimeline.getScene().setMouseEvent(MouseEvent.DRAGGED);
-        }
+	@Override
+	public void mouseDragged(java.awt.event.MouseEvent e) {
+		mouse.setDragged(true);
+		switch (e.getButton()) {
+		case java.awt.event.MouseEvent.BUTTON1:
+			mouseButton = MouseButton.LEFT;
+			break;
+		case java.awt.event.MouseEvent.BUTTON2:
+			mouseButton = MouseButton.MIDDLE;
+			break;
+		case java.awt.event.MouseEvent.BUTTON3:
+			mouseButton = MouseButton.RIGHT;
+			break;
+		}
 
 
-        updateMouse();
-    }
+	    mouse.setButtonPressed(mouseButton, true);
+		mouseEvent(MouseEvent.DRAGGED, mouseButton);
+		rootObject.setMouseEvent(MouseEvent.DRAGGED);
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.DRAGGED);
+		}
 
-    @Override
-    public void mouseMoved(java.awt.event.MouseEvent e) {
-        mouse.setMoved(true);
 
-        mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
-        rootObject.setMouseEvent(MouseEvent.MOVED);
-        if (timeline) {
-            rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
-            rootTimeline.getScene().setMouseEvent(MouseEvent.MOVED);
-        }
+		updateMouse();
+	}
 
-        updateMouse();
-    }
+	@Override
+	public void mouseMoved(java.awt.event.MouseEvent e) {
+		mouse.setMoved(true);
+
+	    mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
+		rootObject.setMouseEvent(MouseEvent.MOVED);
+		if (timeline) {
+			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
+			rootTimeline.getScene().setMouseEvent(MouseEvent.MOVED);
+		}
+
+		updateMouse();
+	}
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
@@ -518,269 +519,269 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         }
     }
 
-    private final void updateMouse() {
-        mouse.setPrvX(mouse.getX());
-        mouse.setPrvY(mouse.getY());
+	private final void updateMouse() {
+		mouse.setPrvX(mouse.getX());
+		mouse.setPrvY(mouse.getY());
 
-        Point p = getMousePosition(true);
-        if (p != null) {
-            mouse.setX(p.x);
-            mouse.setY(getHeight() - p.y);
-        }
-    }
+		Point p = getMousePosition(true);
+		if (p != null) {
+			mouse.setX(p.x);
+			mouse.setY(getHeight() - p.y);
+		}
+	}
 
-    @Override
-    public void keyPressed(java.awt.event.KeyEvent e) {
-        keyboard.setPressed(true);
-        keyboard.setKey(e.getKeyChar());
-        keyboard.setKeyCode(e.getKeyCode());
+	@Override
+	public void keyPressed(java.awt.event.KeyEvent e) {
+		keyboard.setPressed(true);
+		keyboard.setKey(e.getKeyChar());
+		keyboard.setKeyCode(e.getKeyCode());
 
-        keyEvent(KeyEvent.PRESSED);
-        if (timeline) {
-            rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
-        }
-    }
+		keyEvent(KeyEvent.PRESSED);
+		if (timeline) {
+			rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
+		}
+	}
 
-    @Override
-    public void keyReleased(java.awt.event.KeyEvent e) {
-        keyboard.setReleased(true);
-        keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
-        keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
+	@Override
+	public void keyReleased(java.awt.event.KeyEvent e) {
+	    keyboard.setReleased(true);
+	    keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+	    keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
 
-        keyEvent(KeyEvent.RELEASED);
-        if (timeline) {
-            rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
-        }
-    }
+		keyEvent(KeyEvent.RELEASED);
+		if (timeline) {
+			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
+		}
+	}
 
-    @Override
-    public void keyTyped(java.awt.event.KeyEvent e) {
-        keyboard.setTyped(true);
-        keyboard.setKey(e.getKeyChar());
-        keyboard.setKeyCode(e.getKeyCode());
+	@Override
+	public void keyTyped(java.awt.event.KeyEvent e) {
+	    keyboard.setTyped(true);
+	    keyboard.setKey(e.getKeyChar());
+	    keyboard.setKeyCode(e.getKeyCode());
 
-        keyEvent(KeyEvent.TYPED);
-        if (timeline) {
-            rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
-        }
-    }
+		keyEvent(KeyEvent.TYPED);
+		if (timeline) {
+			rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
+		}
+	}
 
-    // -------------------------------------------------------------------------
-    // capture image
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
+	// capture image
+	// -------------------------------------------------------------------------
 
-    public void capture(String file) {
-        capture(file, true);
-    }
+	public void capture(String file) {
+		capture(file, true);
+	}
 
-    public void capture(String file, boolean background) {
-        String suffix = FileUtil.getSuffix(new File(file));
-        if (suffix.matches("jpg|JPG|jpeg|JPEG")) {
-            capture(file, background, ImageType.JPG);
-        } else if (suffix.matches("png|PNG")) {
-            capture(file, background, ImageType.PNG);
-        } else if (suffix.matches("bmp|BMP")) {
-            capture(file, background, ImageType.BMP);
-        } else if (suffix.matches("gif|GIF")) {
-            capture(file, background, ImageType.GIF);
-        } else {
-            throw new IllegalArgumentException(
-                    "The file type is not supporeted.");
-        }
-    }
+	public void capture(String file, boolean background) {
+		String suffix = FileUtil.getSuffix(new File(file));
+		if (suffix.matches("jpg|JPG|jpeg|JPEG")) {
+			capture(file, background, ImageType.JPG);
+		} else if (suffix.matches("png|PNG")) {
+			capture(file, background, ImageType.PNG);
+		} else if (suffix.matches("bmp|BMP")) {
+			capture(file, background, ImageType.BMP);
+		} else if (suffix.matches("gif|GIF")) {
+			capture(file, background, ImageType.GIF);
+		} else {
+			throw new IllegalArgumentException(
+					"The file type is not supporeted.");
+		}
+	}
 
-    public void capture(String file, boolean background, ImageType type) {
-        saveImageFlag = true;
-        imageType = type;
-        saveBackground = background;
-        saveFile = file;
-    }
+	public void capture(String file, boolean background, ImageType type) {
+		saveImageFlag = true;
+		imageType = type;
+		saveBackground = background;
+		saveFile = file;
+	}
 
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
 
-    @Override
-    public void reset() {
-        rootObject.resetObjects();
-    }
+	@Override
+	public void reset() {
+		rootObject.resetObjects();
+	}
 
-    @Override
-    public void initSet() {
-        rootObjectInit = true;
-        rootObject = null;
+	@Override
+	public void initSet() {
+		rootObjectInit = true;
+		rootObject = null;
 
-        initRootOject();
+		initRootOject();
 
-        this.setup();
+		this.setup();
 
-        isInitializing = false;
+		isInitializing = false;
 
-        if (AppletRunner.frame != null && runAsApplication) {
-            JFrame frame = AppletRunner.frame;
-            if (!initialFullScreen) {
-                Insets insets = frame.getInsets();
-                frame.setSize(getWidth()  + insets.left + insets.right,
-                              getHeight() + insets.top  + insets.bottom);
-            }
-            frame.setLocationRelativeTo(null);
-        }
+		if (AppletRunner.frame != null && runAsApplication) {
+		    JFrame frame = AppletRunner.frame;
+			if (!initialFullScreen) {
+	            Insets insets = frame.getInsets();
+	            frame.setSize(getWidth()  + insets.left + insets.right,
+	                          getHeight() + insets.top  + insets.bottom);
+	        }
+			frame.setLocationRelativeTo(null);
+		}
 
-        setFPS(getFPS());
-    }
+		setFPS(getFPS());
+	}
 
-    @Override
-    public void drawWithGraphics(Graphics g) {
-        setGLParam(g.getGL());
+	@Override
+	public void drawWithGraphics(Graphics g) {
+		setGLParam(g.getGL());
 
-        drawObjects(g);
+		drawObjects(g);
 
-        updateObjects();
+		updateObjects();
 
-        // Calculate real fps.
-        {
-            frame++;
-            long now = System.currentTimeMillis();
-            long elapse = now - baseTime;
-            if (1000 < elapse) {
-                workingFPS = (double)frame * 1000.0 / (double)elapse;
-                baseTime = now;
-                frame = 0;
-            }
-        }
+		// Calculate real fps.
+		{
+		    frame++;
+		    long now = System.currentTimeMillis();
+		    long elapse = now - baseTime;
+		    if (1000 < elapse) {
+		        workingFPS = frame * 1000.0 / elapse;
+		        baseTime = now;
+		        frame = 0;
+		    }
+		}
 
-        // capture image
-        if (saveImageFlag) {
-            saveImageFlag = false;
+		// capture image
+		if (saveImageFlag) {
+			saveImageFlag = false;
 
-            try {
-                switch (imageType) {
-                case JPG:
-                case PNG:
-                case BMP:
-                case GIF:
-                default:
-                    Screenshot.writeToFile(new File(saveFile), width, height,
-                            !saveBackground);
-                    break;
-                }
-            } catch (GLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+			try {
+				switch (imageType) {
+				case JPG:
+				case PNG:
+				case BMP:
+				case GIF:
+				default:
+					Screenshot.writeToFile(new File(saveFile), width, height,
+							!saveBackground);
+					break;
+				}
+			} catch (GLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public boolean isRunAsApplication() {
-        return runAsApplication;
-    }
+	public boolean isRunAsApplication() {
+		return runAsApplication;
+	}
 
-    public void setRunAsApplication(boolean runAsApplication) {
-        this.runAsApplication = runAsApplication;
-    }
+	public void setRunAsApplication(boolean runAsApplication) {
+		this.runAsApplication = runAsApplication;
+	}
 
-    public int getMouseWheelRotation() {
-        return mouse.getWheelRotation();
-    }
+	public int getMouseWheelRotation() {
+		return mouse.getWheelRotation();
+	}
 
-    public Mouse getMouse() {
-        return mouse;
-    }
+	public Mouse getMouse() {
+	    return mouse;
+	}
 
-    public int getPreMouseX() {
-        return mouse.getPrvX();
-    }
+	public int getPreMouseX() {
+		return mouse.getPrvX();
+	}
 
-    public int getPreMouseY() {
-        return mouse.getPrvY();
-    }
+	public int getPreMouseY() {
+		return mouse.getPrvY();
+	}
 
-    public int getMouseX() {
-        return mouse.getX();
-    }
+	public int getMouseX() {
+		return mouse.getX();
+	}
 
-    public int getMouseY() {
-        return mouse.getY();
-    }
+	public int getMouseY() {
+		return mouse.getY();
+	}
 
-    public boolean isMousePressed() {
-        return mouse.isPressed();
-    }
+	public boolean isMousePressed() {
+		return mouse.isPressed();
+	}
 
-    public boolean isMousePressed(MouseButton button) {
-        return mouse.isButtonPressed(button);
-    }
+	public boolean isMousePressed(MouseButton button) {
+	    return mouse.isButtonPressed(button);
+	}
 
-    public boolean isMouseClicked() {
-        return mouse.isClicked();
-    }
+	public boolean isMouseClicked() {
+		return mouse.isClicked();
+	}
 
-    public boolean isMouseEntered() {
-        return mouse.isEntered();
-    }
+	public boolean isMouseEntered() {
+		return mouse.isEntered();
+	}
 
-    public boolean isMouseExited() {
-        return mouse.isExited();
-    }
+	public boolean isMouseExited() {
+		return mouse.isExited();
+	}
 
-    public boolean isMouseReleased() {
-        return mouse.isReleased();
-    }
+	public boolean isMouseReleased() {
+		return mouse.isReleased();
+	}
 
-    public boolean isMouseDragged() {
-        return mouse.isDragged();
-    }
+	public boolean isMouseDragged() {
+		return mouse.isDragged();
+	}
 
-    public boolean isMouseMoved() {
-        return mouse.isMoved();
-    }
+	public boolean isMouseMoved() {
+		return mouse.isMoved();
+	}
 
-    public Keyboard getKeyboard() {
-        return keyboard;
-    }
+	public Keyboard getKeyboard() {
+	    return keyboard;
+	}
 
-    public char getKey() {
-        return keyboard.getKey();
-    }
+	public char getKey() {
+		return keyboard.getKey();
+	}
 
-    public int getKeyCode() {
-        return keyboard.getKeyCode();
-    }
+	public int getKeyCode() {
+	    return keyboard.getKeyCode();
+	}
 
-    public boolean isKeyPressed() {
-        return keyboard.isPressed();
-    }
+	public boolean isKeyPressed() {
+		return keyboard.isPressed();
+	}
 
-    public boolean isKeyReleased() {
-        return keyboard.isReleased();
-    }
+	public boolean isKeyReleased() {
+		return keyboard.isReleased();
+	}
 
-    public boolean isKeyTyped() {
-        return keyboard.isTyped();
-    }
+	public boolean isKeyTyped() {
+		return keyboard.isTyped();
+	}
 
-    // MenuBar -----
+	// MenuBar -----
 
-    public MenuBar getMenuBar() {
-        return menuBar;
-    }
+	public MenuBar getMenuBar() {
+	    return menuBar;
+	}
 
-    // PopupMenu -----
+	// PopupMenu -----
 
-    public PopupMenu getPopupMenu() {
-        return popupMenu;
-    }
+	public PopupMenu getPopupMenu() {
+	    return popupMenu;
+	}
 
-    // ----------
+	// ----------
 
-    @Override
-    public int getWidth() {
-        return width;
-    }
+	@Override
+	public int getWidth() {
+		return width;
+	}
 
-    @Override
-    public int getHeight() {
-        return height;
-    }
+	@Override
+	public int getHeight() {
+		return height;
+	}
 
     private final void drawObjects(Graphics g) {
         rootObject.clearSelectionList();
@@ -796,24 +797,24 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void glTest(Graphics g) {
-        //g.getGL().glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        //g.getGL().glLoadIdentity();
-        g.getGL().glColor3d(1.0, 1.0, 1.0);
-        g.getGL().glTranslatef(-1.5f, 0.0f, -6.0f);
-        g.getGL().glBegin(GL2.GL_TRIANGLES);
-        g.getGL().glVertex3f(100.0f, 100.0f, 0.0f);
-        g.getGL().glVertex3f(0.0f, 0.0f, 0.0f);
-        g.getGL().glVertex3f(300.0f, 0.0f, 0.0f);
-        g.getGL().glEnd();
-        g.getGL().glTranslatef(1.5f, 0.0f, 0.0f);
-        g.getGL().glColor3d(0.5, 0.5, 0.5);
-        g.getGL().glBegin(GL2.GL_QUADS);
-        g.getGL().glVertex3f(0.0f, 400.0f, 0.0f);
-        g.getGL().glVertex3f(200.0f, 400.0f, 0.0f);
-        g.getGL().glVertex3f(200.0f, -100.0f, 0.0f);
-        g.getGL().glVertex3f(0.0f, -100.0f, 0.0f);
-        g.getGL().glEnd();
-        //g.getGL().glFlush();
+    	//g.getGL().glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+    	//g.getGL().glLoadIdentity();
+    	g.getGL().glColor3d(1.0, 1.0, 1.0);
+    	g.getGL().glTranslatef(-1.5f, 0.0f, -6.0f);
+    	g.getGL().glBegin(GL2.GL_TRIANGLES);
+    	g.getGL().glVertex3f(100.0f, 100.0f, 0.0f);
+    	g.getGL().glVertex3f(0.0f, 0.0f, 0.0f);
+    	g.getGL().glVertex3f(300.0f, 0.0f, 0.0f);
+    	g.getGL().glEnd();
+    	g.getGL().glTranslatef(1.5f, 0.0f, 0.0f);
+    	g.getGL().glColor3d(0.5, 0.5, 0.5);
+    	g.getGL().glBegin(GL2.GL_QUADS);
+    	g.getGL().glVertex3f(0.0f, 400.0f, 0.0f);
+    	g.getGL().glVertex3f(200.0f, 400.0f, 0.0f);
+    	g.getGL().glVertex3f(200.0f, -100.0f, 0.0f);
+    	g.getGL().glVertex3f(0.0f, -100.0f, 0.0f);
+    	g.getGL().glEnd();
+    	//g.getGL().glFlush();
     }
 
     // TODO: should change access public to private final
@@ -831,12 +832,12 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private static TweenManager tweenManager = null;
 
     private TweenManager getTweenManager() {
-        if (tweenManager == null) {
-            tweenManager = new TweenManager();
-            rootObject.addTweenManager(tweenManager);
-        }
+    	if (tweenManager == null) {
+    		tweenManager = new TweenManager();
+    		rootObject.addTweenManager(tweenManager);
+    	}
 
-        return tweenManager;
+    	return tweenManager;
     }
 
     public void addTween(Tween t) {
@@ -877,6 +878,18 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
    public void setRotation(double angle, double x,double y, double z) {
        rootObject.setRotation(angle, x, y, z);
+   }
+
+   public void enableBlurShader(){
+       rootObject.enableBlur(this.width, this.height);
+   }
+
+   public boolean isBlur() {
+       return rootObject.isRootBlur();
+   }
+
+   public void disableBlurShader() {
+       rootObject.setRootBlur(false);
    }
 
    public void addObject(Object obj) {
@@ -927,7 +940,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
 
     public void removeObject(int index) {
-        rootObject.remove(index);
+    	rootObject.remove(index);
     }
 
 
@@ -1103,75 +1116,75 @@ interface GraphicsDrawable {
  */
 class AppletGLEventListener implements GLEventListener {
 
-    public int width;
-    public int height;
-    private GL2 gl;
-    GLU glu;
-    GLUT glut;
-    private Graphics g = null;
-    private GraphicsDrawable d = null;
-    boolean reset = false;
+	public int width;
+	public int height;
+	private GL2 gl;
+	GLU glu;
+	GLUT glut;
+	private Graphics g = null;
+	private GraphicsDrawable d = null;
+	boolean reset = false;
 
-    public AppletGLEventListener(GraphicsDrawable drawable, int w, int h) {
-        this.width = w;
-        this.height = h;
-        this.d = drawable;
-    }
+	public AppletGLEventListener(GraphicsDrawable drawable, int w, int h) {
+		this.width = w;
+		this.height = h;
+		this.d = drawable;
+	}
 
-    @Override
-    public void init(GLAutoDrawable drawable) {
-        gl = drawable.getGL().getGL2();
-        glu = new GLU();
-        glut = new GLUT();
+	@Override
+	public void init(GLAutoDrawable drawable) {
+		gl = drawable.getGL().getGL2();
+		glu = new GLU();
+		glut = new GLUT();
 
-        g = new Graphics(gl, glu, glut, width, height);
-        if (reset)
-            d.reset();
-        else
-            d.initSet();
-        reset = true;
-    }
+		g = new Graphics(gl, glu, glut, width, height);
+		if (reset)
+			d.reset();
+		else
+			d.initSet();
+		reset = true;
+	}
 
-    @Override
-    public void display(GLAutoDrawable drawable) {
-        synchronized (this) {
-            gl.glViewport(0, 0, this.width, this.height);
+	@Override
+	public void display(GLAutoDrawable drawable) {
+		synchronized (this) {
+			gl.glViewport(0, 0, this.width, this.height);
 
-            g.ortho();
-            gl.glClearStencil(0);
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
-            gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-            gl.glEnable(GL2.GL_BLEND);
+			g.ortho();
+			gl.glClearStencil(0);
+			gl.glEnable(GL2.GL_DEPTH_TEST);
+			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
+			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+			gl.glEnable(GL2.GL_BLEND);
+	        gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
+			gl.glEnable(GL2.GL_LINE_SMOOTH);
 
-            gl.glEnable(GL2.GL_LINE_SMOOTH);
+			if (d != null) {
+				d.drawWithGraphics(g);
+			}
 
-            if (d != null) {
-                d.drawWithGraphics(g);
-            }
+			gl.glFlush();
+		}
+	}
 
-            gl.glFlush();
-        }
-    }
+	@Override
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+	    ((Applet)d).setAppletSize(width, height);
+	    this.setSize(width, height);
+	}
 
-    @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        ((Applet)d).setAppletSize(width, height);
-        this.setSize(width, height);
-    }
+	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {}
 
-    public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {}
+	public void setSize(int w, int h) {
+		this.width = w;
+		this.height = h;
+		this.g.setWidth(w);
+		this.g.setHeight(h);
+	}
 
-    public void setSize(int w, int h) {
-        this.width = w;
-        this.height = h;
-        this.g.setWidth(w);
-        this.g.setHeight(h);
-    }
+	@Override
+	public void dispose(GLAutoDrawable arg0) {
+		// TODO Auto-generated method stub
 
-    @Override
-    public void dispose(GLAutoDrawable arg0) {
-        // TODO Auto-generated method stub
-
-    }
+	}
 }

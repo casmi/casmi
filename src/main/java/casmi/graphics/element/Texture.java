@@ -19,6 +19,7 @@
 
 package casmi.graphics.element;
 
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -59,6 +60,7 @@ public class Texture extends Element implements Renderable, Reset {
     private ArrayList<Double> ny;
 
     private Vertex tmpV = new Vertex();
+    private boolean init = true;
 
     protected boolean loadFlag = false;
     protected boolean reloadFlag = false;
@@ -325,6 +327,29 @@ public class Texture extends Element implements Renderable, Reset {
             || !this.isDepthTest())
             gl.glDisable(GL2.GL_DEPTH_TEST);
 
+        if (enableBlur && this.rootBlur){
+            gl.glActiveTexture(GL2.GL_TEXTURE0);
+            this.objIDShader.setUniform("sampler", 0);
+        }
+
+        if (this.enableBump && this.normalMap!=null){
+            gl.glEnable(GL2.GL_NORMALIZE);
+            gl.glActiveTexture(GL2.GL_TEXTURE0);
+            this.shader.enableShader(gl);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
+            this.shader.setUniform("normalMap", 0);
+            normalMap.enableTexture(gl);
+            gl.glActiveTexture(GL2.GL_TEXTURE1);
+            this.shader.setUniform("colorMap", 1);
+        }else if (this.enableShader){
+            gl.glActiveTexture(GL2.GL_TEXTURE0);
+            if(this.shader==null)
+                System.out.println("shader null");
+            this.shader.enableShader(gl);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
+            this.shader.setUniform("sampler", 0);
+        }
+
         gl.glPushMatrix();
         {
             this.setTweenParameter(gl);
@@ -360,6 +385,16 @@ public class Texture extends Element implements Renderable, Reset {
                     break;
                 }
                 gl.glEnd();
+                if (this.enableBump && this.normalMap!=null){
+                    double[] tnt = new double[3];
+                    tnt[0] = 0;
+                    tnt[1] = 1;
+                    tnt[2] = 0;
+                    this.shader.enableShader();
+                    this.shader.setAttribLocation("tangent");
+                    this.shader.setUniform("inv", -1.0f);
+                    this.shader.setVertexAttrib3("tangent", tnt);
+                }
             } else {
                 switch (mode) {
                 case LINES:
@@ -393,6 +428,9 @@ public class Texture extends Element implements Renderable, Reset {
             image.disableTexture(gl);
         }
         gl.glPopMatrix();
+
+        if (this.enableShader)
+            this.shader.disableShader(gl);
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001
             || !this.isDepthTest())
@@ -483,95 +521,135 @@ public class Texture extends Element implements Renderable, Reset {
      *
      * @see casmi.image.ImageMode
      */
-    public void rotation(TextureRotationMode mode) {
-        float[][] tmp = corner.clone();
-        switch (mode) {
-        case HALF:
-            corner[0] = tmp[2];
-            corner[1] = tmp[3];
-            corner[2] = tmp[0];
-            corner[3] = tmp[1];
-            break;
-        case CLOCKWIZE:
-            corner[0] = tmp[3];
-            corner[1] = tmp[0];
-            corner[2] = tmp[1];
-            corner[3] = tmp[2];
-            break;
-        case COUNTERCLOCKWIZE:
-            corner[0] = tmp[1];
-            corner[1] = tmp[2];
-            corner[2] = tmp[3];
-            corner[3] = tmp[0];
-            break;
-        default:
-            break;
-        }
-    }
+	public void rotation(TextureRotationMode mode){
+		float[][] tmp = corner.clone();
+		switch (mode) {
+		case HALF:
+			corner[0] = tmp[2];
+			corner[1] = tmp[3];
+			corner[2] = tmp[0];
+			corner[3] = tmp[1];
+			break;
+		case CLOCKWIZE:
+			corner[0] = tmp[3];
+			corner[1] = tmp[0];
+			corner[2] = tmp[1];
+			corner[3] = tmp[2];
+			break;
+		case COUNTERCLOCKWIZE:
+			corner[0] = tmp[1];
+			corner[1] = tmp[2];
+			corner[2] = tmp[3];
+			corner[3] = tmp[0];
+			break;
+		default:
+			break;
+		}
+	}
 
-    /**
+	/**
      * Flips the way of mapping the texture.
      *
      * @param mode The alignment of the position of the Texture.
      *
      * @see casmi.image.ImageMode
      */
-    public void flip(TextureFlipMode mode) {
-        float[][] tmp = corner.clone();
-        switch (mode) {
-        case VERTICAL:
-            corner[0] = tmp[1];
-            corner[1] = tmp[0];
-            corner[2] = tmp[3];
-            corner[3] = tmp[2];
-            break;
-        case HORIZONTAL:
-            corner[0] = tmp[3];
-            corner[1] = tmp[2];
-            corner[2] = tmp[1];
-            corner[3] = tmp[0];
-            break;
-        default:
-            break;
+	public void flip(TextureFlipMode mode){
+		float[][] tmp = corner.clone();
+		switch (mode) {
+		case VERTICAL:
+			corner[0] = tmp[1];
+			corner[1] = tmp[0];
+			corner[2] = tmp[3];
+			corner[3] = tmp[2];
+			break;
+		case HORIZONTAL:
+			corner[0] = tmp[3];
+			corner[1] = tmp[2];
+			corner[2] = tmp[1];
+			corner[3] = tmp[0];
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void setTextureCorner(int index, double x,double y){
+		corner[index][0] = (float)x;
+		corner[index][1] = (float)y;
+	}
+
+	public float getTextureCorner(int index1,int index2){
+		return corner[index1][index2];
+	}
+
+//	public void enableMask(){
+//		masking = true;
+//	}
+
+//	public void disableMask(){
+//		masking = false;
+//	}
+
+	public void setReloadFlag(boolean reloadFlag) {
+	    this.reloadFlag = reloadFlag;
+	}
+
+	public void reloadImage(GL2 gl){
+		image.reloadTexture(gl);
+	}
+
+	public void loadImage(){
+		image.loadTexture();
+	}
+
+	public BufferedImage getBufferedImage() {
+	    return image.getImg();
+	}
+
+	public boolean isInit() {
+	    return init;
+	}
+
+	public void setInit(boolean init) {
+	    this.init = init;
+	}
+
+
+	@Override
+	public void reset(GL2 gl) {
+		if(init){
+			loadImage();
+			init = false;
+		}else{
+			reloadImage(gl);
+		}
+		if(this.enableTexture)
+            if(texture.isInit()){
+                texture.loadImage();
+                texture.setInit(false);
+            }else{System.out.println("reload");
+                texture.reloadImage(gl);
+            }
+        if(this.enableBump)
+            if(normalMap.isInit()){
+                normalMap.loadImage();
+                normalMap.setInit(false);
+            }else{
+                normalMap.reloadImage(gl);
+            }
+        if(this.enableShader){
+            System.out.println("reset");
+            shader.initShaders(gl);
         }
-    }
+	}
 
-    public void setTextureCorner(int index, double x, double y) {
-        corner[index][0] = (float)x;
-        corner[index][1] = (float)y;
-    }
+	/**Check texture is enable or not.
+    *
+    */
+   @Override
+   public boolean isEnableTexture() {
+       return true;
+   }
 
-    public float getTextureCorner(int index1, int index2) {
-        return corner[index1][index2];
-    }
-
-    // public void enableMask(){
-    // masking = true;
-    // }
-
-    // public void disableMask(){
-    // masking = false;
-    // }
-
-    public void setReloadFlag(boolean reloadFlag) {
-        this.reloadFlag = reloadFlag;
-    }
-
-    public void reloadImage(GL2 gl) {
-        image.reloadTexture(gl);
-    }
-
-    public void loadImage() {
-        image.loadTexture();
-    }
-
-    @Override
-    public void reset(GL2 gl) {
-        if (init) {
-            loadImage();
-            init = false;
-        } else {
-            reloadImage(gl);
-        }
-    }
 }

@@ -30,7 +30,7 @@ import javax.media.opengl.GL2;
  */
 public class Material {
 
-    private float shininess[] = {1.0f};
+    private float shininess = 1.0f;
     private float ambient[] = {0,0,0,1.0f};
     private float diffuse[] = {0,0,0,1.0f};
     private float specular[] = {0,0,0,1.0f};
@@ -55,18 +55,7 @@ public class Material {
      *                 The amount of gloss in the surface of shapes of this Material.
      */
     public void shininess(float shininess){
-        this.shininess[0] = shininess;
-        Sh = true;
-    }
-
-    /**
-     * Sets the amount of gloss in the surface of shapes.
-     *
-     * @param shininess
-     *                 The amount of gloss in the surface of shapes of this Material.
-     */
-    public void shininess(float shininess[]){
-        this.shininess[0] = shininess[0];
+        this.shininess = shininess;
         Sh = true;
     }
 
@@ -130,9 +119,15 @@ public class Material {
      * @param red
      *                 The red color of the diffuse.
      * @param green
+<<<<<<< HEAD
+     * 				The green color of the diffuse.
+     * @param blue
+     * 				The blue color of the diffuse.
+=======
      *                 The green color of the diffuse.
      * @param blue
      *                 The blue color of the diffuse.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
     public void diffuse(float red, float green, float blue){
         diffuse[0] = red;
@@ -157,8 +152,13 @@ public class Material {
     /**
      * Sets the specular color of the materials used for shapes drawn to the screen.
      *
+<<<<<<< HEAD
+     * 	@param specular
+     * 				The specular color of the Material.
+=======
      *     @param specular
      *                 The specular color of the Material.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
     public void specular(float specular[]){
         for(int i = 0; i<specular.length;i++)
@@ -172,9 +172,15 @@ public class Material {
      * @param red
      *                 The red color of the specular.
      * @param green
+<<<<<<< HEAD
+     * 				The green color of the specular.
+     * @param blue
+     * 				The blue color of the specular.
+=======
      *                 The green color of the specular.
      * @param blue
      *                 The blue color of the specular.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
     public void specular(float red, float green, float blue){
         specular[0] = red;
@@ -240,7 +246,7 @@ public class Material {
 
     public void setup(GL2 gl) {
         if(Sh==true)
-            gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininess,0);
+            gl.glMaterialf(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininess);
         if(Am==true)
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, ambient,0);
         if(Di==true)

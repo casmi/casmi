@@ -49,11 +49,12 @@ public class Light extends Element implements ObjectRender {
     private float diffuse[] = {0,0,0,1.0f};
     private float specular[] = {0,0,0,1.0f};
     private float emissive[] = {0,0,0,1.0f};
-    private Boolean Sh = false;
-    private Boolean Am = false;
-    private Boolean Di = false;
-    private Boolean Sp = false;
-    private Boolean Em = false;
+
+    private boolean Sh = false;
+    private boolean Am = false;
+    private boolean Di = false;
+    private boolean Sp = false;
+    private boolean Em = false;
 
     /**
      * Creates Light object.
@@ -132,6 +133,7 @@ public class Light extends Element implements ObjectRender {
         this.dv.set(x, y, z);
     }
 
+
     /**
      * Returns the LightMode
      *
@@ -175,16 +177,16 @@ public class Light extends Element implements ObjectRender {
 
         switch(lightMode){
         case AMBIENT:
-            g.ambientLight(index, color, v);
+            g.ambientLight(index, color, true, v);
             break;
         case DIRECTION:
-            g.directionalLight(index, color, dv);
+            g.directionalLight(index, color, true, dv);
             break;
         case POINT:
-            g.pointLight(index, color, v);
+            g.pointLight(index, color, true, v);
             break;
         case SPOT:
-            g.spotLight(index, color, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
+            g.spotLight(index, color, true, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
             break;
         case NONE:
             break;

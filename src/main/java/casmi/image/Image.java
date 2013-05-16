@@ -112,7 +112,11 @@ public class Image {
      * Creates a new Image object using BufferedImage.
      *
      * @param image
+<<<<<<< HEAD
+     * 					The BufferedImge of this Image.
+=======
      *                     The BufferedImge of this Image.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      *
      * @see java.awt.image.BufferedImage
      */
@@ -126,53 +130,54 @@ public class Image {
      * Copies a Image object using BuffedImage.
      *
      * @param image
+<<<<<<< HEAD
+     * 					The BufferedImage of this Image.
+=======
      *                     The BufferedImage of this Image.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      *
      * @return
      *                     The copy of this Image.
      */
     public BufferedImage copyImage(BufferedImage image) {
         BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-        Graphics2D g2d = (Graphics2D)newImage.createGraphics();
+        Graphics2D g2d = newImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.dispose();
         return newImage;
     }
 
     private BufferedImage convertByteToInt(BufferedImage src) {
-        BufferedImage dst = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        int[] pixels = ((DataBufferInt)(dst.getRaster().getDataBuffer())).getData();
-        byte[] binary = ((DataBufferByte)(src.getRaster().getDataBuffer())).getData();
-        int r, g, b, a;
-        int pixelsize = src.getWidth() * src.getHeight();
-        if (src.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
-            for (int i = 0, j = 0; i < pixelsize; i++) {
-                a = binary[j++] & 0xff;
-                b = binary[j++] & 0xff;
-                g = binary[j++] & 0xff;
-                r = binary[j++] & 0xff;
-                pixels[i] = (a<<24) | (r<<16) | (g<<8) | b;
-            }
-        }
-        if (src.getType() == BufferedImage.TYPE_3BYTE_BGR) {
-            for (int i = 0, j = 0; i < pixelsize; i++) {
-                b = binary[j++] & 0xff;
-                g = binary[j++] & 0xff;
-                r = binary[j++] & 0xff;
-                pixels[i] = 0xff000000 | (r<<16) | (g<<8) | b;
-            }
-        }
-        return dst;
+    	BufferedImage dst = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    	int[] pixels = ((DataBufferInt)(dst.getRaster().getDataBuffer())).getData();
+    	byte[] binary = ((DataBufferByte)(src.getRaster().getDataBuffer())).getData();
+    	int r, g, b, a;
+    	int pixelsize = src.getWidth() * src.getHeight();
+    	if (src.getType() == BufferedImage.TYPE_4BYTE_ABGR) {
+    	    for (int i = 0, j = 0; i < pixelsize; i++) {
+    			a = binary[j++] & 0xff;
+    			b = binary[j++] & 0xff;
+    			g = binary[j++] & 0xff;
+    			r = binary[j++] & 0xff;
+    			pixels[i] = (a<<24) | (r<<16) | (g<<8) | b;
+    		}
+    	}
+    	if (src.getType() == BufferedImage.TYPE_3BYTE_BGR) {
+    		for (int i = 0, j = 0; i < pixelsize; i++) {
+    			b = binary[j++] & 0xff;
+    			g = binary[j++] & 0xff;
+    			r = binary[j++] & 0xff;
+    			pixels[i] = 0xff000000 | (r<<16) | (g<<8) | b;
+    		}
+    	}
+    	return dst;
     }
 
     /**
      * Returns the clone of the input image.
      *
-     * @param image
-     *                     The image you want to clone.
-     *
-     * @return
-     *                     The clone image of the input image.
+     * @param image  The image you want to clone.
+     * @return       The clone image of the input image.
      */
     public static Image clone(Image image) {
         Image cloneImage = new Image(image.img);
@@ -225,7 +230,7 @@ public class Image {
      * Sets the ImageMode of this Image.
      *
      * @param mode
-     *                     The Image mode of this Image.
+     * 					The Image mode of this Image.
      *
      * @see casmi.image.ImageMode
      */
@@ -342,7 +347,11 @@ public class Image {
      * Sets the color value of the pixel data in this Image.
      *
      * @param color
+<<<<<<< HEAD
+     * 					The color value of the pixel.
+=======
      *                     The color value of the pixel.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      * @param x
      *                     The x-coordinate of the pixel.
      * @param y
@@ -386,7 +395,11 @@ public class Image {
      * Sets the color values to this Image.
      *
      * @param colors
+<<<<<<< HEAD
+     * 					The array of Color which size is width * height of this Image.
+=======
      *                     The array of Color which size is width * height of this Image.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
     public final void setColors(Color[] colors) {
         int[] pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
@@ -420,7 +433,11 @@ public class Image {
      * Returns ImageMode of this Image.
      *
      * @return
+<<<<<<< HEAD
+     * 					The ImageMode of the Image.
+=======
      *                     The ImageMode of the Image.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      *
      * @see casmi.image.ImageMode
      */
@@ -432,7 +449,11 @@ public class Image {
      * Sets ImageMode of this Image.
      *
      * @param mode
+<<<<<<< HEAD
+     * 					The ImageMode of the Image.
+=======
      *                     The ImageMode of the Image.
+>>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      *
      * @see casmi.image.ImageMode
      */
@@ -460,4 +481,7 @@ public class Image {
         return height;
     }
 
+    public BufferedImage getImg() {
+        return img;
+    }
 }
