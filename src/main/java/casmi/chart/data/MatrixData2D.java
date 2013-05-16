@@ -64,7 +64,7 @@ public class MatrixData2D {
 		this.secondAxis = secondAxis;
 	}
 	
-	public void setData(String x, double y){
+	public void appendData(String x, double y){
 		PairData p = new PairData(x,y);
 		this.data.add(p);
 	}
