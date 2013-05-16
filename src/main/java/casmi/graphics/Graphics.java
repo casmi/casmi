@@ -46,9 +46,9 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 public class Graphics {
 
-	private GL2  gl;
-	private GLU  glu;
-	private GLUT glut;
+    private GL2  gl;
+    private GLU  glu;
+    private GLUT glut;
 
 	private int width;
 	private int height;
@@ -110,16 +110,16 @@ public class Graphics {
 	/**
      * Sets the width of the display window.
      */
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
 	/**
      * Returns the height of the display window.
      */
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
 	/**
      * Sets the height of the display window.
@@ -148,11 +148,11 @@ public class Graphics {
      * @param alpha
      *            The alpha opacity of the background.
      */
-	public void background(float gray, float alpha) {
-		gl.glClearColor(gray / 255, gray / 255, gray / 255, alpha / 255);
-	}
+    public void background(float gray, float alpha) {
+        gl.glClearColor(gray / 255, gray / 255, gray / 255, alpha / 255);
+    }
 
-	/**
+    /**
      *Sets the background to a RGB and value.
      *
      * @param x
@@ -162,11 +162,11 @@ public class Graphics {
      * @param z
      *            The B value of the background.
      */
-	public void background(float x, float y, float z) {
-		gl.glClearColor(x / 255, y / 255, z / 255, 1);
-	}
+    public void background(float x, float y, float z) {
+        gl.glClearColor(x / 255, y / 255, z / 255, 1);
+    }
 
-	/**
+    /**
      *Sets the background to a RGB and alpha value.
      *
      * @param x
@@ -319,11 +319,11 @@ public class Graphics {
 	/**
      * Rotates around the Y axis.
      */
-	public void rotateY(double angle) {
-		gl.glRotated(angle, 0, 1.0, 0);
-	}
+    public void rotateY(double angle) {
+        gl.glRotated(angle, 0, 1.0, 0);
+    }
 
-	/**
+    /**
      * Rotates around the Z axis.
      */
 	public void rotateZ(double angle) {
@@ -354,50 +354,50 @@ public class Graphics {
 	/**
      * Scales in X ,Y and Z.
      */
-	public void scale(double sx, double sy, double sz) {
-		gl.glScaled(sx, sy, sz);
-	}
+    public void scale(double sx, double sy, double sz) {
+        gl.glScaled(sx, sy, sz);
+    }
 
-	// Light
+    // Light
     /**
      * Sets the RGB value of the ambientLight
      */
-	public void ambientLight(float r, float g, float b) {
-		float ambient[] = { r, g, b, 255 };
-		normalize(ambient);
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-	}
+    public void ambientLight(float r, float g, float b) {
+        float ambient[] = { r, g, b, 255 };
+        normalize(ambient);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
+    }
 
-	/**
+    /**
      * Sets the RGB value and the position of the ambientLight
      */
-	public void ambientLight(float r, float g, float b, float x, float y,
-			float z) {
-		float ambient[] = { r, g, b, 255 };
-		float position[] = { x, y, z, 1.0f };
-		normalize(ambient);
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-	}
+    public void ambientLight(float r, float g, float b, float x, float y,
+            float z) {
+        float ambient[] = { r, g, b, 255 };
+        float position[] = { x, y, z, 1.0f };
+        normalize(ambient);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
+    }
 
-	/**
+    /**
      * Sets the RGB value and the position of the ambientLight
      */
-	public void ambientLight(float r, float g, float b, Vertex v) {
-		float ambient[] = { r, g, b, 255 };
-		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
-		normalize(ambient);
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-	}
+    public void ambientLight(float r, float g, float b, Vertex v) {
+        float ambient[] = { r, g, b, 255 };
+        float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
+        normalize(ambient);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
+    }
 
-	/**
+    /**
      * Sets the color value of the ambientLight
      */
 	public void ambientLight(Color color) {
@@ -435,45 +435,45 @@ public class Graphics {
             gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
     }
 
-	/**
+    /**
      * Sets the RGB value of the No.i ambientLight
      */
-	public void ambientLight(int i, float r, float g, float b) {
-		float ambient[] = { r, g, b, 255 };
-		normalize(ambient);
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0 + i);
-		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
-	}
+    public void ambientLight(int i, float r, float g, float b) {
+        float ambient[] = { r, g, b, 255 };
+        normalize(ambient);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0 + i);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
+    }
 
-	/**
+    /**
      * Sets the RBG value and the position of the No.i ambientLight
      */
-	public void ambientLight(int i, float r, float g, float b, float x,
-			float y, float z) {
-		float ambient[] = { r, g, b, 255 };
-		float position[] = { x, y, z, 1.0f };
-		normalize(ambient);
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0 + i);
-		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
-		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
-	}
+    public void ambientLight(int i, float r, float g, float b, float x,
+            float y, float z) {
+        float ambient[] = { r, g, b, 255 };
+        float position[] = { x, y, z, 1.0f };
+        normalize(ambient);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0 + i);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
+    }
 
-	/**
+    /**
      * Sets the RBG value and the position of the No.i ambientLight
      */
-	public void ambientLight(int i, float r, float g, float b, Vertex v) {
-		float ambient[] = { r, g, b, 255 };
-		float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
-		normalize(ambient);
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0 + i);
-		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
-		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
-	}
+    public void ambientLight(int i, float r, float g, float b, Vertex v) {
+        float ambient[] = { r, g, b, 255 };
+        float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
+        normalize(ambient);
+        gl.glEnable(GL2.GL_LIGHTING);
+        gl.glEnable(GL2.GL_LIGHT0 + i);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, position, 0);
+        gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
+    }
 
-	/**
+    /**
      * Sets the color value of the No.i ambientLight
      */
 	public void ambientLight(int i, Color color, boolean enableColor) {
@@ -507,7 +507,7 @@ public class Graphics {
             gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_AMBIENT, ambient, 0);
     }
 
-	/**
+    /**
      * Sets the color value and the position of the No.i directionalLight
      */
 	public void directionalLight(int i, Color color, boolean enableColor, float x, float y, float z) {
@@ -696,140 +696,128 @@ public class Graphics {
 	/**
      * Disables texture.
      */
-	public void notexture(Image image) {
-		image.disableTexture(gl);
-	}
+    public void notexture(Image image) {
+        image.disableTexture(gl);
+    }
 
-	/**
-	 * Sets texture vertex(nx,ny) at position(x,y).
-	 * */
-	public void vertex(float x, float y, float nx, float ny) {
-		gl.glTexCoord2f(nx, ny);
-		gl.glVertex2f(x, y);
-	}
+    /**
+     * Sets texture vertex(nx,ny) at position(x,y).
+     * */
+    public void vertex(float x, float y, float nx, float ny) {
+        gl.glTexCoord2f(nx, ny);
+        gl.glVertex2f(x, y);
+    }
 
-	/**
+    /**
      * Sets texture vertex(nx,ny) at position(x,y,z).
      * */
-	public void vertex(float x, float y, float z, float nx, float ny) {
-		gl.glTexCoord2f(nx, ny);
-		gl.glVertex3f(x, y, z);
-	}
+    public void vertex(float x, float y, float z, float nx, float ny) {
+        gl.glTexCoord2f(nx, ny);
+        gl.glVertex3f(x, y, z);
+    }
 
-	/**
+    /**
      * Sets texture vertex(nx,ny) at position v.
      * */
-	public void vertex(Vertex v, float nx, float ny) {
-		gl.glTexCoord2f(nx, ny);
-		gl.glVertex3d(v.getX(), v.getY(), v.getZ());
-	}
+    public void vertex(Vertex v, float nx, float ny) {
+        gl.glTexCoord2f(nx, ny);
+        gl.glVertex3d(v.getX(), v.getY(), v.getZ());
+    }
 
-	/**
-	 * Displays texture img at position (x,y).
-	 * If
-	 */
-	public void image(Image img, double x, double y) {
-		if (img.getTexture() != null) {
-		    gl.glDisable(GL.GL_DEPTH_TEST);
-		    img.enableTexture(gl);
-			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
-			gl.glBegin(GL2.GL_QUADS);
-			switch (img.getMode()) {
-			default:
-			case CORNER:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) x, (float) y - img.getHeight());
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) x, (float) y);
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) x + img.getWidth(), (float) y);
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) x + img.getWidth(), (float) y - img.getHeight());
-				break;
-			case CENTER:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
-						- img.getHeight() / 2.0f);
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
-						+ img.getHeight() / 2.0f);
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
-						+ img.getHeight() / 2.0f);
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
-						- img.getHeight() / 2.0f);
-				break;
-			}
-			gl.glEnd();
-			img.disableTexture(gl);
-			gl.glEnable(GL.GL_DEPTH_TEST);
-		}
-
-	}
-
-	/**
-	 *  Displays texture img at the point(x,y) and sets the width and height (w,h) of the texture.
-	 *  A call to imageMode(CORNERS) will change the width and height parameters to define
-	 *  the x and y values of the opposite corner of the image.
-	 * */
-	public void image(Image img, double x, double y, double w, double h) {
-		if (img.getTexture() != null) {
+    /**
+     * Displays texture img at position (x,y).
+     * If
+     */
+    public void image(Image img, double x, double y) {
+        if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
-			img.enableTexture(gl);
-			gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
-			gl.glBegin(GL2.GL_QUADS);
-			switch (img.getMode()) {
-			default:
-			case CORNER:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) x, (float) (y - h));
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) x, (float) y);
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) (x + w), (float) y);
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) (x + w), (float) (y - h));
-				break;
-			case CORNERS:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) x, (float) h);
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) x, (float) y);
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) w, (float) y);
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) w, (float) h);
-				break;
-			case CENTER:
-				gl.glTexCoord2f(0.0f, 1.0f);
-				gl.glVertex2f((float) (x - w / 2.0), (float) (y - h / 2.0));
-				gl.glTexCoord2f(0.0f, 0.0f);
-				gl.glVertex2f((float) (x - w / 2.0), (float) (y + h / 2.0));
-				gl.glTexCoord2f(1.0f, 0.0f);
-				gl.glVertex2f((float) (x + w / 2.0), (float) (y + h / 2.0));
-				gl.glTexCoord2f(1.0f, 1.0f);
-				gl.glVertex2f((float) (x + w / 2.0), (float) (y - h / 2.0));
-				break;
-			}
-			gl.glEnd();
-			img.disableTexture(gl);
+            img.enableTexture(gl);
+            gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
+            gl.glBegin(GL2.GL_QUADS);
+            switch (img.getMode()) {
+            default:
+            case CORNER:
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex2f((float) x, (float) y - img.getHeight());
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex2f((float) x, (float) y);
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex2f((float) x + img.getWidth(), (float) y);
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex2f((float) x + img.getWidth(), (float) y - img.getHeight());
+                break;
+            case CENTER:
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
+                        - img.getHeight() / 2.0f);
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
+                        + img.getHeight() / 2.0f);
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
+                        + img.getHeight() / 2.0f);
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
+                        - img.getHeight() / 2.0f);
+                break;
+            }
+            gl.glEnd();
+            img.disableTexture(gl);
             gl.glEnable(GL.GL_DEPTH_TEST);
-		}
-
-	}
-/*
-	// textures
-	public static void addTextureImage(Image img) {
-		textureImages.add(img);
-	}
-
-	public static void reloadTextures(GL2 gl) {
-	    for (Image img : textureImages) {
-            img.loadTexture();
         }
-	}
-*/
+
+    }
+
+    /**
+     *  Displays texture img at the point(x,y) and sets the width and height (w,h) of the texture.
+     *  A call to imageMode(CORNERS) will change the width and height parameters to define
+     *  the x and y values of the opposite corner of the image.
+     * */
+    public void image(Image img, double x, double y, double w, double h) {
+        if (img.getTexture() != null) {
+            gl.glDisable(GL.GL_DEPTH_TEST);
+            img.enableTexture(gl);
+            gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
+            gl.glBegin(GL2.GL_QUADS);
+            switch (img.getMode()) {
+            default:
+            case CORNER:
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex2f((float) x, (float) (y - h));
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex2f((float) x, (float) y);
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex2f((float) (x + w), (float) y);
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex2f((float) (x + w), (float) (y - h));
+                break;
+            case CORNERS:
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex2f((float) x, (float) h);
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex2f((float) x, (float) y);
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex2f((float) w, (float) y);
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex2f((float) w, (float) h);
+                break;
+            case CENTER:
+                gl.glTexCoord2f(0.0f, 1.0f);
+                gl.glVertex2f((float) (x - w / 2.0), (float) (y - h / 2.0));
+                gl.glTexCoord2f(0.0f, 0.0f);
+                gl.glVertex2f((float) (x - w / 2.0), (float) (y + h / 2.0));
+                gl.glTexCoord2f(1.0f, 0.0f);
+                gl.glVertex2f((float) (x + w / 2.0), (float) (y + h / 2.0));
+                gl.glTexCoord2f(1.0f, 1.0f);
+                gl.glVertex2f((float) (x + w / 2.0), (float) (y - h / 2.0));
+                break;
+            }
+            gl.glEnd();
+            img.disableTexture(gl);
+            gl.glEnable(GL.GL_DEPTH_TEST);
+        }
+
+    }
 
 	// camera
 	/**
@@ -1017,6 +1005,5 @@ public class Graphics {
 	public double getSceneA(){
 		return this.sceneAlpha;
 	}
-
 
 }

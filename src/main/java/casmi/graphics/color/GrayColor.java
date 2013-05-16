@@ -23,70 +23,70 @@ import javax.media.opengl.GL2;
 
 /**
  * Gray color class.
- * 
+ *
  * @author T. Takeuchi
  */
 public class GrayColor implements Color {
 
     protected double gray  = 1.0;
     protected double alpha = 1.0;
-    
+
     /**
      * Creates a new GrayColor object using a gray-scale value.
      *
-     * @param gray 
+     * @param gray
      *              The gray-scale value, from 0.0 to 1.0.
      */
     public GrayColor(double gray) {
         this(gray, 1.0);
     }
-    
+
     /**
      * Creates a new GrayColor object using gray-scale and alpha values.
      *
-     * @param gray 
+     * @param gray
      *              The gray-scale value, from 0.0 to 1.0.
-     * @param alpha 
+     * @param alpha
      *              The alpha value, from 0.0 to 1.0.
      */
     public GrayColor(double gray, double alpha) {
         this.gray  = gray;
         this.alpha = alpha;
     }
-    
+
     /**
      * Copy constructor for {@link #clone()} method.
-     * 
+     *
      * @param color
      *            GrayColor object.
      */
     private GrayColor(GrayColor color) {
         this(color.gray, color.alpha);
     }
-    
+
     public static GrayColor lerpColor(GrayColor color1, GrayColor color2, double amt) {
         double gray  = color2.gray  * amt + color1.gray  * (1.0 - amt);
         double alpha = color2.alpha * amt + color1.alpha * (1.0 - amt);
         return new GrayColor(gray, alpha);
     }
-    
+
     /**
      * Returns a Color object that shows a complementary color.
-     *  
+     *
      * @return a complementary Color object.
      */
     public GrayColor getComplementaryColor() {
         return new GrayColor(1.0 - this.gray, this.alpha);
     }
-    
+
     public double getGray() {
         return gray;
     }
-    
+
     public void setGray(double gray) {
         this.gray = gray;
     }
-    
+
     @Override
     public double getRed() {
         return gray;

@@ -811,10 +811,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
     private final void drawObjects(Graphics g) {
-    	rootObject.clearSelectionList();
-    	rootObject.rootBufRender(g, getMouseX(), getMouseY(), false,0);
-    	rootObject.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
-    	update(g);
+        rootObject.clearSelectionList();
+        rootObject.rootBufRender(g, getMouseX(), getMouseY(), false,0);
+        rootObject.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
+        update();
     }
 
     private final void updateObjects() {
@@ -846,14 +846,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     // TODO: should change access public to private final
     public void update(Graphics g) {
-    	if (rootObject.isResetObject() ) {
-    		rootObject.resetObjects();
-    		rootObject.setResetObject(false);
-    	}
+        if (rootObject.isResetObject() ) {
+            rootObject.resetObjects();
+            rootObject.setResetObject(false);
+        }
 
-    	if (!rootObjectInit)
-    		rootObjectInit = true;
-    	update();
+        if (!rootObjectInit)
+            rootObjectInit = true;
+        update();
     }
 
     private static TweenManager tweenManager = null;
@@ -868,43 +868,43 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void addTween(Tween t) {
-    	getTweenManager().add(t);
+        getTweenManager().add(t);
     }
 
     public void addTween(TweenSerialGroup g) {
-    	getTweenManager().add(g);
+        getTweenManager().add(g);
     }
 
     public void addTween(TweenParallelGroup g) {
-    	getTweenManager().add(g);
+        getTweenManager().add(g);
     }
 
     public void removeTween(Tween t) {
-    	getTweenManager().remove(t);
+        getTweenManager().remove(t);
     }
 
     /////////////////
     public void setMask(Mask mask){
-    	rootObject.setMask(mask);
+        rootObject.setMask(mask);
     }
 
     public void clearTween(){
-    	tweenManager = null;
-    	rootObject.clearTweenManager();
+        tweenManager = null;
+        rootObject.clearTweenManager();
     }
 
 
    public void setPosition(double x, double y, double z){
-	   rootObject.setPosition(x, y, z);
+       rootObject.setPosition(x, y, z);
    }
 
    public void setPosition(double x, double y){
-	   rootObject.setPosition(x, y);
+       rootObject.setPosition(x, y);
    }
 
 
    public void setRotation(double angle, double x,double y, double z) {
-	   rootObject.setRotation(angle, x, y, z);
+       rootObject.setRotation(angle, x, y, z);
    }
 
    public void enableBlurShader(){
@@ -921,17 +921,17 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
    public void addObject(Object obj) {
       // addObject(0, obj);
-	   if(rootObjectInit){
-		   rootObject.add(obj);
-		   if(obj instanceof TimelineRender){
-			   rootTimeline = (Timeline)obj;
-			   timeline = true;
-			   rootTimeline.setKeyboard(keyboard);
-			   rootTimeline.setMouse(mouse);
-			   rootTimeline.setPopup(popupMenu);
-			   rootTimeline.setApplet(this);
-		   }
-	   }
+       if(rootObjectInit){
+           rootObject.add(obj);
+           if(obj instanceof TimelineRender){
+               rootTimeline = (Timeline)obj;
+               timeline = true;
+               rootTimeline.setKeyboard(keyboard);
+               rootTimeline.setMouse(mouse);
+               rootTimeline.setPopup(popupMenu);
+               rootTimeline.setApplet(this);
+           }
+       }
    }
 
    public void addObject(int index, Object obj) {
@@ -941,14 +941,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
            throw new CasmiRuntimeException("The added object is not rendarable");
        }
 
-	   if(obj instanceof TimelineRender){
-		   rootTimeline = (Timeline)obj;
-		   timeline = true;
-		   rootTimeline.setKeyboard(keyboard);
-		   rootTimeline.setMouse(mouse);
-		   rootTimeline.setPopup(popupMenu);
-		   rootTimeline.setApplet(this);
-	   }
+       if(obj instanceof TimelineRender){
+           rootTimeline = (Timeline)obj;
+           timeline = true;
+           rootTimeline.setKeyboard(keyboard);
+           rootTimeline.setMouse(mouse);
+           rootTimeline.setPopup(popupMenu);
+           rootTimeline.setApplet(this);
+       }
        // NOTE: ???
       /* if (rootObject instanceof TimelineRender) {
            timeline = true;
@@ -961,9 +961,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
 
    public void addObject(List<Object> objectList) {
-	   for (Object obj : objectList) {
-	       addObject(obj);
-	   }
+       for (Object obj : objectList) {
+           addObject(obj);
+       }
    }
 
     public void removeObject(int index) {
@@ -972,11 +972,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 
     public Object getObject(int index) {
-    	return rootObject.get(index);
+        return rootObject.get(index);
     }
 
     public void clearObject() {
-    	rootObject.clear();
+        rootObject.clear();
     }
 
     public void addUpdateObject(Updatable obj) {
@@ -1008,119 +1008,119 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void setPerspective() {
-		rootObject.addPerse(new Perspective());
-	}
+        rootObject.addPerse(new Perspective());
+    }
 
-	public void setPerspective(double fov, double aspect, double zNear,	double zFar) {
-		rootObject.addPerse(new Perspective(fov, aspect, zNear, zFar));
-	}
+    public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
+        rootObject.addPerse(new Perspective(fov, aspect, zNear, zFar));
+    }
 
-	public void setPerspective(Perspective perspective) {
-		rootObject.addPerse(perspective);
-	}
+    public void setPerspective(Perspective perspective) {
+        rootObject.addPerse(perspective);
+    }
 
-	public void setOrtho() {
-		rootObject.addPerse(new Ortho());
-	}
+    public void setOrtho() {
+        rootObject.addPerse(new Ortho());
+    }
 
-	public void setOrtho(double left, double right, double bottom, double top,
-			double near, double far) {
-		rootObject.addPerse(new Ortho(left, right, bottom, top, near, far));
-	}
+    public void setOrtho(double left, double right, double bottom, double top,
+            double near, double far) {
+        rootObject.addPerse(new Ortho(left, right, bottom, top, near, far));
+    }
 
-	public void setOrtho(Ortho ortho) {
-		rootObject.addPerse(ortho);
-	}
+    public void setOrtho(Ortho ortho) {
+        rootObject.addPerse(ortho);
+    }
 
-	public void setFrustum() {
-		rootObject.addPerse(new Frustum());
-	}
+    public void setFrustum() {
+        rootObject.addPerse(new Frustum());
+    }
 
-	public void setFrustum(double left, double right, double bottom,
-			double top, double near, double far) {
-		rootObject.addPerse(new Frustum(left, right, bottom, top, near, far));
-	}
+    public void setFrustum(double left, double right, double bottom,
+            double top, double near, double far) {
+        rootObject.addPerse(new Frustum(left, right, bottom, top, near, far));
+    }
 
-	public void setFrustum(Frustum frustum) {
-		rootObject.addPerse(frustum);
-	}
+    public void setFrustum(Frustum frustum) {
+        rootObject.addPerse(frustum);
+    }
 
-	public void setCamera() {
-		rootObject.addCamera(new Camera());
-	}
+    public void setCamera() {
+        rootObject.addCamera(new Camera());
+    }
 
-	public void setCamera(double eyeX, double eyeY, double eyeZ,
-			double centerX, double centerY, double centerZ, double upX,
-			double upY, double upZ) {
-		rootObject.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY,
-				centerZ, upX, upY, upZ));
-	}
+    public void setCamera(double eyeX, double eyeY, double eyeZ,
+            double centerX, double centerY, double centerZ, double upX,
+            double upY, double upZ) {
+        rootObject.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY,
+                centerZ, upX, upY, upZ));
+    }
 
-	public void setCamera(Camera camera) {
-		rootObject.addCamera(camera);
-	}
+    public void setCamera(Camera camera) {
+        rootObject.addCamera(camera);
+    }
 
-	public void getCamera(int index) {
-		rootObject.getCamera(index);
-	}
+    public void getCamera(int index) {
+        rootObject.getCamera(index);
+    }
 
-	public void addLight(Light light) {
-		rootObject.addLight(light);
-	}
+    public void addLight(Light light) {
+        rootObject.addLight(light);
+    }
 
-	public void getLight(int index) {
-		rootObject.getLight(index);
-	}
+    public void getLight(int index) {
+        rootObject.getLight(index);
+    }
 
-	public void addLight(int index, Light light) {
-		rootObject.addLight(index, light);
-	}
+    public void addLight(int index, Light light) {
+        rootObject.addLight(index, light);
+    }
 
-	public void removeLight(int index) {
-		rootObject.remove(index);
-	}
+    public void removeLight(int index) {
+        rootObject.remove(index);
+    }
 
-	public void applyMatrix(DoubleBuffer matrix) {
-		rootObject.applyMatrix(matrix);
-	}
+    public void applyMatrix(DoubleBuffer matrix) {
+        rootObject.applyMatrix(matrix);
+    }
 
-	public void applyMatix(double matrix[]) {
-		rootObject.applyMatrix(matrix);
-	}
+    public void applyMatix(double matrix[]) {
+        rootObject.applyMatrix(matrix);
+    }
 
-	public void loadMatrix(DoubleBuffer matrix) {
-		rootObject.loadMatrix(matrix);
-	}
+    public void loadMatrix(DoubleBuffer matrix) {
+        rootObject.loadMatrix(matrix);
+    }
 
-	public void loadMatix(double matrix[]) {
-		rootObject.loadMatrix(matrix);
-	}
+    public void loadMatix(double matrix[]) {
+        rootObject.loadMatrix(matrix);
+    }
 
-	public void setBackGroundColor(double gray) {
-		rootObject.setBackGroundColor(new BackGround(gray));
-	}
+    public void setBackGroundColor(double gray) {
+        rootObject.setBackGroundColor(new BackGround(gray));
+    }
 
-	public void setBackGroundColor(double r, double g, double b) {
-		rootObject.setBackGroundColor(new BackGround(r, g, b));
-	}
+    public void setBackGroundColor(double r, double g, double b) {
+        rootObject.setBackGroundColor(new BackGround(r, g, b));
+    }
 
-	public void setBackGroundColor(Color color) {
-		rootObject.setBackGroundColor(new BackGround(color));
-	}
+    public void setBackGroundColor(Color color) {
+        rootObject.setBackGroundColor(new BackGround(color));
+    }
 
-	public void setBackGroundColor(ColorSet colorset) {
-		rootObject.setBackGroundColor(new BackGround(colorset));
-	}
+    public void setBackGroundColor(ColorSet colorset) {
+        rootObject.setBackGroundColor(new BackGround(colorset));
+    }
 
-	public static void showAlert(String title, String message) {
-		JFrame frame = new JFrame();
-		frame.setTitle(title);
-		JOptionPane.showMessageDialog(frame, message);
-	}
+    public static void showAlert(String title, String message) {
+        JFrame frame = new JFrame();
+        frame.setTitle(title);
+        JOptionPane.showMessageDialog(frame, message);
+    }
 
-	public AppletGLEventListener getListener() {
-		return listener;
-	}
+    public AppletGLEventListener getListener() {
+        return listener;
+    }
 }
 
 /**
@@ -1130,9 +1130,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
  *
  */
 interface GraphicsDrawable {
-	public void drawWithGraphics(Graphics g);
-	public void reset();
-	public void initSet();
+    public void drawWithGraphics(Graphics g);
+    public void reset();
+    public void initSet();
 }
 
 /**

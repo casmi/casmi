@@ -16,9 +16,9 @@ public class FrameBufferObject {
 
     private boolean init;
 
-    //FBO用ID
+    //FBO逕ｨID
     private int fboID;
-    //RBO用ID
+    //RBO逕ｨID
     private int rboID;
 
     public FrameBufferObject(int width, int height) {
@@ -45,7 +45,7 @@ public class FrameBufferObject {
     }
 
     public void bindFrameBuffer(GL2 gl) {
-        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, this.fboID);//描画先の切り替え
+        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, this.fboID);
     }
 
     public void unBindFrameBuffer(GL2 gl) {
@@ -101,7 +101,7 @@ public class FrameBufferObject {
         gl.glGenTextures(this.texNumSize, this.texID, 0);
     }
 
-    //---------- テクスチャオブジェクト作成 ---------//
+    //---------- 繝�け繧ｹ繝√Ε繧ｪ繝悶ず繧ｧ繧ｯ繝井ｽ懈� ---------//
     private void createTexture(GL2 gl)
     {
         genTexture(gl);
@@ -114,7 +114,7 @@ public class FrameBufferObject {
 
           gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
           gl.glTexParameterf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
-          gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_GENERATE_MIPMAP, GL2.GL_TRUE);  //自動的なミップマップの作成
+          gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_GENERATE_MIPMAP, GL2.GL_TRUE);  //閾ｪ蜍慕噪縺ｪ繝溘ャ繝励�繝��縺ｮ菴懈�
          // makeImage(512, 512, 4);
           gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, this.width, this.height, 0, GL2.GL_RGBA, GL2.GL_FLOAT, null);
           gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
@@ -123,37 +123,33 @@ public class FrameBufferObject {
     }
 
 
-    //---------- FBO,RBOの作成 ----------------//
+    //---------- FBO,RBO縺ｮ菴懈� ----------------//
     public void createFBOandRBO(GL2 gl)
     {
-          //FBO作成
+          //FBO菴懈�
         fboID = genFBO(gl);
           //glGenFramebuffers(1, FboID[0]);
           gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, fboID);
 
 
-          //RBOの作成
+          //RBO縺ｮ菴懈�
           rboID = genRB(gl);
-          //gl.glGenRenderbuffers(1, RboID[0]);//RGO作成
-          gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, rboID);//バインド
+          //gl.glGenRenderbuffers(1, RboID[0]);//RGO菴懈�
+          gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, rboID);//繝舌う繝ｳ繝�
+          //繝｡繝｢繝ｪ遒ｺ菫�          gl.glRenderbufferStorage(GL2.GL_RENDERBUFFER, GL2.GL_DEPTH_COMPONENT, this.width, this.height);
+          gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, 0);//RBO縺ｮ繝�ヵ繧ｩ繝ｫ繝医∈繝舌う繝ｳ繝�
 
-          //メモリ確保
-          gl.glRenderbufferStorage(GL2.GL_RENDERBUFFER, GL2.GL_DEPTH_COMPONENT, this.width, this.height);
-          gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, 0);//RBOのデフォルトへバインド
+          /* 髢｢騾｣莉倥¢(繧｢繧ｿ繝�メ繝｡繝ｳ繝� */
 
-
-          /* 関連付け(アタッチメント) */
-
-          //テクスチャ->FBO (GL_COLOR_ATTACHMENT0に接続)
+          //繝�け繧ｹ繝√Ε->FBO (GL_COLOR_ATTACHMENT0縺ｫ謗･邯�
           for(int i=0; i<this.texNumSize; i++)
               gl.glFramebufferTexture2D(GL2.GL_FRAMEBUFFER, GL2.GL_COLOR_ATTACHMENT0 + i, GL2.GL_TEXTURE_2D, texID[i], 0);
 
           //RBO->FBO
           gl.glFramebufferRenderbuffer(GL2.GL_FRAMEBUFFER, GL2.GL_DEPTH_ATTACHMENT, GL2.GL_RENDERBUFFER, rboID);
 
-          gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);//FBOのデフォルトへバインド
-
-          //FBOができているかのチェック
+          gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);//FBO縺ｮ繝�ヵ繧ｩ繝ｫ繝医∈繝舌う繝ｳ繝�
+          //FBO縺後〒縺阪※縺�ｋ縺九�繝√ぉ繝�け
           if(checkFramebufferStatus(gl) == false ){
                   System.out.println("out");
           }

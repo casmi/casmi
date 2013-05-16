@@ -1,4 +1,4 @@
-# About casmi
+# casmi
 
 casmi is an opensource free software and is Java based library with OpenGL that is using in production or development of 2D/3D visualization systems. It can support programmers with simple and intuitive interfaces for their implementation.
 It can work on cross platform (GNU/Linux, Mac OS X, and Windows).
@@ -6,47 +6,42 @@ casmi is sutable for visualization, because it originaly desinged for informatio
 
 # Getting Started
 
-## Setup casmi
+## Setup
 
-### Using maven (we recommend to use maven)
-   
-Add following settings to your pom.xml
+### Using Maven (we strongly recommend to use Maven)
 
-```xml
-<repository>
-    <id>casmi</id>
-    <name>casmi</name>
-    <url>http://casmi.github.com/maven-repo/</url>
-</repository>
-```
+Add following settings to your `pom.xml`.
 
 ```xml
 <dependency>
-    <groupId>casmi</groupId>
+    <groupId>com.github.casmi</groupId>
 	<artifactId>casmi</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.2</version>
 </dependency>
 ```
 
 All dependent libraries will be downloaded automatically if using maven.
 
-### Others
+### Manual setup
 
-You can download binary jar from http://casmi.github.com/download/
+You can download binary jar from <http://casmi.github.com/download/>.
 
 ## Project Template
-
-If you use Eclipse, you can create casmi project easily.
 
 ### Maven Archetype
 
 You can use maven archetype for casmi project.
-Archetype catalog is http://casmi.github.com/maven-repo/archetype-catalog.xml
+Archetype catalog is <http://casmi.github.com/maven-repo/archetype-catalog.xml>
+
+You can create Eclipse project by the following command.
+
+```
+$ mvn archetype:generate -DarchetypeCatalog=http://casmi.github.com/maven-repo/archetype-catalog.xml
+```
 
 ### Quickstart Project
 
-You can download Quickstart Eclipse project template from http://casmi.github.com/download/
-
+You can download quickstart project template from <http://casmi.github.com/download/>.
 
 # License
 

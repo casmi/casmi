@@ -23,10 +23,10 @@ import casmi.graphics.Graphics;
 
 /**
  * Perse interface for Frustum, Ortho, and Perspective.
- * 
+ *
  * @author Y. Ban
  */
 public interface Perse {
-	
+
     void simplerender(Graphics g);
 }

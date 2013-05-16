@@ -93,8 +93,8 @@ public class HTTP {
     }
     
     public Reader requestGetWithGzip() throws IOException {
-    	
-    	connection.setRequestMethod("GET");
+        
+        connection.setRequestMethod("GET");
         connection.setDoOutput(false);
 
         final GZIPInputStream gzipInStream = new GZIPInputStream(connection.getInputStream());

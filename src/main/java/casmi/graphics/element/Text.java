@@ -32,8 +32,7 @@ import casmi.graphics.font.Font;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 /**
- * Text class.
- * Wrap JOGL and make it easy to use.
+ * Text class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban, T. Takeuchi
  */
@@ -60,8 +59,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Creates a new Text object using letters to be displayed.
      *
-     * @param text
-     *           The letters to be displayed.
+     * @param text The letters to be displayed.
      */
     public Text(String text) {
         this(text, new Font());
@@ -70,10 +68,8 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Creates a new Text object using letters to be displayed, and Font.
      *
-     * @param text
-     *           The letters to be displayed.
-     * @param font
-     *           The font of text.
+     * @param text The letters to be displayed.
+     * @param font The font of text.
      */
     public Text(String text, Font font) {
         this(text, font, 0, 0, 0);
@@ -82,12 +78,9 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Creates a new Text object using letters to be displayed, x,y-coordinate.
      *
-     * @param text
-     *           The letters to be displayed.
-     * @param x
-     *           The x-coordinate of text.
-     * @param y
-     *           The y-coordinate of text.
+     * @param text The letters to be displayed.
+     * @param x The x-coordinate of text.
+     * @param y The y-coordinate of text.
      */
     public Text(String text, double x, double y) {
         this(text, new Font(), x, y);
@@ -96,14 +89,10 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Creates a new Text object using letters to be displayed, x,y-coordinate and Font.
      *
-     * @param text
-     *           The letters to be displayed.
-     * @param font
-     *           The font of text.
-     * @param x
-     *           The x-coordinate of text.
-     * @param y
-     *           The y-coordinate of text.
+     * @param text The letters to be displayed.
+     * @param font The font of text.
+     * @param x The x-coordinate of text.
+     * @param y The y-coordinate of text.
      */
     public Text(String text, Font font, double x, double y) {
         this(text, font, x, y, 0);
@@ -112,14 +101,10 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Creates a new Text object using letters to be displayed, x,y,z-coordinate.
      *
-     * @param text
-     *           The letters to be displayed.
-     * @param x
-     *           The x-coordinate of text.
-     * @param y
-     *           The y-coordinate of text.
-     * @param z
-     *           The z-coordinate of text.
+     * @param text The letters to be displayed.
+     * @param x The x-coordinate of text.
+     * @param y The y-coordinate of text.
+     * @param z The z-coordinate of text.
      */
     public Text(String text, double x, double y, double z) {
         this(text, new Font(), x, y, z);
@@ -128,16 +113,11 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Creates a new Text object using letters to be displayed, x,y,z-coordinate and Font.
      *
-     * @param text
-     *           The letters to be displayed.
-     * @param font
-     *           The font of text.
-     * @param x
-     *           The x-coordinate of text.
-     * @param y
-     *           The y-coordinate of text.
-     * @param z
-     *           The z-coordinate of text.
+     * @param text The letters to be displayed.
+     * @param font The font of text.
+     * @param x The x-coordinate of text.
+     * @param y The y-coordinate of text.
+     * @param z The z-coordinate of text.
      */
     public Text(String text, Font font, double x, double y, double z) {
         this.x = x;
@@ -154,18 +134,18 @@ public class Text extends Element implements Renderable, Reset {
 
         try {
             textRenderer = new TextRenderer(font.getAWTFont(), true, true);
-        	frc = new FontRenderContext(new AffineTransform(), false, false);
+            frc = new FontRenderContext(new AffineTransform(), false, false);
             layout = new TextLayout[strArray.length];
             for (int i = 0; i < strArray.length; ++i) {
                 layout[i] = new TextLayout(strArray[i], font.getAWTFont(), frc);
             }
         } catch (java.lang.IllegalArgumentException e) {
-        	// Ignore
+            // Ignore
         }
     }
 
-	@Override
-	public void reset(GL2 gl) {
+    @Override
+    public void reset(GL2 gl) {
         try {
             textRenderer = new TextRenderer(font.getAWTFont(), true, true);
             frc = new FontRenderContext(new AffineTransform(), false, false);
@@ -174,7 +154,7 @@ public class Text extends Element implements Renderable, Reset {
                 layout[i] = new TextLayout(strArray[i], font.getAWTFont(), frc);
             }
         } catch (java.lang.IllegalArgumentException e) {
-        	// Ignore
+            // Ignore
         }
 	}
 
@@ -197,19 +177,15 @@ public class Text extends Element implements Renderable, Reset {
                 textRenderer.begin3DRendering();
                 {
                     if (stroke) {
-                        textRenderer.setColor(
-                            (float)getSceneStrokeColor().getRed(),
-                            (float)getSceneStrokeColor().getGreen(),
-                            (float)getSceneStrokeColor().getBlue(),
-                            (float)getSceneStrokeColor().getAlpha()
-                        );
+                        textRenderer.setColor((float)getSceneStrokeColor().getRed(),
+                                              (float)getSceneStrokeColor().getGreen(),
+                                              (float)getSceneStrokeColor().getBlue(),
+                                              (float)getSceneStrokeColor().getAlpha());
                     } else if (fill) {
-                        textRenderer.setColor(
-                            (float)getSceneFillColor().getRed(),
-                            (float)getSceneFillColor().getGreen(),
-                            (float)getSceneFillColor().getBlue(),
-                            (float)getSceneFillColor().getAlpha()
-                        );
+                        textRenderer.setColor((float)getSceneFillColor().getRed(),
+                                              (float)getSceneFillColor().getGreen(),
+                                              (float)getSceneFillColor().getBlue(),
+                                              (float)getSceneFillColor().getAlpha());
                     }
 
                     double tmpX = 0.0;
@@ -230,11 +206,7 @@ public class Text extends Element implements Renderable, Reset {
                         }
 
                         try {
-                            textRenderer.draw3D(strArray[i],
-                                                (float)tmpX,
-                                                (float)(tmpY - leading * i),
-                                                (float)z,
-                                                1.0f);
+                            textRenderer.draw3D(strArray[i], (float)tmpX, (float)(tmpY - leading * i), (float)z, 1.0f);
                         } catch (ArrayIndexOutOfBoundsException e) {
                             // Ignore
                             break;
@@ -274,42 +246,35 @@ public class Text extends Element implements Renderable, Reset {
         gl.glPopMatrix();
 
         if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
-        	gl.glEnable(GL2.GL_DEPTH_TEST);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
     }
 
     /**
      * Returns descent of the current font at its current size and line.
      *
-     * @param line
-     *           The number of lines.
-     * @return
-     *           The descent of text.
+     * @param line The number of lines.
+     * @return The descent of text.
      */
     public final double getDescent(int line) {
-        if (layout[line] == null)
-            return 0;
+        if (layout[line] == null) return 0;
         return layout[line].getDescent();
     }
 
     /**
      * Returns ascent of the current font at its current size and line.
      *
-     * @param line
-     *           The number of lines.
-     * @return
-     *           The ascent of text.
+     * @param line The number of lines.
+     * @return The ascent of text.
      */
     public final double getAscent(int line) {
-        if (layout[line] == null)
-            return 0;
+        if (layout[line] == null) return 0;
         return layout[line].getAscent();
     }
 
     /**
      * Returns descent of the current font at its current size.
      *
-     * @return
-     *           The descent of text.
+     * @return The descent of text.
      */
     public final double getDescent() {
         return getDescent(0);
@@ -318,8 +283,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns ascent of the current font at its current size.
      *
-     * @return
-     *           The ascent of text.
+     * @return The ascent of text.
      */
     public final double getAscent() {
         return getAscent(0);
@@ -328,19 +292,16 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns letter's width of the current font at its current size.
      *
-     * @return
-     *           The letter's width.
+     * @return The letter's width.
      */
     public final double getWidth() {
         return getWidth(0);
     }
 
-
     /**
      * Returns letter's height of the current font at its current size.
      *
-     * @return
-     *           The letter's height.
+     * @return The letter's height.
      */
     public final double getHeight() {
         return getHeight(0);
@@ -349,48 +310,40 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns letter's width of the current font at its current size and line.
      *
-     * @param line
-     *           The number of lines.
-     * @return
-     *           The letter's width.
+     * @param line The number of lines.
+     * @return The letter's width.
      *
-     * @throws GLException
-     *             If the textRenderer is not valid; calls the reset method and
-     *             creates a new textRenderer.
+     * @throws GLException If the textRenderer is not valid; calls the reset method and creates a
+     *         new textRenderer.
      */
     public final double getWidth(int line) {
-       if (strArray.length == 0)
-           return 0.0;
+        if (strArray.length == 0) return 0.0;
 
-       try {
-           return textRenderer.getBounds(strArray[line]).getWidth();
-       } catch (GLException e) {
-           reset = true;
-       }
+        try {
+            return textRenderer.getBounds(strArray[line]).getWidth();
+        } catch (GLException e) {
+            reset = true;
+        }
 
-       return 0.0;
+        return 0.0;
     }
 
     /**
      * Returns letter's height of the current font at its current size and line.
      *
-     * @param line
-     *           The number of lines.
-     * @return
-     *           The letter's height.
+     * @param line The number of lines.
+     * @return The letter's height.
      *
-     * @throws GLException
-     *             If the textRenderer is not valid; calls the reset method and
-     *             creates a new textRenderer.
+     * @throws GLException If the textRenderer is not valid; calls the reset method and creates a
+     *         new textRenderer.
      */
     public final double getHeight(int line) {
-        if (strArray.length == 0)
-            return 0.0;
+        if (strArray.length == 0) return 0.0;
 
         try {
             return textRenderer.getBounds(strArray[line]).getHeight();
         } catch (GLException e) {
-        	reset = true;
+            reset = true;
         }
 
         return 0.0;
@@ -399,8 +352,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns the TextLayout of this Text.
      *
-     * @return
-     *           The TextLayout of this Text.
+     * @return The TextLayout of this Text.
      */
     public final TextLayout getLayout() {
         return layout[0];
@@ -409,39 +361,32 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns the TextLayout of the i line.
      *
-     * @param line
-     *           The number of lines.
-     * @return
-     *           The TextLayout of the i line.
+     * @param line The number of lines.
+     * @return The TextLayout of the i line.
      */
     public final TextLayout getLayout(int line) {
         return layout[line];
     }
 
     /**
-     * Returns the current alignment for drawing text.
-     * The parameters LEFT, CENTER, and RIGHT set the display characteristics of
-     * the letters in relation to the values for the x and y parameters of the
-     * text() function.
+     * Returns the current alignment for drawing text. The parameters LEFT, CENTER, and RIGHT set
+     * the display characteristics of the letters in relation to the values for the x and y
+     * parameters of the text() function.
      *
-     * @return
-     *        The TextAlign of the text.
+     * @return The TextAlign of the text.
      */
     public final TextAlign getAlign() {
         return align;
     }
 
     /**
-     * Sets the current alignment for drawing text.
-     * The parameters LEFT, CENTER, and RIGHT set
-     * the display characteristics of the letters
-     * in relation to the values for the x and y
-     * parameters of the text() function.
+     * Sets the current alignment for drawing text. The parameters LEFT, CENTER, and RIGHT set the
+     * display characteristics of the letters in relation to the values for the x and y parameters
+     * of the text() function.
      *
-     * @param align
-     *           Either LEFT, CENTER or LIGHT.
+     * @param align Either LEFT, CENTER or LIGHT.
      */
-    public void setAlign(TextAlign align){
+    public void setAlign(TextAlign align) {
         this.align = align;
     }
 
@@ -452,8 +397,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns the leading of this letters.
      *
-     * @return
-     *          The leading of this Text.
+     * @return The leading of this Text.
      */
     public double getLeading() {
         return leading;
@@ -466,8 +410,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns the letters of this Text.
      *
-     * @return
-     *          The letters of this Text.
+     * @return The letters of this Text.
      */
     public String getText() {
         return str;
@@ -476,8 +419,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Sets the letters of this Text.
      *
-     * @param str
-     *          The letters to be displayed.
+     * @param str The letters to be displayed.
      */
     public void setText(String str) {
         this.str = str;
@@ -497,8 +439,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns the TextRenderer of this Text.
      *
-     * @return
-     *           The TextRenderer of this Text.
+     * @return The TextRenderer of this Text.
      */
     public TextRenderer getRenderer() {
         return textRenderer;
@@ -507,8 +448,7 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Returns the Font of this Text.
      *
-     * @return
-     *           The Font of the Text.
+     * @return The Font of the Text.
      */
     public final Font getFont() {
         return font;
@@ -517,17 +457,16 @@ public class Text extends Element implements Renderable, Reset {
     /**
      * Sets the Font of this Text.
      *
-     * @param font
-     *           The Font of the Text.
+     * @param font The Font of the Text.
      */
     public final void setFont(Font font) {
         this.font = font;
         textRenderer = new TextRenderer(font.getAWTFont(), true, true);
     }
 
-	public final boolean isSelection() {
-		return selection;
-	}
+    public final boolean isSelection() {
+        return selection;
+    }
 
 	public final void setSelection(boolean selection) {
 		this.selection = selection;

@@ -25,10 +25,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import casmi.exception.ParserException;
 import casmi.io.Reader;
-import casmi.parser.XML;
-import casmi.parser.XMLElement;
 
 public class HTTPTest {
 
@@ -92,44 +89,6 @@ public class HTTPTest {
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed to read.");
-        }
-
-        http.disconnect();
-        reader.close();
-    }
-
-    @Test
-    public void httpAndXmlTest() {
-        HTTP http = null;
-        Reader reader = null;
-
-        try {
-            http = new HTTP("http://api.twitter.com/1/statuses/public_timeline.xml");
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Failed to create instance.");
-        }
-
-        try {
-            reader = http.requestGet();
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Failed to request.");
-        }
-
-        try {
-            XML xml = new XML();
-            xml.parseString(reader.readAll());
-
-            for (XMLElement status : xml.getChildren()) {
-                System.out.println(status.getChildren("text")[0].getContent());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail("Failed to read.");
-        } catch (ParserException e) {
-            e.printStackTrace();
-            fail("Failed to parse.");
         }
 
         http.disconnect();

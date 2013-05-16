@@ -22,10 +22,10 @@ package casmi.matrix;
 import java.text.NumberFormat;
 
 /**
- * 2D Matrix class. 
- * 
+ * 2D Matrix class.
+ *
  * @author Y. Ban
- * 
+ *
  */
 public class Matrix2D implements Matrix {
 
@@ -374,7 +374,7 @@ public class Matrix2D implements Matrix {
 
     // TODO make this more efficient, or move into Matrix2D
     protected boolean isWarped() {
-        return ((m00 != 1) || (m01 != 0) && 
+        return ((m00 != 1) || (m01 != 0) &&
                 (m10 != 0) || (m11 != 1));
     }
 

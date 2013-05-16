@@ -28,5 +28,5 @@ package casmi.tween;
  * @see Tweenable
  */
 public interface SimpleTweenable extends Tweenable {
-	
+
 }

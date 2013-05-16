@@ -16,12 +16,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 package casmi.matrix;
 
 /**
  * Vertex class.
- * 
+ *
  * @author Y. Ban
  */
 public class Vertex {
@@ -35,7 +35,7 @@ public class Vertex {
         this.y = 0.0;
         this.z = 0.0;
     }
-    
+
     public Vertex(double x, double y) {
         this.x = x;
         this.y = y;
@@ -71,72 +71,72 @@ public class Vertex {
     public void setZ(double z) {
         this.z = z;
     }
-    
+
     public void set(double x, double y, double z){
-    	this.x = x;
-    	this.y = y;
-    	this.z = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
-    
+
     public void set(double x, double y){
-    	this.x = x;
-    	this.y = y;
+        this.x = x;
+        this.y = y;
     }
-    
+
     public Vertex mult(Vertex a) {
-    	Vertex result;
-    	result = new Vertex(a.x*this.x,a.y*this.y);
-    	return result;
+        Vertex result;
+        result = new Vertex(a.x*this.x,a.y*this.y);
+        return result;
     }
-    
+
     public Vertex par(Vertex a) {
-    	Vertex result;
-    	result = new Vertex(this.x/a.x,this.y/a.y);
-    	return result;
+        Vertex result;
+        result = new Vertex(this.x/a.x,this.y/a.y);
+        return result;
     }
-    
+
     public Vertex mult(double b) {
-    	Vertex result;
-    	result = new Vertex(this.x*b,this.y*b);
-    	return result; 	
+        Vertex result;
+        result = new Vertex(this.x*b,this.y*b);
+        return result;
     }
-    
+
     public Vertex par(double a) {
-    	Vertex result;
-    	result = new Vertex(this.x/a,this.y/a);
-    	return result;
+        Vertex result;
+        result = new Vertex(this.x/a,this.y/a);
+        return result;
     }
-    
+
     public Vertex add(double num) {
-    	Vertex result;
-    	result = new Vertex(this.x+num, this.y+num);
-    	return result;
+        Vertex result;
+        result = new Vertex(this.x+num, this.y+num);
+        return result;
     }
-    
+
     public Vertex add(Vertex v) {
-    	Vertex result;
-    	result = new Vertex(this.x+v.x,this.y+v.y);
-    	return result;
+        Vertex result;
+        result = new Vertex(this.x+v.x,this.y+v.y);
+        return result;
     }
-    
+
     public double lengthSquared() {
-    	return this.x*this.x+this.y*this.y;
+        return this.x*this.x+this.y*this.y;
     }
-    
+
     public static double getDistance(Vertex a, Vertex b) {
-    	return Math.sqrt(Math.pow(a.x-b.x,2.0) + Math.pow(a.y - b.y, 2.0) + Math.pow(a.z - b.z, 2.0));
+        return Math.sqrt(Math.pow(a.x-b.x,2.0) + Math.pow(a.y - b.y, 2.0) + Math.pow(a.z - b.z, 2.0));
     }
-    
+
     public static double dotProduct(Vertex a, Vertex b) {
-    	return (a.x * b.x + a.y * b.y + a.z * b.z);
+        return (a.x * b.x + a.y * b.y + a.z * b.z);
     }
-    
+
     public static Vertex crossProduct(Vertex a, Vertex b) {
-    	return new Vertex(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+        return new Vertex(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
     }
-    
+
     @Override
     public String toString() {
-        return "(" + x + ", " + y + ", " + z + ")"; 
+        return "(" + x + ", " + y + ", " + z + ")";
     }
 }

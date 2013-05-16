@@ -23,10 +23,10 @@ package casmi;
  * @author Y. Ban
  */
 public enum KeyEvent {
-	
-    PRESSED, 
-    
+
+    PRESSED,
+
     RELEASED,
-    
+
     TYPED
 }

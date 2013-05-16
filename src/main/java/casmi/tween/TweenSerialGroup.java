@@ -22,54 +22,54 @@ package casmi.tween;
 /**
  * A TweenGroup can be used to create complex animations made of sequences and
  * parallel sets of Tweens.
- * 
+ *
  * @author Y. Ban
- * 
+ *
  * @see Tween
  * @see TweenManager
  */
 public class TweenSerialGroup extends TweenGroup {
 
-	/**
-	 * Convenience method to create a group with its elements running as a
-	 * sequence. TweenGroup.sequence(...);
-	 * TweenGroup.getNew().addInSequence(...); </pre>
-	 * 
-	 * @param objs
-	 *            A list of objects made of Tweens and/or TweenGroups.
-	 * @return The TweenGroup created.
-	 */
-	public static TweenSerialGroup create(Groupable... objs) {
-		TweenSerialGroup group = new TweenSerialGroup();
-		
-		for (Groupable o : objs){
-			group.append(o);
-		}
-		return group;
-	}
+    /**
+     * Convenience method to create a group with its elements running as a
+     * sequence. TweenGroup.sequence(...);
+     * TweenGroup.getNew().addInSequence(...); </pre>
+     *
+     * @param objs
+     *            A list of objects made of Tweens and/or TweenGroups.
+     * @return The TweenGroup created.
+     */
+    public static TweenSerialGroup create(Groupable... objs) {
+        TweenSerialGroup group = new TweenSerialGroup();
 
-	/**
-	 * Adds a list of Tweens and/or TweenGroups and make them run after the
-	 * current ones, one after the other.
-	 * 
-	 * @param objs
-	 *            A list of objects made of Tweens and/or TweenGroups.
-	 * @return The group, for instruction chaining.
-	 */
-	public TweenSerialGroup append(Groupable... objs) {
-		for (Groupable o : objs) {
-			if (o != null) {
-				if (getGroupables().isEmpty()) {
-					getGroupables().add(o);
-				} else {
-					Groupable last = getGroupables().get(getGroupables().size() - 1);
-					o.addDelay(last.getDelay() + last.getDuration());
-					getGroupables().add(o);
-				}
-				setDuration( getDuration() + o.getDelay() + o.getDuration() );
-			}
-		}
-		return this;
-	}
+        for (Groupable o : objs){
+            group.append(o);
+        }
+        return group;
+    }
+
+    /**
+     * Adds a list of Tweens and/or TweenGroups and make them run after the
+     * current ones, one after the other.
+     *
+     * @param objs
+     *            A list of objects made of Tweens and/or TweenGroups.
+     * @return The group, for instruction chaining.
+     */
+    public TweenSerialGroup append(Groupable... objs) {
+        for (Groupable o : objs) {
+            if (o != null) {
+                if (getGroupables().isEmpty()) {
+                    getGroupables().add(o);
+                } else {
+                    Groupable last = getGroupables().get(getGroupables().size() - 1);
+                    o.addDelay(last.getDelay() + last.getDuration());
+                    getGroupables().add(o);
+                }
+                setDuration( getDuration() + o.getDelay() + o.getDuration() );
+            }
+        }
+        return this;
+    }
 
 }

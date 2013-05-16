@@ -34,7 +34,7 @@ import casmi.util.DateUtil;
 
 /**
  * MySQL class.
- * 
+ *
  * @author T. Takeuchi
  */
 public class MySQL extends SQL {
@@ -74,10 +74,10 @@ public class MySQL extends SQL {
 
     /**
      * Creates new MySQL object from the specified host and database name.
-     * 
+     *
      * @param host
      *            The host name of a MySQL server.
-     * 
+     *
      * @param database
      *            The database name.
      */
@@ -99,16 +99,16 @@ public class MySQL extends SQL {
     /**
      * Creates new MySQL object from the specified host, database, user, and
      * password.
-     * 
+     *
      * @param host
      *            The host name of a MySQL server.
-     * 
+     *
      * @param database
      *            The database name.
-     * 
+     *
      * @param user
      *            The user name to log in the MySQL server.
-     * 
+     *
      * @param password
      *            The password to log in the MySQL server.
      */
@@ -200,7 +200,7 @@ public class MySQL extends SQL {
 
     /**
      * Return true if the SQL is a query.
-     * 
+     *
      * @param sql
      * @return
      */
@@ -215,7 +215,7 @@ public class MySQL extends SQL {
 
     /**
      * Set parameter on a prepared statement.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param param
@@ -288,7 +288,7 @@ public class MySQL extends SQL {
     @Override
     @SuppressWarnings("unchecked")
     <T> T get(ResultSet resultSet, Class<T> type, String field) throws SQLException {
-        
+
         if (type == Blob.class) {
             return (T)resultSet.getBlob(field);
         } else if (type ==     int.class ||
@@ -300,10 +300,10 @@ public class MySQL extends SQL {
         } else if (type ==    long.class ||
                    type ==    Long.class) {
             return (T)(Long)resultSet.getLong(field);
-        } else if (type == double.class || 
+        } else if (type == double.class ||
                    type == Double.class) {
             return (T)(Double)resultSet.getDouble(field);
-        } else if (type == float.class || 
+        } else if (type == float.class ||
                    type == Float.class) {
             return (T)(Float)resultSet.getFloat(field);
         } else if (type == java.util.Date.class) {
@@ -311,21 +311,21 @@ public class MySQL extends SQL {
         } else if (type == String.class) {
             return (T)resultSet.getString(field);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Retrieves the value of the designated column in the current row as a Blob
      * object in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return
      *         a Blob object representing the SQL BLOB value in the specified
      *         column.
-     * 
+     *
      * @throws SQLException
      *             if the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -341,14 +341,14 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a Blob
      * object in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return
      *         a Blob object representing the SQL BLOB value in the specified
      *         column.
-     * 
+     *
      * @throws SQLException
      *             if the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -364,13 +364,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as
      * java.util.Date object.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the column index is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -388,13 +388,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as
      * java.util.Date object.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the column index is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -412,13 +412,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * double in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -434,13 +434,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * double in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -456,13 +456,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * float in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0f.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -478,13 +478,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * float in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.0f.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -500,13 +500,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as int in
      * the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -522,13 +522,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a int
      * in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         0.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -543,13 +543,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * Object in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return
      *         A java.lang.Object holding the column value.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -565,13 +565,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * Object in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return
      *         A java.lang.Object holding the column value.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -587,13 +587,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * String in the Java programming language.
-     * 
+     *
      * @param column
      *            The first column is 1, the second is 2, ...
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -609,13 +609,13 @@ public class MySQL extends SQL {
     /**
      * Retrieves the value of the designated column in the current row as a
      * String in the Java programming language.
-     * 
+     *
      * @param field
      *            The name of the field.
-     * 
+     *
      * @return The column value; if the value is SQL NULL, the value returned is
      *         null.
-     * 
+     *
      * @throws SQLException
      *             If the columnIndex is not valid; if a database access error
      *             occurs or this method is called on a closed result set.
@@ -634,7 +634,7 @@ public class MySQL extends SQL {
 
     /**
      * Returns a string representation of the record.
-     * 
+     *
      * @return a string representation of the record.
      * @throws SQLException
      */
@@ -655,18 +655,18 @@ public class MySQL extends SQL {
 
     /**
      * Prints a record string and then terminate the line simply.
-     * 
+     *
      * @throws SQLException
      */
     public void println() throws SQLException {
 
         System.out.println(recordToString());
     }
-    
+
     // O/R mapping.
-    
+
     public <T extends Entity> void drop(Class<T> type) throws SQLException {
-        
+
         Statement statement = connection.createStatement();
         String stmt = StatementGenerator.drop(getSQLType(), getTablename(type));
         statement.executeUpdate(stmt);
@@ -679,7 +679,7 @@ public class MySQL extends SQL {
 
     /**
      * Return a database's URL.
-     * 
+     *
      * @return A database's URL string.
      */
     public String getURL() {
@@ -689,7 +689,7 @@ public class MySQL extends SQL {
 
     /**
      * Return a user name.
-     * 
+     *
      * @return A user name string.
      */
     public String getUser() {
@@ -699,7 +699,7 @@ public class MySQL extends SQL {
 
     /**
      * Return java.sql.Statement object.
-     * 
+     *
      * @return java.sql.Statement object.
      */
     public Statement getStatement() {
@@ -709,7 +709,7 @@ public class MySQL extends SQL {
 
     /**
      * Return java.sql.PreparedStatement object.
-     * 
+     *
      * @return java.sql.PreparedStatement object.
      */
     public PreparedStatement getPreparedStatement() {
@@ -719,7 +719,7 @@ public class MySQL extends SQL {
 
     /**
      * Return java.sql.ResultSet object.
-     * 
+     *
      * @return java.sql.ResultSet object.
      */
     public ResultSet getResultSet() {

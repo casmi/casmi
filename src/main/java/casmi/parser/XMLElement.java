@@ -21,16 +21,16 @@ package casmi.parser;
 
 /**
  * XML element class.
- * 
+ *
  * <p>
  * This class uses <a href="http://devkix.com/nanoxml.php">nanoxml</a> library
  * (lite-2.2.3) licensed by zlib/libpng license.
  * </p>
- * 
+ *
  * @see casmi.exception.ParserException
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class XMLElement {
 
@@ -50,7 +50,7 @@ public class XMLElement {
 
     /**
      * Create a new XMLElement object from the specified name.
-     * 
+     *
      * @param name The element name.
      */
     public XMLElement(String name) {
@@ -61,9 +61,9 @@ public class XMLElement {
 
     /**
      * Create a new XMLElement object from the specified name and content.
-     * 
+     *
      * @param name The element name.
-     * 
+     *
      * @param content The content.
      */
     public XMLElement(String name, String content) {
@@ -74,7 +74,7 @@ public class XMLElement {
     }
 
     private XMLElement(nanoxml.XMLElement element) {
-        
+
         this.nanoElement = element;
     }
 
@@ -84,9 +84,9 @@ public class XMLElement {
 
     /**
      * Add a new attribute with the specified key and value.
-     * 
+     *
      * @param key The attribute key.
-     * 
+     *
      * @param value The attribute value.
      */
     public void addAttribute(String key, String value) {
@@ -97,7 +97,7 @@ public class XMLElement {
     /**
      * Add a new child.
      * The child is a XMLElement object.
-     * 
+     *
      * @param child The XMLElement object.
      */
     public void addChild(XMLElement child) {
@@ -107,7 +107,7 @@ public class XMLElement {
 
     /**
      * Removes an attribute from the specified key.
-     * 
+     *
      * @param key The key name of the removed attribute.
      */
     public void removeAttribute(String key) {
@@ -117,7 +117,7 @@ public class XMLElement {
 
     /**
      * Removes a child.
-     * 
+     *
      * @param child The removed XMLElement object.
      */
     public void removeChild(XMLElement child) {
@@ -127,7 +127,7 @@ public class XMLElement {
 
     /**
      * Set a new name to the XMLElement object.
-     * 
+     *
      * @param name The name string.
      */
     public void setName(String name) {
@@ -137,7 +137,7 @@ public class XMLElement {
 
     /**
      * Set a new content to the XMLElement object.
-     * 
+     *
      * @param content The content string.
      */
     public void setContent(String content) {
@@ -151,7 +151,7 @@ public class XMLElement {
 
     /**
      * Returns an amount of attributes.
-     * 
+     *
      * @return An amount of attributes as int.
      */
     public int countAttributes() {
@@ -161,7 +161,7 @@ public class XMLElement {
 
     /**
      * Returns an amount of children.
-     * 
+     *
      * @return An amount of children as int.
      */
     public int countChildren() {
@@ -171,7 +171,7 @@ public class XMLElement {
 
     /**
      * Returns attribute names as a string array.
-     * 
+     *
      * @return The attribute names.
      */
     public String[] getAttributeNames() {
@@ -181,7 +181,7 @@ public class XMLElement {
 
     /**
      * Returns children as a XMLElement array.
-     * 
+     *
      * @return The children.
      */
     public XMLElement[] getChildren() {
@@ -191,9 +191,9 @@ public class XMLElement {
 
     /**
      * Returns children that have the specified name as a XMLElement array.
-     * 
+     *
      * @param name The name to search.
-     * 
+     *
      * @return The children.
      */
     public XMLElement[] getChildren(String name) {
@@ -211,9 +211,9 @@ public class XMLElement {
 
     /**
      * Returns the attribute value that have the specified key.
-     * 
+     *
      * @param key The attribute key to search.
-     * 
+     *
      * @return The attribute value.
      */
     public String getAttribute(String key) {
@@ -223,7 +223,7 @@ public class XMLElement {
 
     /**
      * Returns the content of the XMLElement object as a string.
-     * 
+     *
      * @return The content.
      */
     public String getContent() {
@@ -234,7 +234,7 @@ public class XMLElement {
 
     /**
      * Returns a name of this XMLElement object.
-     * 
+     *
      * @return A name string.
      */
     public String getName() {
@@ -245,7 +245,7 @@ public class XMLElement {
     /**
      * Returns the line number in the source data on which the element is found.
      * This method returns 0 there is no associated source data.
-     * 
+     *
      * @return The line number; 0 if unknown.
      */
     public int getLine() {
@@ -255,7 +255,7 @@ public class XMLElement {
 
     /**
      * Returns true if this object has attributes.
-     * 
+     *
      * @return <code>true</code> if this object has attributes, or
      *         <code>false</code> if not.
      */
@@ -266,7 +266,7 @@ public class XMLElement {
 
     /**
      * Returns true if this object has children.
-     * 
+     *
      * @return <code>true</code> if this object has children, or
      *         <code>false</code> if not.
      */
@@ -277,7 +277,7 @@ public class XMLElement {
 
     /**
      * Returns true if this object has a content.
-     * 
+     *
      * @return <code>true</code> if this object has a content, or
      *         <code>false</code> if not.
      */

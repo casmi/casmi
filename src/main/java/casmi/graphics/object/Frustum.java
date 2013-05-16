@@ -28,99 +28,99 @@ import casmi.graphics.element.Element;
 /**
  * Frustum class. Works like glFrustum.
  * Wrap JOGL and make it easy to use.
- * 
+ *
  * @author Y. Ban
  */
 public class Frustum extends Element implements ObjectRender, Perse {
-    
-	private double left;
-	private double right;
-	private double bottom;
-	private double top;
-	private double near;
-	private double far;
-	private boolean def = false;
-	
-	/**
-	 * Creates Frustum object with the clipping plane.
-	 * 
-	 * @param left
-	 * 					The left coordinate of the clipping plane.
-	 * @param right
-	 * 					The right coordinate of the clipping plane.
-	 * @param bottom
-	 * 					The bottom coordinate of the clipping plane.
-	 * @param top
-	 * 					The top coordinate of the clipping plane.
-	 * @param near
-	 * 					The near coordinate of the clipping plane.
-	 * @param far
-	 *				 	The far coordinate of the clipping plane.
-	 */
-	public Frustum(double left, double right, double bottom, double top,
-			double near, double far) {
-		this.left = left;
-		this.right = right;
-		this.bottom = bottom;
-		this.top = top;
-		this.near = near;
-		this.far = far;
+
+    private double left;
+    private double right;
+    private double bottom;
+    private double top;
+    private double near;
+    private double far;
+    private boolean def = false;
+
+    /**
+     * Creates Frustum object with the clipping plane.
+     *
+     * @param left
+     *                     The left coordinate of the clipping plane.
+     * @param right
+     *                     The right coordinate of the clipping plane.
+     * @param bottom
+     *                     The bottom coordinate of the clipping plane.
+     * @param top
+     *                     The top coordinate of the clipping plane.
+     * @param near
+     *                     The near coordinate of the clipping plane.
+     * @param far
+     *                     The far coordinate of the clipping plane.
+     */
+    public Frustum(double left, double right, double bottom, double top,
+            double near, double far) {
+        this.left = left;
+        this.right = right;
+        this.bottom = bottom;
+        this.top = top;
+        this.near = near;
+        this.far = far;
     }
-	
-	/**
-	 * Creates Frustum object with the default parameter.
-	 * The default parameter is Frustom(0, this.width, 0, this.height, -1.0e10, 1.0e10).
-	 */
-	public Frustum(){
-		def = true;
-	}
-	
-	/**
-	 * Sets the clipping plane.
-	 * 
-	 * @param left
-	 * 					The left coordinate of the clipping plane.
-	 * @param right
-	 * 					The right coordinate of the clipping plane.
-	 * @param bottom
-	 * 					The bottom coordinate of the clipping plane.
-	 * @param top
-	 * 					The top coordinate of the clipping plane.
-	 * @param near
-	 * 					The near coordinate of the clipping plane.
-	 * @param far
-	 *				 	The far coordinate of the clipping plane.
-	 */
-	public void set(double left, double right, double bottom, double top,
-			double near, double far) {
-		this.left = left;
-		this.right = right;
-		this.bottom = bottom;
-		this.top = top;
-		this.near = near;
-		this.far = far;
+
+    /**
+     * Creates Frustum object with the default parameter.
+     * The default parameter is Frustom(0, this.width, 0, this.height, -1.0e10, 1.0e10).
+     */
+    public Frustum(){
+        def = true;
     }
-    
-	@Override
-	public void render(Graphics g){
-		if(def){
-			g.frustum();
-		} else {
-			g.frustum(left, right, bottom, top, near, far);
-		}
-	}
-	
-	@Override
-	public void simplerender(Graphics g){
-		if(def){
-			g.simplefrustum();
-		} else {
-			g.simplefrustum(left, right, bottom, top, near, far);
-		}
-	}
-	
+
+    /**
+     * Sets the clipping plane.
+     *
+     * @param left
+     *                     The left coordinate of the clipping plane.
+     * @param right
+     *                     The right coordinate of the clipping plane.
+     * @param bottom
+     *                     The bottom coordinate of the clipping plane.
+     * @param top
+     *                     The top coordinate of the clipping plane.
+     * @param near
+     *                     The near coordinate of the clipping plane.
+     * @param far
+     *                     The far coordinate of the clipping plane.
+     */
+    public void set(double left, double right, double bottom, double top,
+            double near, double far) {
+        this.left = left;
+        this.right = right;
+        this.bottom = bottom;
+        this.top = top;
+        this.near = near;
+        this.far = far;
+    }
+
+    @Override
+    public void render(Graphics g){
+        if(def){
+            g.frustum();
+        } else {
+            g.frustum(left, right, bottom, top, near, far);
+        }
+    }
+
+    @Override
+    public void simplerender(Graphics g){
+        if(def){
+            g.simplefrustum();
+        } else {
+            g.simplefrustum(left, right, bottom, top, near, far);
+        }
+    }
+
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
     }
-    
+
 }

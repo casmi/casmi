@@ -51,7 +51,6 @@ import com.jogamp.common.nio.Buffers;
  */
 public class RootObject extends GraphicsObject {
 
-
     private BackGround bg;
 
 
@@ -519,7 +518,6 @@ public class RootObject extends GraphicsObject {
                 objShader.setUniform("texOn", 1.0f);
             }
         }
-
         if (el.isVisible()) {
             if (el.isMasked()) {
                 el.getMask().render(g);
@@ -565,7 +563,9 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    private final int drawObject(Graphics g, boolean selection, double mouseX, double mouseY, int selectionIndex, int selectedIndex) {
+    private final int drawObject(Graphics g,
+                                 boolean selection, double mouseX, double mouseY,
+                                 int selectionIndex, int selectedIndex) {
         for (Object obj : objectList) {
             if (obj instanceof GraphicsObject) {
                 GraphicsObject o = (GraphicsObject)obj;
@@ -655,10 +655,6 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void setMouseEvent(casmi.MouseEvent e) {
-        // if(mouseEventList==null)
-        // mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
-        // if(e!=null&&(e!=mouseEvent||mouseEventList.size()==0))
-        // mouseEventList.add(e);
         mouseEvent = e;
         for (Object obj : objectList) {
             if (obj instanceof GraphicsObject) {
@@ -705,7 +701,6 @@ public class RootObject extends GraphicsObject {
     }
 
     private final void drawLight(Graphics g) {
-
         for (Light light : lightList)
             light.render(g);
     }
@@ -1022,5 +1017,4 @@ public class RootObject extends GraphicsObject {
     public void setRootBlur(boolean blur) {
         this.rootBlur = blur;
     }
-
 }

@@ -27,9 +27,9 @@ import java.lang.annotation.Target;
 /**
  * Indicates the field is a primary key of a SQL database.
  * Must be used in a sub class of casmi.sql.Entity only.
- * 
+ *
  * @see casmi.sql.Entity
- * 
+ *
  * @author T. Takeuchi
  */
 @Target(ElementType.FIELD)

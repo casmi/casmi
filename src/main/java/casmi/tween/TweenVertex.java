@@ -30,76 +30,76 @@ import casmi.matrix.Vertex;
  * @author Y. Ban
  */
 public class TweenVertex extends Vertex implements Tweenable {
-	
-	private Renderable r;
-	private double x, y, z;
 
-	public TweenVertex(double x, double y) {
-		super(x, y);
-		this.x = x;
-		this.y = y;
-		this.z = 0;
-	}
+    private Renderable r;
+    private double x, y, z;
 
-	public TweenVertex(double x, double y, double z) {
-		super(x, y, z);
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
+    public TweenVertex(double x, double y) {
+        super(x, y);
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+    }
 
-	public Renderable getRenderable() {
-		return r;
-	}
+    public TweenVertex(double x, double y, double z) {
+        super(x, y, z);
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
-	@Override
-	public List<Float> getTweenValues(TweenType tweenType) {
-		List<Float> returnValues = new ArrayList<Float>();
-		switch (tweenType) {
-		case POSITION:
-			returnValues.add( (float) super.getX() );
-			returnValues.add( (float) super.getY() );
-			break;
-		case POSITION_3D:
-			returnValues.add( (float) super.getX() );
-			returnValues.add( (float) super.getY() );
-			returnValues.add( (float) super.getZ() );
-			break;
-		default:
-			throw new IllegalArgumentException();    
-		}
-		return returnValues;
-	}
+    public Renderable getRenderable() {
+        return r;
+    }
 
-	@Override
-	public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
-		switch (tweenType) {
-		case POSITION:
-			super.setX(newValues.get(0));
-			super.setY(newValues.get(1));
-			break;
-		case POSITION_3D:
-			super.setX(newValues.get(0));
-			super.setY(newValues.get(1));
-			super.setZ(newValues.get(2));
-			break;
-		default:
-		    break;
-		}
-	}
+    @Override
+    public List<Float> getTweenValues(TweenType tweenType) {
+        List<Float> returnValues = new ArrayList<Float>();
+        switch (tweenType) {
+        case POSITION:
+            returnValues.add( (float) super.getX() );
+            returnValues.add( (float) super.getY() );
+            break;
+        case POSITION_3D:
+            returnValues.add( (float) super.getX() );
+            returnValues.add( (float) super.getY() );
+            returnValues.add( (float) super.getZ() );
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+        return returnValues;
+    }
 
-	@Override
-	public void end(Graphics g, TweenType tweenType) {
-	}
+    @Override
+    public void update(Graphics g, TweenType tweenType, List<Float> newValues) {
+        switch (tweenType) {
+        case POSITION:
+            super.setX(newValues.get(0));
+            super.setY(newValues.get(1));
+            break;
+        case POSITION_3D:
+            super.setX(newValues.get(0));
+            super.setY(newValues.get(1));
+            super.setZ(newValues.get(2));
+            break;
+        default:
+            break;
+        }
+    }
 
-	@Override
-	public void render(Graphics g, TweenType tweenType) {
-	}
+    @Override
+    public void end(Graphics g, TweenType tweenType) {
+    }
 
-	public void reset() {
-		super.setX(x);
-		super.setY(y);
-		super.setZ(z);
-	}
+    @Override
+    public void render(Graphics g, TweenType tweenType) {
+    }
+
+    public void reset() {
+        super.setX(x);
+        super.setY(y);
+        super.setZ(z);
+    }
 
 }

@@ -26,63 +26,63 @@ import casmi.matrix.Vertex;
  */
 public class Random {
 
-	private static java.util.Random r = null;
-	
-	public static final int random(int max) {
-		
-		if (max == 0)
-			return 0;
+    private static java.util.Random r = null;
 
-		if (r == null)
-			r = new java.util.Random();
-		
-		
-		return r.nextInt(max);
-	}
-	
-	public static final int random(int min, int max) {
-		if (min >= max)
-			return min;
+    public static final int random(int max) {
 
-		int diff = max - min;
+        if (max == 0)
+            return 0;
 
-		return random(diff) + min;
-	}
+        if (r == null)
+            r = new java.util.Random();
 
-	public static final float random(float max) {
 
-		if (max == 0)
-			return 0;
+        return r.nextInt(max);
+    }
 
-		if (r == null)
-			r = new java.util.Random();
+    public static final int random(int min, int max) {
+        if (min >= max)
+            return min;
 
-		return r.nextFloat() * max;
-	}
+        int diff = max - min;
 
-	public static final float random(float min, float max) {
-		if (min >= max)
-			return min;
+        return random(diff) + min;
+    }
 
-		float diff = max - min;
+    public static final float random(float max) {
 
-		return random(diff) + min;
-	}
+        if (max == 0)
+            return 0;
 
-	public static final void setSeed(long seed) {
-		if (r == null)
-			r = new java.util.Random();
+        if (r == null)
+            r = new java.util.Random();
 
-		r.setSeed(seed);
-	}
-	
-	/**
-	 * returns a random Vertex that represents a point on the unit circle
-	 * 
-	 * @return vertex
-	 */
-	public static final Vertex randVertex2d() {
-		float theta = random((float)(Math.PI*2.0));
-		return new Vertex(Math.cos(theta),Math.sin(theta));
-	}
+        return r.nextFloat() * max;
+    }
+
+    public static final float random(float min, float max) {
+        if (min >= max)
+            return min;
+
+        float diff = max - min;
+
+        return random(diff) + min;
+    }
+
+    public static final void setSeed(long seed) {
+        if (r == null)
+            r = new java.util.Random();
+
+        r.setSeed(seed);
+    }
+
+    /**
+     * returns a random Vertex that represents a point on the unit circle
+     *
+     * @return vertex
+     */
+    public static final Vertex randVertex2d() {
+        float theta = random((float)(Math.PI*2.0));
+        return new Vertex(Math.cos(theta),Math.sin(theta));
+    }
 }

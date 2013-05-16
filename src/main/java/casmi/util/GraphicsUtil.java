@@ -25,15 +25,15 @@ import casmi.graphics.element.Element;
 
 /**
  * Graphics utility class for easy to use casmi.
- * 
+ *
  * @author T. Takeuchi
  */
 public class GraphicsUtil {
-    
+
     /**
      * Remove all elements in the specified list from casmi.Applet,
      * casmi.graphics.object.GraphicsObject, or casmi.graphics.group.Group.
-     * 
+     *
      * @param list
      *            List of objects extends Element.
      */

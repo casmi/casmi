@@ -16,44 +16,43 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package casmi;
 
+package casmi;
 
 /**
  * Mouse class.
- * <p>
- * 
+ *
  * @author T. Takeuchi
  */
 public class Mouse {
 
     private int x = 0;
     private int y = 0;
-    
+
     private int prvX = 0;
     private int prvY = 0;
-    
-    private boolean leftButtonPressed   = false;
+
+    private boolean leftButtonPressed = false;
     private boolean middleButtonPressed = false;
-    private boolean rightButtonPressed  = false;
-    
-    private boolean pressed  = false;
-    private boolean clicked  = false;
+    private boolean rightButtonPressed = false;
+
+    private boolean pressed = false;
+    private boolean clicked = false;
     private boolean doubleClicked = false;
-    private boolean	entered  = false;
-    private boolean exited   = false;
+    private boolean entered = false;
+    private boolean exited = false;
     private boolean released = false;
-    private boolean dragged  = false;
-    private boolean moved    = false;
-    
+    private boolean dragged = false;
+    private boolean moved = false;
+
     private int wheelRotation = 0;
-    
+
     private long mouseClickLeftTime = 0;
     private long mouseClickRightTime = 0;
     private long mouseClickMiddleTime = 0;
-    
+
     Mouse() {}
-    
+
     public int getX() {
         return x;
     }
@@ -61,7 +60,7 @@ public class Mouse {
     void setX(int x) {
         this.x = x;
     }
-    
+
     public int getY() {
         return y;
     }
@@ -69,7 +68,7 @@ public class Mouse {
     void setY(int y) {
         this.y = y;
     }
-    
+
     public int getPrvX() {
         return prvX;
     }
@@ -77,11 +76,11 @@ public class Mouse {
     void setPrvX(int prvX) {
         this.prvX = prvX;
     }
-    
+
     public int getPrvY() {
         return prvY;
     }
-    
+
     void setPrvY(int prvY) {
         this.prvY = prvY;
     }
@@ -99,17 +98,17 @@ public class Mouse {
         }
         return false;
     }
-    
+
     void setButtonPressed(MouseButton button, boolean pressed) {
         switch (button) {
         case LEFT:
-            leftButtonPressed   = pressed;
+            leftButtonPressed = pressed;
             break;
         case MIDDLE:
             middleButtonPressed = pressed;
             break;
         case RIGHT:
-            rightButtonPressed  = pressed;
+            rightButtonPressed = pressed;
             break;
         default:
             break;
@@ -119,55 +118,55 @@ public class Mouse {
     public boolean isPressed() {
         return pressed;
     }
-    
+
     void setPressed(boolean pressed) {
         this.pressed = pressed;
     }
-    
+
     public boolean isClicked() {
         return clicked;
     }
-    
+
     void setClicked(boolean clicked) {
         this.clicked = clicked;
     }
-    
+
     public boolean isEntered() {
         return entered;
     }
-    
+
     void setEntered(boolean entered) {
         this.entered = entered;
     }
-    
+
     public boolean isExited() {
         return exited;
     }
-    
+
     void setExited(boolean exited) {
         this.exited = exited;
     }
-    
+
     public boolean isReleased() {
         return released;
     }
-    
+
     void setReleased(boolean released) {
         this.released = released;
     }
-    
+
     boolean isDragged() {
         return dragged;
     }
-    
+
     void setDragged(boolean dragged) {
         this.dragged = dragged;
     }
-    
+
     boolean isMoved() {
         return moved;
     }
-    
+
     void setMoved(boolean moved) {
         this.moved = moved;
     }
@@ -175,40 +174,40 @@ public class Mouse {
     public int getWheelRotation() {
         return wheelRotation;
     }
-    
+
     void setWheelRotation(int wheelRotation) {
         this.wheelRotation = wheelRotation;
     }
 
-	public boolean isDoubleClicked() {
-		return doubleClicked;
-	}
+    public boolean isDoubleClicked() {
+        return doubleClicked;
+    }
 
-	public void setDoubleClicked(boolean doubleClicked) {
-		this.doubleClicked = doubleClicked;
-	}
+    public void setDoubleClicked(boolean doubleClicked) {
+        this.doubleClicked = doubleClicked;
+    }
 
-	public long getMouseClickLeftTime() {
-		return mouseClickLeftTime;
-	}
+    public long getMouseClickLeftTime() {
+        return mouseClickLeftTime;
+    }
 
-	public void setMouseClickLeftTime(long mouseClickTime) {
-		this.mouseClickLeftTime = mouseClickTime;
-	}
+    public void setMouseClickLeftTime(long mouseClickTime) {
+        this.mouseClickLeftTime = mouseClickTime;
+    }
 
-	public long getMouseClickRightTime() {
-		return mouseClickRightTime;
-	}
+    public long getMouseClickRightTime() {
+        return mouseClickRightTime;
+    }
 
-	public void setMouseClickRightTime(long mouseClickRightTime) {
-		this.mouseClickRightTime = mouseClickRightTime;
-	}
+    public void setMouseClickRightTime(long mouseClickRightTime) {
+        this.mouseClickRightTime = mouseClickRightTime;
+    }
 
-	public long getMouseClickMiddleTime() {
-		return mouseClickMiddleTime;
-	}
+    public long getMouseClickMiddleTime() {
+        return mouseClickMiddleTime;
+    }
 
-	public void setMouseClickMiddleTime(long mouseClickMiddleTime) {
-		this.mouseClickMiddleTime = mouseClickMiddleTime;
-	}
+    public void setMouseClickMiddleTime(long mouseClickMiddleTime) {
+        this.mouseClickMiddleTime = mouseClickMiddleTime;
+    }
 }

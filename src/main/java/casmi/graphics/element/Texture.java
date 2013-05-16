@@ -31,16 +31,14 @@ import casmi.image.ImageMode;
 import casmi.matrix.Vertex;
 
 /**
- * Texture class.
- * Wrap JOGL and make it easy to use.
+ * Texture class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
- *
  */
 public class Texture extends Element implements Renderable, Reset {
 
-    public static final int LINES     = 1;
-    public static final int LINES_3D  = 3;
+    public static final int LINES = 1;
+    public static final int LINES_3D = 3;
     public static final int LINE_LOOP = 51;
 
     protected Image image;
@@ -52,7 +50,7 @@ public class Texture extends Element implements Renderable, Reset {
     protected double x;
     protected double y;
     protected double z;
-    protected int    mode;
+    protected int mode;
 
     private ArrayList<Double> xList;
     private ArrayList<Double> yList;
@@ -69,18 +67,12 @@ public class Texture extends Element implements Renderable, Reset {
 
     protected boolean masking = false;
 
-    private float[][] corner = {
-        { 0.0f, 1.0f },
-        { 0.0f, 0.0f },
-        { 1.0f, 0.0f },
-        { 1.0f, 1.0f }
-    };
+    private float[][] corner = { {0.0f, 1.0f}, {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}};
 
     /**
      * Creates a new Texture using the Image's path.
      *
-     * @param path
-     * 				The path of Image.
+     * @param path The path of Image.
      *
      */
     public Texture(String path) {
@@ -90,8 +82,7 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Creates a new Texture using the Image's url.
      *
-     * @param url
-     * 				The url of Image.
+     * @param url The url of Image.
      *
      */
     public Texture(URL url) {
@@ -101,13 +92,12 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Creates a new Texture using the Image.
      *
-     * @param image
-     * 				The Image of this Texture.
+     * @param image The Image of this Texture.
      *
      */
     public Texture(Image image) {
         this.image = image;
-        width  = image.getWidth();
+        width = image.getWidth();
         height = image.getHeight();
 
         xList = new ArrayList<Double>();
@@ -122,81 +112,73 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Sets the mask of this Texture.
      *
-     * @param path
-     * 				The path of the mask Image.
+     * @param path The path of the mask Image.
      */
-	public void setMask(String path){
-		setMask(new Image(path));
-	}
+    public void setMask(String path) {
+        setMask(new Image(path));
+    }
 
     /**
      * Sets the mask of this Texture.
      *
-     * @param url
-     * 				The url of the mask Image.
+     * @param url The url of the mask Image.
      */
-	public void setMask(URL url) {
-		setMask(new Image(url));
-	}
+    public void setMask(URL url) {
+        setMask(new Image(url));
+    }
 
     /**
      * Sets the mask of this Texture.
      *
-     * @param maskImage
-     * 				The mask Image for this Texture.
+     * @param maskImage The mask Image for this Texture.
      */
-	public void setMask(Image maskImage) {
-		masking = true;
-		this.mask = maskImage;
-		maskedImage = Image.clone(image);
-		for (int imageY = 0; imageY < this.maskedImage.getHeight(); imageY++) {
-			for (int imageX = 0; imageX < this.maskedImage.getWidth(); imageX++) {
-				if (imageX <= mask.getWidth() && imageY <= mask.getHeight())
-					this.image.setA(mask.getGray(imageX, imageY), imageX , imageY);
-			}
-		}
-	}
+    public void setMask(Image maskImage) {
+        masking = true;
+        this.mask = maskImage;
+        maskedImage = Image.clone(image);
+        for (int imageY = 0; imageY < this.maskedImage.getHeight(); imageY++) {
+            for (int imageX = 0; imageX < this.maskedImage.getWidth(); imageX++) {
+                if (imageX <= mask.getWidth() && imageY <= mask.getHeight())
+                    this.image.setA(mask.getGray(imageX, imageY), imageX, imageY);
+            }
+        }
+    }
 
-	/**
+    /**
      * Sets the mask of this Texture.
      *
-     * @param maskTexture
-     * 				The mask Texture for this Texture.
+     * @param maskTexture The mask Texture for this Texture.
      */
-	public void setMask(Texture maskTexture) {
-		masking = true;
-		this.mask = maskTexture.getImage();
-		maskedImage = Image.clone(image);
-		for (int imageY = 0; imageY < this.maskedImage.getHeight(); imageY++) {
-			for (int imageX = 0; imageX < this.maskedImage.getWidth(); imageX++) {
-				if (imageX <= mask.getWidth() && imageY <= mask.getHeight())
-					this.image.setA(mask.getGray(imageX, imageY), imageX , imageY);
-			}
-		}
-	}
+    public void setMask(Texture maskTexture) {
+        masking = true;
+        this.mask = maskTexture.getImage();
+        maskedImage = Image.clone(image);
+        for (int imageY = 0; imageY < this.maskedImage.getHeight(); imageY++) {
+            for (int imageX = 0; imageX < this.maskedImage.getWidth(); imageX++) {
+                if (imageX <= mask.getWidth() && imageY <= mask.getHeight())
+                    this.image.setA(mask.getGray(imageX, imageY), imageX, imageY);
+            }
+        }
+    }
 
-	/**
+    /**
      * Sets the Texture.
      *
      * @param texture
      */
-	@Override
+    @Override
     public void setTexture(Texture texture) {
-		this.image = texture.image;
-	}
+        this.image = texture.image;
+    }
 
-	/**
-	 * Adds the vertex for mapping of Texture.
-	 *
-	 * @param x
-	 * 			The x-coordinate of the vertex point.
-	 * @param y
-	 * 			The y-coordinate of the vertex point.
-	 * @param nx
-	 * 			The x-coordinate of the mapping point.
-	 * @param ny
-	 * 			The y-coordinate of the mapping point.
-	 */
+    /**
+     * Adds the vertex for mapping of Texture.
+     *
+     * @param x The x-coordinate of the vertex point.
+     * @param y The y-coordinate of the vertex point.
+     * @param nx The x-coordinate of the mapping point.
+     * @param ny The y-coordinate of the mapping point.
+     */
     public void addVertex(double x, double y, double nx, double ny) {
         mode = LINES;
         this.xList.add(x);
@@ -205,20 +187,15 @@ public class Texture extends Element implements Renderable, Reset {
         this.ny.add(ny);
     }
 
-	/**
-	 * Adds the vertex for mapping of Texture.
-	 *
-	 * @param x
-	 * 			The x-coordinate of the vertex point.
-	 * @param y
-	 * 			The y-coordinate of the vertex point.
-	 * @param z
-	 * 			The z-coordinate of the vertex point.
-	 * @param nx
-	 * 			The x-coordinate of the mapping point.
-	 * @param ny
-	 * 			The y-coordinate of the mapping point.
-	 */
+    /**
+     * Adds the vertex for mapping of Texture.
+     *
+     * @param x The x-coordinate of the vertex point.
+     * @param y The y-coordinate of the vertex point.
+     * @param z The z-coordinate of the vertex point.
+     * @param nx The x-coordinate of the mapping point.
+     * @param ny The y-coordinate of the mapping point.
+     */
     public void addVertex(double x, double y, double z, double nx, double ny) {
         mode = LINES_3D;
         this.xList.add(x);
@@ -228,16 +205,13 @@ public class Texture extends Element implements Renderable, Reset {
         this.ny.add(ny);
     }
 
-	/**
-	 * Adds the vertex for mapping of Texture.
-	 *
-	 * @param v
-	 * 			The coordinates of the vertex point.
-	 * @param nx
-	 * 			The x-coordinate of the mapping point.
-	 * @param ny
-	 * 			The y-coordinate of the mapping point.
-	 */
+    /**
+     * Adds the vertex for mapping of Texture.
+     *
+     * @param v The coordinates of the vertex point.
+     * @param nx The x-coordinate of the mapping point.
+     * @param ny The y-coordinate of the mapping point.
+     */
     public void addVertex(Vertex v, double nx, double ny) {
         mode = LINES_3D;
         this.xList.add(v.getX());
@@ -247,12 +221,11 @@ public class Texture extends Element implements Renderable, Reset {
         this.ny.add(ny);
     }
 
-    /**Gets the vertex point.
+    /**
+     * Gets the vertex point.
      *
-     * @param i
-     * 			The index of the point.
-     * @return
-     * 			The vertex point of the texture map.
+     * @param i The index of the point.
+     * @return The vertex point of the texture map.
      */
     public Vertex getTextureVertex(int i) {
         tmpV.setX(xList.get(i));
@@ -261,10 +234,10 @@ public class Texture extends Element implements Renderable, Reset {
         return tmpV;
     }
 
-    /**Removes the vertex point.
+    /**
+     * Removes the vertex point.
      *
-     * @param i
-     * 			The index of the point.
+     * @param i The index of the point.
      */
     public void removeVertex(int i) {
         this.xList.remove(i);
@@ -274,20 +247,15 @@ public class Texture extends Element implements Renderable, Reset {
         this.ny.remove(i);
     }
 
-	/**
-	 * Sets the vertex for mapping of Texture.
-	 *
-	 * @param i
-	 * 			The index of the vertex point.
-	 * @param x
-	 * 			The x-coordinate of the vertex point.
-	 * @param y
-	 * 			The y-coordinate of the vertex point.
-	 * @param nx
-	 * 			The x-coordinate of the mapping point.
-	 * @param ny
-	 * 			The y-coordinate of the mapping point.
-	 */
+    /**
+     * Sets the vertex for mapping of Texture.
+     *
+     * @param i The index of the vertex point.
+     * @param x The x-coordinate of the vertex point.
+     * @param y The y-coordinate of the vertex point.
+     * @param nx The x-coordinate of the mapping point.
+     * @param ny The y-coordinate of the mapping point.
+     */
     public void setVertex(int i, double x, double y, double nx, double ny) {
         this.xList.set(i, x);
         this.yList.set(i, y);
@@ -296,22 +264,16 @@ public class Texture extends Element implements Renderable, Reset {
         this.ny.set(i, ny);
     }
 
-	/**
-	 * Sets the vertex for mapping of Texture.
-	 *
-	 * @param i
-	 * 			The index of the vertex point.
-	 * @param x
-	 * 			The x-coordinate of the vertex point.
-	 * @param y
-	 * 			The y-coordinate of the vertex point.
-	 * @param z
-	 * 			The z-coordinate of the vertex point.
-	 * @param nx
-	 * 			The x-coordinate of the mapping point.
-	 * @param ny
-	 * 			The y-coordinate of the mapping point.
-	 */
+    /**
+     * Sets the vertex for mapping of Texture.
+     *
+     * @param i The index of the vertex point.
+     * @param x The x-coordinate of the vertex point.
+     * @param y The y-coordinate of the vertex point.
+     * @param z The z-coordinate of the vertex point.
+     * @param nx The x-coordinate of the mapping point.
+     * @param ny The y-coordinate of the mapping point.
+     */
     public void setVertex(int i, double x, double y, double z, double nx, double ny) {
         this.xList.set(i, x);
         this.yList.set(i, y);
@@ -323,10 +285,10 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Clears vertex points.
      */
-    public void clearVertex(){
-    	this.xList.clear();
-    	this.yList.clear();
-    	this.zList.clear();
+    public void clearVertex() {
+        this.xList.clear();
+        this.yList.clear();
+        this.zList.clear();
     }
 
     public final void reload() {
@@ -334,11 +296,11 @@ public class Texture extends Element implements Renderable, Reset {
     }
 
     public final Image getImage() {
-    //	if (!masking) {
-    		return this.image;
-   // 	} else {
-   // 		return this.maskedImage;
-   // 	}
+        // if (!masking) {
+        return this.image;
+        // } else {
+        // return this.maskedImage;
+        // }
     }
 
     public final void enableTexture(GL2 gl) {
@@ -355,12 +317,15 @@ public class Texture extends Element implements Renderable, Reset {
             image.loadTexture();
             loadFlag = false;
         }
+
         if (reloadFlag) {
             image.reloadTexture(gl);
             reloadFlag = false;
         }
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
-        	gl.glDisable(GL2.GL_DEPTH_TEST);
+
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001
+            || !this.isDepthTest())
+            gl.glDisable(GL2.GL_DEPTH_TEST);
 
         if (enableBlur && this.rootBlur){
             gl.glActiveTexture(GL2.GL_TEXTURE0);
@@ -467,35 +432,30 @@ public class Texture extends Element implements Renderable, Reset {
         if (this.enableShader)
             this.shader.disableShader(gl);
 
-        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
-        	gl.glEnable(GL2.GL_DEPTH_TEST);
+        if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001
+            || !this.isDepthTest())
+            gl.glEnable(GL2.GL_DEPTH_TEST);
     }
-
 
     /**
      * Sets the position, width and height of this Texture.
      *
-     * @param x
-     * 				The x-coordinate of the Texture.
-     * @param y
-     * 				The y-coordinate of the Texture.
-     * @param width
-     * 				The width of the Texture.
-     * @param height
-     * 				The height of the Texture.
+     * @param x The x-coordinate of the Texture.
+     * @param y The y-coordinate of the Texture.
+     * @param width The width of the Texture.
+     * @param height The height of the Texture.
      */
     public final void set(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
-        this.width  = width;
+        this.width = width;
         this.height = height;
     }
 
     /**
      * Gets the width of this Texture.
      *
-     * @return
-     * 			The width of the Texture.
+     * @return The width of the Texture.
      */
     public final double getWidth() {
         return width;
@@ -504,8 +464,7 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Gets the height of this Texture.
      *
-     * @return
-     * 			The height of the Texture.
+     * @return The height of the Texture.
      */
     public final double getHeight() {
         return height;
@@ -514,8 +473,7 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Sets the width of this Texture.
      *
-     * @param width
-     * 			The width of the Texture.
+     * @param width The width of the Texture.
      */
     public final void setWidth(double width) {
         this.width = width;
@@ -524,8 +482,7 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Sets the height of this Texture.
      *
-     * @param height
-     * 			The height of the Texture.
+     * @param height The height of the Texture.
      */
     public final void setHeight(double height) {
         this.height = height;
@@ -534,8 +491,7 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Aligns the position of this Texture.
      *
-     * @param mode
-     * 			The alignment of the position of the Texture.
+     * @param mode The alignment of the position of the Texture.
      *
      * @see casmi.image.ImageMode
      */
@@ -546,14 +502,10 @@ public class Texture extends Element implements Renderable, Reset {
     /**
      * Sets the corner of this Texture.
      *
-     * @param x1
-     *            The x-coordinates for the first corner.
-     * @param y1
-     *            The y-coordinates for the first corner.
-     * @param x2
-     *            The x-coordinates for the second corner.
-     * @param y2
-     *            The y-coordinates for the second corner.
+     * @param x1 The x-coordinates for the first corner.
+     * @param y1 The y-coordinates for the first corner.
+     * @param x2 The x-coordinates for the second corner.
+     * @param y2 The y-coordinates for the second corner.
      */
     public final void setCorner(double x1, double y1, double x2, double y2) {
         this.x = (x1 + x2) / 2.0;
@@ -562,11 +514,10 @@ public class Texture extends Element implements Renderable, Reset {
         this.height = Math.abs(y1 - y2);
     }
 
-	/**
-	 * Rotates the way of mapping the texture.
-	 *
-	 * @param mode
-     * 			The alignment of the position of the Texture.
+    /**
+     * Rotates the way of mapping the texture.
+     *
+     * @param mode The alignment of the position of the Texture.
      *
      * @see casmi.image.ImageMode
      */
@@ -597,10 +548,9 @@ public class Texture extends Element implements Renderable, Reset {
 	}
 
 	/**
-	 * Flips the way of mapping the texture.
-	 *
-	 * @param mode
-     * 			The alignment of the position of the Texture.
+     * Flips the way of mapping the texture.
+     *
+     * @param mode The alignment of the position of the Texture.
      *
      * @see casmi.image.ImageMode
      */
@@ -701,6 +651,5 @@ public class Texture extends Element implements Renderable, Reset {
    public boolean isEnableTexture() {
        return true;
    }
-
 
 }

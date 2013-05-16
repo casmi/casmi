@@ -30,7 +30,7 @@ import javax.swing.JPopupMenu;
 
 /**
  * Class for creating popup menu easily.
- * 
+ *
  * @author S. Yoshida
  */
 public class PopupMenu extends JPopupMenu {
@@ -49,6 +49,7 @@ public class PopupMenu extends JPopupMenu {
         show(target, x, y);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void show() {
         show(target, target.getMouseX(), target.getHeight() - target.getMouseY());
@@ -60,6 +61,7 @@ public class PopupMenu extends JPopupMenu {
 
         menuItem.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent event) {
                 Method method;
                 try {

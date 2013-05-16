@@ -28,9 +28,8 @@ import casmi.util.FileUtil;
 
 /**
  * Font class. Wraps java.awt.Font and make it easy to use.
- * 
+ *
  * @author T. Takeuchi
- * 
  */
 public class Font {
 
@@ -67,7 +66,7 @@ public class Font {
 
     /**
      * Creates a new Font object from the specified name.
-     * 
+     *
      * @param name
      *            The font name.
      */
@@ -77,7 +76,7 @@ public class Font {
 
     /**
      * Creates a new Font object from the specified name, style and point size.
-     * 
+     *
      * @param name
      *            The font name.
      * @param style
@@ -93,7 +92,7 @@ public class Font {
 
     /**
      * Creates a new Font object from the specified name, style and point size.
-     * 
+     *
      * @param name
      *            The font name.
      * @param style
@@ -107,11 +106,11 @@ public class Font {
 
     /**
      * Creates a new Font object from the specified font file.
-     * 
+     *
      * @param file
      *            The font file. Open Type Font(.otf) or True Type Font(.ttf)
      *            file can be used.
-     * 
+     *
      * @throws FontFormatException
      *             If fontFormat is not TRUETYPE_FONT or TYPE1_FONT.
      * @throws IOException
@@ -124,7 +123,7 @@ public class Font {
     /**
      * Creates a new Font object from the specified font file, style and point
      * size.
-     * 
+     *
      * @param file
      *            The font file. Open Type Font(.otf) or True Type Font(.ttf)
      *            file can be used.
@@ -132,7 +131,7 @@ public class Font {
      *            The font style enum by FontStyle.
      * @param size
      *            The point size of the Font.
-     * 
+     *
      * @throws FontFormatException
      *             If fontFormat is not TRUETYPE_FONT or TYPE1_FONT.
      * @throws IOException
@@ -151,7 +150,7 @@ public class Font {
     /**
      * Creates a new Font object from the specified font file, style and point
      * size.
-     * 
+     *
      * @param file
      *            The font file. Open Type Font(.otf) or True Type Font(.ttf)
      *            file can be used.
@@ -159,7 +158,7 @@ public class Font {
      *            The font style.
      * @param size
      *            The point size of the Font.
-     * 
+     *
      * @throws FontFormatException
      *             If fontFormat is not TRUETYPE_FONT or TYPE1_FONT.
      * @throws IOException
@@ -172,7 +171,7 @@ public class Font {
 
     /**
      * Creates a new Font object from java.awt.Font object.
-     * 
+     *
      * @param font
      *            java.awt.Font object.
      */
@@ -186,7 +185,7 @@ public class Font {
 
     /**
      * Get java.awt.Font object from this Font object.
-     * 
+     *
      * @return java.awt.Font object.
      */
     public java.awt.Font getAWTFont() {
@@ -195,7 +194,7 @@ public class Font {
 
     /**
      * Returns the point size of this Font in double value.
-     * 
+     *
      * @return The point size of this Font as a double value.
      */
     public double getSize() {
@@ -204,7 +203,7 @@ public class Font {
 
     /**
      * Set the new point size.
-     * 
+     *
      * @param size
      *            The new point size of the Font.
      */
@@ -215,7 +214,7 @@ public class Font {
     /**
      * Returns the style of this Font. The style can be PLAIN, BOLD, ITALIC, or
      * BOLD+ITALIC.
-     * 
+     *
      * @return The style of this Font.
      */
     public FontStyle getStyle() {
@@ -224,7 +223,7 @@ public class Font {
 
     /**
      * Set the new style.
-     * 
+     *
      * @param style
      *            The new style of this Font.
      */
@@ -235,9 +234,9 @@ public class Font {
     /**
      * Set the new style from string. This method ignores case.
      * <p>
-     * 
+     *
      * Example: font.setStyle("plain");
-     * 
+     *
      * @param style
      *            The new style of this Font.
      */
@@ -247,7 +246,7 @@ public class Font {
 
     /**
      * Returns the family name of this Font.
-     * 
+     *
      * @return A String that is the family name of this Font.
      */
     public String getFamily() {
@@ -257,7 +256,7 @@ public class Font {
     /**
      * Returns the logical name of this Font. Use getFamily to get the family
      * name of the font. Use getFontName to get the font face name of the font.
-     * 
+     *
      * @return A String representing the logical name of this Font.
      */
     public String getName() {
@@ -268,7 +267,7 @@ public class Font {
      * Returns the font face name of this Font. For example, Helvetica Bold
      * could be returned as a font face name. Use getFamily to get the family
      * name of the font. Use getName to get the logical name of the font.
-     * 
+     *
      * @return A String representing the font face name of this Font.
      */
     public String getFontName() {
@@ -278,7 +277,7 @@ public class Font {
     /**
      * Returns the postscript name of this Font. Use getFamily to get the family
      * name of the font. Use getFontName to get the font face name of the font.
-     * 
+     *
      * @return A String representing the postscript name of this Font.
      */
     public String getPSName() {
@@ -287,7 +286,7 @@ public class Font {
 
     /**
      * Return a java.awt.Font style constant from FontStyle.
-     * 
+     *
      * @param style
      *            FontStyle value.
      * @return A java.awt.Font style constant.
@@ -307,7 +306,7 @@ public class Font {
 
     /**
      * Return FontStyle enum value from java.awt.Font style constant.
-     * 
+     *
      * @param style
      *            java.awt.Font style constant value.
      * @return FontStyle value.
@@ -329,7 +328,7 @@ public class Font {
 
     /**
      * Return FontStyle enum value from a font style name.
-     * 
+     *
      * @param style
      *            A style name like "italic".
      * @return FontStyle enum value.
@@ -356,7 +355,7 @@ public class Font {
 
     /**
      * Return available fonts' name of this computer.
-     * 
+     *
      * @return An array of String containing font family names localized for the
      *         default locale, or a suitable alternative name if no name exists
      *         for this locale.

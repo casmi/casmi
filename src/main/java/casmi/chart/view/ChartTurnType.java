@@ -19,13 +19,12 @@
 
 package casmi.chart.view;
 
-
 /**
  * @author Y. Ban
  */
 public enum ChartTurnType {
-	
-	CLOCKWISE,
-	
-	COUNTERCLOCKWISE
+
+    CLOCKWISE,
+
+    COUNTERCLOCKWISE
 }

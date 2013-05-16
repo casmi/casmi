@@ -29,7 +29,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 
 /**
- * 
+ *
  * @author T. Takeuchi
  */
 public class SocketServer implements Runnable {

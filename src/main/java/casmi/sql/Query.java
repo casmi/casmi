@@ -28,130 +28,130 @@ public class Query {
     private  String where;
     private  String group;
     private  String order;
-    private boolean desc; 
+    private boolean desc;
     private     int limit;
-    
+
     private boolean selectEnable;
     private boolean whereEnable;
     private boolean groupEnable;
     private boolean orderEnable;
     private boolean limitEnable;
-    
+
     public Query select(String... fields) {
-        
+
         for (String f : fields) {
             selects.add(f);
         }
         selectEnable = true;
         return this;
     }
-    
+
     public Query where(String where) {
-        
+
         this.where = where;
         whereEnable = true;
         return this;
     }
-    
+
     public Query andWhere(String where) {
-        
+
         if (whereEnable) {
-            this.where += " AND " + where; 
+            this.where += " AND " + where;
         } else {
             where(where);
         }
         return this;
     }
-    
+
     public Query orWhere(String where) {
-        
+
         if (whereEnable) {
-            this.where += " OR " + where; 
+            this.where += " OR " + where;
         } else {
             where(where);
         }
         return this;
     }
-    
+
     public Query group(String field) {
-         
+
         group = field;
         groupEnable = true;
         return this;
     }
-    
+
     public Query order(String field) {
-        
+
         order = field;
         orderEnable = true;
         return this;
     }
-    
+
     public Query desc(boolean desc) {
-        
+
         this.desc = desc;
         return this;
     }
-    
+
     public Query limit(int num) {
-        
+
         limit = num;
         limitEnable = true;
         return this;
     }
-    
+
     String[] getSelects() {
-    
+
         return selects.toArray(new String[selects.size()]);
     }
 
     String getWhere() {
-    
+
         return where;
     }
 
     String getGroup() {
-    
+
         return group;
     }
 
     String getOrder() {
-    
+
         return order;
     }
-    
+
     boolean isDesc() {
-        
+
         return desc;
     }
 
     int getLimit() {
-    
+
         return limit;
     }
 
     boolean isSelectEnable() {
-    
+
         return selectEnable;
     }
 
     boolean isWhereEnable() {
-    
+
         return whereEnable;
     }
 
     boolean isGroupEnable() {
-    
+
         return groupEnable;
     }
 
     boolean isOrderEnable() {
-    
+
         return orderEnable;
     }
-    
+
     boolean isLimitEnable() {
-    
+
         return limitEnable;
     }
 }

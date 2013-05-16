@@ -1,3 +1,6 @@
-bin/
-target/
-lib/
+bin/**
+target/**
+.project
+.metadata
+.classpath
+.settings/

@@ -20,7 +20,7 @@
 package casmi.net;
 
 /**
- * 
+ *
  * @author T. Takeuchi
  */
 public class SocketClient {

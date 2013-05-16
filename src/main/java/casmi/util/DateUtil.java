@@ -27,15 +27,15 @@ import java.util.GregorianCalendar;
 
 /**
  * Date utility class.
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class DateUtil {
 
     /**
      * Returns the current time in milliseconds.
-     * 
+     *
      * @return
      *         The difference, measured in milliseconds, between the current time
      *         and midnight, January 1, 1970 UTC.
@@ -47,7 +47,7 @@ public class DateUtil {
 
     /**
      * Returns the current second as a value from 0 - 59.
-     * 
+     *
      * @return
      *         The second as a int value from 0 - 59.
      */
@@ -58,7 +58,7 @@ public class DateUtil {
 
     /**
      * Returns the current minute as a value from 0 - 59.
-     * 
+     *
      * @return
      *         The minute as a int value from 0 - 59.
      */
@@ -69,7 +69,7 @@ public class DateUtil {
 
     /**
      * Returns the current hour as a value from 0 - 23.
-     * 
+     *
      * @return
      *         The hour as a int value from 0 - 23.
      */
@@ -80,7 +80,7 @@ public class DateUtil {
 
     /**
      * Returns the current day as a value from 0 - 31.
-     * 
+     *
      * @return
      *         The day as a int value from 0 - 31.
      */
@@ -91,7 +91,7 @@ public class DateUtil {
 
     /**
      * Returns the current month as a value from 1 - 12.
-     * 
+     *
      * @return
      *         The month as a int value from 1 - 12.
      */
@@ -102,7 +102,7 @@ public class DateUtil {
 
     /**
      * Returns the current year as a value (2011, 2012, 2013, etc).
-     * 
+     *
      * @return
      *         The year as a int value.
      */
@@ -110,35 +110,35 @@ public class DateUtil {
 
         return new GregorianCalendar().get(Calendar.YEAR);
     }
-    
+
     public static final int secondToMillis(int second) {
-        
+
         return second * 1000;
     }
-    
+
     public static final int minuteToMillis(int minute) {
-        
+
         return secondToMillis(minute * 60);
     }
-    
+
     public static final int hourToMillis(int hour) {
-        
+
         return minuteToMillis(hour * 60);
     }
-    
+
     public static final int dayToMillis(int day) {
-        
+
         return hourToMillis(day * 24);
     }
 
     /**
      * Formats a Date into a date/time string.
-     * 
+     *
      * @param date
      *            The time value to be formatted into a time string.
      * @param pattern
      *            The pattern describing the date and time format.
-     * 
+     *
      * @return
      *         The formatted time string.
      */
@@ -149,15 +149,15 @@ public class DateUtil {
 
     /**
      * Parses text from the beginning of the given string to produce a date.
-     * 
+     *
      * @param source
      *            A String whose beginning should be parsed.
      * @param pattern
      *            The pattern describing the date and time format.
-     * 
+     *
      * @return
      *         A Date parsed from the string.
-     * 
+     *
      * @throws ParseException
      *             If the beginning of the specified string cannot be parsed.
      */
@@ -168,7 +168,7 @@ public class DateUtil {
 
     /**
      * Convert a java.util.Date object to a java.sql.Date object.
-     * 
+     *
      * @param date A java.util.Date object.
      * @return A java.sql.Date object.
      */
@@ -186,7 +186,7 @@ public class DateUtil {
     /**
      * Convert a java.sql.Date object to a java.util.Date object.
      * This method is equal to simple upcast.
-     * 
+     *
      * @param date A java.sql.Date object.
      * @return A java.util.Date object.
      */

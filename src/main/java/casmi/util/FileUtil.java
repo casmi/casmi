@@ -30,9 +30,9 @@ import java.nio.channels.FileChannel;
 
 /**
  * File utility class.
- * 
+ *
  * @author T. Takeuchi
- * 
+ *
  */
 public class FileUtil {
 
@@ -60,12 +60,12 @@ public class FileUtil {
     /**
      * Moves a file from src to dest.
      * This method is equals to "copy -> delete."
-     * 
+     *
      * @param src
      *            An existing file to move, must not be <code>null</code>.
      * @param dest
      *            The destination file, must not be <code>null</code> and exist.
-     * 
+     *
      * @throws IOException
      *             If moving is failed.
      */
@@ -76,40 +76,40 @@ public class FileUtil {
             throw new IOException("Failed to delete the src file '" + src + "' after copying.");
         }
     }
-    
-    public static void createFileFromInputStream(File dest, InputStream inputStream) throws IOException {  
-        byte[] buffer = new byte[1024];  
+
+    public static void createFileFromInputStream(File dest, InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[1024];
         int length = 0;
         FileOutputStream fos = null;
-        
-        try {  
-            fos = new FileOutputStream(dest);  
-  
-            while (0 <= (length = inputStream.read(buffer))) {  
-                fos.write(buffer, 0, length);  
-            }  
-  
-            fos.close();  
-            fos = null;  
-        } finally {  
-            if (fos != null) {  
-                try {  
-                    fos.close();  
+
+        try {
+            fos = new FileOutputStream(dest);
+
+            while (0 <= (length = inputStream.read(buffer))) {
+                fos.write(buffer, 0, length);
+            }
+
+            fos.close();
+            fos = null;
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
                 } catch (IOException e) {
                     // Ignore.
-                }  
-            }  
-        }  
-    }  
+                }
+            }
+        }
+    }
 
     /**
      * Copies a file to a new location preserving the file date.
-     * 
+     *
      * @param src
      *            An existing file to copy, must not be <code>null</code>.
      * @param dest
      *            The new file, must not be <code>null</code> and exist.
-     * 
+     *
      * @throws IOException
      *             If copying is failed.
      */
@@ -151,9 +151,9 @@ public class FileUtil {
 
     /**
      * Deletes a file.
-     * 
+     *
      * @param file A file to delete.
-     * 
+     *
      * @return <code>true</code> if the file was deleted, otherwise
      *         <code>false</code>.
      */
@@ -167,31 +167,31 @@ public class FileUtil {
 
         return file.delete();
     }
-    
+
     /**
      * Check file existence
-     * 
+     *
      * @param filePath
-     * 
+     *
      * @return
      *     Return <code>true</code> if the file is exist, otherwise return <code>false</code>
      */
     public static boolean exist(String filePath) {
-    	
-    	File f = new File(filePath);
-    	
-    	if( !f.isFile() ) {
-    		return false;
-    	}
-    	
-    	return true;
+
+        File f = new File(filePath);
+
+        if( !f.isFile() ) {
+            return false;
+        }
+
+        return true;
     }
-    
+
     /**
      * Returns a suffix string from a File.
-     * 
+     *
      * @param file The file to know the suffix.
-     * 
+     *
      * @return A suffix string
      */
     public static String getSuffix(File file) {
@@ -207,7 +207,7 @@ public class FileUtil {
 
     /**
      * Search an absolute file path from current working directory recursively.
-     * 
+     *
      * @param fileName file name to search.
      * @return an absolute file path.
      */
@@ -218,7 +218,7 @@ public class FileUtil {
 
     /**
      * Recursive method for searching file path.
-     * 
+     *
      * @param dir
      * @param fileName
      * @return
@@ -241,9 +241,9 @@ public class FileUtil {
      * It creates a new file with size 0 byte or, if the file exists already, it
      * is opened and closed without modifying it, but updating the file date and
      * time.
-     * 
+     *
      * @param file The file to "touch."
-     * 
+     *
      * @throws FileNotFoundException
      *             If the file is not found.
      */

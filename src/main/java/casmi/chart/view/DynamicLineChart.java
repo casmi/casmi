@@ -35,7 +35,7 @@ import casmi.tween.simpletweenables.TweenDouble;
 
 /**
  * DynamicLineChart Class.
- * 
+ *
  * @author Y.Ban
  */
 public class DynamicLineChart extends Chart {
@@ -94,8 +94,8 @@ public class DynamicLineChart extends Chart {
     }
 
     private void setGraphVertex() {
-        xDivision = width / (double)m.getSize();
-        yDivision = height / (double)(maxY - minY);
+        xDivision = width / m.getSize();
+        yDivision = height / (maxY - minY);
         for (int i = 0; i < this.m.getSize(); i++) {
             Vertex v = new Vertex(xDivision * i, yDivision * (this.m.getDataY(i) - minY));
             vertexs.add(v);
@@ -103,14 +103,14 @@ public class DynamicLineChart extends Chart {
     }
 
     private void setGraphLine4Tween() {
-        xDivision = width / (double)m.getSize();
-        yDivision = height / (double)(maxY - minY);
+        xDivision = width / m.getSize();
+        yDivision = height / (maxY - minY);
         lines.clear();
         int index = 0;
         for (int i = 0; i < this.m.getSize() - 1; i++) {
             Line l = new Line(vertexs.get(i), vertexs.get(i));
-            l.setCornerColor(0, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / (double)height));
-            l.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / (double)height));
+            l.setCornerColor(0, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
+            l.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
             lines.add(l);
             add(lines.get(index));
             index++;
@@ -118,14 +118,14 @@ public class DynamicLineChart extends Chart {
     }
 
     private void setGraphLine() {
-        xDivision = width / (double)m.getSize();
-        yDivision = height / (double)(maxY - minY);
+        xDivision = width / m.getSize();
+        yDivision = height / (maxY - minY);
         lines.clear();
         int index = 0;
         for (int i = 0; i < this.m.getSize() - 1; i++) {
             Line l = new Line(vertexs.get(i), vertexs.get(i + 1));
-            l.setCornerColor(0, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / (double)height));
-            l.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i + 1).getY() / (double)height));
+            l.setCornerColor(0, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
+            l.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i + 1).getY() / height));
             lines.add(l);
             add(lines.get(index));
             index++;
@@ -145,10 +145,12 @@ public class DynamicLineChart extends Chart {
         this.bottomColor = bottomColor;
     }
 
+    @Override
     public boolean isGradation() {
         return gradation;
     }
 
+    @Override
     public void setGradation(boolean gradation) {
         this.gradation = gradation;
     }
@@ -189,11 +191,11 @@ public class DynamicLineChart extends Chart {
                     if (vertexs.get(i).getX() <= td.getValue() && vertexs.get(i + 1).getX() > td.getValue()) {
                         if (i > 0) {
                             lines.get(i - 1).set(vertexs.get(i - 1), vertexs.get(i));
-                            lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / (double)height));
+                            lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
                         }
                         double nowY = (vertexs.get(i + 1).getY() - vertexs.get(i).getY()) * (td.getValue() - vertexs.get(i).getX()) / xDivision + vertexs.get(i).getY();
                         lines.get(i).set(vertexs.get(i).getX(), vertexs.get(i).getY(), td.getValue(), nowY);
-                        lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, nowY / (double)height));
+                        lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, nowY / height));
                     }
                 }
 
@@ -205,8 +207,8 @@ public class DynamicLineChart extends Chart {
         int i = 0;
         for (Line line : lines) {
             line.set(vertexs.get(i), vertexs.get(i));
-            line.setCornerColor(0, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / (double)height));
-            line.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / (double)height));
+            line.setCornerColor(0, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
+            line.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
             i++;
         }
         td.setValue(vertexs.get(0).getX());

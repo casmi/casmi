@@ -22,36 +22,35 @@ package casmi.graphics.color;
 import javax.media.opengl.GL2;
 
 /**
- * Color class.
- * Wrap JOGL and make it easy to use.
+ * Color class. Wrap JOGL and make it easy to use.
  * <p>
- * Creates colors for storing in variables of the color datatype.
- * The parameters are interpreted as RGB or HSB values depending on the current colorMode(). 
- * The default mode is RGB values from 0 to 255.
+ * Creates colors for storing in variables of the color datatype. The parameters are interpreted as
+ * RGB or HSB values depending on the current colorMode(). The default mode is RGB values from 0 to
+ * 255.
  *
  * @see casmi.graphics.color.ColorSet
- * 
+ *
  * @author Y. Ban
  */
 public interface Color {
 
     double getRed();
-    
+
     void setRed(double red);
-    
+
     double getGreen();
-    
+
     void setGreen(double green);
-    
+
     double getBlue();
-    
+
     void setBlue(double blue);
-    
+
     double getAlpha();
-    
+
     void setAlpha(double alpha);
-    
-	void setup(GL2 gl);
-	
-	Color clone();
+
+    void setup(GL2 gl);
+
+    Color clone();
 }

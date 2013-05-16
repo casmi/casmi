@@ -25,126 +25,126 @@ import java.util.ArrayList;
  * TweenGroup class.
  *
  * @author Y. Ban
- * 
+ *
  * @see Tween
  * @see casmi.graphics.group.Group
  */
 public abstract class TweenGroup implements Groupable {
 
-	private final ArrayList<Groupable> groupables = new ArrayList<Groupable>(0);
-	private long duration = 0;
-	private long delay = 0;
-	private int repeatCnt = 0;
-	private long intervalMillis = 0;
-	private int iteration = 0;
-	private boolean reputation;
-	private int baseGroupNum;
+    private final ArrayList<Groupable> groupables = new ArrayList<Groupable>(0);
+    private long duration = 0;
+    private long delay = 0;
+    private int repeatCnt = 0;
+    private long intervalMillis = 0;
+    private int iteration = 0;
+    private boolean reputation;
+    private int baseGroupNum;
 
-	void reset() {
-		getGroupables().clear();
-		setDuration(0);
-		delay = 0;
-	}
+    void reset() {
+        getGroupables().clear();
+        setDuration(0);
+        delay = 0;
+    }
 
-	/**
-	 * Adds a list of Tweens and/or TweenGroups and make them run in parallel
-	 * to the current ones.
-	 * @param objs A list of objects made of Tweens and/or TweenGroups.
-	 * @return The group, for instruction chaining.
-	 */
-	public abstract TweenGroup append(Groupable... objs);
+    /**
+     * Adds a list of Tweens and/or TweenGroups and make them run in parallel
+     * to the current ones.
+     * @param objs A list of objects made of Tweens and/or TweenGroups.
+     * @return The group, for instruction chaining.
+     */
+    public abstract TweenGroup append(Groupable... objs);
 
-	/**
-	 * Gets the current duration of the group, in milliseconds.
-	 */
-	@Override
-	public long getDuration() {
-		return duration;
-	}
+    /**
+     * Gets the current duration of the group, in milliseconds.
+     */
+    @Override
+    public long getDuration() {
+        return duration;
+    }
 
-	/**
-	 * Gets the current delay of the group, in milliseconds.
-	 */
-	@Override
-	public long getDelay() {
-		return delay;
-	}
+    /**
+     * Gets the current delay of the group, in milliseconds.
+     */
+    @Override
+    public long getDelay() {
+        return delay;
+    }
 
-	/**
-	 * Adds a delay to the group.
-	 */
-	@Override
-	public TweenGroup addDelay(long millis) {
-		this.delay += millis;
-		for(Groupable g: getGroupables()){
-			g.addDelay(millis);
-		}
-		return this;
-	}
+    /**
+     * Adds a delay to the group.
+     */
+    @Override
+    public TweenGroup addDelay(long millis) {
+        this.delay += millis;
+        for(Groupable g: getGroupables()){
+            g.addDelay(millis);
+        }
+        return this;
+    }
 
-	ArrayList<Groupable> getGroupables() {
-		return groupables;
-	}
+    ArrayList<Groupable> getGroupables() {
+        return groupables;
+    }
 
-	protected void setDuration(long duration) {
-		this.duration = duration;
-	}
-	
-	
-	public TweenGroup repeat(int count, int delayMillis) {
-		setRepeatCnt(count);
-		setIntervalMillis(delayMillis);
-			baseGroupNum = this.getGroupables().size();
-			if(this instanceof TweenSerialGroup){
-				while(this.getRepeatCnt()>this.getIteration()){
-					for(int i = 0; i < baseGroupNum; i++){
-						if(this.getGroupables().get(i) instanceof Tween){
-							Tween t = ((Tween) this.getGroupables().get(i)).clone();
-							if(i==0)
-								t.addDelay(getIntervalMillis());
-							this.append(t);
-						}
-						else{
-						}
-					}
-					iteration++;
-				}
-			}
-		
-		
-		return this;
-	}
+    protected void setDuration(long duration) {
+        this.duration = duration;
+    }
 
-	public int getRepeatCnt() {
-		return repeatCnt;
-	}
 
-	public void setRepeatCnt(int repeatCnt) {
-		this.repeatCnt = repeatCnt;
-	}
+    public TweenGroup repeat(int count, int delayMillis) {
+        setRepeatCnt(count);
+        setIntervalMillis(delayMillis);
+            baseGroupNum = this.getGroupables().size();
+            if(this instanceof TweenSerialGroup){
+                while(this.getRepeatCnt()>this.getIteration()){
+                    for(int i = 0; i < baseGroupNum; i++){
+                        if(this.getGroupables().get(i) instanceof Tween){
+                            Tween t = ((Tween) this.getGroupables().get(i)).clone();
+                            if(i==0)
+                                t.addDelay(getIntervalMillis());
+                            this.append(t);
+                        }
+                        else{
+                        }
+                    }
+                    iteration++;
+                }
+            }
 
-	public long getIntervalMillis() {
-		return intervalMillis;
-	}
 
-	public void setIntervalMillis(int intervalMillis) {
-		this.intervalMillis = intervalMillis;
-	}
+        return this;
+    }
 
-	public int getIteration() {
-		return iteration;
-	}
+    public int getRepeatCnt() {
+        return repeatCnt;
+    }
 
-	public void setIteration(int iteration) {
-		this.iteration = iteration;
-	}
+    public void setRepeatCnt(int repeatCnt) {
+        this.repeatCnt = repeatCnt;
+    }
 
-	public boolean isReputation() {
-		return reputation;
-	}
+    public long getIntervalMillis() {
+        return intervalMillis;
+    }
 
-	public void setReputation(boolean reputation) {
-		this.reputation = reputation;
-	}
-		
+    public void setIntervalMillis(int intervalMillis) {
+        this.intervalMillis = intervalMillis;
+    }
+
+    public int getIteration() {
+        return iteration;
+    }
+
+    public void setIteration(int iteration) {
+        this.iteration = iteration;
+    }
+
+    public boolean isReputation() {
+        return reputation;
+    }
+
+    public void setReputation(boolean reputation) {
+        this.reputation = reputation;
+    }
+
 }
