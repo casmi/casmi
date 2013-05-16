@@ -39,7 +39,6 @@ public class Shader {
 
     public void initShaders(GL2 gl) {
         if (!isInit) {
-            System.out.println("init");
             try {
                 isInit = true;
                 this.gl = gl;
@@ -61,10 +60,9 @@ public class Shader {
                 gl.glAttachShader(shaderprogram, f);
                 gl.glLinkProgram(shaderprogram);
                 gl.glValidateProgram(shaderprogram);
-                System.out.println("loaded!!");
 
             } catch (IOException e) {
-                System.out.println("load Error!!");
+                System.out.println(this.vartName + "load Error!!");
                 e.printStackTrace();
             }
         }

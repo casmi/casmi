@@ -123,16 +123,15 @@ public class FrameBufferObject {
         gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, fboID);
 
         rboID = genRB(gl);
-        gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, rboID);//バインド
-
+        gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, rboID);
         gl.glRenderbufferStorage(GL2.GL_RENDERBUFFER, GL2.GL_DEPTH_COMPONENT, this.width, this.height);
-        gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, 0);//RBOのデフォルトへバインド
+        gl.glBindRenderbuffer(GL2.GL_RENDERBUFFER, 0);
 
         for(int i=0; i<this.texNumSize; i++)
             gl.glFramebufferTexture2D(GL2.GL_FRAMEBUFFER, GL2.GL_COLOR_ATTACHMENT0 + i, GL2.GL_TEXTURE_2D, texID[i], 0);
 
         gl.glFramebufferRenderbuffer(GL2.GL_FRAMEBUFFER, GL2.GL_DEPTH_ATTACHMENT, GL2.GL_RENDERBUFFER, rboID);
-        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);//FBOのデフォルトへバインド
+        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
         if(checkFramebufferStatus(gl) == false )
             System.out.println("failed to make framebuffer");
     }
@@ -147,7 +146,7 @@ public class FrameBufferObject {
         int status = gl.glCheckFramebufferStatus(GL2.GL_FRAMEBUFFER);
         switch(status){
           case GL2.GL_FRAMEBUFFER_COMPLETE:
-                  System.out.println( "Framebuffer complete.");
+                  //System.out.println( "Framebuffer complete.");
                   return true;
 
           case GL2.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:

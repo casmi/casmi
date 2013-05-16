@@ -263,7 +263,7 @@ public class RootObject extends GraphicsObject {
         this.windowHeight = height;
         this.rootBlur = true;
         if(this.fbo4Blur==null)
-        createBlurShader(width, height);
+            createBlurShader(width, height);
     }
 
     public void createBlurShader(int width, int height) {
@@ -361,6 +361,7 @@ public class RootObject extends GraphicsObject {
 
     public void rootBufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
         this.selectionPhase = false;
+        this.rootMotionBlur = false;
         if (this.isVisible()) {
             this.g = g;
 
@@ -450,19 +451,18 @@ public class RootObject extends GraphicsObject {
         GLU glu = g.getGLU();
         gl.glEnable(GL2.GL_TEXTURE_2D);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(0));
-        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);// ミップマップの生成
+        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(1));
-        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);// ミップマップの生成
+        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 
-        if(rootMotionBlur)
+        if(isMotionBlur())
             drawMotionBlurFBO(gl, glu);
-
 
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
-        if(rootMotionBlur)
+        if(isMotionBlur())
             blurShader.blur(fbo4Blur, fbo4MotionBlur2, gl, glu);
         else
             blurShader.blur(fbo4Blur, gl, glu);
@@ -496,7 +496,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void render(Element el) {
         el.setRootGlow(rootBlur);
-        this.rootMotionBlur = false;
+       // this.rootMotionBlur = false;
         if (rootBlur && selectionPhase == false) {
             if (el.isBlur() && el.getBlurMode() == BlurMode.MotionBlur){
                 objShader.setUniform("mask", 2.0f);
@@ -992,7 +992,6 @@ public class RootObject extends GraphicsObject {
 
     public void resetShader() {
         createBlurShader(windowWidth, windowHeight);
-        System.out.println("reset!!");
     }
 
     @Override
