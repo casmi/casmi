@@ -26,10 +26,7 @@ import casmi.graphics.object.GraphicsObject;
  *
  * @author Y. Ban.
  */
-abstract public class Group extends GraphicsObject {
-
+public class Group extends GraphicsObject {
     public void setup() {};
-
-    @Override
-    abstract public void update();
+    public void update() {};
 }
