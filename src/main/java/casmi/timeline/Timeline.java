@@ -30,14 +30,13 @@ import javax.media.opengl.GL2;
 import casmi.Applet;
 import casmi.Keyboard;
 import casmi.Mouse;
-import casmi.PopupMenu;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
-import casmi.parser.CSV;
 import casmi.tween.Tween;
 import casmi.tween.TweenEquation;
 import casmi.tween.equations.Linear;
 import casmi.tween.simpletweenables.TweenDouble;
+import casmi.ui.PopupMenu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,32 +99,32 @@ public class Timeline implements TimelineRender, Reset {
     }
 
 
-    public final void readTimelineCSV(String csvfile) {
-        CSV csv;
-        String name;
-        double time;
-        try {
-            csv = new CSV(csvfile);
-            String[] test;
-            while ((test = csv.readLine()) != null) {
-                name = test[0];
-                time = Double.valueOf(test[1]).doubleValue();
-               {
-                   for(Scene s : tmpSceneList){
-                       if(s.getIdName() == name){
-                           s.setTime(time);
-                           this.appendScene(s);
-                           break;
-                       }
-                   }
-               }
-
-            }
-            csv.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public final void readTimelineCSV(String csvfile) {
+//        CSV csv;
+//        String name;
+//        double time;
+//        try {
+//            csv = new CSV(csvfile);
+//            String[] test;
+//            while ((test = csv.readLine()) != null) {
+//                name = test[0];
+//                time = Double.valueOf(test[1]).doubleValue();
+//               {
+//                   for(Scene s : tmpSceneList){
+//                       if(s.getIdName() == name){
+//                           s.setTime(time);
+//                           this.appendScene(s);
+//                           break;
+//                       }
+//                   }
+//               }
+//
+//            }
+//            csv.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Jump to the next Scene.

@@ -74,13 +74,14 @@ import casmi.graphics.object.Mask;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.graphics.object.RootObject;
-import casmi.io.ImageType;
+import casmi.image.ImageType;
 import casmi.timeline.Timeline;
 import casmi.timeline.TimelineRender;
 import casmi.tween.Tween;
 import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;
 import casmi.tween.TweenSerialGroup;
+import casmi.ui.PopupMenu;
 import casmi.util.FileUtil;
 
 import com.jogamp.opengl.util.awt.Screenshot;

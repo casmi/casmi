@@ -24,7 +24,6 @@ import javax.media.opengl.GL2;
 import casmi.Keyboard;
 import casmi.Mouse;
 import casmi.MouseButton;
-import casmi.PopupMenu;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
 import casmi.graphics.object.Camera;
@@ -39,6 +38,7 @@ import casmi.tween.TweenEquation;
 import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;
 import casmi.tween.TweenSerialGroup;
+import casmi.ui.PopupMenu;
 
 /**
  * Scene class for time line animation.

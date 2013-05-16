@@ -16,13 +16,22 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package casmi.net;
+package casmi.image;
 
 /**
+ * Types of output image.
  *
  * @author T. Takeuchi
  */
-public class SocketClient {
+public enum ImageType {
 
+    JPG,
+
+    PNG,
+
+    BMP,
+
+    GIF,
+
+    PDF,
 }

@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
 
     <name>casmi</name>
-    <url>http://casmi.github.com/</url>
+    <url>http://casmi.github.io/</url>
     <description>A Java library for 2D/3D information visualization with simple and intuitive API for graphics, database, and analysis of data</description>
 
     <parent>

@@ -17,7 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi;
+package casmi.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +27,8 @@ import java.lang.reflect.Method;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+
+import casmi.Applet;
 
 /**
  * Class for creating popup menu easily.

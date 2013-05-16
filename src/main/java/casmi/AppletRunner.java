@@ -28,10 +28,13 @@ import java.awt.Insets;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import casmi.exception.CasmiRuntimeException;
 import casmi.util.OS;
 import casmi.util.SystemUtil;
 
 /**
+ * Applet Runner
+ * 
  * @author T. Aoki
  */
 public class AppletRunner {
@@ -40,14 +43,14 @@ public class AppletRunner {
     static GraphicsDevice displayDevice;
 
     public static void run(String className, String title) {
-
         final Applet applet;
+        
         try {
             Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(className);
             initBeforeCreateApplet(title);
             applet = (Applet)c.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CasmiRuntimeException("Failed to create instance of " + className, e);
         }
 
         runApplet(applet, title);
