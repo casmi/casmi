@@ -32,6 +32,4 @@ public enum ImageType {
     BMP,
 
     GIF,
-
-    PDF,
 }

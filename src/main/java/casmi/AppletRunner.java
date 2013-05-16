@@ -33,9 +33,8 @@ import casmi.util.OS;
 import casmi.util.SystemUtil;
 
 /**
- * Applet Runner
- * 
- * @author T. Aoki
+ * @author Takashi AOKI <federkasten@me.com>
+ *
  */
 public class AppletRunner {
 
@@ -56,7 +55,7 @@ public class AppletRunner {
         runApplet(applet, title);
     }
 
-    public static void run(Applet applet, String title) {
+    public static void run(final Applet applet, String title) {
         runApplet(applet, title);
     }
 

@@ -52,14 +52,7 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
-
+import casmi.util.FileUtil;
 import casmi.exception.CasmiRuntimeException;
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
@@ -82,7 +75,6 @@ import casmi.tween.TweenManager;
 import casmi.tween.TweenParallelGroup;
 import casmi.tween.TweenSerialGroup;
 import casmi.ui.PopupMenu;
-import casmi.util.FileUtil;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -591,8 +583,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
             capture(file, background, ImageType.BMP);
         } else if (suffix.matches("gif|GIF")) {
             capture(file, background, ImageType.GIF);
-        } else if (suffix.matches("pdf|PDF")) {
-            capture(file, background, ImageType.PDF);
         } else {
             throw new IllegalArgumentException(
                     "The file type is not supporeted.");
@@ -671,28 +661,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
                     Screenshot.writeToFile(new File(saveFile), width, height,
                             !saveBackground);
                     break;
-                case PDF: {
-                    BufferedImage bi = Screenshot.readToBufferedImage(width,
-                            height, !saveBackground);
-                    PDDocument doc = new PDDocument();
-                    PDRectangle rect = new PDRectangle(width, height);
-                    PDPage page = new PDPage(rect);
-                    doc.addPage(page);
-                    PDXObjectImage ximage = new PDJpeg(doc, bi);
-                    PDPageContentStream contentStream = new PDPageContentStream(
-                            doc, page);
-                    contentStream.drawImage(ximage, 0, 0);
-                    contentStream.close();
-                    doc.save(saveFile);
-                    doc.close();
-                    break;
-                }
                 }
             } catch (GLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (COSVisitorException e) {
                 e.printStackTrace();
             }
         }

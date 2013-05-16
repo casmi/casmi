@@ -25,8 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import casmi.exception.NetException;
-
+import casmi.exception.CasmiException;
 
 /**
  * Utility class to access system properties easily.
@@ -140,15 +139,15 @@ public class SystemUtil {
      * @throws NetException
      *            If errors occur
      */
-    public static void browse(URL url) throws NetException {
+    public static void browse(URL url) throws CasmiException {
 
         Desktop desktop = Desktop.getDesktop();
         try {
             desktop.browse(new URI(url.toString()));
         } catch (URISyntaxException e) {
-            throw new NetException(e);
+            throw new CasmiException(e);
         } catch (IOException e) {
-            throw new NetException(e);
+            throw new CasmiException(e);
         }
     }
 }
