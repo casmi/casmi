@@ -2,11 +2,6 @@ varying vec3 P;
 varying vec3 N;
 uniform float time;
 
-float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453+ time);
-}
-
-
 void main(void)
 {
     vec3 L = normalize(gl_LightSource[0].position.xyz - P);

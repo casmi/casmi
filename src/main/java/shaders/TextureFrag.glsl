@@ -22,8 +22,4 @@ void main(void)
     vec4 specular = gl_FrontLightProduct[0].specular * powNH;
     vec4 texColor = texture2D(sampler, gl_TexCoord[0].st);
     gl_FragColor = (ambient + diffuse) * texColor + specular;
-   // gl_FragColor = texColor;
-   // gl_FragColor = mix(ambient + diffuse, texColor, 0) + specular;
-   // gl_FragColor = ambient + diffuse + specular;
-    //gl_FragColor = vec4(rand(vec2(1.0,1.0)), rand(vec2(0.0,1.0)), rand(vec2(1.0,0.0)), 1.0);
 }

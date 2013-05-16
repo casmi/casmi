@@ -130,7 +130,6 @@ public class Sphere extends Element implements Renderable, Reset {
         {
             gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
             gl.glPolygonOffset(1f, 1f);
-          //  gl.glEnable(GL2.GL_CULL_FACE);
             this.setTweenParameter(gl);
             if (this.ismaterial) material.setup(gl);
 
@@ -248,7 +247,7 @@ public class Sphere extends Element implements Renderable, Reset {
 			if(texture.isInit()){
 				texture.loadImage();
 				texture.setInit(false);
-			}else{System.out.println("reload");
+			}else{
 				texture.reloadImage(gl);
 			}
 		if(this.enableBump)
@@ -259,7 +258,6 @@ public class Sphere extends Element implements Renderable, Reset {
 		        normalMap.reloadImage(gl);
 		    }
 		if(this.enableShader){
-		    System.out.println("reset");
 		    shader.initShaders(gl);
 		}
 	}
