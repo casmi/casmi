@@ -32,12 +32,21 @@ Run the following command
 
 You can download quickstart project template from [download](http://casmi.github.io/download.html) page or [git repository](https://github.com/casmi/casmi-quickstart).
 
-## 2. Run
+## 2. Build
 
-    cd path/to/your/project
+Change to the your project directory and execute:
+
+    mvn compile
+
+## 3. Run
+
+To run, execute the following **(Required to specify the main class of your project)**
+
     mvn exec:java -Dexec.mainClass="path.to.MainClass"
 
-For further steps, take a [tour](http://casmi.github.io/tour.html).
+## 4. What's next?
+
+Take a [tour](http://casmi.github.io/tour.html).
 
 # License
 
