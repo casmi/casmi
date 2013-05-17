@@ -1,47 +1,41 @@
-# casmi
+2D/3D visualization for Java
 
-casmi is an opensource free software and is Java based library with OpenGL that is using in production or development of 2D/3D visualization systems. It can support programmers with simple and intuitive interfaces for their implementation.
-It can work on cross platform (GNU/Linux, Mac OS X, and Windows).
-casmi is sutable for visualization, because it originaly desinged for information visualization, especially with huge data set.
+```xml
+    <dependency>
+        <groupId>com.github.casmi</groupId>
+        <artifactId>casmi</artifactId>
+        <version>0.3.2</version>
+    </dependency>
+```
+
+# Overview
+
+casmi is a visualization library for Java.
+
+casmi supports 2D/3D realtime rendering base on OpenGL.
+With assembling graphics primitives (line, circle, sphere, etc.), you can easily design scene layouts.
+Smooth tween animations and scene sequencing functions add rich user interface on your application.
 
 # Getting Started
 
-## Setup
+## 1. Create a project
 
-### Using Maven (we strongly recommend to use Maven)
-
-Add following settings to your `pom.xml`.
-
-```xml
-<dependency>
-    <groupId>com.github.casmi</groupId>
-	<artifactId>casmi</artifactId>
-	<version>0.3.2</version>
-</dependency>
-```
-
-All dependent libraries will be downloaded automatically if using maven.
-
-### Manual setup
-
-You can download binary jar from <http://casmi.github.com/download/>.
-
-## Project Template
+We recommend to use [Apache Maven](http://maven.apache.org/).
 
 ### Maven Archetype
 
-You can use maven archetype for casmi project.
-Archetype catalog is <http://casmi.github.com/maven-repo/archetype-catalog.xml>
+Run the following command
 
-You can create Eclipse project by the following command.
+    mvn archetype:generate -Dfilter=com.github.casmi.archetypes:casmi-quickstart
 
-```
-$ mvn archetype:generate -DarchetypeCatalog=http://casmi.github.com/maven-repo/archetype-catalog.xml
-```
+### Quickstart project
 
-### Quickstart Project
+You can download quickstart project template from [download](http://casmi.github.io/download.html) page or [git repository](https://github.com/casmi/casmi-quickstart).
 
-You can download quickstart project template from <http://casmi.github.com/download/>.
+## 2. Run
+
+    cd path/to/your/project
+    mvn exec:java -Dexec.mainClass="path.to.MainClass"
 
 # License
 
