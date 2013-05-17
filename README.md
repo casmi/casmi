@@ -1,11 +1,11 @@
 2D/3D visualization for Java
 
 ```xml
-    <dependency>
-        <groupId>com.github.casmi</groupId>
-        <artifactId>casmi</artifactId>
-        <version>0.3.2</version>
-    </dependency>
+<dependency>
+    <groupId>com.github.casmi</groupId>
+    <artifactId>casmi</artifactId>
+    <version>0.3.2</version>
+</dependency>
 ```
 
 # Overview
@@ -36,6 +36,8 @@ You can download quickstart project template from [download](http://casmi.github
 
     cd path/to/your/project
     mvn exec:java -Dexec.mainClass="path.to.MainClass"
+
+For further steps, take a [tour](http://casmi.github.io/tour.html).
 
 # License
 
