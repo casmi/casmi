@@ -57,7 +57,6 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	protected boolean resetObject = false;
 
 	protected MouseEvent mouseEvent;
-
 	protected int selectionBufSize = 1024*1024;
 
     private Shader objShader;
@@ -299,6 +298,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	public void bufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
 	    selectionPhase = false;
+	    this.rootMotionBlur = false;
 		if (this.isVisible()) {
 			this.g = g;
 
@@ -362,7 +362,6 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	public void render(Element el) {
         el.setRootGlow(rootBlur);
-        this.rootMotionBlur = false;
         if (rootBlur && selectionPhase == false) {
             if (el.isBlur() && el.getBlurMode() == BlurMode.MotionBlur){
                 objShader.setUniform("mask", 2.0f);
@@ -453,10 +452,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 				} else {
 					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
 							selectionIndex, selectedIndex);
-
 //stuck selectionID of elements in a group
-//                    for (int j = sIndex; j < selectionIndex; j++) {
-//                        o.getSelectionList().add(j);
+//					for (int j = sIndex; j < selectionIndex; j++) {
+//						o.getSelectionList().add(j);
 //
 //					}
 					if (o.getMouseOverCallback() != null) {
@@ -930,6 +928,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	    this.rootBlur = rootBlur;
 	    this.objShader = objectShader;
 	}
+
+
+
 }
 
 

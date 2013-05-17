@@ -894,11 +894,11 @@ abstract public class Element implements Cloneable, Renderable {
 	        this.enableBlur = true;
 	        if(this instanceof GraphicsObject){
 	            GraphicsObject g = (GraphicsObject)this;
-	            for (Object obj : g.getObjectList()) {
+	            for(Object obj : g.getObjectList()) {
 	                if(obj instanceof Element)
-	                    ((Element) obj).enableBlur();
+	                    ((Element)obj).enableBlur();
 	                if(obj instanceof Group)
-	                    ((Group) obj).enableBlur();
+	                    ((Group)obj).enableBlur();
 	            }
 	        }
     }
@@ -910,11 +910,11 @@ abstract public class Element implements Cloneable, Renderable {
 	    this.enableBlur = false;
         if(this instanceof GraphicsObject){
             GraphicsObject g = (GraphicsObject)this;
-            for (Object obj : g.getObjectList()) {
+            for(Object obj : g.getObjectList()) {
                 if(obj instanceof Element)
-                    ((Element) obj).disableBlur();
+                    ((Element)obj).disableBlur();
                 if(obj instanceof Group)
-                    ((Group) obj).disableBlur();
+                    ((Group)obj).disableBlur();
             }
         }
 	}
@@ -928,11 +928,11 @@ abstract public class Element implements Cloneable, Renderable {
         this.blurMode = blur;
         if(this instanceof GraphicsObject){
             GraphicsObject g = (GraphicsObject)this;
-            for (Object obj : g.getObjectList()) {
+            for(Object obj : g.getObjectList()) {
                 if(obj instanceof Element)
-                    ((Element) obj).setBlurMode(blur);
+                    ((Element)obj).setBlurMode(blur);
                 if(obj instanceof Group)
-                    ((Group) obj).setBlurMode(blur);
+                    ((Group)obj).setBlurMode(blur);
             }
         }
 	}
@@ -942,14 +942,28 @@ abstract public class Element implements Cloneable, Renderable {
 
 		if(this instanceof GraphicsObject){
 			GraphicsObject g = (GraphicsObject)this;
-			for (Object obj : g.getObjectList()) {
+			for(Object obj : g.getObjectList()) {
 				if(obj instanceof Element)
-					((Element) obj).setDepthTest(depthTest);
+					((Element)obj).setDepthTest(depthTest);
 				if(obj instanceof Group)
-					((Group) obj).setDepthTest(depthTest);
+					((Group)obj).setDepthTest(depthTest);
 			}
 
 		}
+	}
+
+	public boolean isMotionBlur() {
+	    if(this.rootMotionBlur)
+	        return true;
+	    else{
+	        if(this instanceof GraphicsObject){
+	            GraphicsObject g = (GraphicsObject)this;
+	            for(Object obj : g.getObjectList())
+	                if(obj instanceof Group)
+	                    if(((Group)obj).isMotionBlur()) return true;
+	        }
+	    }
+	    return false;
 	}
 
 	public void remove() {
