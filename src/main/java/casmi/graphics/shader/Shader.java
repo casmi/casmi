@@ -18,8 +18,8 @@ public class Shader {
     private HashMap<String, Integer> attribMap;
 
     public Shader(String shaderName) {
-        this.vartName = "/shaders/" + shaderName + "Vert.glsl";
-        this.fragName = "/shaders/" + shaderName + "Frag.glsl";
+        this.vartName = shaderName + "Vert.glsl";
+        this.fragName = shaderName + "Frag.glsl";
         uniformMap = new HashMap<String, Integer>();
         attribMap = new HashMap<String, Integer>();
     }
@@ -62,7 +62,7 @@ public class Shader {
                 gl.glValidateProgram(shaderprogram);
 
             } catch (IOException e) {
-                System.out.println(this.vartName + "load Error!!");
+                System.out.println(this.vartName + " load Error!!");
                 e.printStackTrace();
             }
         }
