@@ -26,10 +26,9 @@ package casmi.graphics.shader;
  */
 public enum BlurMode {
 
-    Blur,
+    BLUR,
 
-    Glow,
+    GLOW,
 
-    MotionBlur,
-
+    MOTION_BLUR
 }

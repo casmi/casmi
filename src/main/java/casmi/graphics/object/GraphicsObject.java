@@ -363,7 +363,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	public void render(Element el) {
         el.setRootGlow(rootBlur);
         if (rootBlur && selectionPhase == false) {
-            if (el.isBlur() && el.getBlurMode() == BlurMode.MotionBlur){
+            if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR){
                 objShader.setUniform("mask", 2.0f);
                 this.rootMotionBlur = true;
             }
@@ -372,7 +372,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
             else
                 objShader.setUniform("mask", 0.0f);
 
-            if (el.isBlur() && ( el.getBlurMode() == BlurMode.Blur || el.getBlurMode() == BlurMode.MotionBlur))
+            if (el.isBlur() && ( el.getBlurMode() == BlurMode.BLUR || el.getBlurMode() == BlurMode.MOTION_BLUR))
                 objShader.setUniform("draw", 0.0f);
             else
                 objShader.setUniform("draw", 1.0f);
@@ -917,7 +917,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public void enableBlur(double glowSize) {
-	    this.blurMode = BlurMode.Blur;
+	    this.blurMode = BlurMode.BLUR;
 	}
 
 	public void enableBlur(BlurMode blur, double glowSize) {

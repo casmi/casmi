@@ -156,18 +156,18 @@ public class Text extends Element implements Renderable, Reset {
         } catch (java.lang.IllegalArgumentException e) {
             // Ignore
         }
-	}
+    }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-    	if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
-    		gl.glDisable(GL2.GL_DEPTH_TEST);
+        if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
+            gl.glDisable(GL2.GL_DEPTH_TEST);
 
 
-    	if (enableBlur && this.rootBlur){
-    	    gl.glActiveTexture(GL2.GL_TEXTURE0);
+        if (enableBlur && this.rootBlur) {
+            gl.glActiveTexture(GL2.GL_TEXTURE0);
             this.objIDShader.setUniform("sampler", 0);
-    	}
+        }
 
         gl.glPushMatrix();
         {
@@ -468,15 +468,15 @@ public class Text extends Element implements Renderable, Reset {
         return selection;
     }
 
-	public final void setSelection(boolean selection) {
-		this.selection = selection;
-	}
+    public final void setSelection(boolean selection) {
+        this.selection = selection;
+    }
 
-	/**Check texture is enable or not.
-    *
-    */
-   @Override
-   public boolean isEnableTexture() {
-       return true;
-   }
+    /**
+     * Check texture is enable or not.
+     */
+    @Override
+    public boolean isEnableTexture() {
+        return true;
+    }
 }
