@@ -552,13 +552,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	@Override
 	public void keyReleased(java.awt.event.KeyEvent e) {
 	    keyboard.setReleased(true);
-	    keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
-	    keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
 
 		keyEvent(KeyEvent.RELEASED);
 		if (timeline) {
 			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
 		}
+
+        keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+        keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
 	}
 
 	@Override
