@@ -12,9 +12,9 @@
 
 casmi is a visualization library for Java.
 
-casmi supports 2D/3D realtime rendering base on OpenGL.
+casmi supports 2D/3D realtime rendering based on OpenGL.
 With assembling graphics primitives (line, circle, sphere, etc.), you can easily design scene layouts.
-Smooth tween animations and scene sequencing functions add rich user interface on your application.
+Smooth tween animations and scene sequencing functions add rich UI/UX on your application.
 
 # Getting Started
 
