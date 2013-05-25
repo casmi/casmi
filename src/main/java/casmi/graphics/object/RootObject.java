@@ -1,16 +1,20 @@
 /*
- * casmi http://casmi.github.com/ Copyright (C) 2011, Xcoo, Inc.
+ *   casmi
+ *   http://casmi.github.io/
+ *   Copyright (C) 2011, Xcoo, Inc.
  *
- * casmi is free software: you can redistribute it and/or modify it under the terms of the GNU
- * Lesser General Public License as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version.
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this program.
- * If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package casmi.graphics.object;
@@ -45,14 +49,13 @@ import casmi.tween.TweenManager;
 import com.jogamp.common.nio.Buffers;
 
 /**
- * GrapicsObject.
+ * Root GraphicsObject.
  *
  * @author Y. Ban
  */
 public class RootObject extends GraphicsObject {
 
     private BackGround bg;
-
 
     private int selectedIndex = -1;
     private IntBuffer selectBuffer;
@@ -321,7 +324,9 @@ public class RootObject extends GraphicsObject {
             Iterator<Object> itr = objectList.iterator();
             while (itr.hasNext()) {
                 Object obj = itr.next();
-                if (obj instanceof Element) if (((Element)obj).isRemove()) objectList.remove(obj);
+                if (obj instanceof Element)
+                    if (((Element)obj).isRemove())
+                        objectList.remove(obj);
             }
         }
     }
@@ -355,7 +360,6 @@ public class RootObject extends GraphicsObject {
                 this.setTweenParameter(g.getGL());
             }
             g.popMatrix();
-
         }
     }
 
@@ -372,7 +376,6 @@ public class RootObject extends GraphicsObject {
                 }
                 removeObject = false;
             }
-
 
             if (bg != null) bg.render(g);
 
@@ -406,7 +409,6 @@ public class RootObject extends GraphicsObject {
                 fbo4Blur.unBindFrameBuffer(g.getGL());
                 drawGlowFBO(g);
             }
-
         }
     }
 
@@ -456,13 +458,13 @@ public class RootObject extends GraphicsObject {
         gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 
-        if(isMotionBlur())
+        if (isMotionBlur())
             drawMotionBlurFBO(gl, glu);
 
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
-        if(isMotionBlur())
+        if (isMotionBlur())
             blurShader.blur(fbo4Blur, fbo4MotionBlur2, gl, glu);
         else
             blurShader.blur(fbo4Blur, gl, glu);
@@ -476,7 +478,6 @@ public class RootObject extends GraphicsObject {
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
         gl.glDisable(GL2.GL_TEXTURE_2D);
         blurShader.disableShader();
-
     }
 
     /*
@@ -497,17 +498,17 @@ public class RootObject extends GraphicsObject {
     public void render(Element el) {
         el.setRootGlow(rootBlur);
        // this.rootMotionBlur = false;
-        if (rootBlur && selectionPhase == false) {
-            if (el.isBlur() && el.getBlurMode() == BlurMode.MotionBlur){
+        if (rootBlur && !selectionPhase) {
+            if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR) {
                 objShader.setUniform("mask", 2.0f);
                 this.rootMotionBlur = true;
-            }
-            else if (el.isBlur())
+            } else if (el.isBlur()) {
                 objShader.setUniform("mask", 1.0f);
-            else
+            } else {
                 objShader.setUniform("mask", 0.0f);
+            }
 
-            if (el.isBlur() && ( el.getBlurMode() == BlurMode.Blur || el.getBlurMode() == BlurMode.MotionBlur))
+            if (el.isBlur() && (el.getBlurMode() == BlurMode.BLUR || el.getBlurMode() == BlurMode.MOTION_BLUR))
                 objShader.setUniform("draw", 0.0f);
             else
                 objShader.setUniform("draw", 1.0f);
@@ -677,25 +678,25 @@ public class RootObject extends GraphicsObject {
         for (Perse perse : perseList) {
             if (perse instanceof Perspective) {
                 Perspective perspective = (Perspective)perse;
-                if (selection == false)
+                if (!selection)
                     perspective.render(g);
                 else
                     perspective.simplerender(g);
             } else if (perse instanceof Ortho) {
                 Ortho ortho = (Ortho)perse;
-                if (selection == false)
+                if (!selection)
                     ortho.render(g);
                 else
                     ortho.simplerender(g);
             } else if (perse instanceof Frustum) {
                 Frustum frustum = (Frustum)perse;
-                if (selection == false)
+                if (!selection)
                     frustum.render(g);
                 else
                     frustum.simplerender(g);
             }
         }
-        if (selection == true && perseList.size() == 0) {
+        if (selection && perseList.size() == 0) {
             g.simpleortho();
         }
     }
@@ -757,7 +758,6 @@ public class RootObject extends GraphicsObject {
     }
 
     public void setSelectionbuffsize(int selectionbuffsize) {
-
         this.selectionBufSize = selectionbuffsize;
 
         selectBuffer = Buffers.newDirectIntBuffer(selectionBufSize);
@@ -843,7 +843,6 @@ public class RootObject extends GraphicsObject {
             }
         }
     }
-
 
     /**
      * Sets the color of this Element's stroke.

@@ -1,3 +1,22 @@
+/*
+ *   casmi
+ *   http://casmi.github.io/
+ *   Copyright (C) 2011, Xcoo, Inc.
+ *
+ *  casmi is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package casmi.graphics.shader;
 
 import java.io.IOException;
@@ -7,6 +26,11 @@ import java.util.Scanner;
 
 import javax.media.opengl.GL2;
 
+/**
+ * Shader.
+ *
+ * @author Y. Ban
+ */
 public class Shader {
 
     private int shaderprogram;
@@ -18,8 +42,8 @@ public class Shader {
     private HashMap<String, Integer> attribMap;
 
     public Shader(String shaderName) {
-        this.vartName = "/shaders/" + shaderName + "Vert.glsl";
-        this.fragName = "/shaders/" + shaderName + "Frag.glsl";
+        this.vartName = shaderName + "Vert.glsl";
+        this.fragName = shaderName + "Frag.glsl";
         uniformMap = new HashMap<String, Integer>();
         attribMap = new HashMap<String, Integer>();
     }
@@ -60,9 +84,8 @@ public class Shader {
                 gl.glAttachShader(shaderprogram, f);
                 gl.glLinkProgram(shaderprogram);
                 gl.glValidateProgram(shaderprogram);
-
             } catch (IOException e) {
-                System.out.println(this.vartName + "load Error!!");
+                System.out.println(this.vartName + " load Error!!");
                 e.printStackTrace();
             }
         }
@@ -76,7 +99,7 @@ public class Shader {
 
     public void setVertexAttrib3(String attribName, double val[]) {
         enableShader();
-        if(attribMap.get(attribName)==null)
+        if (attribMap.get(attribName) == null)
             setAttribLocation(attribName);
         gl.glVertexAttrib3dv(attribMap.get(attribName), val, 0);
     }
@@ -89,14 +112,14 @@ public class Shader {
 
     public void setUniform(String uniformName, float val) {
         enableShader();
-        if(uniformMap.get(uniformName)==null)
+        if (uniformMap.get(uniformName) == null)
             setUniformLocation(uniformName);
         gl.glUniform1f(uniformMap.get(uniformName), val);
     }
 
     public void setUniform(String uniformName, int val) {
         enableShader();
-        if(uniformMap.get(uniformName)==null)
+        if (uniformMap.get(uniformName) == null)
             setUniformLocation(uniformName);
         gl.glUniform1i(uniformMap.get(uniformName), val);
     }
@@ -117,7 +140,6 @@ public class Shader {
 
     public void disableShader() {
         gl.glUseProgram(0);
-
     }
 
     public int getShaderProgram() {
@@ -125,14 +147,13 @@ public class Shader {
     }
 
     public void enableShader(GL2 gl) {
-        if(this.gl!=gl)
+        if (this.gl != gl)
             this.resetShaders(gl);
         gl.glUseProgram(shaderprogram);
     }
 
     public void disableShader(GL2 gl) {
         gl.glUseProgram(0);
-
     }
 
     public static String readFromStream(InputStream ins) throws IOException {
@@ -151,5 +172,4 @@ public class Shader {
 
         return buffer.toString();
     }
-
 }

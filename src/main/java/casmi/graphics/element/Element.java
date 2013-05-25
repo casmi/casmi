@@ -106,7 +106,7 @@ abstract public class Element implements Cloneable, Renderable {
 	protected boolean enableShader = false;
     protected boolean enableBump = false;
 
-    protected BlurMode blurMode = BlurMode.Blur;
+    protected BlurMode blurMode = BlurMode.BLUR;
     protected boolean enableBlur = false;
     protected boolean rootBlur = false;
     protected boolean rootMotionBlur = false;
