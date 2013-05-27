@@ -65,15 +65,15 @@ public class Trackball {
         this(applet.getWidth(), applet.getHeight());
     }
 
-    public void update(int mouseX, int mouseY, int prvMouseX, int prvMouseY) {
+    public void update(int mouseX, int mouseY, int prevMouseX, int prevMouseY) {
         double normalizedMouseX = (2.0 * mouseX - width) / width;
         double normalizedMouseY = (2.0 * mouseY - height) / height;
 
-        double normalizedPrvMouseX = (2.0 * prvMouseX - width) / width;
-        double normalizedPrvMouseY = (2.0 * prvMouseY - height) / height;
+        double normalizedPrevMouseX = (2.0 * prevMouseX - width) / width;
+        double normalizedPrevMouseY = (2.0 * prevMouseY - height) / height;
 
         Quaternion lastQuat =
-            calcQuat(normalizedPrvMouseX, normalizedPrvMouseY, normalizedMouseX, normalizedMouseY);
+            calcQuat(normalizedPrevMouseX, normalizedPrevMouseY, normalizedMouseX, normalizedMouseY);
 
         curQuat = addQuats(lastQuat, curQuat);
     }

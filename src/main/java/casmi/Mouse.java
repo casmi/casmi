@@ -29,8 +29,8 @@ public class Mouse {
     private int x = 0;
     private int y = 0;
 
-    private int prvX = 0;
-    private int prvY = 0;
+    private int prevX = 0;
+    private int prevY = 0;
 
     private boolean leftButtonPressed = false;
     private boolean middleButtonPressed = false;
@@ -69,20 +69,30 @@ public class Mouse {
         this.y = y;
     }
 
+    public int getPrevX() {
+        return prevX;
+    }
+
+    void setPrevX(int prevX) {
+        this.prevX = prevX;
+    }
+
+    public int getPrevY() {
+        return prevY;
+    }
+
+    void setPrevY(int prevY) {
+        this.prevY = prevY;
+    }
+
+    @Deprecated
     public int getPrvX() {
-        return prvX;
+        return prevX;
     }
 
-    void setPrvX(int prvX) {
-        this.prvX = prvX;
-    }
-
+    @Deprecated
     public int getPrvY() {
-        return prvY;
-    }
-
-    void setPrvY(int prvY) {
-        this.prvY = prvY;
+        return prevY;
     }
 
     public boolean isButtonPressed(MouseButton button) {

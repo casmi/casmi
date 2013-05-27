@@ -113,10 +113,12 @@ abstract public class Scene extends RootObject {
         update(g);
     }
 
+    @Override
     public void update(Graphics g) {
         update();
     }
 
+    @Override
     abstract public void update();
 
     public int addObject(Object r) {
@@ -161,12 +163,22 @@ abstract public class Scene extends RootObject {
         return rootTimeline.getMouse();
     }
 
-    public int getPreMouseX() {
-        return rootTimeline.getMouse().getPrvX();
+    public int getPrevMouseX() {
+        return rootTimeline.getMouse().getPrevX();
     }
 
+    public int getPrevMouseY() {
+        return rootTimeline.getMouse().getPrevY();
+    }
+
+    @Deprecated
+    public int getPreMouseX() {
+        return rootTimeline.getMouse().getPrevX();
+    }
+
+    @Deprecated
     public int getPreMouseY() {
-        return rootTimeline.getMouse().getPrvY();
+        return rootTimeline.getMouse().getPrevY();
     }
 
     public int getMouseX() {
@@ -355,6 +367,7 @@ abstract public class Scene extends RootObject {
         this.addCamera(camera);
     }
 
+    @Override
     public Mask getMask() {
         if (mask == null) {
             mask = new Mask();

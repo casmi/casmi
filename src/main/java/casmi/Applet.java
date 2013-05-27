@@ -527,8 +527,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
 	private final void updateMouse() {
-		mouse.setPrvX(mouse.getX());
-		mouse.setPrvY(mouse.getY());
+		mouse.setPrevX(mouse.getX());
+		mouse.setPrevY(mouse.getY());
 
 		Point p = getMousePosition(true);
 		if (p != null) {
@@ -715,12 +715,22 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    return mouse;
 	}
 
-	public int getPreMouseX() {
-		return mouse.getPrvX();
+	public int getPrevMouseX() {
+		return mouse.getPrevX();
 	}
 
+	public int getPrevMouseY() {
+		return mouse.getPrevY();
+	}
+
+	@Deprecated
+	public int getPreMouseX() {
+		return mouse.getPrevX();
+	}
+
+	@Deprecated
 	public int getPreMouseY() {
-		return mouse.getPrvY();
+		return mouse.getPrevY();
 	}
 
 	public int getMouseX() {
