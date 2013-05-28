@@ -19,6 +19,7 @@
 
 package casmi;
 
+import casmi.graphics.object.Camera;
 import casmi.graphics.object.GraphicsObject;
 
 /**
@@ -34,6 +35,7 @@ public class Trackball {
     private static int count = 0;
 
     private int width, height;
+    private Camera camera = null;
 
     class Quaternion {
 
@@ -104,6 +106,8 @@ public class Trackball {
         obj.applyMatrix(mat);
     }
 
+
+
     private final Quaternion calcQuat(double x1, double y1, double x2, double y2) {
 
         Quaternion quat = new Quaternion();
@@ -132,6 +136,7 @@ public class Trackball {
         p2[2] = tbProjectToSphere(TRACKBALL_SIZE, x2, y2);
 
         a = vcross(p2, p1);
+        a = applyCameraMatrix(a);
 
         d = vsub(p1, p2);
         t = vlength(d) / (2.0 * TRACKBALL_SIZE);
@@ -145,6 +150,20 @@ public class Trackball {
         quat = axisToQuat(a, phi);
 
         return quat;
+    }
+
+    private double[] applyCameraMatrix(double[] mat) {
+        if(this.camera!=null){
+            double[] axis = {mat[0], mat[1], mat[2], 1};
+
+            double[] eye = this.camera.getViewMatrix();
+            double[] inv = inverseMatrix(eye);
+            inv[12] = inv[13]= inv[14] = 0;
+            axis = multMatrix(axis, inv);
+            double[] result = {axis[0], axis[1], axis[2]};
+            return result;
+        } else
+            return mat;
     }
 
     private final Quaternion addQuats(Quaternion quat1, Quaternion quat2) {
@@ -219,6 +238,10 @@ public class Trackball {
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
     }
 
     private final double tbProjectToSphere(double r, double x, double y) {
@@ -310,29 +333,132 @@ public class Trackball {
         return new Quaternion(ret[0], ret[1], ret[2], ret[3]);
     }
 
+    private final double calcDeterminate(final double[] mat) {
+        return  mat[12] * mat[9] * mat[6] * mat[3] - mat[8] * mat[13] * mat[6] * mat[3] -
+            mat[12] * mat[5] * mat[10] * mat[3] + mat[4] * mat[13] * mat[10] * mat[3] +
+            mat[8] * mat[5] * mat[14] * mat[3] - mat[4] * mat[9] * mat[14] * mat[3] -
+            mat[12] * mat[9] * mat[2] * mat[7] + mat[8] * mat[13] * mat[2] * mat[7] +
+            mat[12] * mat[1] * mat[10] * mat[7] - mat[0] * mat[13] * mat[10] * mat[7] -
+            mat[8] * mat[1] * mat[14] * mat[7] + mat[0] * mat[9] * mat[14] * mat[7] +
+            mat[12] * mat[5] * mat[2] * mat[11] - mat[4] * mat[13] * mat[2] * mat[11] -
+            mat[12] * mat[1] * mat[6] * mat[11] + mat[0] * mat[13] * mat[6] * mat[11] +
+            mat[4] * mat[1] * mat[14] * mat[11] - mat[0] * mat[5] * mat[14] * mat[11] -
+            mat[8] * mat[5] * mat[2] * mat[15] + mat[4] * mat[9] * mat[2] * mat[15] +
+            mat[8] * mat[1] * mat[6] * mat[15] - mat[0] * mat[9] * mat[6] * mat[15] -
+            mat[4] * mat[1] * mat[10] * mat[15] + mat[0] * mat[5] * mat[10] * mat[15] ;
+    }
+
+    private final double[] inverseMatrix(final double[] mat) {
+        double[] inv = new double[16];
+        double[] result = new double[16];
+        double det = 1.0f / calcDeterminate(mat);
+
+        inv[0]   = mat[6]*mat[11]*mat[13] - mat[7]*mat[10]*mat[13]
+        + mat[7]*mat[9]*mat[14] - mat[5]*mat[11]*mat[14]
+        - mat[6]*mat[9]*mat[15] + mat[5]*mat[10]*mat[15];
+
+        inv[4]   = mat[3]*mat[10]*mat[13] - mat[2]*mat[11]*mat[13]
+        - mat[3]*mat[9]*mat[14] + mat[1]*mat[11]*mat[14]
+        + mat[2]*mat[9]*mat[15] - mat[1]*mat[10]*mat[15];
+
+        inv[8]   = mat[2]*mat[7]*mat[13] - mat[3]*mat[6]*mat[13]
+        + mat[3]*mat[5]*mat[14] - mat[1]*mat[7]*mat[14]
+        - mat[2]*mat[5]*mat[15] + mat[1]*mat[6]*mat[15];
+
+        inv[12]  = mat[3]*mat[6]*mat[9] - mat[2]*mat[7]*mat[9]
+        - mat[3]*mat[5]*mat[10] + mat[1]*mat[7]*mat[10]
+        + mat[2]*mat[5]*mat[11] - mat[1]*mat[6]*mat[11];
+
+        inv[1]   = mat[7]*mat[10]*mat[12] - mat[6]*mat[11]*mat[12]
+        - mat[7]*mat[8]*mat[14] + mat[4]*mat[11]*mat[14]
+        + mat[6]*mat[8]*mat[15] - mat[4]*mat[10]*mat[15];
+
+        inv[5]   = mat[2]*mat[11]*mat[12] - mat[3]*mat[10]*mat[12]
+        + mat[3]*mat[8]*mat[14] - mat[0]*mat[11]*mat[14]
+        - mat[2]*mat[8]*mat[15] + mat[0]*mat[10]*mat[15];
+
+        inv[9]   = mat[3]*mat[6]*mat[12] - mat[2]*mat[7]*mat[12]
+        - mat[3]*mat[4]*mat[14] + mat[0]*mat[7]*mat[14]
+        + mat[2]*mat[4]*mat[15] - mat[0]*mat[6]*mat[15];
+
+        inv[13]  = mat[2]*mat[7]*mat[8] - mat[3]*mat[6]*mat[8]
+        + mat[3]*mat[4]*mat[10] - mat[0]*mat[7]*mat[10]
+        - mat[2]*mat[4]*mat[11] + mat[0]*mat[6]*mat[11];
+
+        inv[2]   = mat[5]*mat[11]*mat[12] - mat[7]*mat[9]*mat[12]
+        + mat[7]*mat[8]*mat[13] - mat[4]*mat[11]*mat[13]
+        - mat[5]*mat[8]*mat[15] + mat[4]*mat[9]*mat[15];
+
+        inv[6]   = mat[3]*mat[9]*mat[12] - mat[1]*mat[11]*mat[12]
+        - mat[3]*mat[8]*mat[13] + mat[0]*mat[11]*mat[13]
+        + mat[1]*mat[8]*mat[15] - mat[0]*mat[9]*mat[15];
+
+        inv[10]  = mat[1]*mat[7]*mat[12] - mat[3]*mat[5]*mat[12]
+        + mat[3]*mat[4]*mat[13] - mat[0]*mat[7]*mat[13]
+        - mat[1]*mat[4]*mat[15] + mat[0]*mat[5]*mat[15];
+
+        inv[14]  = mat[3]*mat[5]*mat[8] - mat[1]*mat[7]*mat[8]
+        - mat[3]*mat[4]*mat[9] + mat[0]*mat[7]*mat[9]
+        + mat[1]*mat[4]*mat[11] - mat[0]*mat[5]*mat[11];
+
+        inv[3]   = mat[6]*mat[9]*mat[12] - mat[5]*mat[10]*mat[12]
+        - mat[6]*mat[8]*mat[13] + mat[4]*mat[10]*mat[13]
+        + mat[5]*mat[8]*mat[14] - mat[4]*mat[9]*mat[14];
+
+        inv[7]  = mat[1]*mat[10]*mat[12] - mat[2]*mat[9]*mat[12]
+        + mat[2]*mat[8]*mat[13] - mat[0]*mat[10]*mat[13]
+        - mat[1]*mat[8]*mat[14] + mat[0]*mat[9]*mat[14];
+
+        inv[11]  = mat[2]*mat[5]*mat[12] - mat[1]*mat[6]*mat[12]
+        - mat[2]*mat[4]*mat[13] + mat[0]*mat[6]*mat[13]
+        + mat[1]*mat[4]*mat[14] - mat[0]*mat[5]*mat[14];
+
+        inv[15]  = mat[1]*mat[6]*mat[8] - mat[2]*mat[5]*mat[8]
+        + mat[2]*mat[4]*mat[9] - mat[0]*mat[6]*mat[9]
+        - mat[1]*mat[4]*mat[10] + mat[0]*mat[5]*mat[10];
+
+        for (int i = 0; i < 16; i++)
+            inv[i] *= det;
+
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                result[i*4+j] = inv[i+4*j];
+
+        return result;
+    }
+
     private final double[] multMatrix(final double[] mat1, final double[] mat2) {
-        double[] ret = new double[16];
+        double [] ret;
+        if(mat1.length == 16){
+            ret = new double[16];
 
-        ret[0]  = mat1[0] * mat2[0] + mat1[1] * mat2[4] + mat1[2] * mat2[8] + mat1[3] * mat2[12];
-        ret[1]  = mat1[0] * mat2[1] + mat1[1] * mat2[5] + mat1[2] * mat2[9] + mat1[3] * mat2[13];
-        ret[2]  = mat1[0] * mat2[2] + mat1[1] * mat2[6] + mat1[2] * mat2[10] + mat1[3] * mat2[14];
-        ret[3]  = mat1[0] * mat2[3] + mat1[1] * mat2[7] + mat1[2] * mat2[11] + mat1[3] * mat2[15];
+            ret[0]  = mat1[0] * mat2[0] + mat1[1] * mat2[4] + mat1[2] * mat2[8] + mat1[3] * mat2[12];
+            ret[1]  = mat1[0] * mat2[1] + mat1[1] * mat2[5] + mat1[2] * mat2[9] + mat1[3] * mat2[13];
+            ret[2]  = mat1[0] * mat2[2] + mat1[1] * mat2[6] + mat1[2] * mat2[10] + mat1[3] * mat2[14];
+            ret[3]  = mat1[0] * mat2[3] + mat1[1] * mat2[7] + mat1[2] * mat2[11] + mat1[3] * mat2[15];
 
-        ret[4]  = mat1[4] * mat2[0] + mat1[5] * mat2[4] + mat1[6] * mat2[8] + mat1[7] * mat2[12];
-        ret[5]  = mat1[4] * mat2[1] + mat1[5] * mat2[5] + mat1[6] * mat2[9] + mat1[7] * mat2[13];
-        ret[6]  = mat1[4] * mat2[2] + mat1[5] * mat2[6] + mat1[6] * mat2[10] + mat1[7] * mat2[14];
-        ret[7]  = mat1[4] * mat2[3] + mat1[5] * mat2[7] + mat1[6] * mat2[11] + mat1[7] * mat2[15];
+            ret[4]  = mat1[4] * mat2[0] + mat1[5] * mat2[4] + mat1[6] * mat2[8] + mat1[7] * mat2[12];
+            ret[5]  = mat1[4] * mat2[1] + mat1[5] * mat2[5] + mat1[6] * mat2[9] + mat1[7] * mat2[13];
+            ret[6]  = mat1[4] * mat2[2] + mat1[5] * mat2[6] + mat1[6] * mat2[10] + mat1[7] * mat2[14];
+            ret[7]  = mat1[4] * mat2[3] + mat1[5] * mat2[7] + mat1[6] * mat2[11] + mat1[7] * mat2[15];
 
-        ret[8]  = mat1[8] * mat2[0] + mat1[9] * mat2[4] + mat1[10] * mat2[8] + mat1[11] * mat2[12];
-        ret[9]  = mat1[8] * mat2[1] + mat1[9] * mat2[5] + mat1[10] * mat2[9] + mat1[11] * mat2[13];
-        ret[10] = mat1[8] * mat2[2] + mat1[9] * mat2[6] + mat1[10] * mat2[10] + mat1[11] * mat2[14];
-        ret[11] = mat1[8] * mat2[3] + mat1[9] * mat2[7] + mat1[10] * mat2[11] + mat1[11] * mat2[15];
+            ret[8]  = mat1[8] * mat2[0] + mat1[9] * mat2[4] + mat1[10] * mat2[8] + mat1[11] * mat2[12];
+            ret[9]  = mat1[8] * mat2[1] + mat1[9] * mat2[5] + mat1[10] * mat2[9] + mat1[11] * mat2[13];
+            ret[10] = mat1[8] * mat2[2] + mat1[9] * mat2[6] + mat1[10] * mat2[10] + mat1[11] * mat2[14];
+            ret[11] = mat1[8] * mat2[3] + mat1[9] * mat2[7] + mat1[10] * mat2[11] + mat1[11] * mat2[15];
 
-        ret[12] = mat1[12] * mat2[0] + mat1[13] * mat2[4] + mat1[14] * mat2[8] + mat1[15] * mat2[12];
-        ret[13] = mat1[12] * mat2[1] + mat1[13] * mat2[5] + mat1[14] * mat2[9] + mat1[15] * mat2[13];
-        ret[14] = mat1[12] * mat2[2] + mat1[13] * mat2[6] + mat1[14] * mat2[10] + mat1[15] * mat2[14];
-        ret[15] = mat1[12] * mat2[3] + mat1[13] * mat2[7] + mat1[14] * mat2[11] + mat1[15] * mat2[15];
+            ret[12] = mat1[12] * mat2[0] + mat1[13] * mat2[4] + mat1[14] * mat2[8] + mat1[15] * mat2[12];
+            ret[13] = mat1[12] * mat2[1] + mat1[13] * mat2[5] + mat1[14] * mat2[9] + mat1[15] * mat2[13];
+            ret[14] = mat1[12] * mat2[2] + mat1[13] * mat2[6] + mat1[14] * mat2[10] + mat1[15] * mat2[14];
+            ret[15] = mat1[12] * mat2[3] + mat1[13] * mat2[7] + mat1[14] * mat2[11] + mat1[15] * mat2[15];
+        } else {
+            ret = new double[4];
 
+            ret[0]  = mat1[0] * mat2[0] + mat1[1] * mat2[4] + mat1[2] * mat2[8] + mat1[3] * mat2[12];
+            ret[1]  = mat1[0] * mat2[1] + mat1[1] * mat2[5] + mat1[2] * mat2[9] + mat1[3] * mat2[13];
+            ret[2]  = mat1[0] * mat2[2] + mat1[1] * mat2[6] + mat1[2] * mat2[10] + mat1[3] * mat2[14];
+            ret[3]  = mat1[0] * mat2[3] + mat1[1] * mat2[7] + mat1[2] * mat2[11] + mat1[3] * mat2[15];
+        }
         return ret;
     }
 }
