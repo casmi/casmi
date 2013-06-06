@@ -30,7 +30,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
@@ -143,18 +142,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	abstract public void update();
 
-	public void exit() {}
-	// TODO: will use abstract method from next version
-	// abstract public void exit();
+	abstract public void exit();
 
 	abstract public void mouseEvent(MouseEvent e, MouseButton b);
 
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
 
-	public void setGLParam(GL2 gl) {
-
-	}
+//	public void setGLParam(GL2 gl) {
+//
+//	}
 
 	class GLRedisplayTask extends TimerTask {
 
@@ -186,7 +183,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		}
 	}
 
-	public void initRootOject() {
+	private void initRootObject() {
 		rootObject = new RootObject();
 		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
 		rootObject.setDepthTest(false);
@@ -194,7 +191,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void init() {
-		initRootOject();
+		initRootObject();
 
 		setSize(100, 100);
 
@@ -302,7 +299,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	public boolean isFullScreen() {
-
 		return isFullScreen;
 	}
 
@@ -481,7 +477,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			break;
 		}
 
-
 	    mouse.setButtonPressed(mouseButton, true);
 		mouseEvent(MouseEvent.DRAGGED, mouseButton);
 		rootObject.setMouseEvent(MouseEvent.DRAGGED);
@@ -489,7 +484,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
 			rootTimeline.getScene().setMouseEvent(MouseEvent.DRAGGED);
 		}
-
 
 		updateMouse();
 	}
@@ -610,7 +604,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		rootObjectInit = true;
 		rootObject = null;
 
-		initRootOject();
+		initRootObject();
 
 		this.setup();
 
@@ -631,7 +625,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
-		setGLParam(g.getGL());
+//		setGLParam(g.getGL());
 
 		drawObjects(g);
 
@@ -807,38 +801,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         }
     }
 
-    public void glTest(Graphics g) {
-    	//g.getGL().glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-    	//g.getGL().glLoadIdentity();
-    	g.getGL().glColor3d(1.0, 1.0, 1.0);
-    	g.getGL().glTranslatef(-1.5f, 0.0f, -6.0f);
-    	g.getGL().glBegin(GL2.GL_TRIANGLES);
-    	g.getGL().glVertex3f(100.0f, 100.0f, 0.0f);
-    	g.getGL().glVertex3f(0.0f, 0.0f, 0.0f);
-    	g.getGL().glVertex3f(300.0f, 0.0f, 0.0f);
-    	g.getGL().glEnd();
-    	g.getGL().glTranslatef(1.5f, 0.0f, 0.0f);
-    	g.getGL().glColor3d(0.5, 0.5, 0.5);
-    	g.getGL().glBegin(GL2.GL_QUADS);
-    	g.getGL().glVertex3f(0.0f, 400.0f, 0.0f);
-    	g.getGL().glVertex3f(200.0f, 400.0f, 0.0f);
-    	g.getGL().glVertex3f(200.0f, -100.0f, 0.0f);
-    	g.getGL().glVertex3f(0.0f, -100.0f, 0.0f);
-    	g.getGL().glEnd();
-    	//g.getGL().glFlush();
-    }
-
-    // TODO: should change access public to private final
-    public void update(Graphics g) {
-        if (rootObject.isResetObject() ) {
-            rootObject.resetObjects();
-            rootObject.setResetObject(false);
-        }
-
-        if (!rootObjectInit)
-            rootObjectInit = true;
-        update();
-    }
+//    private final void update(Graphics g) {
+//        if (rootObject.isResetObject() ) {
+//            rootObject.resetObjects();
+//            rootObject.setResetObject(false);
+//        }
+//
+//        if (!rootObjectInit)
+//            rootObjectInit = true;
+//        update();
+//    }
 
     private static TweenManager tweenManager = null;
 
@@ -904,7 +876,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
 
    public void addObject(Object obj) {
-      // addObject(0, obj);
        if(rootObjectInit){
            rootObject.add(obj);
            if(obj instanceof TimelineRender){
@@ -1110,7 +1081,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 /**
  * implement draw function using casmi Graphics
  *
- * @author takashi
+ * @author Takashi AOKI <federkasten@me.com>
  *
  */
 interface GraphicsDrawable {
@@ -1122,7 +1093,7 @@ interface GraphicsDrawable {
 /**
  * JOGL Events wrap class
  *
- * @author takashi
+ * @author Takashi AOKI <federkasten@me.com>
  *
  */
 class AppletGLEventListener implements GLEventListener {
@@ -1161,12 +1132,16 @@ class AppletGLEventListener implements GLEventListener {
 		synchronized (this) {
 			gl.glViewport(0, 0, this.width, this.height);
 
-			g.ortho();
+			g.ortho();  // TODO fix
+
+			gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			gl.glClearStencil(0);
 			gl.glEnable(GL2.GL_DEPTH_TEST);
 			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
+
 			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL2.GL_BLEND);
+
 	        gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
 			gl.glEnable(GL2.GL_LINE_SMOOTH);
 
@@ -1184,7 +1159,8 @@ class AppletGLEventListener implements GLEventListener {
 	    this.setSize(width, height);
 	}
 
-	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {}
+	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
+	}
 
 	public void setSize(int w, int h) {
 		this.width = w;
@@ -1195,7 +1171,5 @@ class AppletGLEventListener implements GLEventListener {
 
 	@Override
 	public void dispose(GLAutoDrawable arg0) {
-		// TODO Auto-generated method stub
-
 	}
 }
