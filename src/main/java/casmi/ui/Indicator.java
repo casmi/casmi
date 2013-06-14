@@ -46,7 +46,6 @@ public class Indicator extends Group {
 
     public Indicator() {
         super();
-        setup();
     }
 
     public void setup() {

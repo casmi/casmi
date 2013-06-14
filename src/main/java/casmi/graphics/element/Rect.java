@@ -31,7 +31,7 @@ import casmi.graphics.color.RGBColor;
  *
  * @author Y. Ban
  */
-public class Rect extends Element implements Renderable {
+public class Rect extends Element {
 
     private double w;
     private double h;

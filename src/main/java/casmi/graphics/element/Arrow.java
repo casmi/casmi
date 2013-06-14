@@ -264,5 +264,7 @@ public class Arrow extends Group {
     }
 
     @Override
-    public void update() {}
+    public void update() {
+
+    }
 }

@@ -29,9 +29,5 @@ import casmi.graphics.group.Group;
 public class ProgressBar extends Group {
 
     @Override
-    public void update() {
-        // TODO Auto-generated method stub
-
-    }
-
+    public void update() {}
 }
