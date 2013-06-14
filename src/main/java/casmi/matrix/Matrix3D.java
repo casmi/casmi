@@ -72,6 +72,7 @@ public class Matrix3D implements Matrix {
         apply(getRotateXMatrix(rotateZ));
     }
 
+    @Override
     public void reset() {
         set(1, 0, 0, 0,
             0, 1, 0, 0,
@@ -79,7 +80,7 @@ public class Matrix3D implements Matrix {
             0, 0, 0, 1);
     }
 
-    public final Matrix3D getRotateYMatrix(double x) {
+    public static final Matrix3D getRotateYMatrix(double x) {
         double radian = x / 180.0 * Math.PI;
         Matrix3D matrix = new Matrix3D(
             Math.cos(radian), 0, Math.sin(radian), 0,
@@ -89,7 +90,7 @@ public class Matrix3D implements Matrix {
         return matrix;
     }
 
-    public final Matrix3D getRotateXMatrix(double x) {
+    public static final Matrix3D getRotateXMatrix(double x) {
         double radian = x / 180.0 * Math.PI;
         Matrix3D matrix = new Matrix3D(
             1, 0, 0, 0,
@@ -99,7 +100,7 @@ public class Matrix3D implements Matrix {
         return matrix;
     }
 
-    public final Matrix3D getRotateZMatrix(double x) {
+    public static final Matrix3D getRotateZMatrix(double x) {
         double radian = x / 180.0 * Math.PI;
         Matrix3D matrix = new Matrix3D(
             Math.cos(radian), -Math.sin(radian), 0, 0,
@@ -112,6 +113,7 @@ public class Matrix3D implements Matrix {
     /**
      * Returns a copy of this Matrix.
      */
+    @Override
     public Matrix3D get() {
         Matrix3D outgoing = new Matrix3D();
         outgoing.set(this);
@@ -122,6 +124,7 @@ public class Matrix3D implements Matrix {
      * Copies the matrix contents into a 16 entry double array.
      * If target is null (or not the correct size), a new array will be created.
      */
+    @Override
     public double[] get(double[] target) {
         if ((target == null) || (target.length != 16)) {
             target = new double[16];
@@ -149,6 +152,7 @@ public class Matrix3D implements Matrix {
         return target;
     }
 
+    @Override
     public void set(Matrix matrix) {
         if (matrix instanceof Matrix3D) {
             Matrix3D src = (Matrix3D) matrix;
@@ -165,6 +169,7 @@ public class Matrix3D implements Matrix {
         }
     }
 
+    @Override
     public void set(double[] source) {
         if (source.length == 6) {
             set(source[0], source[1], source[2],
@@ -193,6 +198,7 @@ public class Matrix3D implements Matrix {
         }
     }
 
+    @Override
     public void set(double m00, double m01, double m02,
                     double m10, double m11, double m12) {
         set(m00, m01, 0, m02,
@@ -201,6 +207,7 @@ public class Matrix3D implements Matrix {
             0, 0, 0, 1);
     }
 
+    @Override
     public void set(double m00, double m01, double m02, double m03,
                     double m10, double m11, double m12, double m13,
                     double m20, double m21, double m22, double m23,
@@ -211,6 +218,7 @@ public class Matrix3D implements Matrix {
         this.m30 = m30; this.m31 = m31; this.m32 = m32; this.m33 = m33;
     }
 
+    @Override
     public void translate(double tx, double ty) {
         translate(tx, ty, 0);
     }
@@ -219,6 +227,7 @@ public class Matrix3D implements Matrix {
     //        invTranslate(tx, ty, 0);
     //  }
 
+    @Override
     public void translate(double tx, double ty, double tz) {
         m03 += tx * m00 + ty * m01 + tz * m02;
         m13 += tx * m10 + ty * m11 + tz * m12;
@@ -226,28 +235,33 @@ public class Matrix3D implements Matrix {
         m33 += tx * m30 + ty * m31 + tz * m32;
     }
 
+    @Override
     public void rotate(double angle) {
         rotateZ(angle);
     }
 
+    @Override
     public void rotateX(double angle) {
         double c = Math.cos(angle);
         double s = Math.sin(angle);
         apply(1, 0, 0, 0,  0, c, -s, 0,  0, s, c, 0,  0, 0, 0, 1);
     }
 
+    @Override
     public void rotateY(double angle) {
         double c = Math.cos(angle);
         double s = Math.sin(angle);
         apply(c, 0, s, 0,  0, 1, 0, 0,  -s, 0, c, 0,  0, 0, 0, 1);
     }
 
+    @Override
     public void rotateZ(double angle) {
         double c = Math.cos(angle);
         double s = Math.sin(angle);
         apply(c, -s, 0, 0,  s, c, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
     }
 
+    @Override
     public void rotate(double angle, double v0, double v1, double v2) {
         // TODO should make sure this vector is normalized
 
@@ -261,16 +275,19 @@ public class Matrix3D implements Matrix {
               0, 0, 0, 1);
     }
 
+    @Override
     public void scale(double s) {
         //apply(s, 0, 0, 0,  0, s, 0, 0,  0, 0, s, 0,  0, 0, 0, 1);
         scale(s, s, s);
     }
 
+    @Override
     public void scale(double sx, double sy) {
         //apply(sx, 0, 0, 0,  0, sy, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
         scale(sx, sy, 1);
     }
 
+    @Override
     public void scale(double x, double y, double z) {
         //apply(x, 0, 0, 0,  0, y, 0, 0,  0, 0, z, 0,  0, 0, 0, 1);
         m00 *= x;  m01 *= y;  m02 *= z;
@@ -279,22 +296,25 @@ public class Matrix3D implements Matrix {
         m30 *= x;  m31 *= y;  m32 *= z;
     }
 
+    @Override
     public void shearX(double angle) {
-        double t = (double)Math.tan(angle);
+        double t = Math.tan(angle);
         apply(1, t, 0, 0,
               0, 1, 0, 0,
               0, 0, 1, 0,
               0, 0, 0, 1);
     }
 
+    @Override
     public void shearY(double angle) {
-        double t = (double)Math.tan(angle);
+        double t = Math.tan(angle);
         apply(1, 0, 0, 0,
               t, 1, 0, 0,
               0, 0, 1, 0,
               0, 0, 0, 1);
     }
 
+    @Override
     public void apply(Matrix source) {
         if (source instanceof Matrix2D) {
             apply((Matrix2D) source);
@@ -303,6 +323,7 @@ public class Matrix3D implements Matrix {
         }
     }
 
+    @Override
     public void apply(Matrix2D source) {
         apply(source.m00, source.m01, 0, source.m02,
               source.m10, source.m11, 0, source.m12,
@@ -310,6 +331,7 @@ public class Matrix3D implements Matrix {
               0, 0, 0, 1);
     }
 
+    @Override
     public void apply(Matrix3D source) {
         apply(source.m00, source.m01, source.m02, source.m03,
               source.m10, source.m11, source.m12, source.m13,
@@ -317,6 +339,7 @@ public class Matrix3D implements Matrix {
               source.m30, source.m31, source.m32, source.m33);
     }
 
+    @Override
     public void apply(double n00, double n01, double n02,
                       double n10, double n11, double n12) {
         apply(n00, n01, 0, n02,
@@ -325,6 +348,7 @@ public class Matrix3D implements Matrix {
               0, 0, 0, 1);
     }
 
+    @Override
     public void apply(double n00, double n01, double n02, double n03,
                       double n10, double n11, double n12, double n13,
                       double n20, double n21, double n22, double n23,
@@ -356,6 +380,7 @@ public class Matrix3D implements Matrix {
         m30 = r30; m31 = r31; m32 = r32; m33 = r33;
     }
 
+    @Override
     public void preApply(Matrix2D left) {
         preApply(left.m00, left.m01, 0, left.m02,
                  left.m10, left.m11, 0, left.m12,
@@ -366,6 +391,7 @@ public class Matrix3D implements Matrix {
     /**
      * Apply another matrix to the left of this one.
      */
+    @Override
     public void preApply(Matrix3D left) {
         preApply(left.m00, left.m01, left.m02, left.m03,
                  left.m10, left.m11, left.m12, left.m13,
@@ -373,6 +399,7 @@ public class Matrix3D implements Matrix {
                  left.m30, left.m31, left.m32, left.m33);
     }
 
+    @Override
     public void preApply(double n00, double n01, double n02,
                          double n10, double n11, double n12) {
         preApply(n00, n01, 0, n02,
@@ -381,6 +408,7 @@ public class Matrix3D implements Matrix {
                  0, 0, 0, 1);
     }
 
+    @Override
     public void preApply(double n00, double n01, double n02, double n03,
                          double n10, double n11, double n12, double n13,
                          double n20, double n21, double n22, double n23,
@@ -414,6 +442,7 @@ public class Matrix3D implements Matrix {
 
     //////////////////////////////////////////////////////////////
 
+    @Override
     public Vertex mult(Vertex source) {
 
         Vertex result = new Vertex();
@@ -428,6 +457,7 @@ public class Matrix3D implements Matrix {
      * Multiply a three or four element vector against this matrix. If out is
      * null or not length 3 or 4, a new double array (length 3) will be returned.
      */
+    @Override
     public double[] mult(double[] source, double[] target) {
         if (target == null || target.length < 3) {
             target = new double[3];
@@ -495,6 +525,7 @@ public class Matrix3D implements Matrix {
     /**
      * Transpose this matrix.
      */
+    @Override
     public void transpose() {
         double temp;
         temp = m01; m01 = m10; m10 = temp;
@@ -509,6 +540,7 @@ public class Matrix3D implements Matrix {
      * Invert this matrix.
      * @return true if successful
      */
+    @Override
     public boolean invert() {
         double determinant = determinant();
         if (determinant == 0) {
@@ -578,6 +610,7 @@ public class Matrix3D implements Matrix {
     /**
      * @return the determinant of the matrix
      */
+    @Override
     public double determinant() {
         double f = m00
             * ((m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32)
