@@ -26,7 +26,7 @@ import casmi.graphics.Graphics;
  *
  * @author Y. Ban
  */
-public interface Perse {
+public interface Projection {
 
     void simplerender(Graphics g);
 }

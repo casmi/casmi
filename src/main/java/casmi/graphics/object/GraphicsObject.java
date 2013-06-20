@@ -27,16 +27,18 @@ import casmi.graphics.shader.Shader;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
-public class GraphicsObject  extends Element implements Updatable, ObjectRender {
+public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
     protected Graphics g;
 
     protected double tmpAs, tmpAf;
 
-    protected List<Object>       objectList;
-    protected List<Light>        lightList;
-    protected List<Camera>       cameraList;
-    protected List<Perse>        perseList;
+    protected List<Object> objectList;
+
+    protected List<Light> lights;
+    protected List<Camera> cameras;
+    protected List<Projection> projections;
+
     protected List<TweenManager> tmList;
     protected List<Integer> selectionList;
     protected List<MouseEvent> mouseEventList;
@@ -64,9 +66,9 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 
 	public GraphicsObject() {
 		objectList    = new CopyOnWriteArrayList<Object>();
-		lightList     = new CopyOnWriteArrayList<Light>();
-		cameraList    = new CopyOnWriteArrayList<Camera>();
-		perseList     = new CopyOnWriteArrayList<Perse>();
+		lights     = new CopyOnWriteArrayList<Light>();
+		cameras    = new CopyOnWriteArrayList<Camera>();
+		projections     = new CopyOnWriteArrayList<Projection>();
 		tmList        = new CopyOnWriteArrayList<TweenManager>();
 		selectionList = new CopyOnWriteArrayList<Integer>();
 
@@ -83,16 +85,16 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public void addLight(Light r) {
-		r.setIndex(lightList.size());
-		lightList.add(r);
+		r.setIndex(lights.size());
+		lights.add(r);
 	}
 
 	public void addCamera(Camera r) {
-		cameraList.add(r);
+		cameras.add(r);
 	}
 
-	public void addPerse(Perse r) {
-		perseList.add(r);
+	public void addProjection(Projection r) {
+		projections.add(r);
 	}
 
 	public void addTweenManager(TweenManager r) {
@@ -109,15 +111,15 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public void removeLight(int index) {
-		lightList.remove(index);
+		lights.remove(index);
 	}
 
 	public void removeCamera(int index) {
-		cameraList.remove(index);
+		cameras.remove(index);
 	}
 
 	public void removePerse(int index) {
-		perseList.remove(index);
+		projections.remove(index);
 	}
 
 	public void removeTweenManager(int index) {
@@ -129,15 +131,15 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public Object getLight(int index) {
-		return lightList.get(index);
+		return lights.get(index);
 	}
 
 	public Object getCamera(int index) {
-		return cameraList.get(index);
+		return cameras.get(index);
 	}
 
 	public Object getPerse(int index) {
-		return perseList.get(index);
+		return projections.get(index);
 	}
 
 	public TweenManager getTweenManager(int index) {
@@ -149,15 +151,15 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public void addLight(int index, Light r) {
-		lightList.add(index, r);
+		lights.add(index, r);
 	}
 
 	public void addCamera(int index, Camera r) {
-		cameraList.add(index, r);
+		cameras.add(index, r);
 	}
 
-	public void addPerse(int index, Perse r) {
-		perseList.add(index, r);
+	public void addPerse(int index, Projection r) {
+		projections.add(index, r);
 	}
 
 	public void clear() {
@@ -165,15 +167,15 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	public void clearLight() {
-		lightList.clear();
+		lights.clear();
 	}
 
 	public void clearCamera() {
-		cameraList.clear();
+		cameras.clear();
 	}
 
 	public void clearPerse() {
-		perseList.clear();
+		projections.clear();
 	}
 
 	public void clearTweenManager() {
@@ -560,7 +562,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	private final void drawCamera(Graphics g) {
-		for (Camera camera : cameraList) {
+		for (Camera camera : cameras) {
 			if (camera instanceof Camera) {
 				Camera c = camera;
 				c.render(g);
@@ -569,7 +571,7 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 	}
 
 	private final void drawPerse(Graphics g, boolean selection) {
-		for (Perse perse : perseList) {
+		for (Projection perse : projections) {
 			if (perse instanceof Perspective) {
 				Perspective perspective = (Perspective) perse;
 				if (selection == false)
@@ -590,13 +592,13 @@ public class GraphicsObject  extends Element implements Updatable, ObjectRender 
 					frustum.simplerender(g);
 			}
 		}
-		if (selection == true && perseList.size() == 0) {
+		if (selection == true && projections.size() == 0) {
 			g.simpleortho();
 		}
 	}
 
 	private final void drawLight(Graphics g) {
-		for (Light light : lightList)
+		for (Light light : lights)
 			light.render(g);
 	}
 

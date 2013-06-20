@@ -31,7 +31,7 @@ import casmi.graphics.element.Element;
  *
  * @author Y. Ban
  */
-public class Perspective extends Element implements ObjectRender,Perse {
+public class Perspective extends Element implements ObjectRender,Projection {
 
     private double fov;
     private double aspect;

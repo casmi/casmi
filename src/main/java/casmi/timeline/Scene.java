@@ -312,42 +312,42 @@ abstract public class Scene extends RootObject {
     }
 
     public void setPerspective() {
-        this.addPerse(new Perspective());
+        this.addProjection(new Perspective());
     }
 
     public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
-        this.addPerse(new Perspective(fov, aspect, zNear, zFar));
+        this.addProjection(new Perspective(fov, aspect, zNear, zFar));
     }
 
     public void setPerspective(Perspective perspective) {
-        this.addPerse(perspective);
+        this.addProjection(perspective);
     }
 
     public void setOrtho() {
-        this.addPerse(new Ortho());
+        this.addProjection(new Ortho());
     }
 
     public void setOrtho(double left, double right,
                          double bottom, double top,
                          double near, double far) {
-        this.addPerse(new Ortho(left, right, bottom, top, near, far));
+        this.addProjection(new Ortho(left, right, bottom, top, near, far));
     }
 
     public void setOrtho(Ortho ortho) {
-        this.addPerse(ortho);
+        this.addProjection(ortho);
     }
 
     public void setFrustum() {
-        this.addPerse(new Frustum());
+        this.addProjection(new Frustum());
     }
 
     public void setFrustum(double left, double right, double bottom,
                            double top, double near, double far) {
-        this.addPerse(new Frustum(left, right, bottom, top, near, far));
+        this.addProjection(new Frustum(left, right, bottom, top, near, far));
     }
 
     public void setFrustum(Frustum frustum) {
-        this.addPerse(frustum);
+        this.addProjection(frustum);
     }
 
     public void setCamera() {

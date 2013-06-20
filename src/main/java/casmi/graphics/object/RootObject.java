@@ -72,9 +72,9 @@ public class RootObject extends GraphicsObject {
 
     public RootObject() {
         objectList = new CopyOnWriteArrayList<Object>();
-        lightList = new CopyOnWriteArrayList<Light>();
-        cameraList = new CopyOnWriteArrayList<Camera>();
-        perseList = new CopyOnWriteArrayList<Perse>();
+        lights = new CopyOnWriteArrayList<Light>();
+        cameras = new CopyOnWriteArrayList<Camera>();
+        projections = new CopyOnWriteArrayList<Projection>();
         tmList = new CopyOnWriteArrayList<TweenManager>();
         selectionList = new CopyOnWriteArrayList<Integer>();
 
@@ -87,9 +87,9 @@ public class RootObject extends GraphicsObject {
 
     public RootObject(int selectionNum) {
         objectList = new CopyOnWriteArrayList<Object>();
-        lightList = new CopyOnWriteArrayList<Light>();
-        cameraList = new CopyOnWriteArrayList<Camera>();
-        perseList = new CopyOnWriteArrayList<Perse>();
+        lights = new CopyOnWriteArrayList<Light>();
+        cameras = new CopyOnWriteArrayList<Camera>();
+        projections = new CopyOnWriteArrayList<Projection>();
         tmList = new CopyOnWriteArrayList<TweenManager>();
         selectionList = new CopyOnWriteArrayList<Integer>();
         selectBuffer = Buffers.newDirectIntBuffer(NO_SELECTIONBUFF);
@@ -110,18 +110,18 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void addLight(Light r) {
-        r.setIndex(lightList.size());
-        lightList.add(r);
+        r.setIndex(lights.size());
+        lights.add(r);
     }
 
     @Override
     public void addCamera(Camera r) {
-        cameraList.add(r);
+        cameras.add(r);
     }
 
     @Override
-    public void addPerse(Perse r) {
-        perseList.add(r);
+    public void addProjection(Projection p) {
+        projections.add(p);
     }
 
     @Override
@@ -142,17 +142,17 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void removeLight(int index) {
-        lightList.remove(index);
+        lights.remove(index);
     }
 
     @Override
     public void removeCamera(int index) {
-        cameraList.remove(index);
+        cameras.remove(index);
     }
 
     @Override
     public void removePerse(int index) {
-        perseList.remove(index);
+        projections.remove(index);
     }
 
     @Override
@@ -167,17 +167,17 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public Object getLight(int index) {
-        return lightList.get(index);
+        return lights.get(index);
     }
 
     @Override
     public Object getCamera(int index) {
-        return cameraList.get(index);
+        return cameras.get(index);
     }
 
     @Override
     public Object getPerse(int index) {
-        return perseList.get(index);
+        return projections.get(index);
     }
 
     @Override
@@ -192,17 +192,17 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void addLight(int index, Light r) {
-        lightList.add(index, r);
+        lights.add(index, r);
     }
 
     @Override
     public void addCamera(int index, Camera r) {
-        cameraList.add(index, r);
+        cameras.add(index, r);
     }
 
     @Override
-    public void addPerse(int index, Perse r) {
-        perseList.add(index, r);
+    public void addPerse(int index, Projection r) {
+        projections.add(index, r);
     }
 
     @Override
@@ -212,17 +212,17 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void clearLight() {
-        lightList.clear();
+        lights.clear();
     }
 
     @Override
     public void clearCamera() {
-        cameraList.clear();
+        cameras.clear();
     }
 
     @Override
     public void clearPerse() {
-        perseList.clear();
+        projections.clear();
     }
 
     @Override
@@ -666,7 +666,7 @@ public class RootObject extends GraphicsObject {
     }
 
     private final void drawCamera(Graphics g) {
-        for (Camera camera : cameraList) {
+        for (Camera camera : cameras) {
             if (camera instanceof Camera) {
                 Camera c = camera;
                 c.render(g);
@@ -675,7 +675,7 @@ public class RootObject extends GraphicsObject {
     }
 
     private final void drawPerse(Graphics g, boolean selection) {
-        for (Perse perse : perseList) {
+        for (Projection perse : projections) {
             if (perse instanceof Perspective) {
                 Perspective perspective = (Perspective)perse;
                 if (!selection)
@@ -696,13 +696,13 @@ public class RootObject extends GraphicsObject {
                     frustum.simplerender(g);
             }
         }
-        if (selection && perseList.size() == 0) {
+        if (selection && projections.size() == 0) {
             g.simpleortho();
         }
     }
 
     private final void drawLight(Graphics g) {
-        for (Light light : lightList)
+        for (Light light : lights)
             light.render(g);
     }
 

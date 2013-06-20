@@ -100,6 +100,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private final Keyboard  keyboard  = new Keyboard();
     private final MenuBar   menuBar   = new MenuBar();
     private final PopupMenu popupMenu = new PopupMenu(this);
+
     private MouseButton mouseButton;
     private MouseEvent mouseEvent;
 
@@ -127,9 +128,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private RootObject rootObject;
 	private List<Updatable> updateObjectList = new ArrayList<Updatable>();
 
-	//private static final int SELECTION_BUFSIZE = 1024 * 1024;
-	// private int selectedIndex = 0;
-
 	// for capturing a window
 	private ImageType imageType = ImageType.JPG;
 	private boolean saveImageFlag = false;
@@ -148,10 +146,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
-
-//	public void setGLParam(GL2 gl) {
-//
-//	}
 
 	class GLRedisplayTask extends TimerTask {
 
@@ -193,7 +187,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void init() {
 		initRootObject();
 
-		setSize(100, 100);
+		setSize(0, 0);
 
 		// JOGL setup
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
@@ -201,13 +195,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		this.caps.setStencilBits(8);
 		this.panel = new GLJPanel(this.caps);
 		this.listener = new AppletGLEventListener(this, getWidth(), getHeight());
+
 		panel.addGLEventListener(listener);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
 		panel.addMouseWheelListener(this);
 		panel.addKeyListener(this);
-
 		add(panel);
+
 		setFocusable(false);
 		panel.setFocusable(true);
 
@@ -221,7 +216,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
-
 		    @Override
 		    public void run() {
 		        exit();
@@ -595,41 +589,40 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	// -------------------------------------------------------------------------
 
 	@Override
-	public void reset() {
+	public void initGraphics() {
+	    rootObjectInit = true;
+	    rootObject = null;
+
+	    initRootObject();
+
+	    this.setup();
+
+	    isInitializing = false;
+
+	    if (AppletRunner.frame != null && runAsApplication) {
+	        JFrame frame = AppletRunner.frame;
+	        if (!initialFullScreen) {
+	            Insets insets = frame.getInsets();
+	            frame.setSize(getWidth()  + insets.left + insets.right,
+	                getHeight() + insets.top  + insets.bottom);
+	        }
+	        frame.setLocationRelativeTo(null);
+	    }
+
+	    setFPS(getFPS());
+	}
+
+	@Override
+	public void resetGraphics() {
 		rootObject.resetObjects();
 	}
 
 	@Override
-	public void initSet() {
-		rootObjectInit = true;
-		rootObject = null;
-
-		initRootObject();
-
-		this.setup();
-
-		isInitializing = false;
-
-		if (AppletRunner.frame != null && runAsApplication) {
-		    JFrame frame = AppletRunner.frame;
-			if (!initialFullScreen) {
-	            Insets insets = frame.getInsets();
-	            frame.setSize(getWidth()  + insets.left + insets.right,
-	                          getHeight() + insets.top  + insets.bottom);
-	        }
-			frame.setLocationRelativeTo(null);
-		}
-
-		setFPS(getFPS());
-	}
-
-	@Override
 	public void drawWithGraphics(Graphics g) {
-//		setGLParam(g.getGL());
+        update();
+        updateObjects();
 
-		drawObjects(g);
-
-		updateObjects();
+	    drawObjects(g);
 
 		// Calculate real fps.
 		{
@@ -792,7 +785,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.clearSelectionList();
         rootObject.rootBufRender(g, getMouseX(), getMouseY(), false,0);
         rootObject.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
-        update();
     }
 
     private final void updateObjects() {
@@ -904,15 +896,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
            rootTimeline.setPopup(popupMenu);
            rootTimeline.setApplet(this);
        }
-       // NOTE: ???
-      /* if (rootObject instanceof TimelineRender) {
-           timeline = true;
-           rootTimelineRender = (TimelineRender)rootObject;
-           if (rootTimelineRender instanceof Timeline) {
-               rootTimeline = (Timeline)rootTimelineRender;
-               rootTimeline.setApplet(this);
-           }
-       }*/
    }
 
    public void addObject(List<Object> objectList) {
@@ -934,6 +917,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.clear();
     }
 
+    // TODO it seems to be useless
     public void addUpdateObject(Updatable obj) {
         addUpdateObject(0, obj);
     }
@@ -963,41 +947,41 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void setPerspective() {
-        rootObject.addPerse(new Perspective());
+        rootObject.addProjection(new Perspective());
     }
 
     public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
-        rootObject.addPerse(new Perspective(fov, aspect, zNear, zFar));
+        rootObject.addProjection(new Perspective(fov, aspect, zNear, zFar));
     }
 
     public void setPerspective(Perspective perspective) {
-        rootObject.addPerse(perspective);
+        rootObject.addProjection(perspective);
     }
 
     public void setOrtho() {
-        rootObject.addPerse(new Ortho());
+        rootObject.addProjection(new Ortho());
     }
 
     public void setOrtho(double left, double right, double bottom, double top,
             double near, double far) {
-        rootObject.addPerse(new Ortho(left, right, bottom, top, near, far));
+        rootObject.addProjection(new Ortho(left, right, bottom, top, near, far));
     }
 
     public void setOrtho(Ortho ortho) {
-        rootObject.addPerse(ortho);
+        rootObject.addProjection(ortho);
     }
 
     public void setFrustum() {
-        rootObject.addPerse(new Frustum());
+        rootObject.addProjection(new Frustum());
     }
 
     public void setFrustum(double left, double right, double bottom,
             double top, double near, double far) {
-        rootObject.addPerse(new Frustum(left, right, bottom, top, near, far));
+        rootObject.addProjection(new Frustum(left, right, bottom, top, near, far));
     }
 
     public void setFrustum(Frustum frustum) {
-        rootObject.addPerse(frustum);
+        rootObject.addProjection(frustum);
     }
 
     public void setCamera() {
@@ -1086,8 +1070,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
  */
 interface GraphicsDrawable {
     public void drawWithGraphics(Graphics g);
-    public void reset();
-    public void initSet();
+
+    public void resetGraphics();
+    public void initGraphics();
 }
 
 /**
@@ -1100,12 +1085,14 @@ class AppletGLEventListener implements GLEventListener {
 
 	public int width;
 	public int height;
+
 	private GL2 gl;
 	GLU glu;
 	GLUT glut;
+
 	private Graphics g = null;
 	private GraphicsDrawable d = null;
-	boolean reset = false;
+	boolean initialized = false;
 
 	public AppletGLEventListener(GraphicsDrawable drawable, int w, int h) {
 		this.width = w;
@@ -1120,11 +1107,14 @@ class AppletGLEventListener implements GLEventListener {
 		glut = new GLUT();
 
 		g = new Graphics(gl, glu, glut, width, height);
-		if (reset)
-			d.reset();
-		else
-			d.initSet();
-		reset = true;
+
+		if (initialized) {
+			d.resetGraphics();
+		} else {
+			d.initGraphics();
+		}
+
+		initialized = true;
 	}
 
 	@Override

@@ -31,7 +31,7 @@ import casmi.graphics.element.Element;
  *
  * @author Y. Ban
  */
-public class Frustum extends Element implements ObjectRender, Perse {
+public class Frustum extends Element implements ObjectRender, Projection {
 
     private double left;
     private double right;

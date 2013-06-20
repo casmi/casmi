@@ -43,7 +43,7 @@ public class AppletRunner {
 
     public static void run(String className, String title) {
         final Applet applet;
-        
+
         try {
             Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(className);
             initBeforeCreateApplet(title);
