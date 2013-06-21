@@ -31,7 +31,7 @@ import casmi.graphics.element.Element;
  *
  * @author Y. Ban
  */
-public class Perspective extends Element implements ObjectRender,Projection {
+public class Perspective extends Element implements ObjectRender, Projection {
 
     private double fov;
     private double aspect;
@@ -105,7 +105,7 @@ public class Perspective extends Element implements ObjectRender,Projection {
     public void render(GL2 gl, GLU glu, int width, int height) {}
 
     @Override
-    public void simplerender(Graphics g) {
+    public void renderForSelection(Graphics g) {
         if (def) {
             g.simpleperspective();
         } else {

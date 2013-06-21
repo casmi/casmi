@@ -138,7 +138,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		return cameras.get(index);
 	}
 
-	public Object getPerse(int index) {
+	public Object getProjection(int index) {
 		return projections.get(index);
 	}
 
@@ -158,7 +158,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		cameras.add(index, r);
 	}
 
-	public void addPerse(int index, Projection r) {
+	public void addProjection(int index, Projection r) {
 		projections.add(index, r);
 	}
 
@@ -577,19 +577,19 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				if (selection == false)
 					perspective.render(g);
 				else
-					perspective.simplerender(g);
+					perspective.renderForSelection(g);
 			} else if (perse instanceof Ortho) {
 				Ortho ortho = (Ortho) perse;
 				if (selection == false)
 					ortho.render(g);
 				else
-					ortho.simplerender(g);
+					ortho.renderForSelection(g);
 			} else if (perse instanceof Frustum) {
 				Frustum frustum = (Frustum) perse;
 				if (selection == false)
 					frustum.render(g);
 				else
-					frustum.simplerender(g);
+					frustum.renderForSelection(g);
 			}
 		}
 		if (selection == true && projections.size() == 0) {
@@ -649,7 +649,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		return selectionList;
 	}
 
-	public void clearSelectionList() {
+	public void clearSelections() {
 		selectionList.clear();
 	}
 

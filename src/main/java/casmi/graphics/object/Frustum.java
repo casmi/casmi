@@ -111,7 +111,7 @@ public class Frustum extends Element implements ObjectRender, Projection {
     }
 
     @Override
-    public void simplerender(Graphics g){
+    public void renderForSelection(Graphics g){
         if(def){
             g.simplefrustum();
         } else {

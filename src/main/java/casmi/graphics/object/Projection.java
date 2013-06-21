@@ -28,5 +28,5 @@ import casmi.graphics.Graphics;
  */
 public interface Projection {
 
-    void simplerender(Graphics g);
+    void renderForSelection(Graphics g);
 }

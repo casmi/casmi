@@ -106,10 +106,10 @@ abstract public class Scene extends RootObject {
     }
 
     public void drawscene(Graphics g) {
-        this.clearSelectionList();
-        this.rootBufRender(g, getMouseX(), getMouseY(), false,0);
+        this.clearSelections();
+        this.renderAll(g);
         if(!this.rootTimeline.isNowDissolve())
-            this.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
+            this.renderSelectionAll(g, getMouseX(), getMouseY(), 0);
         update(g);
     }
 

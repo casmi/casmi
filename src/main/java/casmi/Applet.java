@@ -118,11 +118,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	private boolean runAsApplication = false;
 
-	// private boolean selectionBuffer = false;
-
 	private boolean timeline = false;
 	private Timeline rootTimeline;
-	//private TimelineRender rootTimelineRender;
 
 	private boolean rootObjectInit = false;
 	private RootObject rootObject;
@@ -149,32 +146,32 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	class GLRedisplayTask extends TimerTask {
 
-		@Override
-		public void run() {
-			if (panel != null) { // TODO if no update, do not re-render
-			    if (initialFullScreen) {
-			        setFullScreen(true);
-			        initialFullScreen = false;
-			    }
+	    @Override
+	    public void run() {
+	        if (panel != null) { // TODO if no update, do not re-render
+	            if (initialFullScreen) {
+	                setFullScreen(true);
+	                initialFullScreen = false;
+	            }
 
-				panel.display();
+	            panel.display();
 
-				mouse.setPressed(false);
-				mouse.setClicked(false);
-				mouse.setDoubleClicked(false);
-				mouse.setEntered(false);
-				mouse.setExited(false);
-				mouse.setReleased(false);
-				mouse.setDragged(false);
-				mouse.setMoved(false);
+	            mouse.setPressed(false);
+	            mouse.setClicked(false);
+	            mouse.setDoubleClicked(false);
+	            mouse.setEntered(false);
+	            mouse.setExited(false);
+	            mouse.setReleased(false);
+	            mouse.setDragged(false);
+	            mouse.setMoved(false);
 
-				keyboard.setPressed(false);
-				keyboard.setReleased(false);
-				keyboard.setTyped(false);
+	            keyboard.setPressed(false);
+	            keyboard.setReleased(false);
+	            keyboard.setTyped(false);
 
-				rootObject.setMouseEvent(null);
-			}
-		}
+	            rootObject.setMouseEvent(null);
+	        }
+	    }
 	}
 
 	private void initRootObject() {
@@ -350,6 +347,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			mouseButton = MouseButton.RIGHT;
 			break;
 		}
+
 	    mouse.setButtonPressed(mouseButton, true);
 		mouseEvent(MouseEvent.PRESSED, mouseButton);
 
@@ -364,6 +362,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 		mouse.setReleased(true);
+
 	    switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			mouseButton = MouseButton.LEFT;
@@ -459,6 +458,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	@Override
 	public void mouseDragged(java.awt.event.MouseEvent e) {
 		mouse.setDragged(true);
+
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			mouseButton = MouseButton.LEFT;
@@ -683,16 +683,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		return mouse.getPrevY();
 	}
 
-	@Deprecated
-	public int getPreMouseX() {
-		return mouse.getPrevX();
-	}
-
-	@Deprecated
-	public int getPreMouseY() {
-		return mouse.getPrevY();
-	}
-
 	public int getMouseX() {
 		return mouse.getX();
 	}
@@ -769,8 +759,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    return popupMenu;
 	}
 
-	// ----------
-
 	@Override
 	public int getWidth() {
 		return width;
@@ -782,9 +770,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
     private final void drawObjects(Graphics g) {
-        rootObject.clearSelectionList();
-        rootObject.rootBufRender(g, getMouseX(), getMouseY(), false,0);
-        rootObject.rootSelectionbufRender(g, getMouseX(), getMouseY(), 0);
+        rootObject.clearSelections();
+
+        rootObject.renderAll(g);
+        rootObject.renderSelectionAll(g, getMouseX(), getMouseY(), 0);
     }
 
     private final void updateObjects() {
@@ -792,17 +781,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
             obj.update();
         }
     }
-
-//    private final void update(Graphics g) {
-//        if (rootObject.isResetObject() ) {
-//            rootObject.resetObjects();
-//            rootObject.setResetObject(false);
-//        }
-//
-//        if (!rootObjectInit)
-//            rootObjectInit = true;
-//        update();
-//    }
 
     private static TweenManager tweenManager = null;
 
@@ -831,7 +809,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         getTweenManager().remove(t);
     }
 
-    /////////////////
     public void setMask(Mask mask){
         rootObject.setMask(mask);
     }
@@ -917,7 +894,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.clear();
     }
 
-    // TODO it seems to be useless
+    // TODO these(addUpdateObject/getUpdateObject/removeUpdateObject/clearUpdateObject) seem to be useless methods
     public void addUpdateObject(Updatable obj) {
         addUpdateObject(0, obj);
     }
@@ -962,8 +939,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.addProjection(new Ortho());
     }
 
-    public void setOrtho(double left, double right, double bottom, double top,
-            double near, double far) {
+    public void setOrtho(double left, double right, double bottom, double top, double near, double far) {
         rootObject.addProjection(new Ortho(left, right, bottom, top, near, far));
     }
 
@@ -975,8 +951,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.addProjection(new Frustum());
     }
 
-    public void setFrustum(double left, double right, double bottom,
-            double top, double near, double far) {
+    public void setFrustum(double left, double right, double bottom, double top, double near, double far) {
         rootObject.addProjection(new Frustum(left, right, bottom, top, near, far));
     }
 
@@ -988,11 +963,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.addCamera(new Camera());
     }
 
-    public void setCamera(double eyeX, double eyeY, double eyeZ,
-            double centerX, double centerY, double centerZ, double upX,
-            double upY, double upZ) {
-        rootObject.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY,
-                centerZ, upX, upY, upZ));
+    public void setCamera(double eyeX, double eyeY, double eyeZ, double centerX, double centerY, double centerZ, double upX, double upY, double upZ) {
+        rootObject.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ));
     }
 
     public void setCamera(Camera camera) {
@@ -1122,7 +1094,7 @@ class AppletGLEventListener implements GLEventListener {
 		synchronized (this) {
 			gl.glViewport(0, 0, this.width, this.height);
 
-			g.ortho();  // TODO fix
+			g.ortho();
 
 			gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			gl.glClearStencil(0);

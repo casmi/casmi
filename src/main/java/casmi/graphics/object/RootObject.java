@@ -176,7 +176,7 @@ public class RootObject extends GraphicsObject {
     }
 
     @Override
-    public Object getPerse(int index) {
+    public Object getProjection(int index) {
         return projections.get(index);
     }
 
@@ -201,7 +201,7 @@ public class RootObject extends GraphicsObject {
     }
 
     @Override
-    public void addPerse(int index, Projection r) {
+    public void addProjection(int index, Projection r) {
         projections.add(index, r);
     }
 
@@ -270,15 +270,15 @@ public class RootObject extends GraphicsObject {
     }
 
     public void createBlurShader(int width, int height) {
-            this.fbo4Blur = new FrameBufferObject(width, height, 3);
-            this.fbo4MotionBlur = new FrameBufferObject(width, height);
-            this.fbo4MotionBlur2 = new FrameBufferObject(width, height);
-            this.objShader = new Shader("ObjID");
-            this.blurShader = new BlurShader(width, height);
-            this.motionBlurShader = new Shader("MotionBlur");
+        this.fbo4Blur = new FrameBufferObject(width, height, 3);
+        this.fbo4MotionBlur = new FrameBufferObject(width, height);
+        this.fbo4MotionBlur2 = new FrameBufferObject(width, height);
+        this.objShader = new Shader("ObjID");
+        this.blurShader = new BlurShader(width, height);
+        this.motionBlurShader = new Shader("MotionBlur");
     }
 
-    public void rootSelectionbufRender(Graphics g, double mouseX, double mouseY, int index) {
+    public void renderSelectionAll(Graphics g, double mouseX, double mouseY, int index) {
         this.selectionPhase = true;
         if (selectionbuff || isSelectionbuffer()) {
 
@@ -303,7 +303,7 @@ public class RootObject extends GraphicsObject {
 
             g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
             g.getGL().glLoadIdentity();
-            drawPerse(g, true);
+            drawProjection(g, true);
             drawCamera(g);
             if (bg != null) bg.render(g);
             drawLight(g);
@@ -341,29 +341,9 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void render(Graphics g) {
-        if (this.isVisible()) {
-            this.g = g;
-
-            drawTweenManager(g);
-
-            drawPerse(g, false);
-
-            drawCamera(g);
-
-            if (bg != null) bg.render(g);
-
-            drawLight(g);
-
-            g.pushMatrix();
-            {
-                setMatrix(g);
-                this.setTweenParameter(g.getGL());
-            }
-            g.popMatrix();
-        }
     }
 
-    public void rootBufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
+    public void renderAll(Graphics g) {
         this.selectionPhase = false;
         this.rootMotionBlur = false;
         if (this.isVisible()) {
@@ -392,14 +372,14 @@ public class RootObject extends GraphicsObject {
                 objShader.setUniform("mask", 0.0f);
             }
             drawTweenManager(g);
-            if (!bool) drawPerse(g, bool);
+            drawProjection(g, false);
             drawCamera(g);
             drawLight(g);
             g.pushMatrix();
             {
                 setMatrix(g);
                 this.setTweenParameter(g.getGL());
-                drawObject(g, bool, mouseX, mouseY, index, -1);
+                drawObject(g, false, 0, 0, 0, -1);
             }
             g.popMatrix();
 
@@ -480,24 +460,10 @@ public class RootObject extends GraphicsObject {
         blurShader.disableShader();
     }
 
-    /*
-     * private int rootBufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index,
-     * int selectedIndex) { int sIndex = -1; if (this.isVisible()) { this.g = g;
-     * drawTweenManager(g); if (bool == false) drawPerse(g, bool);
-     *
-     * drawCamera(g); if (bg != null) bg.render(g); drawLight(g); g.pushMatrix(); setMatrix(g);
-     * this.setTweenParameter(g.getGL()); sIndex = drawObject(g, bool, mouseX, mouseY, index,
-     * selectedIndex); g.popMatrix();
-     *
-     * }
-     *
-     * return sIndex; }
-     */
-
     @Override
     public void render(Element el) {
         el.setRootGlow(rootBlur);
-       // this.rootMotionBlur = false;
+        // this.rootMotionBlur = false;
         if (rootBlur && !selectionPhase) {
             if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR) {
                 objShader.setUniform("mask", 2.0f);
@@ -565,8 +531,8 @@ public class RootObject extends GraphicsObject {
     }
 
     private final int drawObject(Graphics g,
-                                 boolean selection, double mouseX, double mouseY,
-                                 int selectionIndex, int selectedIndex) {
+        boolean selection, double mouseX, double mouseY,
+        int selectionIndex, int selectedIndex) {
         for (Object obj : objectList) {
             if (obj instanceof GraphicsObject) {
                 GraphicsObject o = (GraphicsObject)obj;
@@ -674,26 +640,26 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    private final void drawPerse(Graphics g, boolean selection) {
+    private final void drawProjection(Graphics g, boolean selection) {
         for (Projection perse : projections) {
             if (perse instanceof Perspective) {
                 Perspective perspective = (Perspective)perse;
                 if (!selection)
                     perspective.render(g);
                 else
-                    perspective.simplerender(g);
+                    perspective.renderForSelection(g);
             } else if (perse instanceof Ortho) {
                 Ortho ortho = (Ortho)perse;
                 if (!selection)
                     ortho.render(g);
                 else
-                    ortho.simplerender(g);
+                    ortho.renderForSelection(g);
             } else if (perse instanceof Frustum) {
                 Frustum frustum = (Frustum)perse;
                 if (!selection)
                     frustum.render(g);
                 else
-                    frustum.simplerender(g);
+                    frustum.renderForSelection(g);
             }
         }
         if (selection && projections.size() == 0) {
@@ -770,7 +736,7 @@ public class RootObject extends GraphicsObject {
     }
 
     @Override
-    public void clearSelectionList() {
+    public void clearSelections() {
         selectionList.clear();
     }
 
