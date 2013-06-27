@@ -31,8 +31,6 @@ import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
 import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.Mask;
-import casmi.graphics.shader.BlurMode;
-import casmi.graphics.shader.Shader;
 import casmi.matrix.Vertex;
 
 /**
@@ -42,6 +40,8 @@ import casmi.matrix.Vertex;
  *
  */
 abstract public class Element implements Cloneable, Renderable {
+
+    private boolean projection = true;
 
 	private double strokeRed   = 0.0;
 	private double strokeGreen = 0.0;
@@ -93,7 +93,7 @@ abstract public class Element implements Cloneable, Renderable {
 
 	private boolean depthTest = true;
 	private boolean removeElement = false;
-	private boolean threeD = false;
+//	private boolean threeD = false;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -102,17 +102,17 @@ abstract public class Element implements Cloneable, Renderable {
 	protected boolean reset = false;
 	protected boolean init = true;
 
-	protected Shader shader;
-	protected boolean enableShader = false;
-    protected boolean enableBump = false;
-
-    protected BlurMode blurMode = BlurMode.BLUR;
-    protected boolean enableBlur = false;
-    protected boolean rootBlur = false;
-    protected boolean rootMotionBlur = false;
-
-    protected double glowSize = 0.007;
-    protected Shader objIDShader;
+//	protected Shader shader;
+//	protected boolean enableShader = false;
+//    protected boolean enableBump = false;
+//
+//    protected BlurMode blurMode = BlurMode.BLUR;
+//    protected boolean enableBlur = false;
+//    protected boolean rootBlur = false;
+//    protected boolean rootMotionBlur = false;
+//
+//    protected double glowSize = 0.007;
+//    protected Shader objIDShader;
 
 	/**
 	 * Returns the width of this Element's stroke.
@@ -800,7 +800,7 @@ abstract public class Element implements Cloneable, Renderable {
 		return preMouseOver;
 	}
 
-	public void setPreMouseover(boolean bool) {
+	public void setPrevMouseover(boolean bool) {
 		preMouseOver = bool;
 	}
 
@@ -879,63 +879,63 @@ abstract public class Element implements Cloneable, Renderable {
 		return depthTest;
 	}
 
-	public boolean isBlur() {
-	    return this.enableBlur;
-	}
+//	public boolean isBlur() {
+//	    return this.enableBlur;
+//	}
+//
+//	public BlurMode getBlurMode() {
+//	    return this.blurMode;
+//	}
 
-	public BlurMode getBlurMode() {
-	    return this.blurMode;
-	}
-
-	/**Enables the blur shader.
-    *
-    */
-	public void enableBlur() {
-	        this.enableBlur = true;
-	        if(this instanceof GraphicsObject){
-	            GraphicsObject g = (GraphicsObject)this;
-	            for(Object obj : g.getObjectList()) {
-	                if(obj instanceof Element)
-	                    ((Element)obj).enableBlur();
-	                if(obj instanceof Group)
-	                    ((Group)obj).enableBlur();
-	            }
-	        }
-    }
-
-	/**Disable the blur shader.
-    *
-    */
-	public void disableBlur() {
-	    this.enableBlur = false;
-        if(this instanceof GraphicsObject){
-            GraphicsObject g = (GraphicsObject)this;
-            for(Object obj : g.getObjectList()) {
-                if(obj instanceof Element)
-                    ((Element)obj).disableBlur();
-                if(obj instanceof Group)
-                    ((Group)obj).disableBlur();
-            }
-        }
-	}
-
-	/**Sets BlurMode
-	 *
-	 *@param blur BlurMode (see casmi.graphics.shader.BlurMode)
-	 *
-	 */
-	public void setBlurMode(BlurMode blur) {
-        this.blurMode = blur;
-        if(this instanceof GraphicsObject){
-            GraphicsObject g = (GraphicsObject)this;
-            for(Object obj : g.getObjectList()) {
-                if(obj instanceof Element)
-                    ((Element)obj).setBlurMode(blur);
-                if(obj instanceof Group)
-                    ((Group)obj).setBlurMode(blur);
-            }
-        }
-	}
+//	/**Enables the blur shader.
+//    *
+//    */
+//	public void enableBlur() {
+//	        this.enableBlur = true;
+//	        if(this instanceof GraphicsObject){
+//	            GraphicsObject g = (GraphicsObject)this;
+//	            for(Object obj : g.getObjectList()) {
+//	                if(obj instanceof Element)
+//	                    ((Element)obj).enableBlur();
+//	                if(obj instanceof Group)
+//	                    ((Group)obj).enableBlur();
+//	            }
+//	        }
+//    }
+//
+//	/**Disable the blur shader.
+//    *
+//    */
+//	public void disableBlur() {
+//	    this.enableBlur = false;
+//        if(this instanceof GraphicsObject){
+//            GraphicsObject g = (GraphicsObject)this;
+//            for(Object obj : g.getObjectList()) {
+//                if(obj instanceof Element)
+//                    ((Element)obj).disableBlur();
+//                if(obj instanceof Group)
+//                    ((Group)obj).disableBlur();
+//            }
+//        }
+//	}
+//
+//	/**Sets BlurMode
+//	 *
+//	 *@param blur BlurMode (see casmi.graphics.shader.BlurMode)
+//	 *
+//	 */
+//	public void setBlurMode(BlurMode blur) {
+//        this.blurMode = blur;
+//        if(this instanceof GraphicsObject){
+//            GraphicsObject g = (GraphicsObject)this;
+//            for(Object obj : g.getObjectList()) {
+//                if(obj instanceof Element)
+//                    ((Element)obj).setBlurMode(blur);
+//                if(obj instanceof Group)
+//                    ((Group)obj).setBlurMode(blur);
+//            }
+//        }
+//	}
 
 	public void setDepthTest(boolean depthTest) {
 		this.depthTest = depthTest;
@@ -952,19 +952,19 @@ abstract public class Element implements Cloneable, Renderable {
 		}
 	}
 
-	public boolean isMotionBlur() {
-	    if(this.rootMotionBlur)
-	        return true;
-	    else{
-	        if(this instanceof GraphicsObject){
-	            GraphicsObject g = (GraphicsObject)this;
-	            for(Object obj : g.getObjectList())
-	                if(obj instanceof Group)
-	                    if(((Group)obj).isMotionBlur()) return true;
-	        }
-	    }
-	    return false;
-	}
+//	public boolean isMotionBlur() {
+//	    if(this.rootMotionBlur)
+//	        return true;
+//	    else{
+//	        if(this instanceof GraphicsObject){
+//	            GraphicsObject g = (GraphicsObject)this;
+//	            for(Object obj : g.getObjectList())
+//	                if(obj instanceof Group)
+//	                    if(((Group)obj).isMotionBlur()) return true;
+//	        }
+//	    }
+//	    return false;
+//	}
 
 	public void remove() {
 		this.removeElement = true;
@@ -982,13 +982,13 @@ abstract public class Element implements Cloneable, Renderable {
 		this.reset = reset;
 	}
 
-	public boolean isThreeD() {
-		return threeD;
-	}
-
-	public void setThreeD(boolean threeD) {
-		this.threeD = threeD;
-	}
+//	public boolean isThreeD() {
+//		return threeD;
+//	}
+//
+//	public void setThreeD(boolean threeD) {
+//		this.threeD = threeD;
+//	}
 
 	public void enableMask() {
 		enableMask = true;
@@ -998,41 +998,49 @@ abstract public class Element implements Cloneable, Renderable {
 		this.enableMask = false;
 	}
 
-	public void setShader(Shader shader) {
-	    this.shader = shader;
-	    this.enableShader = true;
-	}
+//	public void setShader(Shader shader) {
+//	    this.shader = shader;
+//	    this.enableShader = true;
+//	}
+//
+//	public void enableShader() {
+//	    this.enableShader = true;
+//	    if(this.normalMap!=null)
+//	        this.enableBump = true;
+//	}
+//
+//	public void disableShader() {
+//	    this.enableShader = false;
+//	    this.enableBump = false;
+//	}
+//
+//	public boolean isEnableShader() {
+//	    return this.enableShader;
+//	}
+//
+//	public void setNormalMap(Texture normal) {
+//	    this.normalMap = normal;
+//	    this.enableBump = true;
+//	}
+//
+//	public void setRootGlow(boolean glow) {
+//	    this.rootBlur = glow;
+//	}
+//
+//	public void setRootMotionBlur(boolean glow) {
+//        this.rootMotionBlur = glow;
+//    }
+//
+//
+//    public void setObjIDShader(Shader shader) {
+//        this.objIDShader = shader;
+//    }
 
-	public void enableShader() {
-	    this.enableShader = true;
-	    if(this.normalMap!=null)
-	        this.enableBump = true;
-	}
-
-	public void disableShader() {
-	    this.enableShader = false;
-	    this.enableBump = false;
-	}
-
-	public boolean isEnableShader() {
-	    return this.enableShader;
-	}
-
-	public void setNormalMap(Texture normal) {
-	    this.normalMap = normal;
-	    this.enableBump = true;
-	}
-
-	public void setRootGlow(boolean glow) {
-	    this.rootBlur = glow;
-	}
-
-	public void setRootMotionBlur(boolean glow) {
-        this.rootMotionBlur = glow;
+    public boolean isProjection() {
+        return projection;
     }
 
-
-    public void setObjIDShader(Shader shader) {
-        this.objIDShader = shader;
+    public void setProjection(boolean projection) {
+        this.projection = projection;
     }
 }

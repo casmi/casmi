@@ -22,8 +22,6 @@ import casmi.graphics.element.Element;
 import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
-import casmi.graphics.shader.BlurMode;
-import casmi.graphics.shader.Shader;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
@@ -61,8 +59,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	protected MouseEvent mouseEvent;
 	protected int selectionBufSize = 1024*1024;
 
-    private Shader objShader;
-    private Boolean selectionPhase = false;
+//    private Shader objShader;
+//    private Boolean selectionPhase = false;
 
 	public GraphicsObject() {
 		objectList    = new CopyOnWriteArrayList<Object>();
@@ -299,8 +297,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 
 	public void bufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
-	    selectionPhase = false;
-	    this.rootMotionBlur = false;
+//	    selectionPhase = false;
+//	    this.rootMotionBlur = false;
 		if (this.isVisible()) {
 			this.g = g;
 
@@ -339,7 +337,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	protected int bufRender(Graphics g, double mouseX, double mouseY,
 			boolean bool, int index, int selectedIndex) {
-	    selectionPhase = true;
+//	    selectionPhase = true;
 		int sIndex = -1;
 		if (this.isVisible() == true) {
 			this.g = g;
@@ -363,28 +361,28 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	public void render(Element el) {
-        el.setRootGlow(rootBlur);
-        if (rootBlur && selectionPhase == false) {
-            if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR){
-                objShader.setUniform("mask", 2.0f);
-                this.rootMotionBlur = true;
-            }
-            else if (el.isBlur())
-                objShader.setUniform("mask", 1.0f);
-            else
-                objShader.setUniform("mask", 0.0f);
-
-            if (el.isBlur() && ( el.getBlurMode() == BlurMode.BLUR || el.getBlurMode() == BlurMode.MOTION_BLUR))
-                objShader.setUniform("draw", 0.0f);
-            else
-                objShader.setUniform("draw", 1.0f);
-
-            objShader.setUniform("texOn", 0.0f);
-            if (el.isEnableTexture()) {
-                el.setObjIDShader(objShader);
-                objShader.setUniform("texOn", 1.0f);
-            }
-        }
+//        el.setRootGlow(rootBlur);
+//        if (rootBlur && selectionPhase == false) {
+//            if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR){
+//                objShader.setUniform("mask", 2.0f);
+//                this.rootMotionBlur = true;
+//            }
+//            else if (el.isBlur())
+//                objShader.setUniform("mask", 1.0f);
+//            else
+//                objShader.setUniform("mask", 0.0f);
+//
+//            if (el.isBlur() && ( el.getBlurMode() == BlurMode.BLUR || el.getBlurMode() == BlurMode.MOTION_BLUR))
+//                objShader.setUniform("draw", 0.0f);
+//            else
+//                objShader.setUniform("draw", 1.0f);
+//
+//            objShader.setUniform("texOn", 0.0f);
+//            if (el.isEnableTexture()) {
+//                el.setObjIDShader(objShader);
+//                objShader.setUniform("texOn", 1.0f);
+//            }
+//        }
 
 		if (el.isVisible()) {
 			if (el.isMasked()) {
@@ -479,7 +477,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 					}
 
 				}
-				o.setPreMouseover(o.isMouseover());
+				o.setPrevMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
 				tr.render(g);
@@ -526,7 +524,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 					}
 
 				}
-				e.setPreMouseover(e.isMouseover());
+				e.setPrevMouseover(e.isMouseover());
 			}
 		}
 		return selectionIndex;
@@ -918,18 +916,18 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		}
 	}
 
-	public void enableBlur(double glowSize) {
-	    this.blurMode = BlurMode.BLUR;
-	}
+//	public void enableBlur(double glowSize) {
+//	    this.blurMode = BlurMode.BLUR;
+//	}
+//
+//	public void enableBlur(BlurMode blur, double glowSize) {
+//        this.blurMode = blur;
+//    }
 
-	public void enableBlur(BlurMode blur, double glowSize) {
-        this.blurMode = blur;
-    }
-
-	protected void setGraphicsObjectShader(boolean rootBlur, Shader objectShader) {
-	    this.rootBlur = rootBlur;
-	    this.objShader = objectShader;
-	}
+//	protected void setGraphicsObjectShader(boolean rootBlur, Shader objectShader) {
+//	    this.rootBlur = rootBlur;
+//	    this.objShader = objectShader;
+//	}
 
 
 

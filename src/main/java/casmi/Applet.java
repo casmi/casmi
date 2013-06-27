@@ -832,17 +832,17 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
        rootObject.setRotation(angle, x, y, z);
    }
 
-   public void enableBlurShader(){
-       rootObject.enableBlur(this.width, this.height);
-   }
-
-   public boolean isBlur() {
-       return rootObject.isRootBlur();
-   }
-
-   public void disableBlurShader() {
-       rootObject.setRootBlur(false);
-   }
+//   public void enableBlurShader(){
+//       rootObject.enableBlur(this.width, this.height);
+//   }
+//
+//   public boolean isBlur() {
+//       return rootObject.isRootBlur();
+//   }
+//
+//   public void disableBlurShader() {
+//       rootObject.setRootBlur(false);
+//   }
 
    public void addObject(Object obj) {
        if(rootObjectInit){

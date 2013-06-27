@@ -40,9 +40,6 @@ import casmi.graphics.element.Element;
 import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
-import casmi.graphics.shader.BlurMode;
-import casmi.graphics.shader.BlurShader;
-import casmi.graphics.shader.Shader;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
@@ -60,13 +57,13 @@ public class RootObject extends GraphicsObject {
     private int selectedIndex = -1;
     private IntBuffer selectBuffer;
     private int selectBuff[];
-    private boolean selectionPhase = false;
+//    private boolean selectionPhase = false;
 
-    private FrameBufferObject fbo4Blur, fbo4MotionBlur, fbo4MotionBlur2;
-    private BlurShader blurShader;
-    private Shader motionBlurShader;
-    private Shader objShader;
-    private int windowWidth, windowHeight;
+//    private FrameBufferObject fbo4Blur, fbo4MotionBlur, fbo4MotionBlur2;
+//    private BlurShader blurShader;
+//    private Shader motionBlurShader;
+//    private Shader objShader;
+//    private int windowWidth, windowHeight;
 
     public final int NO_SELECTIONBUFF = 10;
 
@@ -261,25 +258,25 @@ public class RootObject extends GraphicsObject {
         this.bg = bg;
     }
 
-    public void enableBlur(int width, int height) {
-        this.windowWidth = width;
-        this.windowHeight = height;
-        this.rootBlur = true;
-        if(this.fbo4Blur==null)
-            createBlurShader(width, height);
-    }
+//    public void enableBlur(int width, int height) {
+//        this.windowWidth = width;
+//        this.windowHeight = height;
+//        this.rootBlur = true;
+//        if(this.fbo4Blur==null)
+//            createBlurShader(width, height);
+//    }
 
-    public void createBlurShader(int width, int height) {
-        this.fbo4Blur = new FrameBufferObject(width, height, 3);
-        this.fbo4MotionBlur = new FrameBufferObject(width, height);
-        this.fbo4MotionBlur2 = new FrameBufferObject(width, height);
-        this.objShader = new Shader("ObjID");
-        this.blurShader = new BlurShader(width, height);
-        this.motionBlurShader = new Shader("MotionBlur");
-    }
+//    public void createBlurShader(int width, int height) {
+//        this.fbo4Blur = new FrameBufferObject(width, height, 3);
+//        this.fbo4MotionBlur = new FrameBufferObject(width, height);
+//        this.fbo4MotionBlur2 = new FrameBufferObject(width, height);
+//        this.objShader = new Shader("ObjID");
+//        this.blurShader = new BlurShader(width, height);
+//        this.motionBlurShader = new Shader("MotionBlur");
+//    }
 
     public void renderSelectionAll(Graphics g, double mouseX, double mouseY, int index) {
-        this.selectionPhase = true;
+//        this.selectionPhase = true;
         if (selectionbuff || isSelectionbuffer()) {
 
             Arrays.fill(selectBuff, 0);
@@ -344,8 +341,8 @@ public class RootObject extends GraphicsObject {
     }
 
     public void renderAll(Graphics g) {
-        this.selectionPhase = false;
-        this.rootMotionBlur = false;
+//        this.selectionPhase = false;
+//        this.rootMotionBlur = false;
         if (this.isVisible()) {
             this.g = g;
 
@@ -359,22 +356,24 @@ public class RootObject extends GraphicsObject {
 
             if (bg != null) bg.render(g);
 
-            if (rootBlur) {
-                GL2 gl = g.getGL();
-                if (!fbo4Blur.isInit()) fbo4Blur.init(gl);
-                objShader.initShaders(gl);
-                if (!blurShader.isInit()) blurShader.init(gl);
-                fbo4Blur.bindFrameBuffer(gl);
-                fbo4Blur.drawBuffers(gl);
-                gl.glClearColor(0, 0, 0, 1);
-                gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-                objShader.enableShader(gl);
-                objShader.setUniform("mask", 0.0f);
-            }
+//            if (rootBlur) {
+//                GL2 gl = g.getGL();
+//                if (!fbo4Blur.isInit()) fbo4Blur.init(gl);
+//                objShader.initShaders(gl);
+//                if (!blurShader.isInit()) blurShader.init(gl);
+//                fbo4Blur.bindFrameBuffer(gl);
+//                fbo4Blur.drawBuffers(gl);
+//                gl.glClearColor(0, 0, 0, 1);
+//                gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+//                objShader.enableShader(gl);
+//                objShader.setUniform("mask", 0.0f);
+//            }
+
             drawTweenManager(g);
             drawProjection(g, false);
             drawCamera(g);
             drawLight(g);
+
             g.pushMatrix();
             {
                 setMatrix(g);
@@ -383,140 +382,141 @@ public class RootObject extends GraphicsObject {
             }
             g.popMatrix();
 
-            if (rootBlur) {
-                objShader.disableShader();
-                fbo4Blur.backDrawBuffers(g.getGL());
-                fbo4Blur.unBindFrameBuffer(g.getGL());
-                drawGlowFBO(g);
-            }
+//            if (rootBlur) {
+//                objShader.disableShader();
+//                fbo4Blur.backDrawBuffers(g.getGL());
+//                fbo4Blur.unBindFrameBuffer(g.getGL());
+//                drawGlowFBO(g);
+//            }
         }
     }
 
-    private void drawMotionBlurFBO(GL2 gl, GLU glu) {
-        if (!fbo4MotionBlur.isInit()) fbo4MotionBlur.init(gl);
-        if (!fbo4MotionBlur2.isInit()) fbo4MotionBlur2.init(gl);
-        motionBlurShader.initShaders(gl);
-        gl.glActiveTexture(GL2.GL_TEXTURE0);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(2));
-        gl.glActiveTexture(GL2.GL_TEXTURE1);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4MotionBlur2.getTextureID());
-
-        this.motionBlurShader.enableShader(gl);
-        this.motionBlurShader.setUniform("sampler", 0);
-        this.motionBlurShader.setUniform("sampler2", 1);
-        this.motionBlurShader.setUniform("path", 1.0f);
-
-        fbo4MotionBlur.bindFrameBuffer(gl);
-
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        blurShader.drawPlaneFillScreen(gl, glu);
-        fbo4MotionBlur.unBindFrameBuffer(gl);
-
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-        gl.glActiveTexture(GL2.GL_TEXTURE0);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4MotionBlur.getTextureID());
-        this.motionBlurShader.setUniform("sampler2", 0);
-        this.motionBlurShader.setUniform("path", 0.0f);
-        fbo4MotionBlur2.bindFrameBuffer(gl);
-
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        blurShader.drawPlaneFillScreen(gl, glu);
-        fbo4MotionBlur2.unBindFrameBuffer(gl);
-
-        this.motionBlurShader.disableShader(gl);
-    }
-
-    private void drawGlowFBO(Graphics g) {
-        GL2 gl = g.getGL();
-        GLU glu = g.getGLU();
-        gl.glEnable(GL2.GL_TEXTURE_2D);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(0));
-        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(1));
-        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-
-        if (isMotionBlur())
-            drawMotionBlurFBO(gl, glu);
-
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-
-        if (isMotionBlur())
-            blurShader.blur(fbo4Blur, fbo4MotionBlur2, gl, glu);
-        else
-            blurShader.blur(fbo4Blur, gl, glu);
-
-        blurShader.drawPlaneFillScreen(gl, glu);
-        gl.glActiveTexture(GL2.GL_TEXTURE2);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-        gl.glActiveTexture(GL2.GL_TEXTURE1);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-        gl.glActiveTexture(GL2.GL_TEXTURE0);
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-        gl.glDisable(GL2.GL_TEXTURE_2D);
-        blurShader.disableShader();
-    }
+//    private void drawMotionBlurFBO(GL2 gl, GLU glu) {
+//        if (!fbo4MotionBlur.isInit()) fbo4MotionBlur.init(gl);
+//        if (!fbo4MotionBlur2.isInit()) fbo4MotionBlur2.init(gl);
+//        motionBlurShader.initShaders(gl);
+//        gl.glActiveTexture(GL2.GL_TEXTURE0);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(2));
+//        gl.glActiveTexture(GL2.GL_TEXTURE1);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4MotionBlur2.getTextureID());
+//
+//        this.motionBlurShader.enableShader(gl);
+//        this.motionBlurShader.setUniform("sampler", 0);
+//        this.motionBlurShader.setUniform("sampler2", 1);
+//        this.motionBlurShader.setUniform("path", 1.0f);
+//
+//        fbo4MotionBlur.bindFrameBuffer(gl);
+//
+//        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+//        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+//        blurShader.drawPlaneFillScreen(gl, glu);
+//        fbo4MotionBlur.unBindFrameBuffer(gl);
+//
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+//        gl.glActiveTexture(GL2.GL_TEXTURE0);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4MotionBlur.getTextureID());
+//        this.motionBlurShader.setUniform("sampler2", 0);
+//        this.motionBlurShader.setUniform("path", 0.0f);
+//        fbo4MotionBlur2.bindFrameBuffer(gl);
+//
+//        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+//        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+//        blurShader.drawPlaneFillScreen(gl, glu);
+//        fbo4MotionBlur2.unBindFrameBuffer(gl);
+//
+//        this.motionBlurShader.disableShader(gl);
+//    }
+//
+//    private void drawGlowFBO(Graphics g) {
+//        GL2 gl = g.getGL();
+//        GLU glu = g.getGLU();
+//        gl.glEnable(GL2.GL_TEXTURE_2D);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(0));
+//        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, fbo4Blur.getTextureID(1));
+//        gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+//
+//        if (isMotionBlur())
+//            drawMotionBlurFBO(gl, glu);
+//
+//        gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+//        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+//
+//        if (isMotionBlur())
+//            blurShader.blur(fbo4Blur, fbo4MotionBlur2, gl, glu);
+//        else
+//            blurShader.blur(fbo4Blur, gl, glu);
+//
+//        blurShader.drawPlaneFillScreen(gl, glu);
+//        gl.glActiveTexture(GL2.GL_TEXTURE2);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+//        gl.glActiveTexture(GL2.GL_TEXTURE1);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+//        gl.glActiveTexture(GL2.GL_TEXTURE0);
+//        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+//        gl.glDisable(GL2.GL_TEXTURE_2D);
+//        blurShader.disableShader();
+//    }
 
     @Override
-    public void render(Element el) {
-        el.setRootGlow(rootBlur);
-        // this.rootMotionBlur = false;
-        if (rootBlur && !selectionPhase) {
-            if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR) {
-                objShader.setUniform("mask", 2.0f);
-                this.rootMotionBlur = true;
-            } else if (el.isBlur()) {
-                objShader.setUniform("mask", 1.0f);
-            } else {
-                objShader.setUniform("mask", 0.0f);
+    public void render(Element e) {
+//        e.setRootGlow(rootBlur);
+//        this.rootMotionBlur = false;
+//        if (rootBlur && !selectionPhase) {
+//            if (e.isBlur() && e.getBlurMode() == BlurMode.MOTION_BLUR) {
+//                objShader.setUniform("mask", 2.0f);
+//                this.rootMotionBlur = true;
+//            } else if (e.isBlur()) {
+//                objShader.setUniform("mask", 1.0f);
+//            } else {
+//                objShader.setUniform("mask", 0.0f);
+//            }
+//
+//            if (e.isBlur() && (e.getBlurMode() == BlurMode.BLUR || e.getBlurMode() == BlurMode.MOTION_BLUR))
+//                objShader.setUniform("draw", 0.0f);
+//            else
+//                objShader.setUniform("draw", 1.0f);
+//
+//            objShader.setUniform("texOn", 0.0f);
+//            if (e.isEnableTexture()) {
+//                e.setObjIDShader(objShader);
+//                objShader.setUniform("texOn", 1.0f);
+//            }
+//        }
+
+        if (e.isVisible()) {
+            if (e.isMasked()) {
+                e.getMask().render(g);
             }
 
-            if (el.isBlur() && (el.getBlurMode() == BlurMode.BLUR || el.getBlurMode() == BlurMode.MOTION_BLUR))
-                objShader.setUniform("draw", 0.0f);
-            else
-                objShader.setUniform("draw", 1.0f);
-
-            objShader.setUniform("texOn", 0.0f);
-            if (el.isEnableTexture()) {
-                el.setObjIDShader(objShader);
-                objShader.setUniform("texOn", 1.0f);
-            }
-        }
-        if (el.isVisible()) {
-            if (el.isMasked()) {
-                el.getMask().render(g);
-            }
-
-            if (el.getPosition().getZ() == 0) {
-                el.setDepthTest(false);
+            if (e.getPosition().getZ() == 0) {
+                e.setDepthTest(false);
             } else {
                 this.setDepthTest(true);
             }
 
             g.pushMatrix();
             {
-                if (el.isTween()) {
-                    tmpAs = el.gettAS();
-                    tmpAf = el.gettAF();
-                    el.settAF(tmpAf * this.getSceneFillColor().getAlpha());
-                    el.settAS(tmpAs * this.getSceneStrokeColor().getAlpha());
-                    g.render(el);
-                    el.settAF(tmpAf);
-                    el.settAS(tmpAs);
+                if (e.isTween()) {
+                    tmpAs = e.gettAS();
+                    tmpAf = e.gettAF();
+                    e.settAF(tmpAf * this.getSceneFillColor().getAlpha());
+                    e.settAS(tmpAs * this.getSceneStrokeColor().getAlpha());
+                    g.render(e);
+                    e.settAF(tmpAf);
+                    e.settAS(tmpAs);
                 } else {
-                    tmpAf = el.getFillColor().getAlpha();
-                    tmpAs = el.getStrokeColor().getAlpha();
-                    el.getFillColor().setAlpha(tmpAf * this.getSceneFillColor().getAlpha());
-                    el.getStrokeColor().setAlpha(tmpAs * this.getSceneStrokeColor().getAlpha());
-                    g.render(el);
-                    el.getFillColor().setAlpha(tmpAf);
-                    el.getStrokeColor().setAlpha(tmpAs);
+                    tmpAf = e.getFillColor().getAlpha();
+                    tmpAs = e.getStrokeColor().getAlpha();
+                    e.getFillColor().setAlpha(tmpAf * this.getSceneFillColor().getAlpha());
+                    e.getStrokeColor().setAlpha(tmpAs * this.getSceneStrokeColor().getAlpha());
+                    g.render(e);
+                    e.getFillColor().setAlpha(tmpAf);
+                    e.getStrokeColor().setAlpha(tmpAs);
                 }
 
-                if (el.isMasked()) {
+                if (e.isMasked()) {
                     g.getGL().glDisable(GL2.GL_STENCIL_TEST);
                 }
             }
@@ -533,6 +533,7 @@ public class RootObject extends GraphicsObject {
     private final int drawObject(Graphics g,
         boolean selection, double mouseX, double mouseY,
         int selectionIndex, int selectedIndex) {
+
         for (Object obj : objectList) {
             if (obj instanceof GraphicsObject) {
                 GraphicsObject o = (GraphicsObject)obj;
@@ -544,12 +545,12 @@ public class RootObject extends GraphicsObject {
                     if (o.getMouseOverCallback() != null) {
                         selectionbuff = true;
                     }
-                    o.setGraphicsObjectShader(rootBlur, objShader);
+//                    o.setGraphicsObjectShader(rootBlur, objShader);
                     o.bufRender(g, mouseX, mouseY, false, selectionIndex);
                     if (o.isSelectionbuff() == true) selectionbuff = true;
                     if (((Element)o).isMasked()) g.getGL().glDisable(GL2.GL_STENCIL_TEST);
                 } else {
-                    o.setGraphicsObjectShader(rootBlur, objShader);
+//                    o.setGraphicsObjectShader(rootBlur, objShader);
                     selectionIndex =
                         o.bufRender(g, mouseX, mouseY, true, selectionIndex, selectedIndex);
 
@@ -558,7 +559,7 @@ public class RootObject extends GraphicsObject {
                     }
 
                 }
-                o.setPreMouseover(o.isMouseover());
+                o.setPrevMouseover(o.isMouseover());
             } else if (obj instanceof TimelineRender) {
                 TimelineRender tr = (TimelineRender)obj;
                 tr.render(g);
@@ -567,18 +568,7 @@ public class RootObject extends GraphicsObject {
                 if (!selection) tm.render(g);
             } else {
                 Element e = (Element)obj;
-                if (!selection) {
-                    if (e.isRemove()) removeObject = true;
-                    if (e.isReset()) {
-                        resetObject = true;
-                        e.setReset(false);
-                    }
-                    if (e.getMouseOverCallback() != null) {
-                        selectionbuff = true;
-
-                    }
-                    this.render((Element)obj);
-                } else {
+                if (selection) {
                     if (e.getMouseOverCallback() != null) {
                         g.getGL().glLoadName(selectionIndex);
                         if (e instanceof Text) {
@@ -597,9 +587,19 @@ public class RootObject extends GraphicsObject {
                         this.render((Element)obj);
                         if (e instanceof Text) ((Text)e).setSelection(false);
                     }
+                } else {
+                    if (e.isRemove()) removeObject = true;
+                    if (e.isReset()) {
+                        resetObject = true;
+                        e.setReset(false);
+                    }
+                    if (e.getMouseOverCallback() != null) {
+                        selectionbuff = true;
 
+                    }
+                    this.render((Element)obj);
                 }
-                e.setPreMouseover(e.isMouseover());
+                e.setPrevMouseover(e.isMouseover());
             }
         }
         return selectionIndex;
@@ -641,21 +641,21 @@ public class RootObject extends GraphicsObject {
     }
 
     private final void drawProjection(Graphics g, boolean selection) {
-        for (Projection perse : projections) {
-            if (perse instanceof Perspective) {
-                Perspective perspective = (Perspective)perse;
+        for (Projection p : projections) {
+            if (p instanceof Perspective) {
+                Perspective perspective = (Perspective)p;
                 if (!selection)
                     perspective.render(g);
                 else
                     perspective.renderForSelection(g);
-            } else if (perse instanceof Ortho) {
-                Ortho ortho = (Ortho)perse;
+            } else if (p instanceof Ortho) {
+                Ortho ortho = (Ortho)p;
                 if (!selection)
                     ortho.render(g);
                 else
                     ortho.renderForSelection(g);
-            } else if (perse instanceof Frustum) {
-                Frustum frustum = (Frustum)perse;
+            } else if (p instanceof Frustum) {
+                Frustum frustum = (Frustum)p;
                 if (!selection)
                     frustum.render(g);
                 else
@@ -950,19 +950,19 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    public void resetFBO(GL2 gl) {
-        // fbo.createFBOandRBO(gl);
-        // blur.init(gl);
-    }
+//    public void resetFBO(GL2 gl) {
+//        // fbo.createFBOandRBO(gl);
+//        // blur.init(gl);
+//    }
 
-    public void resetShader() {
-        createBlurShader(windowWidth, windowHeight);
-    }
+//    public void resetShader() {
+//        createBlurShader(windowWidth, windowHeight);
+//    }
 
     @Override
     public void resetObjects() {
-        resetFBO(g.getGL());
-        resetShader();
+//        resetFBO(g.getGL());
+//        resetShader();
         for (Object obj : objectList) {
             if (obj instanceof Reset) {
                 Reset el = (Reset)obj;
@@ -974,11 +974,11 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    public boolean isRootBlur() {
-        return this.rootBlur;
-    }
-
-    public void setRootBlur(boolean blur) {
-        this.rootBlur = blur;
-    }
+//    public boolean isRootBlur() {
+//        return this.rootBlur;
+//    }
+//
+//    public void setRootBlur(boolean blur) {
+//        this.rootBlur = blur;
+//    }
 }

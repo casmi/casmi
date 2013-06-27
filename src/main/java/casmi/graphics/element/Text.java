@@ -164,10 +164,10 @@ public class Text extends Element implements Renderable, Reset {
             gl.glDisable(GL2.GL_DEPTH_TEST);
 
 
-        if (enableBlur && this.rootBlur) {
-            gl.glActiveTexture(GL2.GL_TEXTURE0);
-            this.objIDShader.setUniform("sampler", 0);
-        }
+//        if (enableBlur && this.rootBlur) {
+//            gl.glActiveTexture(GL2.GL_TEXTURE0);
+//            this.objIDShader.setUniform("sampler", 0);
+//        }
 
         gl.glPushMatrix();
         {

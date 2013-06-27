@@ -57,7 +57,7 @@ public class Box extends Element implements Renderable, Reset {
         width = size;
         depth = size;
         height = size;
-        this.setThreeD(true);
+//        this.setThreeD(true);
     }
 
     /**
@@ -71,15 +71,15 @@ public class Box extends Element implements Renderable, Reset {
         this.width = width;
         this.height = height;
         this.depth = depth;
-        this.setThreeD(true);
+//        this.setThreeD(true);
     }
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest() == false)
-            && this.isThreeD() == false) {
-            gl.glDisable(GL2.GL_DEPTH_TEST);
-        }
+//        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest() == false)
+//            && this.isThreeD() == false) {
+//            gl.glDisable(GL2.GL_DEPTH_TEST);
+//        }
 
         gl.glEnable(GL2.GL_DEPTH_TEST);
 
@@ -127,10 +127,10 @@ public class Box extends Element implements Renderable, Reset {
 
         gl.glDisable(GL2.GL_DEPTH_TEST);
 
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest() == false)
-            && this.isThreeD() == false) {
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-        }
+//        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest() == false)
+//            && this.isThreeD() == false) {
+//            gl.glEnable(GL2.GL_DEPTH_TEST);
+//        }
     }
 
     private static float[][] boxVertices;

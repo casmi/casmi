@@ -43,7 +43,7 @@ public class Sphere extends Element implements Renderable, Reset {
      */
     public Sphere(double radius) {
         this.r = radius;
-        this.setThreeD(true);
+//        this.setThreeD(true);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Sphere extends Element implements Renderable, Reset {
         this.r = radius;
         this.slices = slices;
         this.stacks = stacks;
-        this.setThreeD(true);
+//        this.setThreeD(true);
     }
 
     /**
@@ -100,27 +100,26 @@ public class Sphere extends Element implements Renderable, Reset {
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height) {
+//        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
+//            && !this.isThreeD()) {
+//            gl.glDisable(GL2.GL_DEPTH_TEST);
+//        }
 
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
-            && !this.isThreeD()) {
-            gl.glDisable(GL2.GL_DEPTH_TEST);
-        }
-
-        if (this.enableBump && this.normalMap!=null){
-            gl.glEnable(GL2.GL_NORMALIZE);
-            gl.glActiveTexture(GL2.GL_TEXTURE0);
-            this.shader.enableShader(gl);
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-            this.shader.setUniform("normalMap", 0);
-            normalMap.enableTexture(gl);
-            gl.glActiveTexture(GL2.GL_TEXTURE1);
-            this.shader.setUniform("colorMap", 1);
-        }else if (this.enableShader){
-            gl.glActiveTexture(GL2.GL_TEXTURE0);
-            this.shader.enableShader(gl);
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-            this.shader.setUniform("sampler", 0);
-        }
+//        if (this.enableBump && this.normalMap!=null){
+//            gl.glEnable(GL2.GL_NORMALIZE);
+//            gl.glActiveTexture(GL2.GL_TEXTURE0);
+//            this.shader.enableShader(gl);
+//            gl.glEnable(GL2.GL_DEPTH_TEST);
+//            this.shader.setUniform("normalMap", 0);
+//            normalMap.enableTexture(gl);
+//            gl.glActiveTexture(GL2.GL_TEXTURE1);
+//            this.shader.setUniform("colorMap", 1);
+//        }else if (this.enableShader){
+//            gl.glActiveTexture(GL2.GL_TEXTURE0);
+//            this.shader.enableShader(gl);
+//            gl.glEnable(GL2.GL_DEPTH_TEST);
+//            this.shader.setUniform("sampler", 0);
+//        }
 
         if (this.enableTexture) {
             texture.enableTexture(gl);
@@ -135,10 +134,10 @@ public class Sphere extends Element implements Renderable, Reset {
 
             if (this.fill) {
                 getSceneFillColor().setup(gl);
-                if(this.enableBump)
-                    drawBumpSphere(gl, (float)r, slices, stacks);
-                else
-                    drawSolidSphere(glu, (float)r, slices, stacks);
+//                if(this.enableBump)
+//                    drawBumpSphere(gl, (float)r, slices, stacks);
+//                else
+                drawSolidSphere(glu, (float)r, slices, stacks);
             }
 
             if (this.stroke) {
@@ -154,64 +153,63 @@ public class Sphere extends Element implements Renderable, Reset {
             texture.disableTexture(gl);
         }
 
-
-        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
-            && !this.isThreeD()) {
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-        }
-
-        if (this.enableShader)
-            this.shader.disableShader(gl);
+//        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
+//            && !this.isThreeD()) {
+//            gl.glEnable(GL2.GL_DEPTH_TEST);
+//        }
+//
+//        if (this.enableShader)
+//            this.shader.disableShader(gl);
     }
 
-    private final void drawBumpSphere(GL2 gl, float radius, int slices, int stacks) {
-        int i, j;
-        double s, t0, t1, r0, r1, th0, th1, phi;
-        double[] tnt = new double[3];
-        double[] p = new double[3];
-        double[] pp = new double[3];
-        this.shader.enableShader();
-        this.shader.setAttribLocation("tangent");
-        this.shader.setUniform("inv", -1.0f);
-        for(j = 0; j < stacks; j++) {
-            t0 = (double)j / (double)stacks;
-            t1 = (double)(j+1) / (double)stacks;
-            th0 = Math.PI * t0;
-            th1 = Math.PI * t1;
-            r0 = radius * Math.sin(th0);
-            r1 = radius * Math.sin(th1);
-            p[2] = radius * Math.cos(th0);
-            pp[2] = radius * Math.cos(th1);
-            tnt[2] = 0.0;
-
-            //t0 = 1.0 - t0;
-            //t1 = 1.0 - t1;
-
-            gl.glBegin(GL2.GL_QUAD_STRIP);
-            for(i = 0; i <= slices; i++) {
-                s = (double)i / (double)slices;
-                phi = -Math.PI + 2.0 * Math.PI * s;
-                p[0] = r0 * Math.cos(phi);
-                p[1] = r0 * Math.sin(phi);
-                pp[0] = r1 * Math.cos(phi);
-                pp[1] = r1 * Math.sin(phi);
-
-                tnt[0] = -Math.sin(phi);
-                tnt[1] = Math.cos(phi);
-                this.shader.setVertexAttrib3("tangent", tnt);
-                gl.glTexCoord2d(s, t0);
-                gl.glNormal3dv(p, 0);
-                gl.glVertex3dv(p, 0);
-
-                gl.glTexCoord2d(s, t1);
-                gl.glNormal3dv(pp, 0);
-                gl.glVertex3dv(pp, 0);
-            }
-
-            gl.glEnd();
-        }
-
-    }
+//    private final void drawBumpSphere(GL2 gl, float radius, int slices, int stacks) {
+//        int i, j;
+//        double s, t0, t1, r0, r1, th0, th1, phi;
+//        double[] tnt = new double[3];
+//        double[] p = new double[3];
+//        double[] pp = new double[3];
+//        this.shader.enableShader();
+//        this.shader.setAttribLocation("tangent");
+//        this.shader.setUniform("inv", -1.0f);
+//        for(j = 0; j < stacks; j++) {
+//            t0 = (double)j / (double)stacks;
+//            t1 = (double)(j+1) / (double)stacks;
+//            th0 = Math.PI * t0;
+//            th1 = Math.PI * t1;
+//            r0 = radius * Math.sin(th0);
+//            r1 = radius * Math.sin(th1);
+//            p[2] = radius * Math.cos(th0);
+//            pp[2] = radius * Math.cos(th1);
+//            tnt[2] = 0.0;
+//
+//            //t0 = 1.0 - t0;
+//            //t1 = 1.0 - t1;
+//
+//            gl.glBegin(GL2.GL_QUAD_STRIP);
+//            for(i = 0; i <= slices; i++) {
+//                s = (double)i / (double)slices;
+//                phi = -Math.PI + 2.0 * Math.PI * s;
+//                p[0] = r0 * Math.cos(phi);
+//                p[1] = r0 * Math.sin(phi);
+//                pp[0] = r1 * Math.cos(phi);
+//                pp[1] = r1 * Math.sin(phi);
+//
+//                tnt[0] = -Math.sin(phi);
+//                tnt[1] = Math.cos(phi);
+//                this.shader.setVertexAttrib3("tangent", tnt);
+//                gl.glTexCoord2d(s, t0);
+//                gl.glNormal3dv(p, 0);
+//                gl.glVertex3dv(p, 0);
+//
+//                gl.glTexCoord2d(s, t1);
+//                gl.glNormal3dv(pp, 0);
+//                gl.glVertex3dv(pp, 0);
+//            }
+//
+//            gl.glEnd();
+//        }
+//
+//    }
 
     private GLUquadric quadObj;
 
@@ -243,22 +241,23 @@ public class Sphere extends Element implements Renderable, Reset {
 
 	@Override
 	public void reset(GL2 gl) {
-		if(this.enableTexture)
-			if(texture.isInit()){
-				texture.loadImage();
-				texture.setInit(false);
-			}else{
-				texture.reloadImage(gl);
-			}
-		if(this.enableBump)
-		    if(normalMap.isInit()){
-		        normalMap.loadImage();
-		        normalMap.setInit(false);
-		    }else{
-		        normalMap.reloadImage(gl);
-		    }
-		if(this.enableShader){
-		    shader.initShaders(gl);
-		}
+	    if(this.enableTexture) {
+	        if(texture.isInit()){
+	            texture.loadImage();
+	            texture.setInit(false);
+	        }else{
+	            texture.reloadImage(gl);
+	        }
+	    }
+//		if(this.enableBump)
+//		    if(normalMap.isInit()){
+//		        normalMap.loadImage();
+//		        normalMap.setInit(false);
+//		    }else{
+//		        normalMap.reloadImage(gl);
+//		    }
+//		if(this.enableShader){
+//		    shader.initShaders(gl);
+//		}
 	}
 }
