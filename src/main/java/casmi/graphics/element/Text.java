@@ -171,7 +171,7 @@ public class Text extends Element implements Renderable, Reset {
 
         gl.glPushMatrix();
         {
-            setTweenParameter(gl);
+            move(gl);
 
             if (!isSelection()) {
                 textRenderer.begin3DRendering();

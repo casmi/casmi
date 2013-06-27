@@ -41,7 +41,7 @@ import casmi.matrix.Vertex;
  */
 abstract public class Element implements Cloneable, Renderable {
 
-    private boolean projection = true;
+    protected boolean useProjection = true;
 
 	private double strokeRed   = 0.0;
 	private double strokeGreen = 0.0;
@@ -339,7 +339,7 @@ abstract public class Element implements Cloneable, Renderable {
 		return this.tween;
 	}
 
-	protected void setTweenParameter(GL2 gl) {
+	protected void move(GL2 gl) {
 	    gl.glTranslated(x, y, z);
 	    gl.glScaled(scaleX, scaleY, scaleZ);
 	    gl.glRotated(rotate,  0.0, 0.0, 1.0);
@@ -998,6 +998,14 @@ abstract public class Element implements Cloneable, Renderable {
 		this.enableMask = false;
 	}
 
+    public boolean isUseProjection() {
+        return useProjection;
+    }
+
+    public void setUseProjection(boolean useProjection) {
+        this.useProjection = useProjection;
+    }
+
 //	public void setShader(Shader shader) {
 //	    this.shader = shader;
 //	    this.enableShader = true;
@@ -1035,12 +1043,4 @@ abstract public class Element implements Cloneable, Renderable {
 //    public void setObjIDShader(Shader shader) {
 //        this.objIDShader = shader;
 //    }
-
-    public boolean isProjection() {
-        return projection;
-    }
-
-    public void setProjection(boolean projection) {
-        this.projection = projection;
-    }
 }

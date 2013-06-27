@@ -246,7 +246,7 @@ public class Quad extends Element implements Renderable, Reset {
 
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
             if (this.fill) {
                 getSceneFillColor().setup(gl);
                 gl.glBegin(GL2.GL_QUADS);

@@ -244,7 +244,7 @@ public class Ellipse extends Element implements Renderable {
 
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
 
             if (this.fill) {
                 getSceneFillColor().setup(gl);

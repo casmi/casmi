@@ -101,7 +101,7 @@ public class Point extends Element implements Renderable {
 
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
 
             switch (MODE) {
             case POINTS:

@@ -115,7 +115,7 @@ public class Frustum extends Element implements ObjectRender, Projection {
         if(def){
             g.simplefrustum();
         } else {
-            g.simplefrustum(left, right, bottom, top, near, far);
+            g.simpleFrustum(left, right, bottom, top, near, far);
         }
     }
 

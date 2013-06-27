@@ -118,7 +118,7 @@ public class Cylinder extends Element implements Renderable {
         }
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
+        this.move(gl);
 
         gl.glTranslated(x, y, z);
 

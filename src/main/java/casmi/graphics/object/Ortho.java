@@ -116,7 +116,7 @@ public class Ortho extends Element implements ObjectRender, Projection {
     @Override
     public void renderForSelection(Graphics g) {
         if(def) {
-            g.simpleortho();
+            g.simpleOrtho();
         } else {
             g.simpleortho(left, right, bottom, top, near, far);
         }

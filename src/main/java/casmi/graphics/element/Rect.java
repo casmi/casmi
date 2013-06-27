@@ -135,7 +135,7 @@ public class Rect extends Element {
 
         gl.glPushMatrix();
         {
-            setTweenParameter(gl);
+            move(gl);
 
             if (fill) {
                 getSceneFillColor().setup(gl);

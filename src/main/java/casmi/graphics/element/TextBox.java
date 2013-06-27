@@ -133,7 +133,7 @@ public class TextBox extends Element implements Renderable, Reset {
 
         gl.glPushMatrix();
         {
-            setTweenParameter(gl);
+            move(gl);
 
             // fill
             if (fill) {

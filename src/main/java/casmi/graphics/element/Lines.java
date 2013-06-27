@@ -181,7 +181,7 @@ public class Lines extends Element implements Renderable {
         double tmpx, tmpy, tmpz;
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
+        this.move(gl);
 
         switch (MODE) {
         case LINES:

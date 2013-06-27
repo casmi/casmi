@@ -462,7 +462,7 @@ public class Line extends Element implements Renderable {
         gl.glPushMatrix();
 
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
             if (dashed) {
                 drawDashedLine(gl);
             } else {

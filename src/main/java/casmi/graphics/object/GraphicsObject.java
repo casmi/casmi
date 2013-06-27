@@ -1,11 +1,8 @@
 package casmi.graphics.object;
 
 import java.nio.DoubleBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,6 +12,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.MouseEvent;
 import casmi.Updatable;
 import casmi.graphics.Graphics;
+import casmi.graphics.Graphics.MatrixMode;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -25,6 +23,12 @@ import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenManager;
 
+/**
+ * Graphics Object
+ *
+ * @author Y. Ban
+ * @author Takashi AOKI <federkasten@me.com>
+ */
 public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
     protected Graphics g;
@@ -41,13 +45,11 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
     protected List<Integer> selectionList;
     protected List<MouseEvent> mouseEventList;
 
-    //private BackGround bg;
-
-    protected enum MatrixMode {
+    protected enum ObjectMatrixMode {
         APPLY, LOAD, NONE
     };
 
-    protected MatrixMode mode = MatrixMode.NONE;
+    protected ObjectMatrixMode mode = ObjectMatrixMode.NONE;
     protected DoubleBuffer matrix;
     protected boolean selectionbuff = false;
 
@@ -58,9 +60,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	protected MouseEvent mouseEvent;
 	protected int selectionBufSize = 1024*1024;
-
-//    private Shader objShader;
-//    private Boolean selectionPhase = false;
 
 	public GraphicsObject() {
 		objectList    = new CopyOnWriteArrayList<Object>();
@@ -185,120 +184,52 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	 */
 	public void applyMatrix(double[] matrix) {
 		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode   = MatrixMode.APPLY;
+		this.mode   = ObjectMatrixMode.APPLY;
 	}
 
 	public void applyMatrix(DoubleBuffer matrix) {
 		this.matrix = matrix;
-		this.mode   = MatrixMode.APPLY;
+		this.mode   = ObjectMatrixMode.APPLY;
 	}
 
 	public void loadMatrix(double[] matrix) {
 	    this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode   = MatrixMode.LOAD;
+		this.mode   = ObjectMatrixMode.LOAD;
 	}
 
 	public void loadMatrix(DoubleBuffer matrix) {
 	    this.matrix = matrix;
-	    this.mode   = MatrixMode.LOAD;
-	}
-
-
-	public double selectionbufRender(Graphics g, double mouseX, double mouseY, int index, int[] selectBuff, IntBuffer selectBuffer, int selectedIndex) {
-
-	    if (selectionbuff || isSelectionbuffer()) {
-
-			Arrays.fill(selectBuff, 0);
-			selectBuffer.position(0);
-			int hits;
-			int viewport[] = new int[4];
-
-			g.getGL().glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
-			g.getGL().glSelectBuffer(selectionBufSize, selectBuffer);
-			g.getGL().glRenderMode(GL2.GL_SELECT);
-
-			g.getGL().glInitNames();
-			g.getGL().glPushName(-1);
-
-			drawTweenManager(g);
-
-			g.getGL().glMatrixMode(GL2.GL_PROJECTION);
-			g.getGL().glLoadIdentity();
-
-			g.getGLU().gluPickMatrix(mouseX, mouseY, 5.0, 5.0, viewport, 0);
-
-			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
-			g.getGL().glLoadIdentity();
-			drawPerse(g, true);
-			drawCamera(g);
-			drawLight(g);
-			g.pushMatrix();
-			setMatrix(g);
-			this.setTweenParameter(g.getGL());
-			drawObject(g, true, mouseX, mouseY, index, selectedIndex);
-			g.popMatrix();
-
-			hits = g.getGL().glRenderMode(GL2.GL_RENDER);
-			selectBuffer.get(selectBuff);
-			selectedIndex = processHits(hits, selectBuff, selectedIndex);
-			g.getGL().glMatrixMode(GL2.GL_MODELVIEW);
-
-		}
-
-		if (removeObject) {
-			Iterator<Object> itr = objectList.iterator();
-			while (itr.hasNext()) {
-				Object obj = itr.next();
-				if (obj instanceof Element)
-					if (((Element)obj).isRemove())
-					    objectList.remove(obj);
-			}
-		}
-
-		return selectedIndex;
-	}
-
-
-
-	private int processHits(int hits, int[] buffer, int selectedIndex) {
-		if (hits > 0) {
-			selectedIndex = buffer[4 * hits - 1];
-		} else {
-			selectedIndex = -1;
-		}
-		return selectedIndex;
+	    this.mode   = ObjectMatrixMode.LOAD;
 	}
 
 	@Override
-	public void render(Graphics g) {
-		if (this.isVisible()) {
-			this.g = g;
+	public void render(Graphics g) {}
+//	public void render(Graphics g) {
+//		if (this.isVisible()) {
+//			this.g = g;
+//
+//			drawTweenManager(g);
+//
+//			drawPerse(g, false);
+//
+//			drawCamera(g);
+//
+//			drawLight(g);
+//
+//			g.pushMatrix();
+//			{
+//			    setMatrix(g);
+//			    this.move(g.getGL());
+//			}
+//			g.popMatrix();
+//
+//			if (this instanceof Group) {
+//				update();
+//			}
+//		}
+//	}
 
-			drawTweenManager(g);
-
-			drawPerse(g, false);
-
-			drawCamera(g);
-
-			drawLight(g);
-
-			g.pushMatrix();
-			{
-			    setMatrix(g);
-			    this.setTweenParameter(g.getGL());
-			}
-			g.popMatrix();
-
-			if (this instanceof Group) {
-				update();
-			}
-		}
-	}
-
-
-	public void bufRender(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
-//	    selectionPhase = false;
-//	    this.rootMotionBlur = false;
+	public void renderAll(Graphics g, double mouseX, double mouseY, boolean bool, int index) {
 		if (this.isVisible()) {
 			this.g = g;
 
@@ -319,13 +250,29 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 			drawLight(g);
 
+			if (!this.isUseProjection()) {
+			    g.matrixMode(MatrixMode.PROJECTION);
+                g.pushMatrix();
+                g.resetMatrix();
+                g.simpleOrtho();
+                g.matrixMode(MatrixMode.MODELVIEW);
+			}
+
 			g.pushMatrix();
 			{
-			    setMatrix(g);
-			    this.setTweenParameter(g.getGL());
+			    loadMatrix(g);
+			    this.move(g.getGL());
 			    drawObject(g, bool, mouseX, mouseY, index, -1);
 			}
 			g.popMatrix();
+
+			if (!this.isUseProjection()) {
+//              g.matrixMode(MatrixMode.MODELVIEW);
+//              g.popMatrix();
+              g.matrixMode(MatrixMode.PROJECTION);
+              g.popMatrix();
+              g.matrixMode(MatrixMode.MODELVIEW);
+          }
 
 			if (this instanceof Group) {
 				update(g);
@@ -335,21 +282,18 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		}
 	}
 
-	protected int bufRender(Graphics g, double mouseX, double mouseY,
-			boolean bool, int index, int selectedIndex) {
-//	    selectionPhase = true;
+	protected int renderSelectionAll(Graphics g, double mouseX, double mouseY, boolean bool, int index, int selectedIndex) {
 		int sIndex = -1;
 		if (this.isVisible() == true) {
 			this.g = g;
 			drawTweenManager(g);
 			if (bool == false)
 				drawPerse(g, bool);
-
 			drawCamera(g);
 			drawLight(g);
 			g.pushMatrix();
-			setMatrix(g);
-			this.setTweenParameter(g.getGL());
+			loadMatrix(g);
+			this.move(g.getGL());
 			sIndex = drawObject(g, bool, mouseX, mouseY, index, selectedIndex);
 			g.popMatrix();
 			if (this instanceof Group) {
@@ -360,62 +304,55 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		return sIndex;
 	}
 
-	public void render(Element el) {
-//        el.setRootGlow(rootBlur);
-//        if (rootBlur && selectionPhase == false) {
-//            if (el.isBlur() && el.getBlurMode() == BlurMode.MOTION_BLUR){
-//                objShader.setUniform("mask", 2.0f);
-//                this.rootMotionBlur = true;
-//            }
-//            else if (el.isBlur())
-//                objShader.setUniform("mask", 1.0f);
-//            else
-//                objShader.setUniform("mask", 0.0f);
-//
-//            if (el.isBlur() && ( el.getBlurMode() == BlurMode.BLUR || el.getBlurMode() == BlurMode.MOTION_BLUR))
-//                objShader.setUniform("draw", 0.0f);
-//            else
-//                objShader.setUniform("draw", 1.0f);
-//
-//            objShader.setUniform("texOn", 0.0f);
-//            if (el.isEnableTexture()) {
-//                el.setObjIDShader(objShader);
-//                objShader.setUniform("texOn", 1.0f);
-//            }
-//        }
-
-		if (el.isVisible()) {
-			if (el.isMasked()) {
-				el.getMask().render(g);
+	public void render(Element e) {
+		if (e.isVisible()) {
+			if (e.isMasked()) {
+				e.getMask().render(g);
 			}
 
-			if (el.getPosition().getZ() == 0) {
-				el.setDepthTest(false);
+			if (e.getPosition().getZ() == 0) {
+				e.setDepthTest(false);
 			} else {
 				this.setDepthTest(true);
 			}
 
 			g.pushMatrix();
 			{
-			    if (el.isTween()) {
-			        tmpAs = el.gettAS();
-			        tmpAf = el.gettAF();
-			        el.settAF(tmpAf * this.getSceneFillColor().getAlpha());
-			        el.settAS(tmpAs * this.getSceneStrokeColor().getAlpha());
-			        g.render(el);
-			        el.settAF(tmpAf);
-			        el.settAS(tmpAs);
+			    if (e.isTween()) {
+			        tmpAs = e.gettAS();
+			        tmpAf = e.gettAF();
+			        e.settAF(tmpAf * this.getSceneFillColor().getAlpha());
+			        e.settAS(tmpAs * this.getSceneStrokeColor().getAlpha());
+			        g.render(e);
+			        e.settAF(tmpAf);
+			        e.settAS(tmpAs);
 			    } else {
-			        tmpAf = el.getFillColor().getAlpha();
-			        tmpAs = el.getStrokeColor().getAlpha();
-			        el.getFillColor().setAlpha(tmpAf * this.getSceneFillColor().getAlpha());
-			        el.getStrokeColor().setAlpha(tmpAs * this.getSceneStrokeColor().getAlpha());
-			        g.render(el);
-			        el.getFillColor().setAlpha(tmpAf);
-			        el.getStrokeColor().setAlpha(tmpAs);
+			        tmpAf = e.getFillColor().getAlpha();
+			        tmpAs = e.getStrokeColor().getAlpha();
+			        e.getFillColor().setAlpha(tmpAf * this.getSceneFillColor().getAlpha());
+			        e.getStrokeColor().setAlpha(tmpAs * this.getSceneStrokeColor().getAlpha());
+
+			        if (!e.isUseProjection()) {
+                        g.matrixMode(MatrixMode.PROJECTION);
+                        g.pushMatrix();
+                        g.resetMatrix();
+                        g.simpleOrtho();
+                        g.matrixMode(MatrixMode.MODELVIEW);
+                    }
+
+			        g.render(e);
+
+			        if (!e.isUseProjection()) {
+                        g.matrixMode(MatrixMode.PROJECTION);
+                        g.popMatrix();
+                        g.matrixMode(MatrixMode.MODELVIEW);
+                    }
+
+			        e.getFillColor().setAlpha(tmpAf);
+			        e.getStrokeColor().setAlpha(tmpAs);
 			    }
 
-			    if (el.isMasked()) {
+			    if (e.isMasked()) {
 			        g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 			    }
 			}
@@ -444,38 +381,13 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 					if (o.getMouseOverCallback() != null) {
 						selectionbuff = true;
 					}
-					o.bufRender(g, mouseX, mouseY, false, selectionIndex);
+					o.renderAll(g, mouseX, mouseY, false, selectionIndex);
 					if (o.isSelectionbuff())
 						selectionbuff = true;
 					if (((Element)o).isMasked())
 						g.getGL().glDisable(GL2.GL_STENCIL_TEST);
 				} else {
-					selectionIndex = o.bufRender(g, mouseX, mouseY, true,
-							selectionIndex, selectedIndex);
-//stuck selectionID of elements in a group
-//					for (int j = sIndex; j < selectionIndex; j++) {
-//						o.getSelectionList().add(j);
-//
-//					}
-					if (o.getMouseOverCallback() != null) {
-
-//						s = 0;
-//						for (int j = 0; j < o.getSelectionList().size(); j++) {
-//							if (o.getSelectionList().get(j) == selectedIndex) {
-//								s += 1;
-//							}
-//						}
-
-//						if (s > 0) {
-//							o.callMouseOverCallback(true);
-//						} else {
-//							o.setMouseover(false);
-//						}
-//						if (o.isMouseover() == false
-//								&& o.isPreMouseover() == true)
-//							o.callMouseOverCallback(false);
-					}
-
+					selectionIndex = o.renderSelectionAll(g, mouseX, mouseY, true, selectionIndex, selectedIndex);
 				}
 				o.setPrevMouseover(o.isMouseover());
 			} else if (obj instanceof TimelineRender) {
@@ -499,29 +411,25 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 					}
 					this.render((Element)obj);
 				} else {
-					if (e.getMouseOverCallback() != null) {
-						g.getGL().glLoadName(selectionIndex);
-						if (e instanceof Text) {
-							((Text) e).setSelection(true);
-						}
-						if (selectionIndex == selectedIndex) {
-							e.callMouseOverCallback(true);
-						//	if(mouseEventList.size()!=0){
-								e.callMouseClickCallback(mouseEvent);
-						//		e.callMouseClickCallback(mouseEventList.get(0));
-						//		mouseEventList.remove(0);
-						//	}
-						} else {
-							e.setMouseover(false);
-						}
-						if (e.isMouseover() == false
-								&& e.isPreMouseover() == true)
-							e.callMouseOverCallback(false);
-						selectionIndex++;
-						this.render((Element) obj);
-						if (e instanceof Text)
-							((Text) e).setSelection(false);
-					}
+				    if (e.getMouseOverCallback() != null) {
+				        g.getGL().glLoadName(selectionIndex);
+				        if (e instanceof Text) {
+				            ((Text) e).setSelection(true);
+				        }
+				        if (selectionIndex == selectedIndex) {
+				            e.callMouseOverCallback(true);
+				            e.callMouseClickCallback(mouseEvent);
+				        } else {
+				            e.setMouseover(false);
+				        }
+				        if (e.isMouseover() == false
+				            && e.isPreMouseover() == true)
+				            e.callMouseOverCallback(false);
+				        selectionIndex++;
+				        this.render((Element) obj);
+				        if (e instanceof Text)
+				            ((Text) e).setSelection(false);
+				    }
 
 				}
 				e.setPrevMouseover(e.isMouseover());
@@ -546,10 +454,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	public void setMouseEvent(casmi.MouseEvent e){
-	//	if(mouseEventList==null)
-	//		mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
-	//	if(e!=null&&(e!=mouseEvent||mouseEventList.size()==0))
-	//		mouseEventList.add(e);
 		mouseEvent = e;
 		for (Object obj : objectList) {
 			if (obj instanceof GraphicsObject) {
@@ -591,7 +495,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			}
 		}
 		if (selection == true && projections.size() == 0) {
-			g.simpleortho();
+			g.simpleOrtho();
 		}
 	}
 
@@ -600,7 +504,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			light.render(g);
 	}
 
-	public void setMatrix(Graphics g) {
+	public void loadMatrix(Graphics g) {
 		switch (mode) {
 		case APPLY:
 			g.applyMatrix(matrix);
@@ -915,22 +819,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			}
 		}
 	}
-
-//	public void enableBlur(double glowSize) {
-//	    this.blurMode = BlurMode.BLUR;
-//	}
-//
-//	public void enableBlur(BlurMode blur, double glowSize) {
-//        this.blurMode = blur;
-//    }
-
-//	protected void setGraphicsObjectShader(boolean rootBlur, Shader objectShader) {
-//	    this.rootBlur = rootBlur;
-//	    this.objShader = objectShader;
-//	}
-
-
-
 }
 
 

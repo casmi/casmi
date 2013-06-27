@@ -129,7 +129,7 @@ public class Sphere extends Element implements Renderable, Reset {
         {
             gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
             gl.glPolygonOffset(1f, 1f);
-            this.setTweenParameter(gl);
+            this.move(gl);
             if (this.ismaterial) material.setup(gl);
 
             if (this.fill) {

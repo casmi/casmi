@@ -911,7 +911,7 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simpleortho() {
+	public void simpleOrtho() {
 		gl.glOrtho(0, this.width, 0, this.height, -1.0e10, 1.0e10);
 	}
 
@@ -941,7 +941,7 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simplefrustum(double left, double right, double bottom, double top,
+	public void simpleFrustum(double left, double right, double bottom, double top,
 			double near, double far) {
 		gl.glFrustum(left, right, bottom, top, near, far);
 		}

@@ -194,7 +194,7 @@ public class RoundRect extends Element implements Renderable {
         }
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
+        this.move(gl);
         if (this.fill) {
             getSceneFillColor().setup(gl);
             // this.fillColor.setup(gl);

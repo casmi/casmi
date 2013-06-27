@@ -352,7 +352,7 @@ public class Texture extends Element implements Renderable, Reset {
 
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
             getSceneFillColor().setup(gl);
             double tmpx, tmpy, tmpz;
             double tmpnx, tmpny;

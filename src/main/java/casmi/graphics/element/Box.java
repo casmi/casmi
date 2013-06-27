@@ -85,7 +85,7 @@ public class Box extends Element implements Renderable, Reset {
 
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
 
             if (!this.enableTexture) {
                 gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);

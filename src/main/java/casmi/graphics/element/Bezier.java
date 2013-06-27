@@ -189,7 +189,7 @@ public class Bezier extends Element implements Renderable {
 
         gl.glPushMatrix();
         {
-            this.setTweenParameter(gl);
+            this.move(gl);
             gl.glTranslated(-this.points[0], -this.points[1], -this.points[2]);
 
             if (this.fill) {

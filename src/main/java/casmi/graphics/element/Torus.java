@@ -118,7 +118,7 @@ public class Torus extends Element implements Renderable {
         gl.glPushMatrix();
         {
             gl.glTranslated(x, y, z);
-            this.setTweenParameter(gl);
+            this.move(gl);
 
             if (this.fill) {
                 getSceneFillColor().setup(gl);

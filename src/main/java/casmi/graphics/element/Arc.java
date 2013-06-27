@@ -241,7 +241,7 @@ public class Arc extends Element implements Renderable {
         }
 
         gl.glPushMatrix();
-        this.setTweenParameter(gl);
+        this.move(gl);
 
         if (this.fill) {
             // this.fillColor.setup(gl);
