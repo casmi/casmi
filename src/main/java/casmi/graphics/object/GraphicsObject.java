@@ -244,7 +244,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			drawTweenManager(g);
 
 			if (!bool)
-			    drawPerse(g, bool);
+			    drawProjection(g, bool);
 
 			drawCamera(g);
 
@@ -288,7 +288,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			this.g = g;
 			drawTweenManager(g);
 			if (bool == false)
-				drawPerse(g, bool);
+				drawProjection(g, bool);
 			drawCamera(g);
 			drawLight(g);
 			g.pushMatrix();
@@ -472,7 +472,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		}
 	}
 
-	private final void drawPerse(Graphics g, boolean selection) {
+	private final void drawProjection(Graphics g, boolean selection) {
 		for (Projection perse : projections) {
 			if (perse instanceof Perspective) {
 				Perspective perspective = (Perspective) perse;
@@ -526,17 +526,14 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	@Override
-	public void update() {
-
-	}
+	public void update() {}
 
 	public List<Object> getObjectList() {
 		return objectList;
 	}
 
 	@Override
-	public void render(GL2 gl, GLU glu, int width, int height) {
-	}
+	public void render(GL2 gl, GLU glu, int width, int height) {}
 
 	public boolean isSelectionbuff() {
 		return selectionbuff;
@@ -545,7 +542,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	public void setSelectionbuff(boolean selectionbuff) {
 		this.selectionbuff = selectionbuff;
 	}
-
 
 	public List<Integer> getSelectionList() {
 		return selectionList;
@@ -602,7 +598,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		}
 	}
 
-
 	/**
 	 * Sets the width of this Element's stroke.
 	 *
@@ -622,7 +617,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			}
 		}
 	}
-
 
 	/**
 	 * Sets the color of this Element's stroke.

@@ -32,7 +32,7 @@ import casmi.graphics.element.Element;
  *
  * @see Tweenable
  */
-public class TweenElement implements Tweenable {
+public class Tweener implements Tweenable {
 
     private double positionX, positionY, positionZ;
     private double rotationX, rotationY, rotationZ;
@@ -43,7 +43,7 @@ public class TweenElement implements Tweenable {
 
     private Element element;
 
-    public TweenElement (Element e) {
+    public Tweener(Element e) {
         this.element = e;
         init();
         reset();

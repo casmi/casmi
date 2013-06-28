@@ -36,9 +36,6 @@ import casmi.tween.Tween;
 import casmi.tween.TweenCallback;
 import casmi.tween.TweenCallbackTypes;
 import casmi.tween.TweenManager;
-import casmi.tween.TweenSerialGroup;
-import casmi.tween.equations.Linear;
-import casmi.tween.simpletweenables.TweenDouble;
 import casmi.util.Random;
 
 /**
@@ -48,7 +45,7 @@ import casmi.util.Random;
  */
 public class DynamicCircleChart extends Group {
 
-    private TweenDouble tw;
+//    private TweenDouble tw;  // TODO fix
     private List<Arc> arclist = new ArrayList<Arc>();
     private List<Color> colorList = new ArrayList<Color>();
     private List<Text> textList = new ArrayList<Text>();
@@ -83,8 +80,9 @@ public class DynamicCircleChart extends Group {
     private void init(MatrixData2D m, double radius, boolean animation) {
         data = m;
         this.radius = radius;
-        tw = new TweenDouble();
-        tw.setValue(0);
+// TODO fix
+//        tw = new TweenDouble();
+//        tw.setValue(0);
         indexNameFont = new Font();
         this.animation = animation;
         setGraphArc();
@@ -99,33 +97,34 @@ public class DynamicCircleChart extends Group {
     }
 
     public void animationUpdate() {
-        if (tweenstart && tw.getValue() <= 360) {
-            setTweenstart(false);
-            manager = new TweenManager();
-            addTweenManager(manager);
-            TweenSerialGroup tsg = TweenSerialGroup.create(
-                Tween.to(tw, tweenMilliSecond, Linear.INOUT).target(360.01).addCompleteCallback(tweencallback)
-                );
-
-            manager.add(tsg);
-        }
-
-        if (tw.getValue() != 0 && tw.getValue() <= 360) {
-            for (int i = 0; i < arclist.size(); i++) {
-                if (arclist.get(i).getStart() - 90 < tw.getValue()) {
-                    arclist.get(i).setVisible(true);
-                    double maxRad = 0;
-                    if (i == arclist.size() - 1) maxRad = 360;
-                    else maxRad = arclist.get(i + 1).getStart() - 90;
-                    if (maxRad > tw.getValue()) {
-                        if (i > 0) {
-                            arclist.get(i - 1).setEnd(arclist.get(i).getStart());
-                        }
-                        arclist.get(i).setEnd(tw.getValue() + 90);
-                    }
-                }
-            }
-        }
+// TODO fix
+//        if (tweenstart && tw.getValue() <= 360) {
+//            setTweenstart(false);
+//            manager = new TweenManager();
+//            addTweenManager(manager);
+//            TweenSerialGroup tsg = TweenSerialGroup.create(
+//                Tween.to(tw, tweenMilliSecond, Linear.INOUT).target(360.01).addCompleteCallback(tweencallback)
+//                );
+//
+//            manager.add(tsg);
+//        }
+//
+//        if (tw.getValue() != 0 && tw.getValue() <= 360) {
+//            for (int i = 0; i < arclist.size(); i++) {
+//                if (arclist.get(i).getStart() - 90 < tw.getValue()) {
+//                    arclist.get(i).setVisible(true);
+//                    double maxRad = 0;
+//                    if (i == arclist.size() - 1) maxRad = 360;
+//                    else maxRad = arclist.get(i + 1).getStart() - 90;
+//                    if (maxRad > tw.getValue()) {
+//                        if (i > 0) {
+//                            arclist.get(i - 1).setEnd(arclist.get(i).getStart());
+//                        }
+//                        arclist.get(i).setEnd(tw.getValue() + 90);
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -145,7 +144,8 @@ public class DynamicCircleChart extends Group {
             arc.setEnd(arc.getStart() + 0.1);
             arc.setVisible(false);
         }
-        tw.setValue(0);
+// TODO fix
+//        tw.setValue(0);
     }
 
     private void setGraphArc() {

@@ -19,9 +19,10 @@
 
 package casmi.timeline;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,11 +36,7 @@ import casmi.graphics.element.Reset;
 import casmi.tween.Tween;
 import casmi.tween.TweenEquation;
 import casmi.tween.equations.Linear;
-import casmi.tween.simpletweenables.TweenDouble;
 import casmi.ui.PopupMenu;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Timeline class.You can use time line with Scene class.
@@ -59,7 +56,8 @@ public class Timeline implements TimelineRender, Reset {
     private Applet baseApplet;
     private double nowDissolveTime;
 
-    TweenDouble td = new TweenDouble(0.0f);
+//    TweenDouble td = new TweenDouble(0.0f);
+
     Tween tween;
 
     private List<Scene> sceneList;
@@ -95,7 +93,8 @@ public class Timeline implements TimelineRender, Reset {
     public Timeline() {
         sceneList = new ArrayList<Scene>();
         tmpSceneList = new ArrayList<Scene>();
-        td = new TweenDouble(0.0);
+// TODO fix
+//        td = new TweenDouble(0.0);
     }
 
 
@@ -179,8 +178,11 @@ public class Timeline implements TimelineRender, Reset {
         if(tween!=null)
             this.getApplet().removeTween(tween);
         tween = null;
-        td.setValue(0);
-        tween = Tween.to(td, (int)diss.getTime()*1000, diss.getEquation()).target(1.0);
+
+// TODO fix
+//        td.setValue(0);
+//        tween = Tween.to(td, (int)diss.getTime()*1000, diss.getEquation()).target(1.0);
+
         this.getApplet().addTween(tween);
 
         task.cancel();
@@ -374,6 +376,7 @@ public class Timeline implements TimelineRender, Reset {
         }
     }
 
+    @Override
     public int render(Graphics g) {
 
         if (!dissolve) {
@@ -403,7 +406,9 @@ public class Timeline implements TimelineRender, Reset {
 
             Dissolve dissolve = sceneList.get(nowSceneID).getDissolve();
             dissolve.setNowDissolve(nowDissolve);
-            dissolve.render(sceneList.get(nowSceneID),sceneList.get(nextSceneID),td.getValue(), g);
+
+// TODO fix
+//            dissolve.render(sceneList.get(nowSceneID),sceneList.get(nextSceneID),td.getValue(), g);
 
         }
         return 0;

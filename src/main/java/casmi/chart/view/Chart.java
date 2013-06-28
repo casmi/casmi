@@ -27,7 +27,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;
-import casmi.tween.TweenElement;
+import casmi.tween.Tweener;
 import casmi.tween.TweenManager;
 
 /**
@@ -46,8 +46,8 @@ public class Chart extends Group {
     protected boolean tweenreset = false;
     protected TweenManager manager;
     protected int tweenMillSec = 1000;
-    protected TweenElement tw;
-    protected List<TweenElement> twlist = new ArrayList<TweenElement>();
+    protected Tweener tw;
+    protected List<Tweener> twlist = new ArrayList<Tweener>();
 
     public Chart(double width, double height, MatrixData2D m) {
         setSize(width, height);

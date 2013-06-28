@@ -27,11 +27,6 @@ import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Line;
 import casmi.matrix.Vertex;
-import casmi.tween.Tween;
-import casmi.tween.TweenManager;
-import casmi.tween.TweenSerialGroup;
-import casmi.tween.equations.Linear;
-import casmi.tween.simpletweenables.TweenDouble;
 
 /**
  * DynamicLineChart Class.
@@ -49,7 +44,7 @@ public class DynamicLineChart extends Chart {
     private double xDivision;
     private double yDivision;
     private boolean animation = true;
-    private TweenDouble td;
+//    private TweenDouble td; // TODO fix
 
     public DynamicLineChart(double width, double height, MatrixData2D m, boolean animation) {
         super(width, height, m);
@@ -79,8 +74,9 @@ public class DynamicLineChart extends Chart {
         lines = new ArrayList<Line>();
         vertexs = new ArrayList<Vertex>();
         tweenMillSec = 3000;
-        td = new TweenDouble();
-        td.setValue(0);
+// TODO fix
+//        td = new TweenDouble();
+//        td.setValue(0);
         setGraphVertex();
         animation = anime;
         if (animation) setGraphLine4Tween();
@@ -173,34 +169,35 @@ public class DynamicLineChart extends Chart {
 
     @Override
     public void update() {
-        if (animation) {
-            if (tweenstart && td.getValue() <= vertexs.get(vertexs.size() - 1).getX()) {
-                tweenstart = false;
-                manager = new TweenManager();
-                td.setValue(vertexs.get(0).getX());
-                addTweenManager(manager);
-                TweenSerialGroup tsg = TweenSerialGroup.create(
-                    Tween.to(td, tweenMillSec, Linear.INOUT).target(vertexs.get(vertexs.size() - 1).getX() + 0.1)
-                    );
-
-                manager.add(tsg);
-            }
-
-            if (td.getValue() != 0 && td.getValue() <= vertexs.get(vertexs.size() - 1).getX()) {
-                for (int i = 0; i < vertexs.size() - 1; i++) {
-                    if (vertexs.get(i).getX() <= td.getValue() && vertexs.get(i + 1).getX() > td.getValue()) {
-                        if (i > 0) {
-                            lines.get(i - 1).set(vertexs.get(i - 1), vertexs.get(i));
-                            lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
-                        }
-                        double nowY = (vertexs.get(i + 1).getY() - vertexs.get(i).getY()) * (td.getValue() - vertexs.get(i).getX()) / xDivision + vertexs.get(i).getY();
-                        lines.get(i).set(vertexs.get(i).getX(), vertexs.get(i).getY(), td.getValue(), nowY);
-                        lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, nowY / height));
-                    }
-                }
-
-            }
-        }
+// TODO fix
+//        if (animation) {
+//            if (tweenstart && td.getValue() <= vertexs.get(vertexs.size() - 1).getX()) {
+//                tweenstart = false;
+//                manager = new TweenManager();
+//                td.setValue(vertexs.get(0).getX());
+//                addTweenManager(manager);
+//                TweenSerialGroup tsg = TweenSerialGroup.create(
+//                    Tween.to(td, tweenMillSec, Linear.INOUT).target(vertexs.get(vertexs.size() - 1).getX() + 0.1)
+//                    );
+//
+//                manager.add(tsg);
+//            }
+//
+//            if (td.getValue() != 0 && td.getValue() <= vertexs.get(vertexs.size() - 1).getX()) {
+//                for (int i = 0; i < vertexs.size() - 1; i++) {
+//                    if (vertexs.get(i).getX() <= td.getValue() && vertexs.get(i + 1).getX() > td.getValue()) {
+//                        if (i > 0) {
+//                            lines.get(i - 1).set(vertexs.get(i - 1), vertexs.get(i));
+//                            lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
+//                        }
+//                        double nowY = (vertexs.get(i + 1).getY() - vertexs.get(i).getY()) * (td.getValue() - vertexs.get(i).getX()) / xDivision + vertexs.get(i).getY();
+//                        lines.get(i).set(vertexs.get(i).getX(), vertexs.get(i).getY(), td.getValue(), nowY);
+//                        lines.get(i).setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, nowY / height));
+//                    }
+//                }
+//
+//            }
+//        }
     }
 
     public void resetTween() {
@@ -211,7 +208,7 @@ public class DynamicLineChart extends Chart {
             line.setCornerColor(1, RGBColor.lerpColor(this.bottomColor, this.topColor, vertexs.get(i).getY() / height));
             i++;
         }
-        td.setValue(vertexs.get(0).getX());
+//        td.setValue(vertexs.get(0).getX()); // TODO fix
     }
 
     public double getxDivision() {

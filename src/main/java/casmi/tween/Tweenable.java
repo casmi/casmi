@@ -31,7 +31,7 @@ import casmi.graphics.Graphics;
  * @author Y. Ban
  *
  * @see Tween
- * @see TweenElement
+ * @see Tweener
  */
 public interface Tweenable {
 
