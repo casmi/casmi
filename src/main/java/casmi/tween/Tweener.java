@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import casmi.graphics.element.Element;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector2D;
+import casmi.matrix.Vector3D;
 
 /**
  * TweenElement class.
@@ -53,9 +54,74 @@ public class Tweener {
         return element;
     }
 
-    public void animatePosition(Vertex v, double duration, TweenType type) {
-        animations.add(new TweenAnimation(AnimationTarget.POSITION_X, element.getX(), v.getX(), duration, type));
-        animations.add(new TweenAnimation(AnimationTarget.POSITION_Y, element.getY(), v.getY(), duration, type));
+    public void animatePosition(Vector2D v, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.POSITION_X, element.getX(), v.getX(), duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.POSITION_Y, element.getY(), v.getY(), duration, equationClazz));
+    }
+
+    public void animatePosition(Vector3D v, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.POSITION_X, element.getX(), v.getX(), duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.POSITION_Y, element.getY(), v.getY(), duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.POSITION_Z, element.getZ(), v.getZ(), duration, equationClazz));
+    }
+
+    public void animateRotation(double x, double y, double z, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_X, element.getRotationX(), x, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_Y, element.getRotationY(), y, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_Z, element.getRotationZ(), z, duration, equationClazz));
+    }
+
+    public void animateRotation(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_Z, element.getRotationZ(), val, duration, equationClazz));
+    }
+
+    public void animateRotationX(double x, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_X, element.getRotationX(), x, duration, equationClazz));
+    }
+
+    public void animateRotationY(double y, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_Y, element.getRotationY(), y, duration, equationClazz));
+    }
+
+    public void animateRotationZ(double z, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ROTATION_Z, element.getRotationZ(), z, duration, equationClazz));
+    }
+
+    public void animateScale(double sx, double sy, double sz, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_X, element.getScaleX(), sx, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_Y, element.getScaleY(), sy, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_Z, element.getScaleZ(), sz, duration, equationClazz));
+    }
+
+    public void animateScale(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_X, element.getScaleX(), val, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_Y, element.getScaleY(), val, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_Z, element.getScaleZ(), val, duration, equationClazz));
+    }
+
+    public void animateScaleX(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_X, element.getScaleX(), val, duration, equationClazz));
+    }
+
+    public void animateScaleY(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_Y, element.getScaleY(), val, duration, equationClazz));
+    }
+
+    public void animateScaleZ(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.SCALE_Z, element.getScaleZ(), val, duration, equationClazz));
+    }
+
+    public void animateAlpha(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ALPHA_STROKE, element.getStrokeAlpha(), val, duration, equationClazz));
+        animations.add(new TweenAnimation(AnimationTarget.ALPHA_FILL, element.getFillAlpha(), val, duration, equationClazz));
+    }
+
+    public void animateStrokeAlpha(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ALPHA_STROKE, element.getStrokeAlpha(), val, duration, equationClazz));
+    }
+
+    public void animateFillAlpha(double val, double duration, Class<? extends TweenEquation> equationClazz) {
+        animations.add(new TweenAnimation(AnimationTarget.ALPHA_FILL, element.getFillAlpha(), val, duration, equationClazz));
     }
 
     private final void init() {
@@ -112,7 +178,39 @@ public class Tweener {
                     element.setZ(a.getValue());
                     break;
 
-                default: // TODO for other animation target
+                case ROTATION_X:
+                    element.setRotationX(a.getValue());
+                    break;
+
+                case ROTATION_Y:
+                    element.setRotationY(a.getValue());
+                    break;
+
+                case ROTATION_Z:
+                    element.setRotationZ(a.getValue());
+                    break;
+
+                case SCALE_X:
+                    element.setScaleX(a.getValue());
+                    break;
+
+                case SCALE_Y:
+                    element.setScaleY(a.getValue());
+                    break;
+
+                case SCALE_Z:
+                    element.setScaleZ(a.getValue());
+                    break;
+
+                case ALPHA_FILL:
+                    element.setFillAlpha(a.getValue());
+                    break;
+
+                case ALPHA_STROKE:
+                    element.setStrokeAlpha(a.getValue());
+                    break;
+
+                default:
                     break;
             }
         }

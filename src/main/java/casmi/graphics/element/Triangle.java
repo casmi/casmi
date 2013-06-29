@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Triangle class. Wrap JOGL and make it easy to use.
@@ -78,7 +78,7 @@ public class Triangle extends Element implements Renderable {
      * @param v2 The coordinates of the second corner.
      * @param v3 The coordinates of the third corner.
      */
-    public Triangle(Vertex v1, Vertex v2, Vertex v3) {
+    public Triangle(Vector3D v1, Vector3D v2, Vector3D v3) {
         this.MODE = TRIANGLE_3D;
         this.x1 = v1.getX();
         this.y1 = v1.getY();
@@ -148,7 +148,7 @@ public class Triangle extends Element implements Renderable {
      * @param v2 The coordinates of the second corner.
      * @param v3 The coordinates of the third corner.
      */
-    public void set(Vertex v1, Vertex v2, Vertex v3) {
+    public void set(Vector3D v1, Vector3D v2, Vector3D v3) {
         this.MODE = TRIANGLE_3D;
         this.x1 = v1.getX();
         this.y1 = v1.getY();
@@ -220,7 +220,7 @@ public class Triangle extends Element implements Renderable {
         calcG();
     }
 
-    public void setConer(int number, Vertex v) {
+    public void setConer(int number, Vector3D v) {
         if (number <= 0) {
             this.x1 = v.getX();
             this.y1 = v.getY();
@@ -237,8 +237,8 @@ public class Triangle extends Element implements Renderable {
         calcG();
     }
 
-    public Vertex getConer(int number) {
-        Vertex v = new Vertex(0, 0, 0);
+    public Vector3D getConer(int number) {
+        Vector3D v = new Vector3D(0, 0, 0);
 
         if (number <= 0) {
             v.set(this.x1, this.y1, this.z1);

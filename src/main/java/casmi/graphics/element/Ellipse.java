@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Ellipse class. Wrap JOGL and make it easy to use.
@@ -66,7 +66,7 @@ public class Ellipse extends Element implements Renderable {
      * @param width The width of the Ellipse.
      * @param height The height of the Ellipse.
      */
-    public Ellipse(Vertex v, double width, double height) {
+    public Ellipse(Vector3D v, double width, double height) {
         this.x = v.getX();
         this.y = v.getY();
         this.width = width;
@@ -107,7 +107,7 @@ public class Ellipse extends Element implements Renderable {
      * @param v The x,y-coordinate of the center of the Ellipse.
      * @param radius The radius of the Ellipse.
      */
-    public Ellipse(Vertex v, double radius) {
+    public Ellipse(Vector3D v, double radius) {
         this.x = v.getX();
         this.y = v.getY();
         this.width = radius * 2.0;
@@ -148,7 +148,7 @@ public class Ellipse extends Element implements Renderable {
      * @param width The width of the Ellipse.
      * @param height The height of the Ellipse.
      */
-    public void set(Vertex v, double width, double height) {
+    public void set(Vector3D v, double width, double height) {
         this.x = v.getX();
         this.y = v.getY();
         this.width = width;
@@ -175,7 +175,7 @@ public class Ellipse extends Element implements Renderable {
      * @param v The x,y-coordinate of the center of the Ellipse.
      * @param radius The radius of the Ellipse.
      */
-    public void set(Vertex v, double radius) {
+    public void set(Vector3D v, double radius) {
         this.x = v.getX();
         this.y = v.getY();
         this.width = radius * 2.0;

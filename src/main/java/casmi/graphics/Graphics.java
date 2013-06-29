@@ -32,7 +32,7 @@ import casmi.graphics.element.Renderable;
 import casmi.graphics.group.GroupRender;
 import casmi.graphics.object.ObjectRender;
 import casmi.image.Image;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 import casmi.timeline.TimelineRender;
 import casmi.tween.TweenerManager;
 
@@ -395,7 +395,7 @@ public class Graphics {
     /**
      * Sets the RGB value and the position of the ambientLight
      */
-    public void ambientLight(float r, float g, float b, Vertex v) {
+    public void ambientLight(float r, float g, float b, Vector3D v) {
         float ambient[] = { r, g, b, 255 };
         float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
         normalize(ambient);
@@ -423,7 +423,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the ambientLight
      */
-	public void ambientLight(Color color, boolean enableColor, Vertex v) {
+	public void ambientLight(Color color, boolean enableColor, Vector3D v) {
 	    float ambient[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -471,7 +471,7 @@ public class Graphics {
     /**
      * Sets the RBG value and the position of the No.i ambientLight
      */
-    public void ambientLight(int i, float r, float g, float b, Vertex v) {
+    public void ambientLight(int i, float r, float g, float b, Vector3D v) {
         float ambient[] = { r, g, b, 255 };
         float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
         normalize(ambient);
@@ -500,7 +500,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i ambientLight
      */
-	public void ambientLight(int i, Color color, boolean enableColor, Vertex v) {
+	public void ambientLight(int i, Color color, boolean enableColor, Vector3D v) {
 	    float ambient[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -536,7 +536,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i directionalLight
      */
-	public void directionalLight(int i, Color color, boolean enableColor, Vertex v) {
+	public void directionalLight(int i, Color color, boolean enableColor, Vector3D v) {
 	    float directionalColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -581,7 +581,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i pointLight
      */
-	public void pointLight(int i, Color color, boolean enableColor, Vertex v) {
+	public void pointLight(int i, Color color, boolean enableColor, Vector3D v) {
 	    float pointColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -604,7 +604,7 @@ public class Graphics {
 	/**
      * Sets the color value, position, direction and the angle of the spotlight cone of the No.i spotLight
      */
-	public void spotLight(int i, Color color, boolean enableColor, Vertex v, float nx, float ny,	float nz, float angle) {
+	public void spotLight(int i, Color color, boolean enableColor, Vector3D v, float nx, float ny,	float nz, float angle) {
 	    float spotColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -727,7 +727,7 @@ public class Graphics {
     /**
      * Sets texture vertex(nx,ny) at position v.
      * */
-    public void vertex(Vertex v, float nx, float ny) {
+    public void vertex(Vector3D v, float nx, float ny) {
         gl.glTexCoord2f(nx, ny);
         gl.glVertex3d(v.getX(), v.getY(), v.getZ());
     }

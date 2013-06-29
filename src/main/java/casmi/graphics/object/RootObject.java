@@ -337,13 +337,13 @@ public class RootObject extends GraphicsObject {
             g.pushMatrix();
             {
                 if (e.isTween()) {
-                    tmpAs = e.gettAS();
-                    tmpAf = e.gettAF();
-                    e.settAF(tmpAf * this.getSceneFillColor().getAlpha());
-                    e.settAS(tmpAs * this.getSceneStrokeColor().getAlpha());
+                    tmpAs = e.getStrokeAlpha();
+                    tmpAf = e.getFillAlpha();
+                    e.setFillAlpha(tmpAf * this.getSceneFillColor().getAlpha());
+                    e.setStrokeAlpha(tmpAs * this.getSceneStrokeColor().getAlpha());
                     g.render(e);
-                    e.settAF(tmpAf);
-                    e.settAS(tmpAs);
+                    e.setStrokeAlpha(tmpAf);
+                    e.setStrokeAlpha(tmpAs);
                 } else {
                     tmpAf = e.getFillColor().getAlpha();
                     tmpAs = e.getStrokeColor().getAlpha();
@@ -696,7 +696,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void setStrokeColor(Color color) {
         this.strokeColor = color;
-        this.tAS = color.getAlpha();
+        this.strokeAlpha = color.getAlpha();
         for (Object obj : objectList) {
             if (obj instanceof Element) {
                 Element el = (Element)obj;
@@ -711,7 +711,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void setStrokeColorAlpha(double alpha) {
         this.strokeColor.setAlpha(alpha);
-        this.tAS = alpha;
+        this.strokeAlpha = alpha;
         for (Object obj : objectList) {
             if (obj instanceof Element) {
                 Element el = (Element)obj;
@@ -745,7 +745,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void setStrokeColor(ColorSet colorSet, double alpha) {
         strokeColor = new RGBColor(colorSet);
-        this.tAS = alpha;
+        this.strokeAlpha = alpha;
         for (Object obj : objectList) {
             if (obj instanceof Element) {
                 Element el = (Element)obj;
@@ -767,7 +767,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void setFillColor(Color color) {
         this.fillColor = color;
-        this.tAF = color.getAlpha();
+        this.fillAlpha = color.getAlpha();
         for (Object obj : objectList) {
             if (obj instanceof Element) {
                 Element el = (Element)obj;
@@ -782,7 +782,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void setFillColorAlpha(double alpha) {
         this.fillColor.setAlpha(alpha);
-        this.tAF = alpha;
+        this.fillAlpha = alpha;
         for (Object obj : objectList) {
             if (obj instanceof Element) {
                 Element el = (Element)obj;
@@ -816,7 +816,7 @@ public class RootObject extends GraphicsObject {
     @Override
     public void setFillColor(ColorSet colorSet, double alpha) {
         this.fillColor = new RGBColor(colorSet, alpha);
-        this.tAF = alpha;
+        this.fillAlpha = alpha;
         for (Object obj : objectList) {
             if (obj instanceof Element) {
                 Element el = (Element)obj;

@@ -20,7 +20,7 @@
 package casmi.graphics.element;
 
 import casmi.graphics.group.Group;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Arrow Class. Wrap JOGL and make it easy to use.
@@ -35,7 +35,7 @@ public class Arrow extends Group {
     private double length;
     private double width;
     private ArrowAlign align = ArrowAlign.BOTTOM;
-    private Vertex startPoint, endPoint;
+    private Vector3D startPoint, endPoint;
 
     /**
      * Creates a new Arrow object using top size and length.
@@ -68,7 +68,7 @@ public class Arrow extends Group {
      * @param start The coordinates of the start point.
      * @param end The coordinates of the end point.
      */
-    public Arrow(double topSize, Vertex start, Vertex end) {
+    public Arrow(double topSize, Vector3D start, Vector3D end) {
         this.topSize = topSize;
         this.length =
             Math.sqrt(Math.pow(end.getY() - start.getY(), 2)
@@ -212,7 +212,7 @@ public class Arrow extends Group {
      * @param end The coordinates of the end point.
      *
      */
-    public void setCorner(Vertex start, Vertex end) {
+    public void setCorner(Vector3D start, Vector3D end) {
         this.startPoint = start;
         this.endPoint = end;
         this.align = ArrowAlign.CORNER;
@@ -250,7 +250,7 @@ public class Arrow extends Group {
      *
      * @return The coordinate of the start point.
      */
-    public Vertex getStartCorner() {
+    public Vector3D getStartCorner() {
         return startPoint;
     }
 
@@ -259,7 +259,7 @@ public class Arrow extends Group {
      *
      * @return The coordinate of the end point.
      */
-    public Vertex getEndCorner() {
+    public Vector3D getEndCorner() {
         return endPoint;
     }
 

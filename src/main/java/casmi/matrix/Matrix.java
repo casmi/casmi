@@ -107,7 +107,7 @@ public interface Matrix {
                            double n30, double n31, double n32, double n33);
 
 
-      public Vertex mult(Vertex source);
+      public Vector3D mult(Vector3D source);
 
       public double[] mult(double[] source, double[] target);
 

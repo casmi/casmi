@@ -19,14 +19,14 @@
 
 package casmi.tween;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import casmi.tween.equations.BounceIn;
-import casmi.tween.equations.BounceInOut;
-import casmi.tween.equations.BounceOut;
 
 
+/**
+ * Tween Animation
+ *
+ * @author Takashi AOKI <federkasten@me.com>
+ *
+ */
 public class TweenAnimation {
 
     enum TweenAnimationStatus {
@@ -36,7 +36,6 @@ public class TweenAnimation {
 
     private TweenAnimationStatus status = TweenAnimationStatus.WAIT;
 
-    private TweenType type;
     private AnimationTarget target;
     private double duration;
 
@@ -49,34 +48,17 @@ public class TweenAnimation {
 
     private TweenEquation equation;
 
-    static private Map<TweenType, Class> equationMap = new HashMap<TweenType, Class>();
-
-    static {
-        equationMap.put(TweenType.BOUNCE_IN, BounceIn.class);
-        equationMap.put(TweenType.BOUNCE_OUT, BounceOut.class);
-        equationMap.put(TweenType.BOUNCE_INOUT, BounceInOut.class);
-    }
-
-    public TweenAnimation(AnimationTarget target, double startValue, double targetValue, double duration, TweenType type) {
+    public TweenAnimation(AnimationTarget target, double startValue, double targetValue, double duration, Class<? extends TweenEquation> equationClazz) {
         this.target = target;
         this.startValue = startValue;
         this.endValue = targetValue;
         this.duration = duration;
-        this.type = type;
 
         try {
-            Class clazz = equationMap.get(type);
-
-            if (clazz != null) {
-                this.equation = (TweenEquation) clazz.newInstance();
-            }
+            this.equation = equationClazz.newInstance();
         } catch (Exception e) {
             this.equation = null;
         }
-    }
-
-    public TweenType getType() {
-        return type;
     }
 
     public AnimationTarget getTarget() {

@@ -125,11 +125,11 @@ public class Mask extends Element implements ObjectRender {
             g.pushMatrix();
             {
                 if (el.isTween()) {
-                    el.settAF((int)((int)el.gettAF() * this.getSceneFillColor().getAlpha()));
-                    el.settAS((int)((int)el.gettAS() * this.getSceneStrokeColor().getAlpha()));
+                    el.setFillAlpha((int)((int)el.getFillAlpha() * this.getSceneFillColor().getAlpha()));
+                    el.setStrokeAlpha((int)((int)el.getStrokeAlpha() * this.getSceneStrokeColor().getAlpha()));
                     g.render(el);
-                    el.settAF((int)el.gettAF());
-                    el.settAS((int)el.gettAS());
+                    el.setFillAlpha((int)el.getFillAlpha());
+                    el.setStrokeAlpha((int)el.getStrokeAlpha());
                 } else {
                     el.getFillColor().setAlpha(el.getFillColor().getAlpha() * getSceneFillColor().getAlpha());
                     el.getStrokeColor().setAlpha(el.getStrokeColor().getAlpha() * getSceneStrokeColor().getAlpha());

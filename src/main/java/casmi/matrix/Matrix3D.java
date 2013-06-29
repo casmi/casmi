@@ -443,9 +443,9 @@ public class Matrix3D implements Matrix {
     //////////////////////////////////////////////////////////////
 
     @Override
-    public Vertex mult(Vertex source) {
+    public Vector3D mult(Vector3D source) {
 
-        Vertex result = new Vertex();
+        Vector3D result = new Vector3D();
         result.setX(m00 * source.getX() + m01 * source.getY() + m02 * source.getZ() + m03);
         result.setY(m10 * source.getX() + m11 * source.getY() + m12 * source.getZ() + m13);
         result.setZ(m20 * source.getX() + m21 * source.getY() + m22 * source.getZ() + m23);

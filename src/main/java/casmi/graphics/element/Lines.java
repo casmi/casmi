@@ -28,7 +28,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Lines class. Wrap JOGL and make it easy to use.
@@ -49,7 +49,7 @@ public class Lines extends Element implements Renderable {
     private double X = 0;
     private double Y = 0;
 
-    private Vertex tmpV = new Vertex(0, 0, 0);
+    private Vector3D tmpV = new Vector3D(0, 0, 0);
 
     private int MODE;
 
@@ -104,7 +104,7 @@ public class Lines extends Element implements Renderable {
      *
      * @param v The coordinates of a new added point.
      */
-    public void vertex(Vertex v) {
+    public void vertex(Vector3D v) {
         MODE = LINES_3D;
         this.x.add(v.getX());
         this.y.add(v.getY());
@@ -119,7 +119,7 @@ public class Lines extends Element implements Renderable {
      * @param i The index number of the point.
      * @return The coordinates of the point.
      */
-    public Vertex getVertex(int i) {
+    public Vector3D getVertex(int i) {
         tmpV.setX(x.get(i));
         tmpV.setY(y.get(i));
         tmpV.setZ(z.get(i));

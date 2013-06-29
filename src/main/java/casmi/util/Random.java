@@ -19,7 +19,7 @@
 
 package casmi.util;
 
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * @author Y. Ban
@@ -81,8 +81,8 @@ public class Random {
      *
      * @return vertex
      */
-    public static final Vertex randVertex2d() {
+    public static final Vector3D randVertex2d() {
         float theta = random((float)(Math.PI*2.0));
-        return new Vertex(Math.cos(theta),Math.sin(theta));
+        return new Vector3D(Math.cos(theta),Math.sin(theta));
     }
 }

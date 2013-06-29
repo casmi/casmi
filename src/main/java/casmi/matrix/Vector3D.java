@@ -24,25 +24,25 @@ package casmi.matrix;
  *
  * @author Y. Ban
  */
-public class Vertex {
+public class Vector3D {
 
     private double x = 0.0;
     private double y = 0.0;
     private double z = 0.0;
 
-    public Vertex() {
+    public Vector3D() {
         this.x = 0.0;
         this.y = 0.0;
         this.z = 0.0;
     }
 
-    public Vertex(double x, double y) {
+    public Vector3D(double x, double y) {
         this.x = x;
         this.y = y;
         this.z = 0.0;
     }
 
-    public Vertex(double x, double y, double z) {
+    public Vector3D(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -83,39 +83,39 @@ public class Vertex {
         this.y = y;
     }
 
-    public Vertex mult(Vertex a) {
-        Vertex result;
-        result = new Vertex(a.x*this.x,a.y*this.y);
+    public Vector3D mult(Vector3D a) {
+        Vector3D result;
+        result = new Vector3D(a.x*this.x,a.y*this.y);
         return result;
     }
 
-    public Vertex par(Vertex a) {
-        Vertex result;
-        result = new Vertex(this.x/a.x,this.y/a.y);
+    public Vector3D par(Vector3D a) {
+        Vector3D result;
+        result = new Vector3D(this.x/a.x,this.y/a.y);
         return result;
     }
 
-    public Vertex mult(double b) {
-        Vertex result;
-        result = new Vertex(this.x*b,this.y*b);
+    public Vector3D mult(double b) {
+        Vector3D result;
+        result = new Vector3D(this.x*b,this.y*b);
         return result;
     }
 
-    public Vertex par(double a) {
-        Vertex result;
-        result = new Vertex(this.x/a,this.y/a);
+    public Vector3D par(double a) {
+        Vector3D result;
+        result = new Vector3D(this.x/a,this.y/a);
         return result;
     }
 
-    public Vertex add(double num) {
-        Vertex result;
-        result = new Vertex(this.x+num, this.y+num);
+    public Vector3D add(double num) {
+        Vector3D result;
+        result = new Vector3D(this.x+num, this.y+num);
         return result;
     }
 
-    public Vertex add(Vertex v) {
-        Vertex result;
-        result = new Vertex(this.x+v.x,this.y+v.y);
+    public Vector3D add(Vector3D v) {
+        Vector3D result;
+        result = new Vector3D(this.x+v.x,this.y+v.y);
         return result;
     }
 
@@ -123,16 +123,16 @@ public class Vertex {
         return this.x*this.x+this.y*this.y;
     }
 
-    public static double getDistance(Vertex a, Vertex b) {
+    public static double getDistance(Vector3D a, Vector3D b) {
         return Math.sqrt(Math.pow(a.x-b.x,2.0) + Math.pow(a.y - b.y, 2.0) + Math.pow(a.z - b.z, 2.0));
     }
 
-    public static double dotProduct(Vertex a, Vertex b) {
+    public static double dotProduct(Vector3D a, Vector3D b) {
         return (a.x * b.x + a.y * b.y + a.z * b.z);
     }
 
-    public static Vertex crossProduct(Vertex a, Vertex b) {
-        return new Vertex(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+    public static Vector3D crossProduct(Vector3D a, Vector3D b) {
+        return new Vector3D(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
     }
 
     @Override

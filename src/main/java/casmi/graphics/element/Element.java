@@ -31,7 +31,7 @@ import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
 import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.Mask;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Element class. Wrap JOGL and make it easy to use.
@@ -43,15 +43,15 @@ abstract public class Element implements Cloneable, Renderable {
 
     protected boolean useProjection = true;
 
-	private double strokeRed   = 0.0;
-	private double strokeGreen = 0.0;
-	private double strokeBlue  = 0.0;
-	private double strokeAlpha = 1.0;
+    protected double strokeRed   = 0.0;
+	protected double strokeGreen = 0.0;
+	protected double strokeBlue  = 0.0;
+	protected double strokeAlpha = 1.0;
 
-	private double fillRed   = 1.0;
-	private double fillGreen = 1.0;
-	private double fillBlue  = 1.0;
-	private double fillAlpha = 1.0;
+	protected double fillRed   = 1.0;
+	protected double fillGreen = 1.0;
+	protected double fillBlue  = 1.0;
+	protected double fillAlpha = 1.0;
 
 	private double sceneA = 1.0;
 
@@ -70,8 +70,8 @@ abstract public class Element implements Cloneable, Renderable {
 	protected double scaleZ = 1.0;
 
 	protected double rotate = 0.0;
-	protected double tAS;
-	protected double tAF;
+//	protected double tAS;
+//	protected double tAF;
 
 	protected Color strokeColor      = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha);
 	protected Color fillColor        = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha);
@@ -152,7 +152,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setStrokeColor(Color color) {
 		this.strokeColor = color;
-		this.tAS = color.getAlpha();
+		this.strokeAlpha = color.getAlpha();
 	}
 
 	/**
@@ -163,7 +163,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setStrokeColorAlpha(double alpha) {
 		this.strokeColor.setAlpha(alpha);
-		this.tAS = alpha;
+		this.strokeAlpha = alpha;
 	}
 
 	/**
@@ -186,7 +186,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setStrokeColor(ColorSet colorSet, double alpha) {
 	    strokeColor = new RGBColor(colorSet);
-	    this.tAS = alpha;
+	    this.strokeAlpha = alpha;
 	}
 
 	/**
@@ -207,7 +207,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setFillColor(Color color) {
 		this.fillColor = color;
-		this.tAF = color.getAlpha();
+		this.fillAlpha = color.getAlpha();
 	}
 
 	/**
@@ -218,7 +218,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setFillColorAlpha(double alpha) {
 		this.fillColor.setAlpha(alpha);
-		this.tAF = alpha;
+		this.fillAlpha = alpha;
 	}
 
 	/**
@@ -241,7 +241,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void setFillColor(ColorSet colorSet, double alpha) {
 		this.fillColor = new RGBColor(colorSet, alpha);
-		this.tAF = alpha;
+		this.fillAlpha = alpha;
 	}
 
 	public boolean isStroke() {
@@ -294,7 +294,7 @@ abstract public class Element implements Cloneable, Renderable {
 	public Color getSceneStrokeColor() {
 		sceneStrokeColor = strokeColor.clone();
 		if (tween) {
-			sceneStrokeColor.setAlpha(gettAS() * sceneA);
+			sceneStrokeColor.setAlpha(this.strokeAlpha * sceneA);
 		} else {
 			sceneStrokeColor.setAlpha(strokeColor.getAlpha() * sceneA);
 		}
@@ -304,7 +304,7 @@ abstract public class Element implements Cloneable, Renderable {
 	public Color getSceneFillColor() {
 	    sceneFillColor = fillColor.clone();
 		if (tween) {
-			sceneFillColor.setAlpha(gettAF() * sceneA);
+			sceneFillColor.setAlpha(this.fillAlpha * sceneA);
 		} else {
 			this.sceneFillColor.setAlpha(fillColor.getAlpha() * sceneA);
 		}
@@ -314,7 +314,7 @@ abstract public class Element implements Cloneable, Renderable {
 	public Color getSceneColor(Color color) {
 	    sceneFillColor = color.clone();
 		if (tween) {
-			sceneFillColor.setAlpha(gettAF() * sceneA);
+			sceneFillColor.setAlpha(this.fillAlpha * sceneA);
 		} else {
 			sceneFillColor.setAlpha(color.getAlpha() * sceneA);
 		}
@@ -347,20 +347,20 @@ abstract public class Element implements Cloneable, Renderable {
 	    gl.glRotated(rotateY, 0.0, 1.0, 0.0);
 	}
 
-	public double gettAS() {
-		return tAS;
+	public double getStrokeAlpha() {
+		return strokeAlpha;
 	}
 
-	public void settAS(double tAS) {
-		this.tAS = tAS;
+	public void setStrokeAlpha(double strokeAlpha) {
+		this.strokeAlpha = strokeAlpha;
 	}
 
-	public double gettAF() {
-		return tAF;
+	public double getFillAlpha() {
+		return fillAlpha;
 	}
 
-	public void settAF(double tAF) {
-		this.tAF = tAF;
+	public void setFillAlpha(double fillAlpha) {
+		this.fillAlpha = fillAlpha;
 	}
 
 	/**Gets x-coordinate of the Element.
@@ -395,8 +395,8 @@ abstract public class Element implements Cloneable, Renderable {
 	 * @return
 	 * 				the position of the Element
 	 */
-	public Vertex getPosition() {
-		Vertex v = new Vertex(x, y, z);
+	public Vector3D getPosition() {
+		Vector3D v = new Vector3D(x, y, z);
 		return v;
 	}
 
@@ -459,7 +459,7 @@ abstract public class Element implements Cloneable, Renderable {
 	 * @param v
 	 * 				the vertex of the position of the Element
 	 */
-	public void setPosition(Vertex v) {
+	public void setPosition(Vector3D v) {
 		this.x = v.getX();
 		this.y = v.getY();
 		this.z = v.getZ();

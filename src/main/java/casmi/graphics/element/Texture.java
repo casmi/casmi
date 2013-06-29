@@ -28,7 +28,7 @@ import javax.media.opengl.glu.GLU;
 
 import casmi.image.Image;
 import casmi.image.ImageMode;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Texture class. Wrap JOGL and make it easy to use.
@@ -59,7 +59,7 @@ public class Texture extends Element implements Renderable, Reset {
     private ArrayList<Double> nx;
     private ArrayList<Double> ny;
 
-    private Vertex tmpV = new Vertex();
+    private Vector3D tmpV = new Vector3D();
     private boolean init = true;
 
     protected boolean loadFlag = false;
@@ -212,7 +212,7 @@ public class Texture extends Element implements Renderable, Reset {
      * @param nx The x-coordinate of the mapping point.
      * @param ny The y-coordinate of the mapping point.
      */
-    public void addVertex(Vertex v, double nx, double ny) {
+    public void addVertex(Vector3D v, double nx, double ny) {
         mode = LINES_3D;
         this.xList.add(v.getX());
         this.yList.add(v.getY());
@@ -227,7 +227,7 @@ public class Texture extends Element implements Renderable, Reset {
      * @param i The index of the point.
      * @return The vertex point of the texture map.
      */
-    public Vertex getTextureVertex(int i) {
+    public Vector3D getTextureVertex(int i) {
         tmpV.setX(xList.get(i));
         tmpV.setY(yList.get(i));
         tmpV.setZ(zList.get(i));

@@ -25,6 +25,7 @@ package casmi.tween;
  * class.
  *
  * @author Y. Ban
+ * @author Takashi AOKI <federkasten@me.com>
  */
 public interface TweenEquation {
 

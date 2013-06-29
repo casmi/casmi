@@ -28,7 +28,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Polygon class. Wrap JOGL and make it easy to use.
@@ -47,7 +47,7 @@ public class Polygon extends Element implements Renderable {
 
     private int size;
 
-    private Vertex tmpV = new Vertex(0, 0, 0);
+    private Vector3D tmpV = new Vector3D(0, 0, 0);
 
     private ArrayList<Color> cornerColor;
 
@@ -98,7 +98,7 @@ public class Polygon extends Element implements Renderable {
      *
      * @param v The coordinates of a new added corner.
      */
-    public void vertex(Vertex v) {
+    public void vertex(Vector3D v) {
         MODE = LINES_3D;
         this.cornerX.add(v.getX());
         this.cornerY.add(v.getY());
@@ -113,7 +113,7 @@ public class Polygon extends Element implements Renderable {
      * @param index The index number of the corner.
      * @return The coordinates of the corner.
      */
-    public Vertex getVertex(int index) {
+    public Vector3D getVertex(int index) {
         tmpV.setX(cornerX.get(index));
         tmpV.setY(cornerY.get(index));
         tmpV.setZ(cornerZ.get(index));

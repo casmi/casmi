@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Line class. Wrap JOGL and make it easy to use.
@@ -97,7 +97,7 @@ public class Line extends Element implements Renderable {
      * @param v1 The coordinates for the first point.
      * @param v2 The coordinates for the second point.
      */
-    public Line(Vertex v1, Vertex v2) {
+    public Line(Vector3D v1, Vector3D v2) {
         this.MODE = LINES_3D;
         this.x1 = v1.getX();
         this.y1 = v1.getY();
@@ -257,7 +257,7 @@ public class Line extends Element implements Renderable {
      * @param v1 The coordinates for the first anchor point.
      * @param v2 The coordinates for the first control point.
      */
-    public void set(Vertex v1, Vertex v2) {
+    public void set(Vector3D v1, Vector3D v2) {
         this.MODE = LINES;
         this.x1 = v1.getX();
         this.y1 = v1.getY();
@@ -523,8 +523,8 @@ public class Line extends Element implements Renderable {
      * @param index The index of the point; if the index is 0, the point is first.
      * @return The coordinates of the point.
      */
-    public Vertex getCorner(int index) {
-        Vertex v = new Vertex();
+    public Vector3D getCorner(int index) {
+        Vector3D v = new Vector3D();
         if (index <= 0)
             v.set(x1, y1, z1);
         else

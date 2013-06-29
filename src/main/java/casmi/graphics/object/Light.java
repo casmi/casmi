@@ -27,7 +27,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Light object class.
@@ -37,9 +37,9 @@ import casmi.matrix.Vertex;
  */
 public class Light extends Element implements ObjectRender {
 
-    private Vertex dv;
+    private Vector3D dv;
     private int index;
-    private Vertex v;
+    private Vector3D v;
     private Color color;
     private double angle = 30.0;
     private LightMode lightMode = LightMode.NONE;
@@ -74,8 +74,8 @@ public class Light extends Element implements ObjectRender {
      */
     public Light(LightMode lightMode) {
         this.lightMode = lightMode;
-        this.v         = new Vertex();
-        this.dv        = new Vertex();
+        this.v         = new Vector3D();
+        this.dv        = new Vector3D();
         this.color     = new RGBColor(0.0, 0.0, 0.0);
     }
 

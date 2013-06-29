@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Bezier class. Wrap JOGL and make it easy to use.
@@ -106,7 +106,7 @@ public class Bezier extends Element implements Renderable {
      * @param v3 The coordinates for the second control point.
      * @param v4 The coordinates for the second ancor point.
      */
-    public Bezier(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    public Bezier(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
         this(v1.getX(), v1.getY(), v1.getZ(), v2.getX(), v2.getY(), v2.getZ(), v3.getX(), v3.getY(), v3.getZ(), v4.getX(), v4.getY(), v4.getZ());
     }
 
@@ -118,7 +118,7 @@ public class Bezier extends Element implements Renderable {
      * @param v3 The coordinates for the second control point.
      * @param v4 The coordinates for the second anchor point.
      */
-    public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    public void set(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
         this.points[0] = v1.getX();
         this.points[1] = v1.getY();
         this.points[2] = v1.getZ();
@@ -176,7 +176,7 @@ public class Bezier extends Element implements Renderable {
      *
      * @param v The coordinates of this node.
      */
-    public void setNode(int number, Vertex v) {
+    public void setNode(int number, Vector3D v) {
         setNode(number, v.getX(), v.getY(), v.getZ());
     }
 

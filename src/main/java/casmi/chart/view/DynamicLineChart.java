@@ -26,7 +26,7 @@ import casmi.chart.data.MatrixData2D;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Line;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * DynamicLineChart Class.
@@ -36,7 +36,7 @@ import casmi.matrix.Vertex;
 public class DynamicLineChart extends Chart {
 
     private List<Line> lines;
-    private List<Vertex> vertexs;
+    private List<Vector3D> vertexs;
     private RGBColor topColor;
     private RGBColor bottomColor;
     private boolean gradation;
@@ -72,7 +72,7 @@ public class DynamicLineChart extends Chart {
         useColor = true;
         gradation = true;
         lines = new ArrayList<Line>();
-        vertexs = new ArrayList<Vertex>();
+        vertexs = new ArrayList<Vector3D>();
         tweenMillSec = 3000;
 // TODO fix
 //        td = new TweenDouble();
@@ -93,7 +93,7 @@ public class DynamicLineChart extends Chart {
         xDivision = width / m.getSize();
         yDivision = height / (maxY - minY);
         for (int i = 0; i < this.m.getSize(); i++) {
-            Vertex v = new Vertex(xDivision * i, yDivision * (this.m.getDataY(i) - minY));
+            Vector3D v = new Vector3D(xDivision * i, yDivision * (this.m.getDataY(i) - minY));
             vertexs.add(v);
         }
     }

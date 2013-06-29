@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Arc class. Wrap JOGL and make it easy to use.
@@ -159,7 +159,7 @@ public class Arc extends Element implements Renderable {
      * @param radEnd The end degree of the Arc.
      * @param precision The precision of the Arc.
      */
-    public Arc(Vertex v, double r, double radStart, double radEnd, double precision) {
+    public Arc(Vector3D v, double r, double radStart, double radEnd, double precision) {
         this.x = v.getX();
         this.y = v.getY();
         this.w = r * 2;
@@ -179,7 +179,7 @@ public class Arc extends Element implements Renderable {
      * @param radStart The start degree of the Arc.
      * @param radEnd The end degree of the Arc.
      */
-    public Arc(Vertex v, double r, double radStart, double radEnd) {
+    public Arc(Vector3D v, double r, double radStart, double radEnd) {
         this.x = v.getX();
         this.y = v.getY();
         this.w = r * 2;

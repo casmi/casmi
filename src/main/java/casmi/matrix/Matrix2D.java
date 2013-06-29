@@ -261,8 +261,8 @@ public class Matrix2D implements Matrix {
     /**
      * Multiply the x and y coordinates of a Vertex against this matrix.
      */
-    public Vertex mult(Vertex source) {
-        Vertex result = new Vertex();
+    public Vector3D mult(Vector3D source) {
+        Vector3D result = new Vector3D();
         result.setX(m00 * source.getX() + m01 * source.getY() + m02);
         result.setY(m10 * source.getX() + m11 * source.getY() + m12);
         return result;

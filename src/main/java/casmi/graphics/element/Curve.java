@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Curve class. Wrap JOGL and make it easy to use.
@@ -176,7 +176,7 @@ public class Curve extends Element implements Renderable {
      * @param v3 The coordinates for the second control point.
      * @param v4 The coordinates for the second ancor point.
      */
-    public Curve(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    public Curve(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
         this.points[0] = (float)v1.getX();
         this.points[1] = (float)v1.getY();
         this.points[2] = (float)v1.getZ();
@@ -320,7 +320,7 @@ public class Curve extends Element implements Renderable {
      * @param v3 The coordinates for the second control point.
      * @param v4 The coordinates for the second ancor point.
      */
-    public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    public void set(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
         this.points[0] = (float)v1.getX();
         this.points[1] = (float)v1.getY();
         this.points[2] = (float)v1.getZ();
@@ -381,7 +381,7 @@ public class Curve extends Element implements Renderable {
      *
      * @param v The coordinates of this node.
      */
-    public void setNode(int number, Vertex v) {
+    public void setNode(int number, Vector3D v) {
         if (number <= 0) {
             number = 0;
         } else if (3 <= number) {

@@ -33,6 +33,6 @@ public enum AnimationTarget {
     ROTATION_X,
     ROTATION_Y,
     ROTATION_Z,
-    ALPHA, ALPHA_STROKE, ALPHA_FILL,
+    ALPHA_STROKE, ALPHA_FILL,
     SCALE_X, SCALE_Y, SCALE_Z,
 }

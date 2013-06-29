@@ -25,7 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.matrix.Vertex;
+import casmi.matrix.Vector3D;
 
 /**
  * Quad class. Wrap JOGL and make it easy to use.
@@ -82,7 +82,7 @@ public class Quad extends Element implements Renderable, Reset {
      * @param v3 The coordinates of the third corner.
      * @param v4 The coordinates of the fourth corner.
      */
-    public Quad(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    public Quad(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
         this.x1 = (float)v1.getX();
         this.y1 = (float)v1.getY();
         this.x2 = (float)v2.getX();
@@ -126,7 +126,7 @@ public class Quad extends Element implements Renderable, Reset {
      * @param v3 The coordinates of the third corner.
      * @param v4 The coordinates of the fourth corner.
      */
-    public void set(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    public void set(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
         this.x1 = (float)v1.getX();
         this.y1 = (float)v1.getY();
         this.x2 = (float)v2.getX();
@@ -193,7 +193,7 @@ public class Quad extends Element implements Renderable, Reset {
      * @param index The index of a corner.
      * @param v The coordinates of a corner.
      */
-    public void setConer(int index, Vertex v) {
+    public void setConer(int index, Vector3D v) {
         if (index <= 0) {
             this.x1 = v.getX();
             this.y1 = v.getY();
@@ -215,8 +215,8 @@ public class Quad extends Element implements Renderable, Reset {
      *
      * @param index The index of a corner.
      */
-    public Vertex getConer(int index) {
-        Vertex v = new Vertex(0, 0, 0);
+    public Vector3D getConer(int index) {
+        Vector3D v = new Vector3D(0, 0, 0);
 
         if (index <= 0) {
             v.set(this.x1, this.y1);

@@ -27,6 +27,7 @@ import casmi.graphics.Graphics;
  * A TweenManager let you pack many tweens together, and update them at once.
  *
  * @author Y. Ban
+ * @author Takashi AOKI <federkasten@me.com>
  *
  */
 public class TweenerManager {
