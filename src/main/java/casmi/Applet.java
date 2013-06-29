@@ -795,14 +795,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         getTweenManager().add(t);
     }
 
-//    public void addTween(TweenSerialGroup g) {
-//        getTweenManager().add(g);
-//    }
-//
-//    public void addTween(TweenParallelGroup g) {
-//        getTweenManager().add(g);
-//    }
-
     public void removeTweener(Tweener t) {
         getTweenManager().remove(t);
     }
@@ -811,7 +803,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.setMask(mask);
     }
 
-    public void clearTween(){
+    public void clearTweeners(){
         tweenerManager = null;
         rootObject.clearTweenManager();
     }
@@ -829,18 +821,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    public void setRotation(double angle, double x,double y, double z) {
        rootObject.setRotation(angle, x, y, z);
    }
-
-//   public void enableBlurShader(){
-//       rootObject.enableBlur(this.width, this.height);
-//   }
-//
-//   public boolean isBlur() {
-//       return rootObject.isRootBlur();
-//   }
-//
-//   public void disableBlurShader() {
-//       rootObject.setRootBlur(false);
-//   }
 
    public void addObject(Object obj) {
        if(rootObjectInit){
@@ -890,35 +870,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     public void clearObject() {
         rootObject.clear();
-    }
-
-    // TODO these(addUpdateObject/getUpdateObject/removeUpdateObject/clearUpdateObject) seem to be useless methods
-    public void addUpdateObject(Updatable obj) {
-        addUpdateObject(0, obj);
-    }
-
-    public void addUpdateObject(int index, Updatable obj) {
-        if (obj instanceof Updatable) {
-            updateObjectList.add(index, obj);
-        } else {
-            throw new CasmiRuntimeException("The added object is not updatable");
-        }
-    }
-
-    public Updatable getUpdateObject(int index) {
-        return updateObjectList.get(index);
-    }
-
-    public void removeUpdateObject(int index) {
-        updateObjectList.remove(index);
-    }
-
-    public void removeUpdateObject(Updatable obj) {
-        updateObjectList.remove(obj);
-    }
-
-    public void clearUpdateObject() {
-        updateObjectList.clear();
     }
 
     public void setPerspective() {
