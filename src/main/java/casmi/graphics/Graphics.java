@@ -29,7 +29,6 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Renderable;
-import casmi.graphics.group.GroupRender;
 import casmi.graphics.object.ObjectRender;
 import casmi.image.Image;
 import casmi.matrix.Vector3D;
@@ -62,10 +61,7 @@ public class Graphics {
 
         r.setAlpha(sceneAlpha);
 
-        if (r instanceof GroupRender) {
-            GroupRender gr = (GroupRender)r;
-            gr.render(this);
-        } else if (r instanceof ObjectRender) {
+        if (r instanceof ObjectRender) {
             ObjectRender or = (ObjectRender)r;
             or.render(this);
         } else {
