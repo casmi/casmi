@@ -33,8 +33,8 @@ import casmi.Keyboard;
 import casmi.Mouse;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Reset;
-import casmi.tween.Tween;
 import casmi.tween.TweenEquation;
+import casmi.tween.Tweener;
 import casmi.tween.equations.Linear;
 import casmi.ui.PopupMenu;
 
@@ -58,7 +58,7 @@ public class Timeline implements TimelineRender, Reset {
 
 //    TweenDouble td = new TweenDouble(0.0f);
 
-    Tween tween;
+    Tweener tweener;
 
     private List<Scene> sceneList;
     private List<Scene> tmpSceneList;
@@ -175,15 +175,15 @@ public class Timeline implements TimelineRender, Reset {
         dissolve = true;
         setEndScene(true);
 
-        if(tween!=null)
-            this.getApplet().removeTween(tween);
-        tween = null;
+        if(tweener != null)
+            this.getApplet().removeTweener(tweener);
+        tweener = null;
 
 // TODO fix
 //        td.setValue(0);
 //        tween = Tween.to(td, (int)diss.getTime()*1000, diss.getEquation()).target(1.0);
 
-        this.getApplet().addTween(tween);
+        this.getApplet().addTweener(tweener);
 
         task.cancel();
         task = null;
@@ -242,7 +242,7 @@ public class Timeline implements TimelineRender, Reset {
      *                     The dissolve time.
      */
     public void goNextScene(String idName, DissolveMode mode, double time) {
-        goNextScene(idName, mode, time, Linear.INOUT);
+        goNextScene(idName, mode, time, new Linear());
     }
 
     /**
@@ -323,7 +323,7 @@ public class Timeline implements TimelineRender, Reset {
      *
      */
     public void appendScene(Scene scene, DissolveMode mode, double dissolveTime) {
-        appendScene(scene, mode, dissolveTime, Linear.INOUT);
+        appendScene(scene, mode, dissolveTime, new Linear());
     }
 
     /**

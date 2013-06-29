@@ -21,20 +21,9 @@ package casmi.tween.equations;
 
 import casmi.tween.TweenEquation;
 
-/**
- * Easing equations based on Robert Penner's work:
- * http://robertpenner.com/easing/
- */
-public class Linear {
-    public static final TweenEquation INOUT = new TweenEquation() {
-        @Override
-        public final float compute(float t, float b, float c, float d) {
-            return c * t/d + b;
-        }
-
-        @Override
-        public String toString() {
-            return "Linear.INOUT";
-        }
-    };
+public class Linear implements TweenEquation {
+    @Override
+    public final double compute(double t, double b, double c, double d) {
+        return c * t/d + b;
+    }
 }

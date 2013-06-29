@@ -19,6 +19,7 @@
 
 package casmi.tween;
 
+
 /**
  * TweenCallback interface for Tween.
  * @author Y. Ban
@@ -27,5 +28,5 @@ package casmi.tween;
  */
 public interface TweenCallback {
 
-    void run(TweenCallbackTypes eventType, Tween tween);
+    void run(TweenCallbackTypes eventType, Tweener tween);
 }

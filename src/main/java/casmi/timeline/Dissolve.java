@@ -38,7 +38,7 @@ public class Dissolve {
 
     private DissolveMode mode = DissolveMode.CROSS;
 
-    private TweenEquation equation = Linear.INOUT;
+    private TweenEquation equation = new Linear();
     protected double width, height;
 
     public Dissolve(DissolveMode mode, double time) {

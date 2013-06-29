@@ -1,7 +1,7 @@
 /*
  *   casmi
  *   http://casmi.github.com/
- *   Copyright (C) 2011-2012, Xcoo, Inc.
+ *   Copyright (C) 2011, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -17,16 +17,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.tween;
+package casmi.tween.equations;
 
-/**
- * @author Y. Ban
- */
-public interface Groupable {
+import casmi.tween.TweenEquation;
 
-    long getDuration();
 
-    long getDelay();
+public class BackOut implements TweenEquation {
 
-    Groupable addDelay(long millis);
+    @Override
+    public final double compute(double t, double b, double c, double d) {
+        float s = 1.70158f;
+        return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+    }
 }

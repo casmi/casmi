@@ -26,7 +26,7 @@ package casmi.tween;
  *
  * @author Y. Ban
  */
-public abstract class TweenEquation {
+public interface TweenEquation {
 
     /**
      * Computes the next value of the interpolation.
@@ -36,14 +36,5 @@ public abstract class TweenEquation {
      * @param d Total duration, in seconds.
      * @return float
      */
-    public abstract float compute(float t, float b, float c, float d);
-
-    /**
-     * Returns true if the given string is the name of this equation (the name
-     * is returned in the toString() method, don't forget to override it).
-     * This method is usually used to save/load a tween to/from a text file.
-     */
-    public boolean isValueOf(String str) {
-        return str.equals(toString());
-    }
+    double compute(double t, double b, double c, double d);
 }

@@ -42,7 +42,7 @@ import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
-import casmi.tween.TweenManager;
+import casmi.tween.TweenerManager;
 
 import com.jogamp.common.nio.Buffers;
 
@@ -67,7 +67,6 @@ public class RootObject extends GraphicsObject {
         lights = new CopyOnWriteArrayList<Light>();
         cameras = new CopyOnWriteArrayList<Camera>();
         projections = new CopyOnWriteArrayList<Projection>();
-        tmList = new CopyOnWriteArrayList<TweenManager>();
         selectionList = new CopyOnWriteArrayList<Integer>();
         mouseEventList = new CopyOnWriteArrayList<MouseEvent>();
         selectBuffer = Buffers.newDirectIntBuffer(selectionBufSize);
@@ -81,7 +80,6 @@ public class RootObject extends GraphicsObject {
         lights = new CopyOnWriteArrayList<Light>();
         cameras = new CopyOnWriteArrayList<Camera>();
         projections = new CopyOnWriteArrayList<Projection>();
-        tmList = new CopyOnWriteArrayList<TweenManager>();
         selectionList = new CopyOnWriteArrayList<Integer>();
         selectBuffer = Buffers.newDirectIntBuffer(NO_SELECTIONBUFF);
         selectBuff = new int[NO_SELECTIONBUFF];
@@ -117,11 +115,6 @@ public class RootObject extends GraphicsObject {
     }
 
     @Override
-    public void addTweenManager(TweenManager r) {
-        tmList.add(r);
-    }
-
-    @Override
     public void clearAllObjects() {
         objectList = null;
         objectList = new CopyOnWriteArrayList<Object>();
@@ -148,11 +141,6 @@ public class RootObject extends GraphicsObject {
     }
 
     @Override
-    public void removeTweenManager(int index) {
-        tmList.remove(index);
-    }
-
-    @Override
     public Object get(int index) {
         return objectList.get(index);
     }
@@ -170,11 +158,6 @@ public class RootObject extends GraphicsObject {
     @Override
     public Object getProjection(int index) {
         return projections.get(index);
-    }
-
-    @Override
-    public TweenManager getTweenManager(int index) {
-        return tmList.get(index);
     }
 
     @Override
@@ -215,11 +198,6 @@ public class RootObject extends GraphicsObject {
     @Override
     public void clearPerse() {
         projections.clear();
-    }
-
-    @Override
-    public void clearTweenManager() {
-        tmList.clear();
     }
 
     /**
@@ -267,7 +245,7 @@ public class RootObject extends GraphicsObject {
             g.getGL().glInitNames();
             g.getGL().glPushName(-1);
 
-            drawTweenManager(g);
+            renderTweenManager(g);
 
             g.getGL().glMatrixMode(GL2.GL_PROJECTION);
             g.getGL().glLoadIdentity();
@@ -328,7 +306,7 @@ public class RootObject extends GraphicsObject {
 
             if (bg != null) bg.render(g);
 
-            drawTweenManager(g);
+            renderTweenManager(g);
             drawProjection(g, false);
             drawCamera(g);
             drawLight(g);
@@ -400,12 +378,6 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    private final void drawTweenManager(Graphics g) {
-        for (TweenManager tm : tmList) {
-            g.render(tm);
-        }
-    }
-
     private final int drawObject(Graphics g,
         boolean selection, double mouseX, double mouseY,
         int selectionIndex, int selectedIndex) {
@@ -469,8 +441,8 @@ public class RootObject extends GraphicsObject {
             } else if (obj instanceof TimelineRender) {
                 TimelineRender tr = (TimelineRender)obj;
                 tr.render(g);
-            } else if (obj instanceof TweenManager) {
-                TweenManager tm = (TweenManager)obj;
+            } else if (obj instanceof TweenerManager) {
+                TweenerManager tm = (TweenerManager)obj;
                 if (!selection) tm.render(g);
             } else {
                 Element e = (Element)obj;

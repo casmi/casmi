@@ -1,7 +1,7 @@
 /*
  *   casmi
  *   http://casmi.github.com/
- *   Copyright (C) 2011-2012, Xcoo, Inc.
+ *   Copyright (C) 2011, Xcoo, Inc.
  *
  *  casmi is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -17,29 +17,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.tween;
+package casmi.tween.equations;
 
-import java.util.List;
+import casmi.tween.TweenEquation;
 
-import casmi.graphics.Graphics;
 
-/**
- * The Tweenable interface lets you interpolate any attribute from any object.
- * Just implement it as you want and let the engine do the interpolation for
- * you.
- *
- * @author Y. Ban
- *
- * @see Tween
- * @see Tweener
- */
-public interface Tweenable {
+public class SinusoidalInOut implements TweenEquation {
 
-    List<Float> getTweenValues(TweenType tweenType);
-
-    void update(Graphics g, TweenType tweenType, List<Float> newValues);
-
-    void end(Graphics g, TweenType tweenType);
-
-    void render(Graphics g, TweenType tweenType);
+    @Override
+    public final double compute(double t, double b, double c, double d) {
+        return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+    }
 }

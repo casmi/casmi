@@ -32,10 +32,10 @@ import casmi.graphics.element.Text;
 import casmi.graphics.element.TextAlign;
 import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;
-import casmi.tween.Tween;
 import casmi.tween.TweenCallback;
 import casmi.tween.TweenCallbackTypes;
-import casmi.tween.TweenManager;
+import casmi.tween.Tweener;
+import casmi.tween.TweenerManager;
 import casmi.util.Random;
 
 /**
@@ -51,7 +51,7 @@ public class DynamicCircleChart extends Group {
     private List<Text> textList = new ArrayList<Text>();
     private Font indexNameFont;
     private boolean tweenstart = false;
-    private TweenManager manager;
+    private TweenerManager manager;
     private MatrixData2D data;
     private double radius;
     private ChartTurnType turn = ChartTurnType.CLOCKWISE;
@@ -90,7 +90,7 @@ public class DynamicCircleChart extends Group {
         tweencallback = new TweenCallback() {
 
             @Override
-            public void run(TweenCallbackTypes eventType, Tween tween) {
+            public void run(TweenCallbackTypes eventType, Tweener tween) {
                 arclist.get(arclist.size() - 1).setEnd(450.0);
             }
         };

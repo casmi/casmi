@@ -27,8 +27,8 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.font.Font;
 import casmi.graphics.group.Group;
+import casmi.tween.TweenerManager;
 import casmi.tween.Tweener;
-import casmi.tween.TweenManager;
 
 /**
  * Chart Class.
@@ -44,7 +44,7 @@ public class Chart extends Group {
     protected double minY, maxY;
     protected boolean tweenstart = false;
     protected boolean tweenreset = false;
-    protected TweenManager manager;
+    protected TweenerManager manager;
     protected int tweenMillSec = 1000;
     protected Tweener tw;
     protected List<Tweener> twlist = new ArrayList<Tweener>();

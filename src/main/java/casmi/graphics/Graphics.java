@@ -34,7 +34,7 @@ import casmi.graphics.object.ObjectRender;
 import casmi.image.Image;
 import casmi.matrix.Vertex;
 import casmi.timeline.TimelineRender;
-import casmi.tween.TweenManager;
+import casmi.tween.TweenerManager;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -56,6 +56,10 @@ public class Graphics {
 	private double sceneAlpha = 1.0;
 
     public void render(Renderable r) {
+        if (r == null) {
+            return;
+        }
+
         r.setAlpha(sceneAlpha);
 
         if (r instanceof GroupRender) {
@@ -70,11 +74,15 @@ public class Graphics {
 	}
 
 	public void render(TimelineRender tr) {
-		tr.render(this);
+	    if (tr != null) {
+	        tr.render(this);
+	    }
 	}
 
-	public void render(TweenManager tm) {
-		tm.render(this);
+	public void render(TweenerManager tm) {
+	    if (tm != null) {
+	        tm.render(this);
+	    }
 	}
 
 

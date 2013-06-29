@@ -28,13 +28,6 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Rect;
-import casmi.tween.Tween;
-import casmi.tween.Tweener;
-import casmi.tween.TweenManager;
-import casmi.tween.TweenParallelGroup;
-import casmi.tween.TweenSerialGroup;
-import casmi.tween.TweenType;
-import casmi.tween.equations.Linear;
 
 /**
  * DynamicBarChart Class.
@@ -140,46 +133,46 @@ public class DynamicBarChart extends Chart {
     }
 
     private void animationUpdate() {
-        if (tweenreset) {
-            tweenreset = false;
-            for (Tweener t : twlist) {
-                t.reset();
-            }
-        }
-
-        if (tweenstart) {
-            tweenstart = false;
-            double barSize = width / m.getSize();
-            tweenstart = false;
-            manager = new TweenManager();
-            addTweenManager(manager);
-
-            tw = null;
-
-            int count = 0;
-            for (Rect r : rlist) {
-                tw = new Tweener(r);
-                twlist.add(tw);
-                TweenSerialGroup tsg = null;
-                if (tweenType == DynamicBarChartTweenType.AT_ONCE) {
-                    tsg = TweenSerialGroup.create(
-                        TweenParallelGroup.create(
-                            Tween.to(tw, TweenType.SCALE_Y, tweenMillSec, Linear.INOUT).target((float)m.getDataY(count)),
-                            Tween.to(tw, TweenType.POSITION_3D, tweenMillSec, Linear.INOUT).target((count + 0.5) * barSize, (float)(m.getDataY(count) / 2.0), 0)
-                            )
-                        );
-                } else if (tweenType == DynamicBarChartTweenType.ORDER) {
-                    tsg = TweenSerialGroup.create(
-                        TweenParallelGroup.create(
-                            Tween.to(tw, TweenType.SCALE_Y, tweenMillSec, Linear.INOUT).target((float)m.getDataY(count)).addDelay(delayMillSec * count),
-                            Tween.to(tw, TweenType.POSITION_3D, tweenMillSec, Linear.INOUT).target((count + 0.5) * barSize, (float)(m.getDataY(count) / 2.0), 0).addDelay(delayMillSec * count)
-                            )
-                        );
-                }
-                manager.add(tsg);
-                count++;
-            }
-        }
+//        if (tweenreset) {
+//            tweenreset = false;
+//            for (Tweener t : twlist) {
+//                t.reset();
+//            }
+//        }
+//
+//        if (tweenstart) {
+//            tweenstart = false;
+//            double barSize = width / m.getSize();
+//            tweenstart = false;
+//            manager = new TweenerManager();
+//            addTweenManager(manager);
+//
+//            tw = null;
+//
+//            int count = 0;
+//            for (Rect r : rlist) {
+//                tw = new Tweener(r);
+//                twlist.add(tw);
+//                TweenSerialGroup tsg = null;
+//                if (tweenType == DynamicBarChartTweenType.AT_ONCE) {
+//                    tsg = TweenSerialGroup.create(
+//                        TweenParallelGroup.create(
+//                            Tween.to(tw, TweenType.SCALE_Y, tweenMillSec, Linear.INOUT).target((float)m.getDataY(count)),
+//                            Tween.to(tw, TweenType.POSITION_3D, tweenMillSec, Linear.INOUT).target((count + 0.5) * barSize, (float)(m.getDataY(count) / 2.0), 0)
+//                            )
+//                        );
+//                } else if (tweenType == DynamicBarChartTweenType.ORDER) {
+//                    tsg = TweenSerialGroup.create(
+//                        TweenParallelGroup.create(
+//                            Tween.to(tw, TweenType.SCALE_Y, tweenMillSec, Linear.INOUT).target((float)m.getDataY(count)).addDelay(delayMillSec * count),
+//                            Tween.to(tw, TweenType.POSITION_3D, tweenMillSec, Linear.INOUT).target((count + 0.5) * barSize, (float)(m.getDataY(count) / 2.0), 0).addDelay(delayMillSec * count)
+//                            )
+//                        );
+//                }
+//                manager.add(tsg);
+//                count++;
+//            }
+//        }
     }
 
     @Override

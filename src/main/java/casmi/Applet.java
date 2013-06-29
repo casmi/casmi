@@ -69,10 +69,8 @@ import casmi.graphics.object.RootObject;
 import casmi.image.ImageType;
 import casmi.timeline.Timeline;
 import casmi.timeline.TimelineRender;
-import casmi.tween.Tween;
-import casmi.tween.TweenManager;
-import casmi.tween.TweenParallelGroup;
-import casmi.tween.TweenSerialGroup;
+import casmi.tween.Tweener;
+import casmi.tween.TweenerManager;
 import casmi.ui.PopupMenu;
 import casmi.util.FileUtil;
 
@@ -782,30 +780,30 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         }
     }
 
-    private static TweenManager tweenManager = null;
+    private static TweenerManager tweenerManager = null;
 
-    private TweenManager getTweenManager() {
-    	if (tweenManager == null) {
-    		tweenManager = new TweenManager();
-    		rootObject.addTweenManager(tweenManager);
+    private TweenerManager getTweenManager() {
+    	if (tweenerManager == null) {
+    		tweenerManager = new TweenerManager();
+    		rootObject.setTweenManager(tweenerManager);
     	}
 
-    	return tweenManager;
+    	return tweenerManager;
     }
 
-    public void addTween(Tween t) {
+    public void addTweener(Tweener t) {
         getTweenManager().add(t);
     }
 
-    public void addTween(TweenSerialGroup g) {
-        getTweenManager().add(g);
-    }
+//    public void addTween(TweenSerialGroup g) {
+//        getTweenManager().add(g);
+//    }
+//
+//    public void addTween(TweenParallelGroup g) {
+//        getTweenManager().add(g);
+//    }
 
-    public void addTween(TweenParallelGroup g) {
-        getTweenManager().add(g);
-    }
-
-    public void removeTween(Tween t) {
+    public void removeTweener(Tweener t) {
         getTweenManager().remove(t);
     }
 
@@ -814,7 +812,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void clearTween(){
-        tweenManager = null;
+        tweenerManager = null;
         rootObject.clearTweenManager();
     }
 

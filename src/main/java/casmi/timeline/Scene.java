@@ -33,11 +33,8 @@ import casmi.graphics.object.Mask;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.graphics.object.RootObject;
-import casmi.tween.Tween;
 import casmi.tween.TweenEquation;
-import casmi.tween.TweenManager;
-import casmi.tween.TweenParallelGroup;
-import casmi.tween.TweenSerialGroup;
+import casmi.tween.TweenerManager;
 import casmi.ui.PopupMenu;
 
 /**
@@ -53,7 +50,7 @@ abstract public class Scene extends RootObject {
     private boolean hasDissolve = false;
     private Timeline rootTimeline;
     private Dissolve dissolve;
-    private TweenManager tweenManager;
+    private TweenerManager tweenManager;
 
     public Scene(String id) {
         super();
@@ -171,16 +168,6 @@ abstract public class Scene extends RootObject {
         return rootTimeline.getMouse().getPrevY();
     }
 
-    @Deprecated
-    public int getPreMouseX() {
-        return rootTimeline.getMouse().getPrevX();
-    }
-
-    @Deprecated
-    public int getPreMouseY() {
-        return rootTimeline.getMouse().getPrevY();
-    }
-
     public int getMouseX() {
         return rootTimeline.getMouse().getX();
     }
@@ -283,27 +270,6 @@ abstract public class Scene extends RootObject {
 
     public void setDissolve(Dissolve dissolve) {
         this.dissolve = dissolve;
-    }
-
-    private TweenManager getTweenManager() {
-        if (tweenManager == null) {
-            tweenManager = new TweenManager();
-            this.addTweenManager(tweenManager);
-        }
-
-        return tweenManager;
-    }
-
-    public void addTween(Tween t) {
-        getTweenManager().add(t);
-    }
-
-    public void addTween(TweenSerialGroup g) {
-        getTweenManager().add(g);
-    }
-
-    public void addTween(TweenParallelGroup g) {
-        getTweenManager().add(g);
     }
 
     public void clearTween(){

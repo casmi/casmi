@@ -21,7 +21,7 @@ import casmi.graphics.element.Reset;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
 import casmi.timeline.TimelineRender;
-import casmi.tween.TweenManager;
+import casmi.tween.TweenerManager;
 
 /**
  * Graphics Object
@@ -41,7 +41,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
     protected List<Camera> cameras;
     protected List<Projection> projections;
 
-    protected List<TweenManager> tmList;
+    protected TweenerManager tweenerManager;
     protected List<Integer> selectionList;
     protected List<MouseEvent> mouseEventList;
 
@@ -66,7 +66,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		lights     = new CopyOnWriteArrayList<Light>();
 		cameras    = new CopyOnWriteArrayList<Camera>();
 		projections     = new CopyOnWriteArrayList<Projection>();
-		tmList        = new CopyOnWriteArrayList<TweenManager>();
+		tweenerManager = null;
 		selectionList = new CopyOnWriteArrayList<Integer>();
 
 		this.setDepthTest(false);
@@ -94,8 +94,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		projections.add(r);
 	}
 
-	public void addTweenManager(TweenManager r) {
-		tmList.add(r);
+	public void setTweenManager(TweenerManager tweenerManager) {
+	    this.tweenerManager = tweenerManager;
 	}
 
 	public void clearAllObjects() {
@@ -119,10 +119,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		projections.remove(index);
 	}
 
-	public void removeTweenManager(int index) {
-		tmList.remove(index);
-	}
-
 	public Object get(int index) {
 		return objectList.get(index);
 	}
@@ -139,8 +135,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		return projections.get(index);
 	}
 
-	public TweenManager getTweenManager(int index) {
-		return tmList.get(index);
+	public TweenerManager getTweenManager() {
+		return tweenerManager;
 	}
 
 	public void add(int index, Object r) {
@@ -176,7 +172,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	public void clearTweenManager() {
-		tmList.clear();
+//		tmList.clear();
+	    tweenerManager = null;
 	}
 
 	/**
@@ -241,7 +238,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 				removeObject = false;
 			}
 
-			drawTweenManager(g);
+			renderTweenManager(g);
 
 			if (!bool)
 			    drawProjection(g, bool);
@@ -286,7 +283,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		int sIndex = -1;
 		if (this.isVisible() == true) {
 			this.g = g;
-			drawTweenManager(g);
+			renderTweenManager(g);
 			if (bool == false)
 				drawProjection(g, bool);
 			drawCamera(g);
@@ -360,10 +357,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		}
 	}
 
-	private final void drawTweenManager(Graphics g) {
-		for (TweenManager tm : tmList) {
-			g.render(tm);
-		}
+	protected final void renderTweenManager(Graphics g) {
+	    g.render(tweenerManager);
 	}
 
 	private final int drawObject(Graphics g,
@@ -393,8 +388,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			} else if (obj instanceof TimelineRender) {
 				TimelineRender tr = (TimelineRender) obj;
 				tr.render(g);
-			} else if (obj instanceof TweenManager) {
-				TweenManager tm = (TweenManager) obj;
+			} else if (obj instanceof TweenerManager) {
+				TweenerManager tm = (TweenerManager) obj;
 				if (!selection)
 					tm.render(g);
 			} else {
