@@ -31,7 +31,7 @@ public class TweenAnimation {
 
     enum TweenAnimationStatus {
         WAIT,
-        STARTED,
+        RUNNING,
     }
 
     private TweenAnimationStatus status = TweenAnimationStatus.WAIT;
@@ -42,9 +42,6 @@ public class TweenAnimation {
     private double startValue;
     private double endValue;
     private double value;
-
-    private boolean repeat;
-    private long numRepeats;
 
     private TweenEquation equation;
 
@@ -88,10 +85,10 @@ public class TweenAnimation {
      */
     void start(long currentTime) {
         this.readyTime = currentTime;
-        if(repeat)
-            this.startTime = readyTime;
-        else
-            this.startTime = this.readyTime + this.delayTime;
+//        if(repeat)
+//            this.startTime = readyTime;
+//        else
+        this.startTime = this.readyTime + this.delayTime;
 
         this.endTime = this.startTime + duration;
 
@@ -105,7 +102,7 @@ public class TweenAnimation {
 
 //        callReadyCallbacks();
 
-        this.status = TweenAnimationStatus.STARTED;
+        this.status = TweenAnimationStatus.RUNNING;
     }
 
     /**
@@ -174,8 +171,16 @@ public class TweenAnimation {
 //                callIterationCompleteCallbacks();
 //                callCompleteCallbacks();
 //            }
-//            return;
+
 //        }
+        if (this.getStatus() != TweenAnimationStatus.RUNNING) {
+            return;
+        }
+
+        if (currentTime >= endTime && this.getStatus() != TweenAnimationStatus.WAIT) {
+            this.status = TweenAnimationStatus.WAIT;
+            return;
+        }
 
         value = equation.compute(currentTime - startTime, startValue, endValue - startValue, duration);
     }
@@ -184,17 +189,17 @@ public class TweenAnimation {
 
     }
 
-    public boolean isRepeat() {
-        return repeat;
-    }
-
-    public void setRepeat(boolean repeat) {
-        this.repeat = repeat;
-    }
-
-    public long getNumRepeats() {
-        return numRepeats;
-    }
+//    public boolean isRepeat() {
+//        return repeat;
+//    }
+//
+//    public void setRepeat(boolean repeat) {
+//        this.repeat = repeat;
+//    }
+//
+//    public long getNumRepeats() {
+//        return numRepeats;
+//    }
 
     public double getReadyTime() {
         return readyTime;

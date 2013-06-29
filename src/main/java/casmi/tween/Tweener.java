@@ -25,6 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import casmi.graphics.element.Element;
 import casmi.matrix.Vector2D;
 import casmi.matrix.Vector3D;
+import casmi.tween.TweenAnimation.TweenAnimationStatus;
 
 /**
  * TweenElement class.
@@ -44,6 +45,9 @@ public class Tweener {
     private Element element;
 
     private List<TweenAnimation> animations = new CopyOnWriteArrayList<TweenAnimation>();
+
+    private boolean repeat = false;
+    private long numRepeats = 0;
 
     public Tweener(Element e) {
         this.element = e;
@@ -142,13 +146,16 @@ public class Tweener {
     }
 
     public final void reset() {
+        resetElement();
+        this.animations.clear();
+    }
+
+    private final void resetElement() {
         element.setPosition(initialPositionX, initialPositionY, initialPositionZ);
         element.setRotation(initialRotationX, initialRotationY, initialRotationZ);
         element.setScale(initialScaleX, initialScaleY, initialScaleZ);
         element.setStrokeColorAlpha(initialStrokeAlpha);
         element.setFillColorAlpha(initialFillAlpha);
-
-        this.animations.clear();
     }
 
     public final void start() {
@@ -214,9 +221,34 @@ public class Tweener {
                     break;
             }
         }
+
+        if (repeat) {
+            boolean next = true;
+
+            for (TweenAnimation a : animations) {
+                if (a.getStatus() == TweenAnimationStatus.RUNNING) {
+                    next = false;
+                    break;
+                }
+            }
+
+            if (next) {
+                numRepeats ++;
+                resetElement();
+                start();
+            }
+        }
     }
 
-    public boolean isReady() {
-        return this.animations.size() > 0;
+    public boolean isRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+    }
+
+    public long getNumRepeats() {
+        return numRepeats;
     }
 }

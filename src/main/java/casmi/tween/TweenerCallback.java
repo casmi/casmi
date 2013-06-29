@@ -19,18 +19,15 @@
 
 package casmi.tween;
 
+
 /**
+ * TweenCallback interface for Tweener.
+ *
  * @author Y. Ban
+ * @author Takashi AOKI <federkasten@me.com>
+ *
+ * @see Tween
  */
-public enum TweenCallbackTypes {
-
-    START,
-
-    END_OF_DELAY,
-
-    ITERATION_COMPLETE,
-
-    COMPLETE,
-
-    KILL
+public interface TweenerCallback {
+    void run(Tweener tween);
 }

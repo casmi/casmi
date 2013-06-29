@@ -61,28 +61,8 @@ public class TweenerManager {
         tweens.clear();
     }
 
-    /**
-     * Returns true if the manager contains any valid tween associated to the
-     * given target.
-     */
-    public final boolean contains(Tweener target) {
-// TODO fix
-//        for (Tweener t : tweens) {
-//            if (t.getElement() == target.getElement() && !t.isFinished())
-//                return true;
-//        }
-        return false;
-    }
-
     public final void remove(Tweener target) {
-// TODO fix
-//        for (Tweener t : tweens ) {
-//            if (t == target ){
-//                if(!t.isFinished())
-//                    t.kill();
-//                tweens.remove(t);
-//            }
-//        }
+        tweens.remove(target);
     }
 
     /**
@@ -94,51 +74,9 @@ public class TweenerManager {
         return tweens.size();
     }
 
-//    /**
-//     * Gets an array containing every tween in the manager.
-//     */
-//    public Tween[] getTweens() {
-//        return tweens.toArray(new Tween[tweens.size()]);
-//    }
-
-//    /**
-//     * Gets an array containing every tween in the manager dedicated to the
-//     * given target.
-//     */
-//    public Tween[] getTweens(Tweenable target) {
-//        ArrayList<Tween> selectedTweens = new ArrayList<Tween>();
-//        for (Tween t : tweens) {
-//            if (t.getTarget() == target &&
-//                    !t.isFinished())
-//                selectedTweens.add(t);
-//        }
-//        return selectedTweens.toArray(new Tween[selectedTweens.size()]);
-//    }
-
-//    /**
-//     * Gets an array containing every tween in the manager dedicated to the
-//     * given target and tween type.
-//     */
-//    public Tween[] getTweens(Tweenable target, TweenType tweenType) {
-//        ArrayList<Tween> selectedTweens = new ArrayList<Tween>();
-//        for (Tween t : tweens) {
-//            if (t.getTarget() == target &&
-//                    t.getTweenType() == tweenType &&
-//                    !t.isFinished())
-//                selectedTweens.add(t);
-//        }
-//        return selectedTweens.toArray(new Tween[selectedTweens.size()]);
-//    }
-
     public final void render(Graphics g) {
         for (Tweener t : tweens) {
             t.render();
         }
-
-//        for (Tweener t : tweens) {
-//            if (t.isFinished()){
-//                tweens.remove(t);
-//                break;}
-//        }
     }
 }
