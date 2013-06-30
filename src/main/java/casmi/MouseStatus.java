@@ -22,7 +22,7 @@ package casmi;
 /**
  * @author Y. Ban
  */
-public enum MouseEvent {
+public enum MouseStatus {
 
     PRESSED,
 

@@ -22,6 +22,7 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import casmi.GradationMode2D;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -126,7 +127,7 @@ public class Rect extends Element {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         calcRect();
 
         if (getSceneStrokeColor().getAlpha() < 1.0 || getSceneFillColor().getAlpha() < 1.0
@@ -222,7 +223,7 @@ public class Rect extends Element {
      * @param color1 The color for gradation.
      * @param color2 The color for gradation.
      *
-     * @see casmi.graphics.element.GradationMode2D
+     * @see casmi.GradationMode2D
      */
     public void setGradationColor(GradationMode2D mode, Color color1, Color color2) {
         setGradation(true);
@@ -242,7 +243,7 @@ public class Rect extends Element {
      * @param colorSet1 The colorSet for gradation.
      * @param colorSet2 The colorSet for gradation.
      *
-     * @see casmi.graphics.element.GradationMode2D
+     * @see casmi.GradationMode2D
      */
     public void setGradationColor(GradationMode2D mode, ColorSet colorSet1, ColorSet colorSet2) {
         setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));

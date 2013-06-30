@@ -60,24 +60,6 @@ public class Mask {
     }
 
     /**
-     * Adds a Graphics Object for stencil mask.
-     *
-     * @param graphicsObject
-     *            Graphics Object for mask.
-     */
-    public void add(GraphicsObject graphicsObject) {
-        for (Object obj : graphicsObject.getObjectList()){
-            if (obj instanceof Element) {
-                Element el = (Element)obj;
-                elements.add(el);
-            } else if (obj instanceof GraphicsObject) {
-                GraphicsObject go = (GraphicsObject)obj;
-                add(go);
-            }
-        }
-    }
-
-    /**
      * Adds a Graphics Element for stencil mask.
      *
      * @param element
@@ -121,22 +103,22 @@ public class Mask {
             render(e, g);
     }
 
-    private void render(Element el, Graphics g) {
-        if (el.isVisible()) {
+    private void render(Element e, Graphics g) {
+        if (e.isVisible()) {
             g.pushMatrix();
             {
-                if (el.isTween()) {
-                    el.setFillAlpha((int)((int)el.getFillAlpha() * this.alpha));
-                    el.setStrokeAlpha((int)((int)el.getStrokeAlpha() * this.alpha));
-                    g.render(el);
-                    el.setFillAlpha((int)el.getFillAlpha());
-                    el.setStrokeAlpha((int)el.getStrokeAlpha());
+                if (e.isTween()) {
+                    e.setFillAlpha((int)((int)e.getFillAlpha() * this.alpha));
+                    e.setStrokeAlpha((int)((int)e.getStrokeAlpha() * this.alpha));
+                    g.render(e, false);
+                    e.setFillAlpha((int)e.getFillAlpha());
+                    e.setStrokeAlpha((int)e.getStrokeAlpha());
                 } else {
-                    el.getFillColor().setAlpha(el.getFillColor().getAlpha() * this.alpha);
-                    el.getStrokeColor().setAlpha(el.getStrokeColor().getAlpha() * this.alpha);
-                    g.render(el);
-                    el.getFillColor().setAlpha(el.getFillColor().getAlpha());
-                    el.getStrokeColor().setAlpha(el.getStrokeColor().getAlpha());
+                    e.getFillColor().setAlpha(e.getFillColor().getAlpha() * this.alpha);
+                    e.getStrokeColor().setAlpha(e.getStrokeColor().getAlpha() * this.alpha);
+                    g.render(e, false);
+                    e.getFillColor().setAlpha(e.getFillColor().getAlpha());
+                    e.getStrokeColor().setAlpha(e.getStrokeColor().getAlpha());
                 }
             }
             g.popMatrix();

@@ -26,6 +26,8 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -119,7 +121,7 @@ public class TextBox extends Element implements Renderable, Resettable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         double x1 = - this.width  / 2.0;
         double y1 =   this.height / 2.0;
         double x2 = - this.width  / 2.0;
@@ -178,7 +180,7 @@ public class TextBox extends Element implements Renderable, Resettable {
             }
             text.setY(this.height / 2.0 - text.getHeight());
             text.setZ(0.0);
-            text.render(gl, glu, width, height);
+            text.render(gl, glu, width, height, selection);
         }
         gl.glPopMatrix();
 

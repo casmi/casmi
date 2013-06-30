@@ -25,6 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.graphics.object.Renderable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -230,7 +231,7 @@ public class Arc extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (precision <= 0.0) {
             precision = 5.0;
         }

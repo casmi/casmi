@@ -28,6 +28,8 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
+import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -46,8 +48,6 @@ public class Text extends Element implements Renderable, Resettable {
     private TextRenderer textRenderer;
     private TextAlign align = TextAlign.LEFT;
     private double leading = 0.0;
-
-    private boolean selection = false;
 
     /**
      * Creates a new Text object.
@@ -159,7 +159,7 @@ public class Text extends Element implements Renderable, Resettable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
             gl.glDisable(GL2.GL_DEPTH_TEST);
 
@@ -173,7 +173,7 @@ public class Text extends Element implements Renderable, Resettable {
         {
             move(gl);
 
-            if (!isSelection()) {
+            if (!selection) {
                 textRenderer.begin3DRendering();
                 {
                     if (stroke) {
@@ -462,14 +462,6 @@ public class Text extends Element implements Renderable, Resettable {
     public final void setFont(Font font) {
         this.font = font;
         textRenderer = new TextRenderer(font.getAWTFont(), true, true);
-    }
-
-    public final boolean isSelection() {
-        return selection;
-    }
-
-    public final void setSelection(boolean selection) {
-        this.selection = selection;
     }
 
     /**

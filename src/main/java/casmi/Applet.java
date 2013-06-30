@@ -33,7 +33,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
-import java.util.List;
+import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,20 +51,18 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import casmi.exception.CasmiRuntimeException;
 import casmi.graphics.Graphics;
+import casmi.graphics.canvas.Canvas;
+import casmi.graphics.canvas.RootCanvas;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
-import casmi.graphics.group.Group;
 import casmi.graphics.object.Background;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
 import casmi.graphics.object.Light;
-import casmi.graphics.object.Mask;
 import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
-import casmi.graphics.object.RootObject;
 import casmi.image.ImageType;
 import casmi.tween.Tweener;
 import casmi.tween.TweenerManager;
@@ -97,7 +95,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private final PopupMenu popupMenu = new PopupMenu(this);
 
     private MouseButton mouseButton;
-    private MouseEvent mouseEvent;
+    private MouseStatus mouseEvent;
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -117,7 +115,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 //	private Timeline rootTimeline;
 
 	private boolean rootObjectIsInitialized = false;
-	private RootObject rootObject;
+	private RootCanvas rootCanvas;
 
 	// for capturing a window
 	private ImageType imageType = ImageType.JPG;
@@ -133,7 +131,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	abstract public void exit();
 
-	abstract public void mouseEvent(MouseEvent e, MouseButton b);
+	abstract public void mouseEvent(MouseStatus e, MouseButton b);
 
 	abstract public void keyEvent(KeyEvent e);
 	// -------------------------------------------------------------------------
@@ -163,20 +161,20 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	            keyboard.setReleased(false);
 	            keyboard.setTyped(false);
 
-	            rootObject.setMouseEvent(null);
+	            rootCanvas.setMouseEvent(null);
 	        }
 	    }
 	}
 
-	private void initRootObject() {
-		rootObject = new RootObject();
-		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
-		rootObject.setDepthTest(false);
+	private void initCanvas() {
+		rootCanvas = new RootCanvas();
+//		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
+//		rootObject.setDepthTest(false);
 	}
 
 	@Override
 	public void init() {
-		initRootObject();
+		initCanvas();
 
 		setSize(0, 0);
 
@@ -275,13 +273,13 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    return workingFPS;
 	}
 
-	public void setDepthTest(boolean depthTest) {
-		rootObject.setDepthTest(depthTest);
-	}
+//	public void setDepthTest(boolean depthTest) {
+//		rootObject.setDepthTest(depthTest);
+//	}
 
-	public boolean isDepthTest() {
-		return rootObject.isDepthTest();
-	}
+//	public boolean isDepthTest() {
+////		return rootObject.isDepthTest();
+//	}
 
 	public boolean isFullScreen() {
 		return isFullScreen;
@@ -343,9 +341,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		}
 
 	    mouse.setButtonPressed(mouseButton, true);
-		mouseEvent(MouseEvent.PRESSED, mouseButton);
+		mouseEvent(MouseStatus.PRESSED, mouseButton);
 
-		rootObject.setMouseEvent(MouseEvent.PRESSED);
+		rootCanvas.setMouseEvent(MouseStatus.PRESSED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
@@ -370,8 +368,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		}
 
 	    mouse.setButtonPressed(mouseButton, false);
-	    mouseEvent(MouseEvent.RELEASED, mouseButton);
-		rootObject.setMouseEvent(MouseEvent.RELEASED);
+	    mouseEvent(MouseStatus.RELEASED, mouseButton);
+		rootCanvas.setMouseEvent(MouseStatus.RELEASED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
@@ -386,40 +384,40 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		switch (e.getButton()) {
 		case java.awt.event.MouseEvent.BUTTON1:
 			mouseButton = MouseButton.LEFT;
-			mouseEvent(MouseEvent.CLICKED, MouseButton.LEFT);
-			mouseEvent = MouseEvent.CLICKED;
+			mouseEvent(MouseStatus.CLICKED, MouseButton.LEFT);
+			mouseEvent = MouseStatus.CLICKED;
 			if ((System.currentTimeMillis() - mouse.getMouseClickLeftTime()) < 300) {
 				mouse.setDoubleClicked(true);
-				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.LEFT);
-				mouseEvent = MouseEvent.DOUBLE_CLICKED;
+				mouseEvent(MouseStatus.DOUBLE_CLICKED, MouseButton.LEFT);
+				mouseEvent = MouseStatus.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
 			mouseButton = MouseButton.MIDDLE;
-			mouseEvent(MouseEvent.CLICKED, MouseButton.MIDDLE);
-			mouseEvent = MouseEvent.CLICKED;
+			mouseEvent(MouseStatus.CLICKED, MouseButton.MIDDLE);
+			mouseEvent = MouseStatus.CLICKED;
 			if ((System.currentTimeMillis() - mouse.getMouseClickMiddleTime()) < 300) {
 				mouse.setDoubleClicked(true);
-				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.MIDDLE);
-				mouseEvent = MouseEvent.DOUBLE_CLICKED;
+				mouseEvent(MouseStatus.DOUBLE_CLICKED, MouseButton.MIDDLE);
+				mouseEvent = MouseStatus.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
 			mouseButton = MouseButton.RIGHT;
-			mouseEvent(MouseEvent.CLICKED, MouseButton.RIGHT);
-			mouseEvent = MouseEvent.CLICKED;
+			mouseEvent(MouseStatus.CLICKED, MouseButton.RIGHT);
+			mouseEvent = MouseStatus.CLICKED;
 			if ((System.currentTimeMillis() - mouse.getMouseClickRightTime()) < 300) {
 				mouse.setDoubleClicked(true);
-				mouseEvent(MouseEvent.DOUBLE_CLICKED, MouseButton.RIGHT);
-				mouseEvent = MouseEvent.DOUBLE_CLICKED;
+				mouseEvent(MouseStatus.DOUBLE_CLICKED, MouseButton.RIGHT);
+				mouseEvent = MouseStatus.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		}
 
-		rootObject.setMouseEvent(mouseEvent);
+		rootCanvas.setMouseEvent(mouseEvent);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
@@ -429,7 +427,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {
-		mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
+		mouseEvent(MouseStatus.ENTERED, MouseButton.LEFT);
 
 		mouse.setEntered(true);
 
@@ -440,7 +438,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {
-		mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
+		mouseEvent(MouseStatus.EXITED, MouseButton.LEFT);
 
 		mouse.setEntered(false);
 
@@ -466,8 +464,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		}
 
 	    mouse.setButtonPressed(mouseButton, true);
-		mouseEvent(MouseEvent.DRAGGED, mouseButton);
-		rootObject.setMouseEvent(MouseEvent.DRAGGED);
+		mouseEvent(MouseStatus.DRAGGED, mouseButton);
+		rootCanvas.setMouseEvent(MouseStatus.DRAGGED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
@@ -481,8 +479,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void mouseMoved(java.awt.event.MouseEvent e) {
 		mouse.setMoved(true);
 
-	    mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
-		rootObject.setMouseEvent(MouseEvent.MOVED);
+	    mouseEvent(MouseStatus.MOVED, MouseButton.LEFT);
+		rootCanvas.setMouseEvent(MouseStatus.MOVED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
@@ -499,7 +497,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         mouse.setWheelRotation(wheelRotation);
 
         if (wheelRotation != 0) {
-            mouseEvent(MouseEvent.WHEEL_ROTATED, MouseButton.NONE);
+            mouseEvent(MouseStatus.WHEEL_ROTATED, MouseButton.NONE);
         }
     }
 
@@ -588,11 +586,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	// -------------------------------------------------------------------------
 
 	@Override
-	public void initGraphics() {
+	public void initGraphics(Graphics g) {
 	    rootObjectIsInitialized = true;
-	    rootObject = null;
+	    rootCanvas = null;
 
-	    initRootObject();
+	    initCanvas();
 
 	    this.setup();
 
@@ -612,8 +610,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	@Override
-	public void resetGraphics() {
-		rootObject.resetObjects();
+    public void resetGraphics(Graphics g) {
+		rootCanvas.resetObjects(g);
 	}
 
 	@Override
@@ -769,10 +767,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
     private final void drawObjects(Graphics g) {
-        rootObject.clearSelections();
+//        canvas.clearSelections();
 
-        rootObject.renderAll(g);
-        rootObject.renderSelectionAll(g, getMouseX(), getMouseY(), 0);
+        rootCanvas.render(g, getMouseX(), getMouseY());
+//        rootObject.drawAll(g);
+//        rootObject.drawAllForSelection(g, getMouseX(), getMouseY(), 0);
     }
 
     private static TweenerManager tweenerManager = null;
@@ -780,7 +779,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private TweenerManager getTweenManager() {
     	if (tweenerManager == null) {
     		tweenerManager = new TweenerManager();
-    		rootObject.setTweenManager(tweenerManager);
+    		rootCanvas.setTweenManager(tweenerManager);
     	}
 
     	return tweenerManager;
@@ -794,32 +793,32 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         getTweenManager().remove(t);
     }
 
-    public void setMask(Mask mask){
-        rootObject.setMask(mask);
-    }
+//    public void setMask(Mask mask){
+//        rootObject.setMask(mask);
+//    }
 
     public void clearTweeners(){
         tweenerManager = null;
-        rootObject.clearTweenManager();
+        rootCanvas.clearTweenManager();
     }
 
 
-   public void setPosition(double x, double y, double z){
-       rootObject.setPosition(x, y, z);
-   }
+//   public void setPosition(double x, double y, double z){
+//       rootObject.setPosition(x, y, z);
+//   }
+//
+//   public void setPosition(double x, double y){
+//       rootObject.setPosition(x, y);
+//   }
+//
+//
+//   public void setRotation(double angle, double x,double y, double z) {
+//       rootObject.setRotation(angle, x, y, z);
+//   }
 
-   public void setPosition(double x, double y){
-       rootObject.setPosition(x, y);
-   }
-
-
-   public void setRotation(double angle, double x,double y, double z) {
-       rootObject.setRotation(angle, x, y, z);
-   }
-
-   public void addObject(Object obj) {
+   public void addObject(Element obj) {
        if(rootObjectIsInitialized){
-           rootObject.add(obj);
+           rootCanvas.add(obj);
 //           if(obj instanceof Timeline){
 //               rootTimeline = (Timeline) obj;
 //               timeline = true;
@@ -831,12 +830,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
        }
    }
 
-   public void addObject(int index, Object obj) {
-       if (obj instanceof Element || obj instanceof Group) {
-           rootObject.add(index, obj);
-       } else {
-           throw new CasmiRuntimeException("The added object is not rendarable");
-       }
+   public void addObject(int index, Element obj) {
+       rootCanvas.add(index, obj);
 
 //       if(obj instanceof Timeline){
 //           rootTimeline = (Timeline)obj;
@@ -848,123 +843,132 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 //       }
    }
 
-   public void addObject(List<Object> objectList) {
-       for (Object obj : objectList) {
-           addObject(obj);
-       }
+   public void addObject(Collection<? extends Element> objects) {
+       rootCanvas.addAll(objects);
+//       for (Object obj : objectList) {
+//           addObject(obj);
+//       }
    }
 
     public void removeObject(int index) {
-    	rootObject.remove(index);
+    	rootCanvas.remove(index);
     }
 
 
     public Object getObject(int index) {
-        return rootObject.get(index);
+        return rootCanvas.get(index);
     }
 
     public void clearObject() {
-        rootObject.clear();
+        rootCanvas.clear();
+    }
+
+    public void addCanvas(Canvas c) {
+        rootCanvas.addCanvas(c);
+    }
+
+    public void removeCanvas(Canvas c) {
+        rootCanvas.removeCanvas(c);
     }
 
     public void setPerspective() {
-        rootObject.addProjection(new Perspective());
+        rootCanvas.addProjection(new Perspective());
     }
 
     public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
-        rootObject.addProjection(new Perspective(fov, aspect, zNear, zFar));
+        rootCanvas.addProjection(new Perspective(fov, aspect, zNear, zFar));
     }
 
     public void setPerspective(Perspective perspective) {
-        rootObject.addProjection(perspective);
+        rootCanvas.addProjection(perspective);
     }
 
     public void setOrtho() {
-        rootObject.addProjection(new Ortho());
+        rootCanvas.addProjection(new Ortho());
     }
 
     public void setOrtho(double left, double right, double bottom, double top, double near, double far) {
-        rootObject.addProjection(new Ortho(left, right, bottom, top, near, far));
+        rootCanvas.addProjection(new Ortho(left, right, bottom, top, near, far));
     }
 
     public void setOrtho(Ortho ortho) {
-        rootObject.addProjection(ortho);
+        rootCanvas.addProjection(ortho);
     }
 
     public void setFrustum() {
-        rootObject.addProjection(new Frustum());
+        rootCanvas.addProjection(new Frustum());
     }
 
     public void setFrustum(double left, double right, double bottom, double top, double near, double far) {
-        rootObject.addProjection(new Frustum(left, right, bottom, top, near, far));
+        rootCanvas.addProjection(new Frustum(left, right, bottom, top, near, far));
     }
 
     public void setFrustum(Frustum frustum) {
-        rootObject.addProjection(frustum);
+        rootCanvas.addProjection(frustum);
     }
 
     public void setCamera() {
-        rootObject.addCamera(new Camera());
+        rootCanvas.setCamera(new Camera());
     }
 
     public void setCamera(double eyeX, double eyeY, double eyeZ, double centerX, double centerY, double centerZ, double upX, double upY, double upZ) {
-        rootObject.addCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ));
+        rootCanvas.setCamera(new Camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ));
     }
 
     public void setCamera(Camera camera) {
-        rootObject.addCamera(camera);
+        rootCanvas.setCamera(camera);
     }
 
     public void getCamera(int index) {
-        rootObject.getCamera(index);
+        rootCanvas.getCamera(index);
     }
 
     public void addLight(Light light) {
-        rootObject.addLight(light);
+        rootCanvas.addLight(light);
     }
 
-    public void getLight(int index) {
-        rootObject.getLight(index);
-    }
+//    public void getLight(int index) {
+//        rootObject.getLight(index);
+//    }
 
     public void addLight(int index, Light light) {
-        rootObject.addLight(index, light);
+        rootCanvas.addLight(index, light);
     }
 
     public void removeLight(int index) {
-        rootObject.remove(index);
+        rootCanvas.remove(index);
     }
 
     public void applyMatrix(DoubleBuffer matrix) {
-        rootObject.applyMatrix(matrix);
+        rootCanvas.applyMatrix(matrix);
     }
 
     public void applyMatix(double matrix[]) {
-        rootObject.applyMatrix(matrix);
+        rootCanvas.applyMatrix(matrix);
     }
 
     public void loadMatrix(DoubleBuffer matrix) {
-        rootObject.loadMatrix(matrix);
+        rootCanvas.loadMatrix(matrix);
     }
 
     public void loadMatix(double matrix[]) {
-        rootObject.loadMatrix(matrix);
+        rootCanvas.loadMatrix(matrix);
     }
 
     public void setBackGroundColor(double gray) {
-        rootObject.setBackGroundColor(new Background(gray));
+        rootCanvas.setBackGroundColor(new Background(gray));
     }
 
     public void setBackGroundColor(double r, double g, double b) {
-        rootObject.setBackGroundColor(new Background(r, g, b));
+        rootCanvas.setBackGroundColor(new Background(r, g, b));
     }
 
     public void setBackGroundColor(Color color) {
-        rootObject.setBackGroundColor(new Background(color));
+        rootCanvas.setBackGroundColor(new Background(color));
     }
 
     public void setBackGroundColor(ColorSet colorset) {
-        rootObject.setBackGroundColor(new Background(colorset));
+        rootCanvas.setBackGroundColor(new Background(colorset));
     }
 
     public static void showAlert(String title, String message) {
@@ -987,8 +991,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 interface GraphicsDrawable {
     public void drawWithGraphics(Graphics g);
 
-    public void resetGraphics();
-    public void initGraphics();
+    public void resetGraphics(Graphics g);
+    public void initGraphics(Graphics g);
 }
 
 /**
@@ -1025,9 +1029,9 @@ class AppletGLEventListener implements GLEventListener {
 		g = new Graphics(gl, glu, glut, width, height);
 
 		if (initialized) {
-			d.resetGraphics();
+			d.resetGraphics(g);
 		} else {
-			d.initGraphics();
+			d.initGraphics(g);
 		}
 
 		initialized = true;

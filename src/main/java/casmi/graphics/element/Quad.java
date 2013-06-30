@@ -25,6 +25,8 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -231,7 +233,7 @@ public class Quad extends Element implements Renderable, Resettable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }

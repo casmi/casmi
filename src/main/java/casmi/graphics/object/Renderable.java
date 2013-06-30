@@ -17,16 +17,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graphics.element;
+package casmi.graphics.object;
 
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 /**
- * Reset interface for graphics object.
+ * Renderable interface for graphics object.
  *
  * @author Y. Ban
  */
-public interface Resettable {
-
-    void reset(GL2 gl);
+public interface Renderable {
+    void render(GL2 gl, GLU glu, int width, int height, boolean selection);
 }

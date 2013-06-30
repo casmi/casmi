@@ -28,7 +28,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.element.Renderable;
+import casmi.graphics.object.Renderable;
 import casmi.image.Image;
 import casmi.matrix.Vector3D;
 import casmi.tween.TweenerManager;
@@ -53,13 +53,13 @@ public class Graphics {
 
 	private double alpha = 1.0;
 
-    public void render(Renderable r) {
+    public void render(Renderable r, boolean selection) {
         if (r == null) {
             return;
         }
 
-        r.setAlpha(getAlpha());
-        r.render(this.gl, this.glu, this.width, this.height);
+//        r.setAlpha(getAlpha());
+        r.render(this.gl, this.glu, this.width, this.height, selection);
 	}
 
 //	public void render(Timeline tr) {

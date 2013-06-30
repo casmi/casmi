@@ -17,18 +17,24 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graphics.element;
+package casmi;
 
 /**
  * Enum class for gradation modes. Sets the trends for the gradation.
  *
  * @author Y. Ban
  */
-public enum GradationMode3D {
+public enum GradationMode2D {
 
-    X_AXIS,
+    /** The horizontal direction constant. */
+    HORIZONTAL,
 
-    Y_AXIS,
+    /** The vertical direction constant. */
+    VERTICAL,
 
-    Z_AXIS
+    /** The left sideways direction constant. */
+    LEFT_SIDEWAYS,
+
+    /** The right sideways direction constant. */
+    RIGHT_SIDEWAYS
 }

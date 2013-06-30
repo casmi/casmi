@@ -22,6 +22,8 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.object.Renderable;
+
 /**
  * Torus class. Wrap JOGL and make it easy to use.
  *
@@ -110,7 +112,7 @@ public class Torus extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }

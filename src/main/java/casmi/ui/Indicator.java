@@ -24,16 +24,19 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
+
 import casmi.graphics.color.GrayColor;
+import casmi.graphics.element.Element;
 import casmi.graphics.element.Rect;
-import casmi.graphics.group.Group;
 
 /**
  * Indicator UI.
  *
  * @author T. Takeuchi
  */
-public class Indicator extends Group {
+public class Indicator extends Element {
 
     private List<Rect> rectList = new ArrayList<Rect>();
 
@@ -53,7 +56,8 @@ public class Indicator extends Group {
             Rect el = new Rect(13, 4);
             el.setStrokeColor(new GrayColor(0.25));
             el.setStroke(false);
-            add(el);
+// TODO fix
+//            add(el);
             rectList.add(el);
 
             el.setX(19.0 * Math.cos(Math.toRadians((90.0 - i * 30.0))));
@@ -79,7 +83,6 @@ public class Indicator extends Group {
         }, 0, 90);
     }
 
-    @Override
     public void update() {
         if (!isAnimating) return;
 
@@ -124,5 +127,10 @@ public class Indicator extends Group {
 
     public void setHideWhenStopped(boolean hideWhenStopped) {
         this.hideWhenStopped = hideWhenStopped;
+    }
+
+    @Override
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
+        // TODO fix
     }
 }

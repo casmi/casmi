@@ -22,9 +22,12 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import casmi.GradationMode3D;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
 
 /**
  * Box class. Wrap JOGL and make it easy to use.
@@ -75,7 +78,7 @@ public class Box extends Element implements Renderable, Resettable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
 //        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || this.isDepthTest() == false)
 //            && this.isThreeD() == false) {
 //            gl.glDisable(GL2.GL_DEPTH_TEST);
@@ -360,7 +363,7 @@ public class Box extends Element implements Renderable, Resettable {
      * @param color1 The color for gradation.
      * @param color2 The color for gradation.
      *
-     * @see casmi.graphics.element.GradationMode2D
+     * @see casmi.GradationMode2D
      */
     public void setGradationColor(GradationMode3D mode, Color color1, Color color2) {
         setGradation(true);
@@ -382,7 +385,7 @@ public class Box extends Element implements Renderable, Resettable {
      * @param colorSet1 The colorSet for gradation.
      * @param colorSet2 The colorSet for gradation.
      *
-     * @see casmi.graphics.element.GradationMode2D
+     * @see casmi.GradationMode2D
      */
     public void setGradationColor(GradationMode3D mode, ColorSet colorSet1, ColorSet colorSet2) {
         setGradationColor(mode, new RGBColor(colorSet1), new RGBColor(colorSet2));

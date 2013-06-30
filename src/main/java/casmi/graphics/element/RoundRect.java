@@ -22,6 +22,8 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.object.Renderable;
+
 /**
  * RoundRect class. Wrap JOGL and make it easy to use.
  *
@@ -185,7 +187,7 @@ public class RoundRect extends Element implements Renderable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         calcRect();
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001
@@ -222,7 +224,7 @@ public class RoundRect extends Element implements Renderable {
                 arc[i].setStroke(false);
                 arc[i].setFill(true);
                 arc[i].setFillColor(this.fillColor);
-                arc[i].render(gl, glu, width, height);
+                arc[i].render(gl, glu, width, height, selection);
             }
         }
 
@@ -245,7 +247,7 @@ public class RoundRect extends Element implements Renderable {
                 arc[i].setStroke(true);
                 arc[i].setStrokeWidth(this.strokeWidth);
                 arc[i].setStrokeColor(this.strokeColor);
-                arc[i].render(gl, glu, width, height);
+                arc[i].render(gl, glu, width, height, selection);
             }
         }
         gl.glPopMatrix();

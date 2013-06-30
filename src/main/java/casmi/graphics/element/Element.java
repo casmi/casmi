@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
+import casmi.MouseStatus;
 import casmi.callback.MouseClickCallback;
 import casmi.callback.MouseClickEventType;
 import casmi.callback.MouseEventCallback;
@@ -32,10 +33,9 @@ import casmi.callback.MouseOverEventType;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.group.Group;
 import casmi.graphics.material.Material;
-import casmi.graphics.object.GraphicsObject;
 import casmi.graphics.object.Mask;
+import casmi.graphics.object.Renderable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -45,9 +45,6 @@ import casmi.matrix.Vector3D;
  *
  */
 abstract public class Element implements Cloneable, Renderable {
-
-    protected boolean useProjection = true;
-
     protected double strokeRed   = 0.0;
 	protected double strokeGreen = 0.0;
 	protected double strokeBlue  = 0.0;
@@ -91,10 +88,11 @@ abstract public class Element implements Cloneable, Renderable {
 
 	protected float strokeWidth = 1.0f;
 
-	private ArrayList<MouseEventCallback> mouseEventCallbacks;
-	private boolean mouseOver       = false;
-	private boolean preMouseOver    = false;
-	private boolean selectionBuffer = false;
+	private ArrayList<MouseEventCallback> mouseEventCallbacks = null;
+	private boolean currentMouseOver = false;
+	private boolean prevMouseOver = false;
+
+//	private boolean selectionBuffer = false;
 
 	private boolean depthTest = true;
 	private boolean removeElement = false;
@@ -291,7 +289,6 @@ abstract public class Element implements Cloneable, Renderable {
 		this.fillColor.setAlpha(alpha);
 	}
 
-	@Override
     public void setAlpha(double alpha) {
 		this.sceneA = alpha;
 	}
@@ -707,6 +704,65 @@ abstract public class Element implements Cloneable, Renderable {
 	    return this.enableTexture;
 	}
 
+    /**
+    *
+    */
+	public void triggerMouseEvent(MouseStatus status, boolean selected) {
+	    prevMouseOver = currentMouseOver;
+	    currentMouseOver = selected;
+
+	    for (MouseEventCallback c : mouseEventCallbacks ) {
+            if (c instanceof MouseOverCallback) {
+                MouseOverCallback callback = (MouseOverCallback) c;
+
+                if (currentMouseOver) {
+                    if (!prevMouseOver) {
+                        callback.run(MouseOverEventType.ENTERED, this);
+                    } else {
+                        callback.run(MouseOverEventType.EXISTED, this);
+                    }
+                } else {
+                    if (prevMouseOver) {
+                        callback.run(MouseOverEventType.EXITED, this);
+                    }
+                }
+            }
+        }
+
+	    if (currentMouseOver) {
+	        for (MouseEventCallback c : mouseEventCallbacks ) {
+	            if (c instanceof MouseClickCallback) {
+	                MouseClickCallback callback = (MouseClickCallback) c;
+
+	                switch (status) {
+	                case CLICKED:
+	                    callback.run(MouseClickEventType.CLICKED, this);
+	                    break;
+
+	                case PRESSED:
+	                    callback.run(MouseClickEventType.PRESSED, this);
+	                    break;
+
+	                case RELEASED:
+	                    callback.run(MouseClickEventType.RELEASED, this);
+	                    break;
+
+	                case DRAGGED:
+	                    callback.run(MouseClickEventType.DRAGGED, this);
+	                    break;
+
+	                case MOVED:
+	                    callback.run(MouseClickEventType.MOVED, this);
+	                    break;
+
+	                default:
+	                    break;
+	                }
+	            }
+	        }
+	    }
+	}
+
 	/**Adds the mosueEventCallback to the Element
 	 *
 	 * @param callback
@@ -714,20 +770,9 @@ abstract public class Element implements Cloneable, Renderable {
 	 */
 	public void addMouseEventCallback(MouseEventCallback callback) {
 		if (mouseEventCallbacks == null) {
-			mouseEventCallbacks = new ArrayList<MouseEventCallback>(3);
+			mouseEventCallbacks = new ArrayList<MouseEventCallback>();
 		}
 		mouseEventCallbacks.add(callback);
-
-		if(this instanceof GraphicsObject){
-			GraphicsObject g = (GraphicsObject)this;
-			for (Object obj : g.getObjectList()) {
-				if(obj instanceof Element)
-					((Element) obj).addMouseEventCallback(callback);
-				if(obj instanceof Group)
-					((Group) obj).addMouseEventCallback(callback);
-			}
-
-		}
 	}
 
 	/**Returns the callbacks that are added to the Element.
@@ -735,48 +780,8 @@ abstract public class Element implements Cloneable, Renderable {
 	 * @return
 	 * 				The callbacks that are added to the Element.
 	 */
-	public List<MouseEventCallback> getMouseOverCallback() {
+	public List<MouseEventCallback> getMouseEventCallbacks() {
 	    return mouseEventCallbacks;
-	}
-
-	public void callMouseOverCallback(boolean b) {
-		for (int i = 0; i < mouseEventCallbacks.size(); i++) {
-			if (mouseEventCallbacks.get(i) instanceof MouseOverCallback) {
-				MouseOverCallback callback = (MouseOverCallback) mouseEventCallbacks.get(i);
-				if (b == true) {
-					if (mouseOver == false) {
-						callback.run(MouseOverEventType.ENTERED, this);
-					}
-					callback.run(MouseOverEventType.EXISTED, this);
-					mouseOver = true;
-				} else {
-					callback.run(MouseOverEventType.EXITED, this);
-				}
-			}
-		}
-	}
-
-	public void callMouseClickCallback(casmi.MouseEvent e) {
-		for (int i = 0; i < mouseEventCallbacks.size(); i++) {
-			if (mouseEventCallbacks.get(i) instanceof MouseClickCallback) {
-				MouseClickCallback callback = (MouseClickCallback) mouseEventCallbacks.get(i);
-
-				if (e == casmi.MouseEvent.CLICKED)
-					callback.run(MouseClickEventType.CLICKED, this);
-
-				if (e == casmi.MouseEvent.PRESSED)
-					callback.run(MouseClickEventType.PRESSED, this);
-
-				if (e == casmi.MouseEvent.RELEASED)
-					callback.run(MouseClickEventType.RELEASED, this);
-
-				if (e == casmi.MouseEvent.DRAGGED)
-					callback.run(MouseClickEventType.DRAGGED, this);
-
-				if (e == casmi.MouseEvent.MOVED)
-					callback.run(MouseClickEventType.MOVED, this);
-			}
-		}
 	}
 
 	@Override
@@ -790,21 +795,21 @@ abstract public class Element implements Cloneable, Renderable {
 		return null;
 	}
 
-	public boolean isMouseover() {
-		return mouseOver;
-	}
-
-	public void setMouseover(boolean bool) {
-		mouseOver = bool;
-	}
-
-	public boolean isPreMouseover() {
-		return preMouseOver;
-	}
-
-	public void setPrevMouseover(boolean bool) {
-		preMouseOver = bool;
-	}
+//	public boolean isMouseOver() {
+//		return mouseOver;
+//	}
+//
+//	public void setMouseover(boolean bool) {
+//		mouseOver = bool;
+//	}
+//
+//	public boolean isPreMouseover() {
+//		return preMouseOver;
+//	}
+//
+//	public void setPrevMouseOver(boolean bool) {
+//		preMouseOver = bool;
+//	}
 
 	/**
 	 * Modify visibility of the Element.
@@ -815,28 +820,6 @@ abstract public class Element implements Cloneable, Renderable {
 	public void setVisible(boolean visible) {
 	    this.visible = visible;
 	}
-
-	/**
-	 * Make the Element visible.
-	 *
-	 * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
-	 *     instead.
-	 */
-	@Deprecated
-    public void visible() {
-		visible = true;
-	}
-
-	/**
-	 * Hide the Element.
-	 *
-	 * @deprecated This method is deprecated. Use {@link #setVisible(boolean)}
-	 *     instead.
-	 */
-	@Deprecated
-    public void hidden() {
-        visible = false;
-    }
 
 	public boolean isVisible() {
 		return visible;
@@ -850,13 +833,13 @@ abstract public class Element implements Cloneable, Renderable {
 		gradation = bool;
 	}
 
-	public boolean isSelectionbuffer() {
-		return selectionBuffer;
-	}
-
-	public void setSelectionbuffer(boolean selectionbuffer) {
-		this.selectionBuffer = selectionbuffer;
-	}
+//	public boolean isSelectionbuffer() {
+//		return selectionBuffer;
+//	}
+//
+//	public void setSelectionbuffer(boolean selectionbuffer) {
+//		this.selectionBuffer = selectionbuffer;
+//	}
 
 	public Mask getMask() {
 		return mask;
@@ -881,92 +864,9 @@ abstract public class Element implements Cloneable, Renderable {
 		return depthTest;
 	}
 
-//	public boolean isBlur() {
-//	    return this.enableBlur;
-//	}
-//
-//	public BlurMode getBlurMode() {
-//	    return this.blurMode;
-//	}
-
-//	/**Enables the blur shader.
-//    *
-//    */
-//	public void enableBlur() {
-//	        this.enableBlur = true;
-//	        if(this instanceof GraphicsObject){
-//	            GraphicsObject g = (GraphicsObject)this;
-//	            for(Object obj : g.getObjectList()) {
-//	                if(obj instanceof Element)
-//	                    ((Element)obj).enableBlur();
-//	                if(obj instanceof Group)
-//	                    ((Group)obj).enableBlur();
-//	            }
-//	        }
-//    }
-//
-//	/**Disable the blur shader.
-//    *
-//    */
-//	public void disableBlur() {
-//	    this.enableBlur = false;
-//        if(this instanceof GraphicsObject){
-//            GraphicsObject g = (GraphicsObject)this;
-//            for(Object obj : g.getObjectList()) {
-//                if(obj instanceof Element)
-//                    ((Element)obj).disableBlur();
-//                if(obj instanceof Group)
-//                    ((Group)obj).disableBlur();
-//            }
-//        }
-//	}
-//
-//	/**Sets BlurMode
-//	 *
-//	 *@param blur BlurMode (see casmi.graphics.shader.BlurMode)
-//	 *
-//	 */
-//	public void setBlurMode(BlurMode blur) {
-//        this.blurMode = blur;
-//        if(this instanceof GraphicsObject){
-//            GraphicsObject g = (GraphicsObject)this;
-//            for(Object obj : g.getObjectList()) {
-//                if(obj instanceof Element)
-//                    ((Element)obj).setBlurMode(blur);
-//                if(obj instanceof Group)
-//                    ((Group)obj).setBlurMode(blur);
-//            }
-//        }
-//	}
-
 	public void setDepthTest(boolean depthTest) {
 		this.depthTest = depthTest;
-
-		if(this instanceof GraphicsObject){
-			GraphicsObject g = (GraphicsObject)this;
-			for(Object obj : g.getObjectList()) {
-				if(obj instanceof Element)
-					((Element)obj).setDepthTest(depthTest);
-				if(obj instanceof Group)
-					((Group)obj).setDepthTest(depthTest);
-			}
-
-		}
 	}
-
-//	public boolean isMotionBlur() {
-//	    if(this.rootMotionBlur)
-//	        return true;
-//	    else{
-//	        if(this instanceof GraphicsObject){
-//	            GraphicsObject g = (GraphicsObject)this;
-//	            for(Object obj : g.getObjectList())
-//	                if(obj instanceof Group)
-//	                    if(((Group)obj).isMotionBlur()) return true;
-//	        }
-//	    }
-//	    return false;
-//	}
 
 	public void remove() {
 		this.removeElement = true;
@@ -984,14 +884,6 @@ abstract public class Element implements Cloneable, Renderable {
 		this.reset = reset;
 	}
 
-//	public boolean isThreeD() {
-//		return threeD;
-//	}
-//
-//	public void setThreeD(boolean threeD) {
-//		this.threeD = threeD;
-//	}
-
 	public void enableMask() {
 		enableMask = true;
 	}
@@ -999,50 +891,4 @@ abstract public class Element implements Cloneable, Renderable {
 	public void disableMask() {
 		this.enableMask = false;
 	}
-
-    public boolean isUseProjection() {
-        return useProjection;
-    }
-
-    public void setUseProjection(boolean useProjection) {
-        this.useProjection = useProjection;
-    }
-
-//	public void setShader(Shader shader) {
-//	    this.shader = shader;
-//	    this.enableShader = true;
-//	}
-//
-//	public void enableShader() {
-//	    this.enableShader = true;
-//	    if(this.normalMap!=null)
-//	        this.enableBump = true;
-//	}
-//
-//	public void disableShader() {
-//	    this.enableShader = false;
-//	    this.enableBump = false;
-//	}
-//
-//	public boolean isEnableShader() {
-//	    return this.enableShader;
-//	}
-//
-//	public void setNormalMap(Texture normal) {
-//	    this.normalMap = normal;
-//	    this.enableBump = true;
-//	}
-//
-//	public void setRootGlow(boolean glow) {
-//	    this.rootBlur = glow;
-//	}
-//
-//	public void setRootMotionBlur(boolean glow) {
-//        this.rootMotionBlur = glow;
-//    }
-//
-//
-//    public void setObjIDShader(Shader shader) {
-//        this.objIDShader = shader;
-//    }
 }

@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
 import casmi.image.Image;
 import casmi.image.ImageMode;
 import casmi.matrix.Vector3D;
@@ -312,7 +314,7 @@ public class Texture extends Element implements Renderable, Resettable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (loadFlag) {
             image.loadTexture();
             loadFlag = false;

@@ -19,8 +19,8 @@
 
 package casmi;
 
+import casmi.graphics.canvas.Canvas;
 import casmi.graphics.object.Camera;
-import casmi.graphics.object.GraphicsObject;
 
 /**
  * Class for Trackball manipulation.
@@ -88,11 +88,11 @@ public class Trackball {
         return calcRotMatrix();
     }
 
-    public void rotate(GraphicsObject obj) {
+    public void rotate(Canvas obj) {
         rotate(obj, obj.getX(), obj.getY(), obj.getZ());
     }
 
-    public void rotate(GraphicsObject obj, double baseX, double baseY, double baseZ) {
+    public void rotate(Canvas obj, double baseX, double baseY, double baseZ) {
         double[] rotMat = calcRotMatrix();
 
         double[] mat1 =

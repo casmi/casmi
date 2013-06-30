@@ -24,6 +24,9 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
+import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
+
 /**
  * Sphere class. Wrap JOGL and make it easy to use.
  *
@@ -99,7 +102,7 @@ public class Sphere extends Element implements Renderable, Resettable {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+    public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
 //        if ((this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest())
 //            && !this.isThreeD()) {
 //            gl.glDisable(GL2.GL_DEPTH_TEST);
