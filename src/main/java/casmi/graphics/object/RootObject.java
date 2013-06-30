@@ -38,10 +38,9 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
-import casmi.graphics.element.Reset;
+import casmi.graphics.element.Resettable;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
-import casmi.timeline.TimelineRender;
 import casmi.tween.TweenerManager;
 
 import com.jogamp.common.nio.Buffers;
@@ -54,7 +53,7 @@ import com.jogamp.common.nio.Buffers;
  */
 public class RootObject extends GraphicsObject {
 
-    private BackGround bg;
+    private Background bg;
 
     private int selectedIndex = -1;
     private IntBuffer selectBuffer;
@@ -89,8 +88,7 @@ public class RootObject extends GraphicsObject {
 
     @Override
     public void add(Object object) {
-        if (object instanceof Element || object instanceof Group
-            || object instanceof TimelineRender) objectList.add(object);
+        if (object instanceof Element || object instanceof Group) objectList.add(object);
     }
 
     @Override
@@ -227,7 +225,7 @@ public class RootObject extends GraphicsObject {
         this.mode = ObjectMatrixMode.LOAD;
     }
 
-    public void setBackGroundColor(BackGround bg) {
+    public void setBackGroundColor(Background bg) {
         this.bg = bg;
     }
 
@@ -354,7 +352,7 @@ public class RootObject extends GraphicsObject {
                         g.matrixMode(MatrixMode.PROJECTION);
                         g.pushMatrix();
                         g.resetMatrix();
-                        g.simpleOrtho();
+                        g.setJustOrtho();
                         g.matrixMode(MatrixMode.MODELVIEW);
                     }
 
@@ -398,7 +396,7 @@ public class RootObject extends GraphicsObject {
                         g.matrixMode(MatrixMode.PROJECTION);
                         g.pushMatrix();
                         g.resetMatrix();
-                        g.simpleOrtho();
+                        g.setJustOrtho();
                         g.matrixMode(MatrixMode.MODELVIEW);
                         g.pushMatrix();
                         g.resetMatrix();
@@ -421,7 +419,7 @@ public class RootObject extends GraphicsObject {
                         g.matrixMode(MatrixMode.PROJECTION);
                         g.pushMatrix();
                         g.resetMatrix();
-                        g.simpleOrtho();
+                        g.setJustOrtho();
                         g.matrixMode(MatrixMode.MODELVIEW);
                         g.pushMatrix();
                         g.resetMatrix();
@@ -438,9 +436,6 @@ public class RootObject extends GraphicsObject {
                     }
                 }
                 o.setPrevMouseover(o.isMouseover());
-            } else if (obj instanceof TimelineRender) {
-                TimelineRender tr = (TimelineRender)obj;
-                tr.render(g);
             } else if (obj instanceof TweenerManager) {
                 TweenerManager tm = (TweenerManager)obj;
                 if (!selection) tm.render(g);
@@ -541,7 +536,7 @@ public class RootObject extends GraphicsObject {
             }
         }
         if (selection && projections.size() == 0) {
-            g.simpleOrtho();
+            g.setJustOrtho();
         }
     }
 
@@ -831,8 +826,8 @@ public class RootObject extends GraphicsObject {
     @Override
     public void resetObjects() {
         for (Object obj : objectList) {
-            if (obj instanceof Reset) {
-                Reset el = (Reset)obj;
+            if (obj instanceof Resettable) {
+                Resettable el = (Resettable)obj;
                 el.reset(g.getGL());
             } else if (obj instanceof GraphicsObject) {
                 GraphicsObject go = (GraphicsObject)obj;

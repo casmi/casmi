@@ -33,7 +33,6 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,7 +57,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
 import casmi.graphics.group.Group;
-import casmi.graphics.object.BackGround;
+import casmi.graphics.object.Background;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
 import casmi.graphics.object.Light;
@@ -67,8 +66,6 @@ import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.graphics.object.RootObject;
 import casmi.image.ImageType;
-import casmi.timeline.Timeline;
-import casmi.timeline.TimelineRender;
 import casmi.tween.Tweener;
 import casmi.tween.TweenerManager;
 import casmi.ui.PopupMenu;
@@ -116,12 +113,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	private boolean runAsApplication = false;
 
-	private boolean timeline = false;
-	private Timeline rootTimeline;
+//	private boolean timeline = false;
+//	private Timeline rootTimeline;
 
-	private boolean rootObjectInit = false;
+	private boolean rootObjectIsInitialized = false;
 	private RootObject rootObject;
-	private List<Updatable> updateObjectList = new ArrayList<Updatable>();
 
 	// for capturing a window
 	private ImageType imageType = ImageType.JPG;
@@ -351,10 +347,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		rootObject.setMouseEvent(MouseEvent.PRESSED);
 
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
-			rootTimeline.getScene().setMouseEvent(MouseEvent.PRESSED);
-		}
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
+//			rootTimeline.getScene().setMouseEvent(MouseEvent.PRESSED);
+//		}
 	}
 
 	@Override
@@ -377,10 +373,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    mouseEvent(MouseEvent.RELEASED, mouseButton);
 		rootObject.setMouseEvent(MouseEvent.RELEASED);
 
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
-			rootTimeline.getScene().setMouseEvent(MouseEvent.RELEASED);
-		}
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
+//			rootTimeline.getScene().setMouseEvent(MouseEvent.RELEASED);
+//		}
 	}
 
 	@Override
@@ -425,10 +421,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		rootObject.setMouseEvent(mouseEvent);
 
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
-			rootTimeline.getScene().setMouseEvent(mouseEvent);
-		}
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
+//			rootTimeline.getScene().setMouseEvent(mouseEvent);
+//		}
 	}
 
 	@Override
@@ -437,9 +433,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		mouse.setEntered(true);
 
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
-		}
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
+//		}
 	}
 
 	@Override
@@ -448,9 +444,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		mouse.setEntered(false);
 
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
-		}
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
+//		}
 	}
 
 	@Override
@@ -472,10 +468,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    mouse.setButtonPressed(mouseButton, true);
 		mouseEvent(MouseEvent.DRAGGED, mouseButton);
 		rootObject.setMouseEvent(MouseEvent.DRAGGED);
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
-			rootTimeline.getScene().setMouseEvent(MouseEvent.DRAGGED);
-		}
+
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
+//			rootTimeline.getScene().setMouseEvent(MouseEvent.DRAGGED);
+//		}
 
 		updateMouse();
 	}
@@ -486,10 +483,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	    mouseEvent(MouseEvent.MOVED, MouseButton.LEFT);
 		rootObject.setMouseEvent(MouseEvent.MOVED);
-		if (timeline) {
-			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
-			rootTimeline.getScene().setMouseEvent(MouseEvent.MOVED);
-		}
+
+//		if (timeline) {
+//			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
+//			rootTimeline.getScene().setMouseEvent(MouseEvent.MOVED);
+//		}
 
 		updateMouse();
 	}
@@ -523,9 +521,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		keyboard.setKeyCode(e.getKeyCode());
 
 		keyEvent(KeyEvent.PRESSED);
-		if (timeline) {
-			rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
-		}
+
+//		if (timeline) {
+//			rootTimeline.getScene().keyEvent(KeyEvent.PRESSED);
+//		}
 	}
 
 	@Override
@@ -533,9 +532,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    keyboard.setReleased(true);
 
 		keyEvent(KeyEvent.RELEASED);
-		if (timeline) {
-			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
-		}
+
+//		if (timeline) {
+//			rootTimeline.getScene().keyEvent(KeyEvent.RELEASED);
+//		}
 
         keyboard.setKey(java.awt.event.KeyEvent.CHAR_UNDEFINED);
         keyboard.setKeyCode(java.awt.event.KeyEvent.VK_UNDEFINED);
@@ -548,9 +548,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    keyboard.setKeyCode(e.getKeyCode());
 
 		keyEvent(KeyEvent.TYPED);
-		if (timeline) {
-			rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
-		}
+
+//		if (timeline) {
+//			rootTimeline.getScene().keyEvent(KeyEvent.TYPED);
+//		}
 	}
 
 	// -------------------------------------------------------------------------
@@ -588,7 +589,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void initGraphics() {
-	    rootObjectInit = true;
+	    rootObjectIsInitialized = true;
 	    rootObject = null;
 
 	    initRootObject();
@@ -618,7 +619,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	@Override
 	public void drawWithGraphics(Graphics g) {
         update();
-        updateObjects();
+//        updateObjects();
 
 	    drawObjects(g);
 
@@ -774,40 +775,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootObject.renderSelectionAll(g, getMouseX(), getMouseY(), 0);
     }
 
-    private final void updateObjects() {
-        for (Updatable obj : updateObjectList) {
-            obj.update();
-        }
-    }
-
-    public void addUpdateObject(Updatable obj) {
-        addUpdateObject(0, obj);
-    }
-
-    public void addUpdateObject(int index, Updatable obj) {
-        if (obj instanceof Updatable) {
-            updateObjectList.add(index, obj);
-        } else {
-            throw new CasmiRuntimeException("The added object is not updatable");
-        }
-    }
-
-    public Updatable getUpdateObject(int index) {
-        return updateObjectList.get(index);
-    }
-
-    public void removeUpdateObject(int index) {
-        updateObjectList.remove(index);
-    }
-
-    public void removeUpdateObject(Updatable obj) {
-        updateObjectList.remove(obj);
-    }
-
-    public void clearUpdateObject() {
-        updateObjectList.clear();
-    }
-
     private static TweenerManager tweenerManager = null;
 
     private TweenerManager getTweenManager() {
@@ -851,34 +818,34 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
    }
 
    public void addObject(Object obj) {
-       if(rootObjectInit){
+       if(rootObjectIsInitialized){
            rootObject.add(obj);
-           if(obj instanceof TimelineRender){
-               rootTimeline = (Timeline)obj;
-               timeline = true;
-               rootTimeline.setKeyboard(keyboard);
-               rootTimeline.setMouse(mouse);
-               rootTimeline.setPopup(popupMenu);
-               rootTimeline.setApplet(this);
-           }
+//           if(obj instanceof Timeline){
+//               rootTimeline = (Timeline) obj;
+//               timeline = true;
+//               rootTimeline.setKeyboard(keyboard);
+//               rootTimeline.setMouse(mouse);
+//               rootTimeline.setPopup(popupMenu);
+//               rootTimeline.setApplet(this);
+//           }
        }
    }
 
    public void addObject(int index, Object obj) {
-       if (obj instanceof Element || obj instanceof Group || obj instanceof TimelineRender) {
+       if (obj instanceof Element || obj instanceof Group) {
            rootObject.add(index, obj);
        } else {
            throw new CasmiRuntimeException("The added object is not rendarable");
        }
 
-       if(obj instanceof TimelineRender){
-           rootTimeline = (Timeline)obj;
-           timeline = true;
-           rootTimeline.setKeyboard(keyboard);
-           rootTimeline.setMouse(mouse);
-           rootTimeline.setPopup(popupMenu);
-           rootTimeline.setApplet(this);
-       }
+//       if(obj instanceof Timeline){
+//           rootTimeline = (Timeline)obj;
+//           timeline = true;
+//           rootTimeline.setKeyboard(keyboard);
+//           rootTimeline.setMouse(mouse);
+//           rootTimeline.setPopup(popupMenu);
+//           rootTimeline.setApplet(this);
+//       }
    }
 
    public void addObject(List<Object> objectList) {
@@ -985,19 +952,19 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void setBackGroundColor(double gray) {
-        rootObject.setBackGroundColor(new BackGround(gray));
+        rootObject.setBackGroundColor(new Background(gray));
     }
 
     public void setBackGroundColor(double r, double g, double b) {
-        rootObject.setBackGroundColor(new BackGround(r, g, b));
+        rootObject.setBackGroundColor(new Background(r, g, b));
     }
 
     public void setBackGroundColor(Color color) {
-        rootObject.setBackGroundColor(new BackGround(color));
+        rootObject.setBackGroundColor(new Background(color));
     }
 
     public void setBackGroundColor(ColorSet colorset) {
-        rootObject.setBackGroundColor(new BackGround(colorset));
+        rootObject.setBackGroundColor(new Background(colorset));
     }
 
     public static void showAlert(String title, String message) {
@@ -1071,7 +1038,7 @@ class AppletGLEventListener implements GLEventListener {
 		synchronized (this) {
 			gl.glViewport(0, 0, this.width, this.height);
 
-			g.ortho();
+			g.setOrtho();
 
 			gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			gl.glClearStencil(0);

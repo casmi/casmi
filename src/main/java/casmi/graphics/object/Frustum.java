@@ -104,18 +104,18 @@ public class Frustum extends Element implements ObjectRender, Projection {
     @Override
     public void render(Graphics g){
         if(def){
-            g.frustum();
+            g.setFrustum();
         } else {
-            g.frustum(left, right, bottom, top, near, far);
+            g.setFrustum(left, right, bottom, top, near, far);
         }
     }
 
     @Override
     public void renderForSelection(Graphics g){
         if(def){
-            g.simplefrustum();
+            g.setJustFrustum();
         } else {
-            g.simpleFrustum(left, right, bottom, top, near, far);
+            g.setJustFrustum(left, right, bottom, top, near, far);
         }
     }
 

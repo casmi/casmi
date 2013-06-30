@@ -29,7 +29,7 @@ import javax.media.opengl.glu.GLUquadric;
  *
  * @author Y. Ban
  */
-public class Sphere extends Element implements Renderable, Reset {
+public class Sphere extends Element implements Renderable, Resettable {
 
     private double r;
 

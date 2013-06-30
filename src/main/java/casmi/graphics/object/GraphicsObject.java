@@ -10,17 +10,15 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import casmi.MouseEvent;
-import casmi.Updatable;
 import casmi.graphics.Graphics;
 import casmi.graphics.Graphics.MatrixMode;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Element;
-import casmi.graphics.element.Reset;
+import casmi.graphics.element.Resettable;
 import casmi.graphics.element.Text;
 import casmi.graphics.group.Group;
-import casmi.timeline.TimelineRender;
 import casmi.tween.TweenerManager;
 
 /**
@@ -29,7 +27,7 @@ import casmi.tween.TweenerManager;
  * @author Y. Ban
  * @author Takashi AOKI <federkasten@me.com>
  */
-public class GraphicsObject extends Element implements Updatable, ObjectRender {
+public class GraphicsObject extends Element implements ObjectRender {
 
     protected Graphics g;
 
@@ -73,7 +71,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 	}
 
 	public void add(Object object) {
-	    if (object instanceof Element || object instanceof Group || object instanceof TimelineRender)
+	    if (object instanceof Element || object instanceof Group)
 	        objectList.add(object);
 	}
 
@@ -251,7 +249,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			    g.matrixMode(MatrixMode.PROJECTION);
                 g.pushMatrix();
                 g.resetMatrix();
-                g.simpleOrtho();
+                g.setJustOrtho();
                 g.matrixMode(MatrixMode.MODELVIEW);
 			}
 
@@ -333,7 +331,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
                         g.matrixMode(MatrixMode.PROJECTION);
                         g.pushMatrix();
                         g.resetMatrix();
-                        g.simpleOrtho();
+                        g.setJustOrtho();
                         g.matrixMode(MatrixMode.MODELVIEW);
                     }
 
@@ -385,9 +383,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 					selectionIndex = o.renderSelectionAll(g, mouseX, mouseY, true, selectionIndex, selectedIndex);
 				}
 				o.setPrevMouseover(o.isMouseover());
-			} else if (obj instanceof TimelineRender) {
-				TimelineRender tr = (TimelineRender) obj;
-				tr.render(g);
 			} else if (obj instanceof TweenerManager) {
 				TweenerManager tm = (TweenerManager) obj;
 				if (!selection)
@@ -490,7 +485,7 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 			}
 		}
 		if (selection == true && projections.size() == 0) {
-			g.simpleOrtho();
+			g.setJustOrtho();
 		}
 	}
 
@@ -520,7 +515,6 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 		update();
 	}
 
-	@Override
 	public void update() {}
 
 	public List<Object> getObjectList() {
@@ -759,8 +753,8 @@ public class GraphicsObject extends Element implements Updatable, ObjectRender {
 
 	public void resetObjects() {
 		for (Object obj : objectList) {
-			if (obj instanceof Reset) {
-				Reset el = (Reset)obj;
+			if (obj instanceof Resettable) {
+				Resettable el = (Resettable)obj;
 				if (g != null)
 				    el.reset(g.getGL());
 			} else if (obj instanceof GraphicsObject) {

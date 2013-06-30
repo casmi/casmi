@@ -32,7 +32,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Quad extends Element implements Renderable, Reset {
+public class Quad extends Element implements Renderable, Resettable {
 
     private double x1;
     private double y1;

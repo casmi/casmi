@@ -33,7 +33,7 @@ import casmi.graphics.element.Element;
  *
  * @author Y. Ban
  */
-public class BackGround extends Element implements ObjectRender{
+public class Background extends Element implements ObjectRender{
     private double red;
     private double green;
     private double blue;
@@ -52,7 +52,7 @@ public class BackGround extends Element implements ObjectRender{
      * @param gray
      *                 The gray-scale value of the BackGround.
      */
-    public BackGround(double gray) {
+    public Background(double gray) {
         this.gray = gray;
         mode = colorMode.Gray;
     }
@@ -67,7 +67,7 @@ public class BackGround extends Element implements ObjectRender{
      * @param blue
      *                 The blue color value of the BackGround.
      */
-    public BackGround(double red,double green,double blue){
+    public Background(double red,double green,double blue){
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -82,7 +82,7 @@ public class BackGround extends Element implements ObjectRender{
      *
      * @see casmi.graphics.color.Color
      */
-    public BackGround(Color color){
+    public Background(Color color){
         this.c = color;
         mode = colorMode.Color;
     }
@@ -95,7 +95,7 @@ public class BackGround extends Element implements ObjectRender{
      *
      * @see casmi.graphics.color.ColorSet
      */
-    public BackGround(ColorSet colorSet){
+    public Background(ColorSet colorSet){
         this.cset = colorSet;
         mode = colorMode.ColorSet;
     }
@@ -105,16 +105,16 @@ public class BackGround extends Element implements ObjectRender{
     public void render(Graphics g){
         switch(mode){
         case Gray:
-            g.background((float)gray);
+            g.setBackground((float)gray);
             break;
         case RGB:
-            g.background((float)red, (float)green, (float)blue);
+            g.setBackground((float)red, (float)green, (float)blue);
             break;
         case Color:
-            g.background(c);
+            g.setBackgroud(c);
             break;
         case ColorSet:
-            g.background(cset);
+            g.setBackground(cset);
             break;
         }
     }

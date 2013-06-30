@@ -35,7 +35,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Texture extends Element implements Renderable, Reset {
+public class Texture extends Element implements Renderable, Resettable {
 
     public static final int LINES = 1;
     public static final int LINES_3D = 3;

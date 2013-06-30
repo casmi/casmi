@@ -36,7 +36,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  *
  * @author Y. Ban, T. Takeuchi
  */
-public class Text extends Element implements Renderable, Reset {
+public class Text extends Element implements Renderable, Resettable {
 
     private Font font;
     private String str;

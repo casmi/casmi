@@ -35,7 +35,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  *
  * @author  T. Takeuchi, Y. Ban
  */
-public class TextBox extends Element implements Renderable, Reset {
+public class TextBox extends Element implements Renderable, Resettable {
 
     private static final boolean DEFAULT_FILL         = false;
     private static final Color   DEFAULT_FILL_COLOR   = new RGBColor(ColorSet.BLACK);

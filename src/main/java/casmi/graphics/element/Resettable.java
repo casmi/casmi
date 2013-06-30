@@ -26,7 +26,7 @@ import javax.media.opengl.GL2;
  *
  * @author Y. Ban
  */
-public interface Reset {
+public interface Resettable {
 
     void reset(GL2 gl);
 }

@@ -30,7 +30,7 @@ import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
 
 /**
- * Maxk class.
+ * Mask class.
  *
  * @author Y. Ban
  */

@@ -94,10 +94,10 @@ public class Perspective extends Element implements ObjectRender, Projection {
     public void render(Graphics g) {
         if (def) {
             double cameraZ = ((g.getHeight() / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
-            g.perspective(Math.PI / 3.0, (double) g.getWidth()
+            g.setPerspective(Math.PI / 3.0, (double) g.getWidth()
                     / (double) g.getHeight(), cameraZ / 10.0, cameraZ * 10.0);
         } else {
-            g.perspective(fov, aspect, zNear, zFar);
+            g.setPerspective(fov, aspect, zNear, zFar);
         }
     }
 
@@ -107,9 +107,9 @@ public class Perspective extends Element implements ObjectRender, Projection {
     @Override
     public void renderForSelection(Graphics g) {
         if (def) {
-            g.simpleperspective();
+            g.setJustPerspective();
         } else {
-            g.simpleperspective(fov, aspect, zNear, zFar);
+            g.setJustPerspective(fov, aspect, zNear, zFar);
         }
     }
 }

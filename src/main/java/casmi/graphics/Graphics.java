@@ -32,15 +32,15 @@ import casmi.graphics.element.Renderable;
 import casmi.graphics.object.ObjectRender;
 import casmi.image.Image;
 import casmi.matrix.Vector3D;
-import casmi.timeline.TimelineRender;
 import casmi.tween.TweenerManager;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
- * Graphics class. Wrap JOGL and make it easy to use.
+ * Wrapper of JOGL to make it easy to use.
  *
  * @author Y. Ban
+ * @author Takashi AOKI <federkasten@me.com>
  *
  */
 public class Graphics {
@@ -52,14 +52,14 @@ public class Graphics {
 	private int width;
 	private int height;
 
-	private double sceneAlpha = 1.0;
+	private double alpha = 1.0;
 
     public void render(Renderable r) {
         if (r == null) {
             return;
         }
 
-        r.setAlpha(sceneAlpha);
+        r.setAlpha(getAlpha());
 
         if (r instanceof ObjectRender) {
             ObjectRender or = (ObjectRender)r;
@@ -69,18 +69,17 @@ public class Graphics {
         }
 	}
 
-	public void render(TimelineRender tr) {
-	    if (tr != null) {
-	        tr.render(this);
-	    }
-	}
+//	public void render(Timeline tr) {
+//	    if (tr != null) {
+//	        tr.render(this);
+//	    }
+//	}
 
 	public void render(TweenerManager tm) {
 	    if (tm != null) {
 	        tm.render(this);
 	    }
 	}
-
 
 	public Graphics(GL2 gl, GLU glu, GLUT glut, int width, int height) {
 		this.gl   = gl;
@@ -102,7 +101,6 @@ public class Graphics {
 	public GLUT getGLUT() {
 	    return glut;
 	}
-
 
 	/**
 	 * Returns the width of the display window.
@@ -140,7 +138,7 @@ public class Graphics {
 	  * @param gray
 	  *            The grayscale value of the background.
 	  */
-	public void background(float gray) {
+	public void setBackground(float gray) {
 		gl.glClearColor(gray / 255, gray / 255, gray / 255, 1);
 	}
 
@@ -152,7 +150,7 @@ public class Graphics {
      * @param alpha
      *            The alpha opacity of the background.
      */
-    public void background(float gray, float alpha) {
+    public void setBackground(float gray, float alpha) {
         gl.glClearColor(gray / 255, gray / 255, gray / 255, alpha / 255);
     }
 
@@ -166,7 +164,7 @@ public class Graphics {
      * @param z
      *            The B value of the background.
      */
-    public void background(float x, float y, float z) {
+    public void setBackground(float x, float y, float z) {
         gl.glClearColor(x / 255, y / 255, z / 255, 1);
     }
 
@@ -182,7 +180,7 @@ public class Graphics {
      * @param a
      *            The alpha opacity of the background.
      */
-	public void background(float x, float y, float z, float a) {
+	public void setBackground(float x, float y, float z, float a) {
 		gl.glClearColor(x / 255, y / 255, z / 255, a / 255);
 	}
 
@@ -192,42 +190,40 @@ public class Graphics {
      * @param color
      *            The RGB or HSB value of the background.
      */
-	public void background(Color color) {
+	public void setBackgroud(Color color) {
 	    gl.glClearColor((float)color.getRed(),
 	                    (float)color.getGreen(),
 	                    (float)color.getBlue(),
-	                    (float)(color.getAlpha() * sceneAlpha));
+	                    (float)(color.getAlpha() * getAlpha()));
 	}
 
-	public void background(ColorSet colorset) {
+	public void setBackground(ColorSet colorset) {
 		Color color = RGBColor.color(colorset);
-		background(color);
+		setBackgroud(color);
 	}
 
-
-	public void setcolor(Color color) {
+	public void setColor(Color color) {
 		gl.glColor4d(color.getRed(),
 		             color.getGreen(),
 		             color.getBlue(),
-		             color.getAlpha() * sceneAlpha);
+		             color.getAlpha() * getAlpha());
 	}
 
-	public void setcolor(float gray) {
-		gl.glColor4d(gray / 255.0, gray / 255.0, gray / 255.0, sceneAlpha);
+	public void setColor(float gray) {
+		gl.glColor4d(gray / 255.0, gray / 255.0, gray / 255.0, getAlpha());
 	}
 
-	public void setcolor(int x, int y, int z, int a) {
+	public void setColor(int x, int y, int z, int a) {
 		Color color = new RGBColor(x / 255.0, y / 255.0, z / 255.0, a / 255.0);
 		gl.glColor4d(color.getRed(),
 		             color.getGreen(),
 		             color.getBlue(),
-		             color.getAlpha() * sceneAlpha);
+		             color.getAlpha() * getAlpha());
 	}
 
-	public void setcolor(int x, int y, int z) {
-		setcolor(x, y, z, 255);
+	public void setColor(int x, int y, int z) {
+		setColor(x, y, z, 255);
 	}
-
 
 	// Matrix Stack
 
@@ -275,7 +271,8 @@ public class Graphics {
 	}
 
 	public enum MatrixMode {
-		PROJECTION, MODELVIEW
+		PROJECTION,
+		MODELVIEW
 	};
 
 	/**
@@ -366,7 +363,7 @@ public class Graphics {
     /**
      * Sets the RGB value of the ambientLight
      */
-    public void ambientLight(float r, float g, float b) {
+    public void setAmbientLight(float r, float g, float b) {
         float ambient[] = { r, g, b, 255 };
         normalize(ambient);
         gl.glEnable(GL2.GL_LIGHTING);
@@ -377,7 +374,7 @@ public class Graphics {
     /**
      * Sets the RGB value and the position of the ambientLight
      */
-    public void ambientLight(float r, float g, float b, float x, float y,
+    public void setAmbientLight(float r, float g, float b, float x, float y,
             float z) {
         float ambient[] = { r, g, b, 255 };
         float position[] = { x, y, z, 1.0f };
@@ -391,7 +388,7 @@ public class Graphics {
     /**
      * Sets the RGB value and the position of the ambientLight
      */
-    public void ambientLight(float r, float g, float b, Vector3D v) {
+    public void setAmbientLight(float r, float g, float b, Vector3D v) {
         float ambient[] = { r, g, b, 255 };
         float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
         normalize(ambient);
@@ -404,7 +401,7 @@ public class Graphics {
     /**
      * Sets the color value of the ambientLight
      */
-	public void ambientLight(Color color) {
+	public void setAmbientLight(Color color) {
 		float ambient[] = {
 		    (float)color.getRed(),
 		    (float)color.getGreen(),
@@ -419,7 +416,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the ambientLight
      */
-	public void ambientLight(Color color, boolean enableColor, Vector3D v) {
+	public void setAmbientLight(Color color, boolean enableColor, Vector3D v) {
 	    float ambient[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -435,14 +432,14 @@ public class Graphics {
         gl.glEnable(GL2.GL_LIGHTING);
         gl.glEnable(GL2.GL_LIGHT0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position, 0);
-        if(enableColor)
-            gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
+
+        if(enableColor) gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
     }
 
     /**
      * Sets the RGB value of the No.i ambientLight
      */
-    public void ambientLight(int i, float r, float g, float b) {
+    public void setAmbientLight(int i, float r, float g, float b) {
         float ambient[] = { r, g, b, 255 };
         normalize(ambient);
         gl.glEnable(GL2.GL_LIGHTING);
@@ -453,7 +450,7 @@ public class Graphics {
     /**
      * Sets the RBG value and the position of the No.i ambientLight
      */
-    public void ambientLight(int i, float r, float g, float b, float x,
+    public void setAmbientLight(int i, float r, float g, float b, float x,
             float y, float z) {
         float ambient[] = { r, g, b, 255 };
         float position[] = { x, y, z, 1.0f };
@@ -467,7 +464,7 @@ public class Graphics {
     /**
      * Sets the RBG value and the position of the No.i ambientLight
      */
-    public void ambientLight(int i, float r, float g, float b, Vector3D v) {
+    public void setAmbientLight(int i, float r, float g, float b, Vector3D v) {
         float ambient[] = { r, g, b, 255 };
         float position[] = { (float)v.getX(), (float)v.getY(), (float)v.getZ(), 1.0f };
         normalize(ambient);
@@ -480,7 +477,7 @@ public class Graphics {
     /**
      * Sets the color value of the No.i ambientLight
      */
-	public void ambientLight(int i, Color color, boolean enableColor) {
+	public void setAmbientLight(int i, Color color, boolean enableColor) {
 	    float ambient[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -496,7 +493,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i ambientLight
      */
-	public void ambientLight(int i, Color color, boolean enableColor, Vector3D v) {
+	public void setAmbientLight(int i, Color color, boolean enableColor, Vector3D v) {
 	    float ambient[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -514,7 +511,7 @@ public class Graphics {
     /**
      * Sets the color value and the position of the No.i directionalLight
      */
-	public void directionalLight(int i, Color color, boolean enableColor, float x, float y, float z) {
+	public void setDirectionalLight(int i, Color color, boolean enableColor, float x, float y, float z) {
 		float directionalColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -532,7 +529,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i directionalLight
      */
-	public void directionalLight(int i, Color color, boolean enableColor, Vector3D v) {
+	public void setDirectionalLight(int i, Color color, boolean enableColor, Vector3D v) {
 	    float directionalColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -543,23 +540,13 @@ public class Graphics {
 		gl.glEnable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_LIGHT0 + i);
 		gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_POSITION, pos, 0);
-		if(enableColor)
-		    gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, directionalColor, 0);
-/////////
-		/*
-		float lightAmbient[] = {0.5f, 0.5f, 0.5f, 1.0f};
-        float lightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-        float lightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, lightAmbient, 0);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, lightDiffuse, 0);
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, lightSpecular, 0);
-        */
+		if(enableColor) gl.glLightfv(GL2.GL_LIGHT0 + i, GL2.GL_DIFFUSE, directionalColor, 0);
 	}
 
 	/**
      * Sets the color value and the position of the No.i pointLight
      */
-	public void pointLight(int i, Color color, boolean enableColor, float x, float y, float z) {
+	public void setPointLight(int i, Color color, boolean enableColor, float x, float y, float z) {
 	    float pointColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -577,7 +564,7 @@ public class Graphics {
 	/**
      * Sets the color value and the position of the No.i pointLight
      */
-	public void pointLight(int i, Color color, boolean enableColor, Vector3D v) {
+	public void setPointLight(int i, Color color, boolean enableColor, Vector3D v) {
 	    float pointColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -600,7 +587,7 @@ public class Graphics {
 	/**
      * Sets the color value, position, direction and the angle of the spotlight cone of the No.i spotLight
      */
-	public void spotLight(int i, Color color, boolean enableColor, Vector3D v, float nx, float ny,	float nz, float angle) {
+	public void setSpotLight(int i, Color color, boolean enableColor, Vector3D v, float nx, float ny,	float nz, float angle) {
 	    float spotColor[] = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -625,9 +612,9 @@ public class Graphics {
 	}
 
 	/**
-	 * Sets the falloff rates for point lights, spot lights, and ambient lights.
+	 * Set attenuation rates for point lights, spot lights, and ambient lights.
 	 */
-	public void lightFalloff(int i, float constant, float liner, float quadratic) {
+	public void setLightAttenuation(int i, float constant, float liner, float quadratic) {
 		float c[] = { constant };
 		float l[] = { liner };
 		float q[] = { quadratic };
@@ -641,7 +628,7 @@ public class Graphics {
 	/**
 	 * Sets the specular color for No.i light.
 	 */
-	public void lightSpecular(int i, Color color) {
+	public void setLightSpecular(int i, Color color) {
 		float[] tmpColor = {
 		    (float)color.getRed(),
 		    (float)color.getGreen(),
@@ -654,7 +641,7 @@ public class Graphics {
 	/**
      * Sets the diffuse color for No.i light.
      */
-	public void lightDiffuse(int i, Color color) {
+	public void setLightDiffuse(int i, Color color) {
 	    float[] tmpColor = {
             (float)color.getRed(),
             (float)color.getGreen(),
@@ -667,7 +654,7 @@ public class Graphics {
 	/**
 	 * Returns the array normalized from 0-255 to 0-1.0.
 	 */
-	public float[] normalize(float[] in) {
+	private static float[] normalize(float[] in) {
 		float[] out = new float[in.length];
 		for (int i = 0; i < in.length; i++) {
 			out[i] = (in[i] / 255.0f);
@@ -675,7 +662,6 @@ public class Graphics {
 		return out;
 	}
 
-	//Image
 	/**
 	 * Starts to draw polygon.
 	 */
@@ -693,21 +679,21 @@ public class Graphics {
 	/**
 	 * Enables texture.
 	 */
-	public void texture(Image image) {
+	public void enableTexture(Image image) {
 		image.enableTexture(gl);
 	}
 
 	/**
      * Disables texture.
      */
-    public void notexture(Image image) {
+    public void disableTexture(Image image) {
         image.disableTexture(gl);
     }
 
     /**
      * Sets texture vertex(nx,ny) at position(x,y).
      * */
-    public void vertex(float x, float y, float nx, float ny) {
+    public void setVertex(float x, float y, float nx, float ny) {
         gl.glTexCoord2f(nx, ny);
         gl.glVertex2f(x, y);
     }
@@ -715,7 +701,7 @@ public class Graphics {
     /**
      * Sets texture vertex(nx,ny) at position(x,y,z).
      * */
-    public void vertex(float x, float y, float z, float nx, float ny) {
+    public void setVertex(float x, float y, float z, float nx, float ny) {
         gl.glTexCoord2f(nx, ny);
         gl.glVertex3f(x, y, z);
     }
@@ -723,7 +709,7 @@ public class Graphics {
     /**
      * Sets texture vertex(nx,ny) at position v.
      * */
-    public void vertex(Vector3D v, float nx, float ny) {
+    public void setVertex(Vector3D v, float nx, float ny) {
         gl.glTexCoord2f(nx, ny);
         gl.glVertex3d(v.getX(), v.getY(), v.getZ());
     }
@@ -732,7 +718,7 @@ public class Graphics {
      * Displays texture img at position (x,y).
      * If
      */
-    public void image(Image img, double x, double y) {
+    public void setImage(Image img, double x, double y) {
         if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
             img.enableTexture(gl);
@@ -777,7 +763,7 @@ public class Graphics {
      *  A call to imageMode(CORNERS) will change the width and height parameters to define
      *  the x and y values of the opposite corner of the image.
      * */
-    public void image(Image img, double x, double y, double w, double h) {
+    public void setImage(Image img, double x, double y, double w, double h) {
         if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
             img.enableTexture(gl);
@@ -840,7 +826,7 @@ public class Graphics {
 	 * @param zFar
 	 *             z-position of nearest farthest plane
 	 */
-	public void perspective(double fov, double aspect, double zNear, double zFar) {
+	public void setPerspective(double fov, double aspect, double zNear, double zFar) {
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
 		glu.gluPerspective(fov, aspect, zNear, zFar);
@@ -848,14 +834,14 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simpleperspective(double fov, double aspect, double zNear, double zFar) {
+	public void setJustPerspective(double fov, double aspect, double zNear, double zFar) {
 		glu.gluPerspective(fov, aspect, zNear, zFar);
-		}
+	}
 
 	/**
 	 * Sets a default perspective.
 	 */
-	public void perspective() {
+	public void setPerspective() {
 		double cameraZ = ((height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
@@ -865,7 +851,7 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simpleperspective(){
+	public void setJustPerspective(){
 		double cameraZ = ((height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
 		glu.gluPerspective(Math.PI / 3.0, (double) this.width
 				/ (double) this.height, cameraZ / 10.0, cameraZ * 10.0);
@@ -890,7 +876,7 @@ public class Graphics {
 	 * @param far
 	 *             maximum distance from the origin away from the viewer
 	 */
-	public void ortho(double left, double right, double bottom, double top,
+	public void setOrtho(double left, double right, double bottom, double top,
 			double near, double far) {
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
@@ -899,7 +885,7 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simpleortho(double left, double right, double bottom, double top,
+	public void setJustOrtho(double left, double right, double bottom, double top,
 			double near, double far) {
 		gl.glOrtho(left, right, bottom, top, near, far);
 		}
@@ -907,7 +893,7 @@ public class Graphics {
 	/**
 	 * Sets the default orthographic projection.
 	 */
-	public void ortho() {
+	public void setOrtho() {
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
 		gl.glOrtho(0, this.width, 0, this.height, -1.0e10, 1.0e10);
@@ -915,13 +901,13 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simpleOrtho() {
+	public void setJustOrtho() {
 		gl.glOrtho(0, this.width, 0, this.height, -1.0e10, 1.0e10);
 	}
 
 	/**Sets a perspective matrix defined through the parameters. Works like
 	 * glFrustum, except it wipes out the current perspective matrix rather
-	 * than muliplying itself with it.
+	 * than multiplying itself with it.
 	 *
 	 * @param left
 	 *             left coordinate of the clipping plane
@@ -936,7 +922,7 @@ public class Graphics {
 	 * @param far
 	 *             far component of the clipping plane
 	 */
-	public void frustum(double left, double right, double bottom, double top,
+	public void setFrustum(double left, double right, double bottom, double top,
 			double near, double far) {
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
@@ -945,12 +931,12 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simpleFrustum(double left, double right, double bottom, double top,
+	public void setJustFrustum(double left, double right, double bottom, double top,
 			double near, double far) {
 		gl.glFrustum(left, right, bottom, top, near, far);
 		}
 
-	public void frustum() {
+	public void setFrustum() {
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
 		gl.glFrustum(0, this.width, 0, this.height, -1.0e10, 1.0e10);
@@ -958,7 +944,7 @@ public class Graphics {
 		resetMatrix();
 	}
 
-	public void simplefrustum() {
+	public void setJustFrustum() {
 		gl.glFrustum(0, this.width, 0, this.height, -1.0e10, 1.0e10);
 		}
 
@@ -987,7 +973,7 @@ public class Graphics {
 	 * @param upZ
 	 *             usually 0.0, 1.0, or -1.0
 	 */
-	public void camera(double eyeX, double eyeY, double eyeZ, double centerX,
+	public void setCamera(double eyeX, double eyeY, double eyeZ, double centerX,
 			double centerY, double centerZ, double upX, double upY, double upZ) {
 		glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY,
 				upZ);
@@ -996,18 +982,17 @@ public class Graphics {
 	/**
 	 * Sets the default camera position.
 	 */
-	public void camera() {
+	public void setCamera() {
 		glu.gluLookAt(width / 2.0, height / 2.0,
 				(height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0), width / 2.0,
 				height / 2.0, 0, 0, 1, 0);
 	}
 
-	public void setSceneA(double a){
-		this.sceneAlpha = a;
-	}
+    public double getAlpha() {
+        return alpha;
+    }
 
-	public double getSceneA(){
-		return this.sceneAlpha;
-	}
-
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
 }

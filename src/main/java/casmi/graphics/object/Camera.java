@@ -96,9 +96,9 @@ public class Camera extends Element implements ObjectRender {
     @Override
     public void render(Graphics g) {
         if (def) {
-            g.camera();
+            g.setCamera();
         } else {
-            g.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+            g.setCamera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
         }
     }
 

@@ -177,16 +177,16 @@ public class Light extends Element implements ObjectRender {
 
         switch(lightMode){
         case AMBIENT:
-            g.ambientLight(index, color, true, v);
+            g.setAmbientLight(index, color, true, v);
             break;
         case DIRECTION:
-            g.directionalLight(index, color, true, dv);
+            g.setDirectionalLight(index, color, true, dv);
             break;
         case POINT:
-            g.pointLight(index, color, true, v);
+            g.setPointLight(index, color, true, v);
             break;
         case SPOT:
-            g.spotLight(index, color, true, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
+            g.setSpotLight(index, color, true, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
             break;
         case NONE:
             break;

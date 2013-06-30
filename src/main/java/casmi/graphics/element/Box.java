@@ -31,7 +31,7 @@ import casmi.graphics.color.RGBColor;
  *
  * @author Y. Ban
  */
-public class Box extends Element implements Renderable, Reset {
+public class Box extends Element implements Renderable, Resettable {
 
     private static final double STROKE_BIAS_RATIO = 1.00;
 
