@@ -27,7 +27,7 @@ import casmi.tween.TweenerManager;
  * @author Y. Ban
  * @author Takashi AOKI <federkasten@me.com>
  */
-public class GraphicsObject extends Element implements ObjectRender {
+public class GraphicsObject extends Element {
 
     protected Graphics g;
 
@@ -197,8 +197,7 @@ public class GraphicsObject extends Element implements ObjectRender {
 	    this.mode   = ObjectMatrixMode.LOAD;
 	}
 
-	@Override
-	public void render(Graphics g) {}
+//	@Override
 //	public void render(Graphics g) {
 //		if (this.isVisible()) {
 //			this.g = g;
@@ -467,21 +466,21 @@ public class GraphicsObject extends Element implements ObjectRender {
 			if (perse instanceof Perspective) {
 				Perspective perspective = (Perspective) perse;
 				if (selection == false)
-					perspective.render(g);
+					perspective.project(g);
 				else
-					perspective.renderForSelection(g);
+					perspective.projectForSelection(g);
 			} else if (perse instanceof Ortho) {
 				Ortho ortho = (Ortho) perse;
 				if (selection == false)
-					ortho.render(g);
+					ortho.project(g);
 				else
-					ortho.renderForSelection(g);
+					ortho.projectForSelection(g);
 			} else if (perse instanceof Frustum) {
 				Frustum frustum = (Frustum) perse;
 				if (selection == false)
-					frustum.render(g);
+					frustum.project(g);
 				else
-					frustum.renderForSelection(g);
+					frustum.projectForSelection(g);
 			}
 		}
 		if (selection == true && projections.size() == 0) {

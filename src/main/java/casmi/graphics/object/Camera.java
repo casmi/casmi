@@ -19,11 +19,7 @@
 
 package casmi.graphics.object;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
-
 import casmi.graphics.Graphics;
-import casmi.graphics.element.Element;
 
 /**
  * Camera class.
@@ -31,7 +27,7 @@ import casmi.graphics.element.Element;
  *
  * @author Y. Ban
  */
-public class Camera extends Element implements ObjectRender {
+public class Camera {
 
     private double eyeX;
     private double eyeY;
@@ -70,8 +66,8 @@ public class Camera extends Element implements ObjectRender {
      *                     Setting which axis is facing upward; usually 0.0, 1.0, or -1.0.
      */
     public Camera(double eyeX,    double eyeY,    double eyeZ,
-                  double centerX, double centerY, double centerZ,
-                  double upX,     double upY,     double upZ) {
+        double centerX, double centerY, double centerZ,
+        double upX,     double upY,     double upZ) {
 
         this.eyeX = eyeX;
         this.eyeY = eyeY;
@@ -93,7 +89,6 @@ public class Camera extends Element implements ObjectRender {
         def = true;
     }
 
-    @Override
     public void render(Graphics g) {
         if (def) {
             g.setCamera();
@@ -125,8 +120,8 @@ public class Camera extends Element implements ObjectRender {
      *                     Setting which axis is facing upward; usually 0.0, 1.0, or -1.0.
      */
     public void set(double eyeX,    double eyeY,    double eyeZ,
-                    double centerX,    double centerY, double centerZ,
-                    double upX,     double upY,     double upZ) {
+        double centerX,    double centerY, double centerZ,
+        double upX,     double upY,     double upZ) {
 
         this.eyeX = eyeX;
         this.eyeY = eyeY;
@@ -340,42 +335,38 @@ public class Camera extends Element implements ObjectRender {
 
     public static final double[] getViewMatrix(double ex, double ey, double ez, double tx, double ty, double tz,
         double ux, double uy, double uz) {
-       double[] matrix = new double[16];
-       double l;
+        double[] matrix = new double[16];
+        double l;
 
-       // z axis = e - t
-       tx = ex - tx;
-       ty = ey - ty;
-       tz = ez - tz;
-       l = Math.sqrt(tx * tx + ty * ty + tz * tz);
-       matrix[2] = tx / l;
-       matrix[6] = ty / l;
-       matrix[10] = tz / l;
+        // z axis = e - t
+        tx = ex - tx;
+        ty = ey - ty;
+        tz = ez - tz;
+        l = Math.sqrt(tx * tx + ty * ty + tz * tz);
+        matrix[2] = tx / l;
+        matrix[6] = ty / l;
+        matrix[10] = tz / l;
 
-       // x axis = u X z
-       tx = uy * matrix[10] - uz * matrix[ 6];
-       ty = uz * matrix[ 2] - ux * matrix[10];
-       tz = ux * matrix[ 6] - uy * matrix[ 2];
-       l = Math.sqrt(tx * tx + ty * ty + tz * tz);
-       matrix[ 0] = tx / l;
-       matrix[ 4] = ty / l;
-       matrix[ 8] = tz / l;
+        // x axis = u X z
+        tx = uy * matrix[10] - uz * matrix[ 6];
+        ty = uz * matrix[ 2] - ux * matrix[10];
+        tz = ux * matrix[ 6] - uy * matrix[ 2];
+        l = Math.sqrt(tx * tx + ty * ty + tz * tz);
+        matrix[ 0] = tx / l;
+        matrix[ 4] = ty / l;
+        matrix[ 8] = tz / l;
 
-       //y axis = z X x
-       matrix[ 1] = matrix[ 6] * matrix[ 8] - matrix[10] * matrix[ 4];
-       matrix[ 5] = matrix[10] * matrix[ 0] - matrix[ 2] * matrix[ 8];
-       matrix[ 9] = matrix[ 2] * matrix[ 4] - matrix[ 6] * matrix[ 0];
+        //y axis = z X x
+        matrix[ 1] = matrix[ 6] * matrix[ 8] - matrix[10] * matrix[ 4];
+        matrix[ 5] = matrix[10] * matrix[ 0] - matrix[ 2] * matrix[ 8];
+        matrix[ 9] = matrix[ 2] * matrix[ 4] - matrix[ 6] * matrix[ 0];
 
-       matrix[12] = -(ex * matrix[ 0] + ey * matrix[ 4] + ez * matrix[ 8]);
-       matrix[13] = -(ex * matrix[ 1] + ey * matrix[ 5] + ez * matrix[ 9]);
-       matrix[14] = -(ex * matrix[ 2] + ey * matrix[ 6] + ez * matrix[10]);
+        matrix[12] = -(ex * matrix[ 0] + ey * matrix[ 4] + ez * matrix[ 8]);
+        matrix[13] = -(ex * matrix[ 1] + ey * matrix[ 5] + ez * matrix[ 9]);
+        matrix[14] = -(ex * matrix[ 2] + ey * matrix[ 6] + ez * matrix[10]);
 
-       matrix[ 3] = matrix[ 7] = matrix[11] = 0.0;
-       matrix[15] = 1.0;
-       return matrix;
-}
-
-    @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
+        matrix[ 3] = matrix[ 7] = matrix[11] = 0.0;
+        matrix[15] = 1.0;
+        return matrix;
     }
 }

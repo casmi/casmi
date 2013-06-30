@@ -29,7 +29,6 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.element.Renderable;
-import casmi.graphics.object.ObjectRender;
 import casmi.image.Image;
 import casmi.matrix.Vector3D;
 import casmi.tween.TweenerManager;
@@ -60,13 +59,7 @@ public class Graphics {
         }
 
         r.setAlpha(getAlpha());
-
-        if (r instanceof ObjectRender) {
-            ObjectRender or = (ObjectRender)r;
-            or.render(this);
-        } else {
-            r.render(this.gl, this.glu, this.width, this.height);
-        }
+        r.render(this.gl, this.glu, this.width, this.height);
 	}
 
 //	public void render(Timeline tr) {

@@ -22,11 +22,12 @@ package casmi.graphics.object;
 import casmi.graphics.Graphics;
 
 /**
- * Perse interface for Frustum, Ortho, and Perspective.
+ * Projection interface for Frustum, Ortho and Perspective.
  *
  * @author Y. Ban
+ * @author Takashi AOKI <federkasten@me.com>
  */
 public interface Projection {
-
-    void renderForSelection(Graphics g);
+    void project(Graphics g);
+    void projectForSelection(Graphics g);
 }

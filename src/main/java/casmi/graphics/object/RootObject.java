@@ -287,9 +287,6 @@ public class RootObject extends GraphicsObject {
         }
     }
 
-    @Override
-    public void render(Graphics g) {}
-
     public void renderAll(Graphics g) {
         if (this.isVisible()) {
             this.g = g;
@@ -518,21 +515,21 @@ public class RootObject extends GraphicsObject {
             if (p instanceof Perspective) {
                 Perspective perspective = (Perspective)p;
                 if (!selection)
-                    perspective.render(g);
+                    perspective.project(g);
                 else
-                    perspective.renderForSelection(g);
+                    perspective.projectForSelection(g);
             } else if (p instanceof Ortho) {
                 Ortho ortho = (Ortho)p;
                 if (!selection)
-                    ortho.render(g);
+                    ortho.project(g);
                 else
-                    ortho.renderForSelection(g);
+                    ortho.projectForSelection(g);
             } else if (p instanceof Frustum) {
                 Frustum frustum = (Frustum)p;
                 if (!selection)
-                    frustum.render(g);
+                    frustum.project(g);
                 else
-                    frustum.renderForSelection(g);
+                    frustum.projectForSelection(g);
             }
         }
         if (selection && projections.size() == 0) {

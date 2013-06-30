@@ -20,26 +20,24 @@
 package casmi.graphics.object;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.element.Element;
 import casmi.matrix.Vector3D;
 
 /**
  * Light object class.
- * Wrap JOGL and make it easy to use.
+ * Wrapper of JOGL light
  *
  * @author Y. Ban
  */
-public class Light extends Element implements ObjectRender {
+public class Light {
 
-    private Vector3D dv;
+    private Vector3D direction;
     private int index;
-    private Vector3D v;
+    private Vector3D position;
     private Color color;
     private double angle = 30.0;
     private LightMode lightMode = LightMode.NONE;
@@ -50,11 +48,11 @@ public class Light extends Element implements ObjectRender {
     private float specular[] = {0,0,0,1.0f};
     private float emissive[] = {0,0,0,1.0f};
 
-    private boolean Sh = false;
-    private boolean Am = false;
-    private boolean Di = false;
-    private boolean Sp = false;
-    private boolean Em = false;
+    private boolean useShininess = false;
+    private boolean useAmbient = false;
+    private boolean useDiffuse = false;
+    private boolean useSpecular = false;
+    private boolean useEmissive = false;
 
     /**
      * Creates Light object.
@@ -74,9 +72,9 @@ public class Light extends Element implements ObjectRender {
      */
     public Light(LightMode lightMode) {
         this.lightMode = lightMode;
-        this.v         = new Vector3D();
-        this.dv        = new Vector3D();
-        this.color     = new RGBColor(0.0, 0.0, 0.0);
+        this.position = new Vector3D();
+        this.direction = new Vector3D();
+        this.color = new RGBColor(0.0, 0.0, 0.0);
     }
 
     /**
@@ -130,7 +128,7 @@ public class Light extends Element implements ObjectRender {
      *                     The z-direction of Light.
      */
     public void setDirection(double x,double y, double z) {
-        this.dv.set(x, y, z);
+        this.direction.set(x, y, z);
     }
 
 
@@ -158,44 +156,36 @@ public class Light extends Element implements ObjectRender {
         this.lightMode = lightMode;
     }
 
-    @Override
     public void render(Graphics g) {
-        v.set(x, y, z);
-
-        float pos[] = {(float) v.getX(),(float) v.getY(),(float) v.getZ(), 1.0f};
+        float pos[] = {(float) position.getX(),(float) position.getY(),(float) position.getZ(), 1.0f};
         g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_POSITION, pos, 0);
-        if(Am==true)
+        if(useAmbient==true)
             g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_AMBIENT, ambient, 0);
-        if(Di==true)
+        if(useDiffuse==true)
             g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_DIFFUSE, diffuse, 0);
-        if(Sp==true)
+        if(useSpecular==true)
             g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_SPECULAR,specular, 0);
-        if(Em==true)
+        if(useEmissive==true)
             g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_EMISSION,emissive, 0);
-        if(Sh==true)
+        if(useShininess==true)
             g.getGL().glLightfv(GL2.GL_LIGHT0+index, GL2.GL_SHININESS,shininess, 0);
 
         switch(lightMode){
         case AMBIENT:
-            g.setAmbientLight(index, color, true, v);
+            g.setAmbientLight(index, color, true, position);
             break;
         case DIRECTION:
-            g.setDirectionalLight(index, color, true, dv);
+            g.setDirectionalLight(index, color, true, direction);
             break;
         case POINT:
-            g.setPointLight(index, color, true, v);
+            g.setPointLight(index, color, true, position);
             break;
         case SPOT:
-            g.setSpotLight(index, color, true, v, (float)dv.getX(), (float)dv.getY(), (float)dv.getZ(), (float)angle);
+            g.setSpotLight(index, color, true, position, (float)direction.getX(), (float)direction.getY(), (float)direction.getZ(), (float)angle);
             break;
         case NONE:
             break;
-
         }
-    }
-
-    @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
     }
 
     /**
@@ -205,7 +195,7 @@ public class Light extends Element implements ObjectRender {
      *                         The x-direction of Light.
      */
     public double getDirectionX() {
-        return dv.getX();
+        return direction.getX();
     }
 
     /**
@@ -215,7 +205,7 @@ public class Light extends Element implements ObjectRender {
      *                         The x-direction of Light.
      */
     public void setDirectionX(double directionX) {
-        this.dv.setX(directionX);
+        this.direction.setX(directionX);
     }
 
     /**
@@ -225,7 +215,7 @@ public class Light extends Element implements ObjectRender {
      *                         The x-direction of Light.
      */
     public double getDirectionY() {
-        return dv.getY();
+        return direction.getY();
     }
 
     /**
@@ -235,7 +225,7 @@ public class Light extends Element implements ObjectRender {
      *                         The y-direction of Light.
      */
     public void setDirectionY(double directionY) {
-        this.dv.setY(directionY);
+        this.direction.setY(directionY);
     }
 
     /**
@@ -245,7 +235,7 @@ public class Light extends Element implements ObjectRender {
      *                         The z-direction of Light.
      */
     public double getDirectionZ() {
-        return dv.getZ();
+        return direction.getZ();
     }
 
     /**
@@ -255,7 +245,7 @@ public class Light extends Element implements ObjectRender {
      *                         The z-direction of Light.
      */
     public void setDirectionZ(double directionZ) {
-        this.dv.setZ(directionZ);
+        this.direction.setZ(directionZ);
     }
 
     /**
@@ -296,7 +286,7 @@ public class Light extends Element implements ObjectRender {
      */
     public void setShininess(float shininess[]) {
         this.shininess = shininess;
-        Sh = true;
+        useShininess = true;
     }
 
     /**
@@ -317,7 +307,7 @@ public class Light extends Element implements ObjectRender {
      */
     public void setAmbient(float ambient[]) {
         this.ambient = ambient;
-        Am = true;
+        useAmbient = true;
     }
 
     /**
@@ -338,7 +328,7 @@ public class Light extends Element implements ObjectRender {
      */
     public void setDiffuse(float diffuse[]) {
         this.diffuse = diffuse;
-        Di = true;
+        useDiffuse = true;
     }
 
     /**
@@ -359,7 +349,7 @@ public class Light extends Element implements ObjectRender {
      */
     public void setSpecular(float specular[]) {
         this.specular = specular;
-        Sp = true;
+        useSpecular = true;
     }
 
     /**
@@ -380,6 +370,28 @@ public class Light extends Element implements ObjectRender {
      */
     public void setEmissive(float emissive[]) {
         this.emissive = emissive;
-        Em = true;
+        useEmissive = true;
     }
+
+    /**Sets the position of the Element in 3D.
+    *
+    * @param x
+    *              x-coordinate
+    * @param y
+    *              y-coordinate
+    * @param z
+    *              z-coordinate
+    */
+   public void setPosition(double x, double y, double z) {
+       this.position.set(x, y, z);
+   }
+
+   /**Sets the position of the Element in 2D.
+    *
+    * @param v
+    *              the vertex of the position of the Element
+    */
+   public void setPosition(Vector3D v) {
+       this.position = v;
+   }
 }

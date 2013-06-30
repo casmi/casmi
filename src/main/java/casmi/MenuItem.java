@@ -24,6 +24,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 
+import casmi.callback.MenuItemSelectCallback;
+
 /**
  * @author T. Takeuchi
  */

@@ -19,19 +19,15 @@
 
 package casmi.graphics.object;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
-
 import casmi.graphics.Graphics;
-import casmi.graphics.element.Element;
 
 /**
  * Frustum class. Works like glFrustum.
- * Wrap JOGL and make it easy to use.
+ * Wrapper of frustum projection for JOGL
  *
  * @author Y. Ban
  */
-public class Frustum extends Element implements ObjectRender, Projection {
+public class Frustum implements Projection {
 
     private double left;
     private double right;
@@ -102,7 +98,7 @@ public class Frustum extends Element implements ObjectRender, Projection {
     }
 
     @Override
-    public void render(Graphics g){
+    public void project(Graphics g){
         if(def){
             g.setFrustum();
         } else {
@@ -111,16 +107,11 @@ public class Frustum extends Element implements ObjectRender, Projection {
     }
 
     @Override
-    public void renderForSelection(Graphics g){
+    public void projectForSelection(Graphics g){
         if(def){
             g.setJustFrustum();
         } else {
             g.setJustFrustum(left, right, bottom, top, near, far);
         }
     }
-
-    @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
-    }
-
 }

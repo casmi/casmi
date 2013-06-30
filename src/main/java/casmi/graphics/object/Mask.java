@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
@@ -34,11 +33,13 @@ import casmi.graphics.element.Element;
  *
  * @author Y. Ban
  */
-public class Mask extends Element implements ObjectRender {
+public class Mask {
 
     private List<Element> elements;
     private BufferedImage maskBuff;
     private boolean maskFlip;
+
+    private double alpha;
 
     /**
      * Creates a new Mask.
@@ -125,14 +126,14 @@ public class Mask extends Element implements ObjectRender {
             g.pushMatrix();
             {
                 if (el.isTween()) {
-                    el.setFillAlpha((int)((int)el.getFillAlpha() * this.getSceneFillColor().getAlpha()));
-                    el.setStrokeAlpha((int)((int)el.getStrokeAlpha() * this.getSceneStrokeColor().getAlpha()));
+                    el.setFillAlpha((int)((int)el.getFillAlpha() * this.alpha));
+                    el.setStrokeAlpha((int)((int)el.getStrokeAlpha() * this.alpha));
                     g.render(el);
                     el.setFillAlpha((int)el.getFillAlpha());
                     el.setStrokeAlpha((int)el.getStrokeAlpha());
                 } else {
-                    el.getFillColor().setAlpha(el.getFillColor().getAlpha() * getSceneFillColor().getAlpha());
-                    el.getStrokeColor().setAlpha(el.getStrokeColor().getAlpha() * getSceneStrokeColor().getAlpha());
+                    el.getFillColor().setAlpha(el.getFillColor().getAlpha() * this.alpha);
+                    el.getStrokeColor().setAlpha(el.getStrokeColor().getAlpha() * this.alpha);
                     g.render(el);
                     el.getFillColor().setAlpha(el.getFillColor().getAlpha());
                     el.getStrokeColor().setAlpha(el.getStrokeColor().getAlpha());
@@ -142,11 +143,6 @@ public class Mask extends Element implements ObjectRender {
         }
     }
 
-    @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
-    }
-
-    @Override
     public void render(Graphics g) {
         GL2 gl = g.getGL();
         gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -197,5 +193,13 @@ public class Mask extends Element implements ObjectRender {
      */
     public void setInverseMask(){
         this.maskFlip = true;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
     }
 }

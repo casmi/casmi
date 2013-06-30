@@ -19,19 +19,15 @@
 
 package casmi.graphics.object;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
-
 import casmi.graphics.Graphics;
-import casmi.graphics.element.Element;
 
 /**
  * Perspective class. Works like glFrustum.
- * Wrap JOGL and make it easy to use.
+ * Wrapper of perspective projection for JOGL
  *
  * @author Y. Ban
  */
-public class Perspective extends Element implements ObjectRender, Projection {
+public class Perspective implements Projection {
 
     private double fov;
     private double aspect;
@@ -91,7 +87,7 @@ public class Perspective extends Element implements ObjectRender, Projection {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void project(Graphics g) {
         if (def) {
             double cameraZ = ((g.getHeight() / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
             g.setPerspective(Math.PI / 3.0, (double) g.getWidth()
@@ -102,10 +98,7 @@ public class Perspective extends Element implements ObjectRender, Projection {
     }
 
     @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {}
-
-    @Override
-    public void renderForSelection(Graphics g) {
+    public void projectForSelection(Graphics g) {
         if (def) {
             g.setJustPerspective();
         } else {

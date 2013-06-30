@@ -19,21 +19,18 @@
 
 package casmi.graphics.object;
 
-import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
-
 import casmi.graphics.Graphics;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
-import casmi.graphics.element.Element;
 
 /**
  * Material class.
- * Wrap JOGL and make it easy to use.
+ * Wrapper of JOGL for managing background
  *
  * @author Y. Ban
  */
-public class Background extends Element implements ObjectRender{
+public class Background {
+
     private double red;
     private double green;
     private double blue;
@@ -100,8 +97,6 @@ public class Background extends Element implements ObjectRender{
         mode = colorMode.ColorSet;
     }
 
-
-    @Override
     public void render(Graphics g){
         switch(mode){
         case Gray:
@@ -118,10 +113,4 @@ public class Background extends Element implements ObjectRender{
             break;
         }
     }
-
-
-    @Override
-    public void render(GL2 gl, GLU glu, int width, int height) {
-    }
-
 }
