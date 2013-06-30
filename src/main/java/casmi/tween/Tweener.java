@@ -142,12 +142,17 @@ public class Tweener {
         initialFillAlpha = this.element.getFillColor().getAlpha();
 
         this.element.setTween(true);
+
+        clear();
+    }
+
+    public final void clear() {
         this.animations.clear();
     }
 
     public final void reset() {
         resetElement();
-        this.animations.clear();
+        clear();
     }
 
     private final void resetElement() {

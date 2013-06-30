@@ -24,6 +24,11 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
+import casmi.callback.MouseClickCallback;
+import casmi.callback.MouseClickEventType;
+import casmi.callback.MouseEventCallback;
+import casmi.callback.MouseOverCallback;
+import casmi.callback.MouseOverEventType;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -737,16 +742,15 @@ abstract public class Element implements Cloneable, Renderable {
 	public void callMouseOverCallback(boolean b) {
 		for (int i = 0; i < mouseEventCallbacks.size(); i++) {
 			if (mouseEventCallbacks.get(i) instanceof MouseOverCallback) {
-				MouseOverCallback mOver = (MouseOverCallback) mouseEventCallbacks
-						.get(i);
+				MouseOverCallback callback = (MouseOverCallback) mouseEventCallbacks.get(i);
 				if (b == true) {
 					if (mouseOver == false) {
-						mOver.run(MouseEventCallback.MouseOverTypes.ENTERED, this);
+						callback.run(MouseOverEventType.ENTERED, this);
 					}
-					mOver.run(MouseEventCallback.MouseOverTypes.EXISTED, this);
+					callback.run(MouseOverEventType.EXISTED, this);
 					mouseOver = true;
 				} else {
-					mOver.run(MouseEventCallback.MouseOverTypes.EXITED, this);
+					callback.run(MouseOverEventType.EXITED, this);
 				}
 			}
 		}
@@ -755,24 +759,22 @@ abstract public class Element implements Cloneable, Renderable {
 	public void callMouseClickCallback(casmi.MouseEvent e) {
 		for (int i = 0; i < mouseEventCallbacks.size(); i++) {
 			if (mouseEventCallbacks.get(i) instanceof MouseClickCallback) {
-				MouseClickCallback mClick = (MouseClickCallback) mouseEventCallbacks
-						.get(i);
+				MouseClickCallback callback = (MouseClickCallback) mouseEventCallbacks.get(i);
 
 				if (e == casmi.MouseEvent.CLICKED)
-					mClick.run(
-							MouseEventCallback.MouseClickTypes.CLICKED, this);
+					callback.run(MouseClickEventType.CLICKED, this);
+
 				if (e == casmi.MouseEvent.PRESSED)
-					mClick.run(
-							MouseEventCallback.MouseClickTypes.PRESSED, this);
+					callback.run(MouseClickEventType.PRESSED, this);
+
 				if (e == casmi.MouseEvent.RELEASED)
-					mClick.run(
-							MouseEventCallback.MouseClickTypes.RELEASED, this);
+					callback.run(MouseClickEventType.RELEASED, this);
+
 				if (e == casmi.MouseEvent.DRAGGED)
-					mClick.run(
-							MouseEventCallback.MouseClickTypes.DRAGGED, this);
+					callback.run(MouseClickEventType.DRAGGED, this);
+
 				if (e == casmi.MouseEvent.MOVED)
-					mClick.run(
-							MouseEventCallback.MouseClickTypes.MOVED, this);
+					callback.run(MouseClickEventType.MOVED, this);
 			}
 		}
 	}

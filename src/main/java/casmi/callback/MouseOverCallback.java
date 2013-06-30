@@ -17,34 +17,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graphics.element;
+package casmi.callback;
+
+import casmi.graphics.element.Element;
 
 /**
- * Callback interface for mouseEvent.
+ * Callback interface for mouseOver.
  *
  * @author Y. Ban
  */
-public interface MouseEventCallback {
-
-    public enum MouseOverTypes {
-
-        ENTERED,
-
-        EXISTED,
-
-        EXITED
-    }
-
-    public enum MouseClickTypes {
-
-        CLICKED,
-
-        PRESSED,
-
-        RELEASED,
-
-        DRAGGED,
-
-        MOVED
-    }
+public interface MouseOverCallback extends MouseEventCallback {
+    void run(MouseOverEventType eventType, Element element);
 }

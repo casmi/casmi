@@ -17,14 +17,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package casmi.graphics.element;
+package casmi.callback;
+
+import casmi.graphics.element.Element;
 
 /**
- * Callback interface for mouseOver.
+ * Callback interface for mouseClick.
  *
  * @author Y. Ban
  */
-public interface MouseOverCallback extends MouseEventCallback {
-
-    void run(MouseOverTypes eventtype, Element element);
+public interface MouseClickCallback extends MouseEventCallback {
+    void run(MouseClickEventType eventType, Element element);
 }
