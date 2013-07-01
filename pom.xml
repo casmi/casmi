@@ -8,7 +8,7 @@
 
     <name>casmi</name>
     <url>http://casmi.github.io/</url>
-    <description>2D/3D visualization library for Jav</description>
+    <description>2D/3D visualization library for Java</description>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
