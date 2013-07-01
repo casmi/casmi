@@ -28,7 +28,8 @@ import javax.media.opengl.GL2;
 
 import casmi.MouseStatus;
 import casmi.graphics.Graphics;
-import casmi.graphics.object.Background;
+import casmi.graphics.object.BackgroundObject;
+import casmi.tween.Tweener;
 
 import com.jogamp.common.nio.Buffers;
 
@@ -40,7 +41,7 @@ import com.jogamp.common.nio.Buffers;
  */
 public class RootCanvas extends Canvas {
 
-    private Background background;
+    private BackgroundObject background;
 
     private IntBuffer selectionBuffer;
     private int selections[];
@@ -49,6 +50,8 @@ public class RootCanvas extends Canvas {
 
     private List<Canvas> canvases = new CopyOnWriteArrayList<Canvas>();
 
+    protected List<Tweener> tweeners = new CopyOnWriteArrayList<Tweener>();
+
     public RootCanvas() {
         super();
 
@@ -56,11 +59,18 @@ public class RootCanvas extends Canvas {
         selections = new int[SELECTION_BUFFER_SIZE];
     }
 
-    public void setBackGroundColor(Background bg) {
+    public void setBackGroundColor(BackgroundObject bg) {
         this.background = bg;
     }
 
-    public void render(Graphics g, double mouseX, double mouseY) {
+    private void animate() {
+        for (Tweener t: tweeners) {
+            t.render();
+        }
+    }
+
+    public synchronized void render(Graphics g, double mouseX, double mouseY) {
+        animate();
 
         // render
 
@@ -74,8 +84,6 @@ public class RootCanvas extends Canvas {
 
         if (background != null) background.render(g);
         g.clear();
-
-        renderTweenManager(g);
 
         renderAll(g);
 
@@ -127,7 +135,7 @@ public class RootCanvas extends Canvas {
         }
     }
 
-    public void reset(Graphics g) {
+    public synchronized void reset(Graphics g) {
         resetObjects(g);
 
         for (Canvas c: canvases) {
@@ -143,12 +151,16 @@ public class RootCanvas extends Canvas {
         }
     }
 
-    public void addCanvas(Canvas c) {
+    public synchronized void addCanvas(Canvas c) {
         canvases.add(c);
     }
 
-    public void removeCanvas(Canvas c) {
+    public synchronized void removeCanvas(Canvas c) {
         canvases.remove(c);
+    }
+
+    public synchronized void removeAllCanvases() {
+        canvases.clear();
     }
 
     public void updateMouseStatus(MouseStatus status) {
@@ -157,5 +169,17 @@ public class RootCanvas extends Canvas {
         for (Canvas c : canvases) {
             c.setMouseStatus(status);
         }
+    }
+
+    public synchronized void addTweener(Tweener t) {
+        tweeners.add(t);
+    }
+
+    public synchronized void removeTweener(Tweener t) {
+        tweeners.remove(t);
+    }
+
+    public synchronized void removeAllTweeners() {
+        tweeners.clear();
     }
 }

@@ -57,7 +57,7 @@ import casmi.graphics.canvas.RootCanvas;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
-import casmi.graphics.object.Background;
+import casmi.graphics.object.BackgroundObject;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
 import casmi.graphics.object.Light;
@@ -65,7 +65,6 @@ import casmi.graphics.object.Ortho;
 import casmi.graphics.object.Perspective;
 import casmi.image.ImageType;
 import casmi.tween.Tweener;
-import casmi.tween.TweenerManager;
 import casmi.ui.PopupMenu;
 import casmi.util.FileUtil;
 
@@ -754,58 +753,50 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootCanvas.render(g, getMouseX(), getMouseY());
     }
 
-    private static TweenerManager tweenerManager = null;
-
-    private TweenerManager getTweenManager() {
-    	if (tweenerManager == null) {
-    		tweenerManager = new TweenerManager();
-    		rootCanvas.setTweenManager(tweenerManager);
-    	}
-
-    	return tweenerManager;
-    }
-
     public void addTweener(Tweener t) {
-        getTweenManager().add(t);
+        rootCanvas.addTweener(t);
     }
 
     public void removeTweener(Tweener t) {
-        getTweenManager().remove(t);
+        rootCanvas.removeTweener(t);
     }
 
-   public void addObject(Element obj) {
-       if(rootObjectIsInitialized){
-           rootCanvas.add(obj);
-//           if(obj instanceof Timeline){
-//               rootTimeline = (Timeline) obj;
-//               timeline = true;
-//               rootTimeline.setKeyboard(keyboard);
-//               rootTimeline.setMouse(mouse);
-//               rootTimeline.setPopup(popupMenu);
-//               rootTimeline.setApplet(this);
-//           }
-       }
-   }
+    public void removeAllTweeners() {
+        rootCanvas.removeAllTweeners();
+    }
 
-   public void addObject(int index, Element obj) {
-       rootCanvas.add(index, obj);
+    public void addObject(Element obj) {
+        if(rootObjectIsInitialized){
+            rootCanvas.add(obj);
+            //           if(obj instanceof Timeline){
+            //               rootTimeline = (Timeline) obj;
+            //               timeline = true;
+            //               rootTimeline.setKeyboard(keyboard);
+            //               rootTimeline.setMouse(mouse);
+            //               rootTimeline.setPopup(popupMenu);
+            //               rootTimeline.setApplet(this);
+            //           }
+        }
+    }
 
-//       if(obj instanceof Timeline){
-//           rootTimeline = (Timeline)obj;
-//           timeline = true;
-//           rootTimeline.setKeyboard(keyboard);
-//           rootTimeline.setMouse(mouse);
-//           rootTimeline.setPopup(popupMenu);
-//           rootTimeline.setApplet(this);
-//       }
-   }
+    public void addObject(int index, Element obj) {
+        rootCanvas.add(index, obj);
+        //       if(obj instanceof Timeline){
+        //           rootTimeline = (Timeline)obj;
+        //           timeline = true;
+        //           rootTimeline.setKeyboard(keyboard);
+        //           rootTimeline.setMouse(mouse);
+        //           rootTimeline.setPopup(popupMenu);
+        //           rootTimeline.setApplet(this);
+        //       }
+    }
 
-   public void addObject(Collection<? extends Element> objects) {
-       rootCanvas.addAll(objects);
-   }
+    public void addObject(Collection<? extends Element> objects) {
+        rootCanvas.addAll(objects);
+    }
 
     public void removeObject(Element e) {
-    	rootCanvas.remove(e);
+        rootCanvas.remove(e);
     }
 
 
@@ -823,6 +814,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     public void removeCanvas(Canvas c) {
         rootCanvas.removeCanvas(c);
+    }
+
+    public void removeAllCanvases() {
+        rootCanvas.removeAllCanvases();
     }
 
     public void setPerspective() {
@@ -906,19 +901,19 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void setBackGroundColor(double gray) {
-        rootCanvas.setBackGroundColor(new Background(gray));
+        rootCanvas.setBackGroundColor(new BackgroundObject(gray));
     }
 
     public void setBackGroundColor(double r, double g, double b) {
-        rootCanvas.setBackGroundColor(new Background(r, g, b));
+        rootCanvas.setBackGroundColor(new BackgroundObject(r, g, b));
     }
 
     public void setBackGroundColor(Color color) {
-        rootCanvas.setBackGroundColor(new Background(color));
+        rootCanvas.setBackGroundColor(new BackgroundObject(color));
     }
 
     public void setBackGroundColor(ColorSet colorset) {
-        rootCanvas.setBackGroundColor(new Background(colorset));
+        rootCanvas.setBackGroundColor(new BackgroundObject(colorset));
     }
 
     public static void showAlert(String title, String message) {

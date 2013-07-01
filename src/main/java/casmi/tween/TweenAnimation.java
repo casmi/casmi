@@ -47,9 +47,9 @@ public class TweenAnimation {
 
     public TweenAnimation(AnimationTarget target, double startValue, double targetValue, double duration, Class<? extends TweenEquation> equationClazz) {
         this.target = target;
-        this.startValue = startValue;
-        this.endValue = targetValue;
-        this.duration = duration;
+        this.setStartValue(startValue);
+        this.setEndValue(targetValue);
+        this.setDuration(duration);
 
         try {
             this.equation = equationClazz.newInstance();
@@ -74,6 +74,18 @@ public class TweenAnimation {
         return endValue;
     }
 
+    public void setStartValue(double startValue) {
+        this.startValue = startValue;
+    }
+
+    public void setEndValue(double endValue) {
+        this.endValue = endValue;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
     private double readyTime;
     private double startTime;
     private double delayTime = 0.0;
@@ -85,23 +97,8 @@ public class TweenAnimation {
      */
     void start(long currentTime) {
         this.readyTime = currentTime;
-//        if(repeat)
-//            this.startTime = readyTime;
-//        else
         this.startTime = this.readyTime + this.delayTime;
-
-        this.endTime = this.startTime + duration;
-
-//        nextStartMillis = Math.max(endMillis, endMillis
-//                + intervalMillis);
-
-//        isReady = true;
-//        isStarted = false;
-//        isEnded = false;
-//        isCompleted = false;
-
-//        callReadyCallbacks();
-
+        this.endTime = this.startTime + getDuration();
         this.status = TweenAnimationStatus.RUNNING;
     }
 
@@ -110,69 +107,6 @@ public class TweenAnimation {
      * was first enabled.
      */
     final void render(long currentTime) {
-//        if (!isReady())
-//            return;
-//
-//        if (checkRepetition(currentMillis)){
-//            iteration += 1;
-//            start(System.currentTimeMillis(), true);
-//            return;
-//        }
-//
-//        if (isEnded) {
-//            target.end(g, tweenType);
-//            return;
-//        }
-
-//        if (checkStart(currentMillis) && !isStarted) {
-//
-//
-//            isStarted = true;
-//            if (iteration > 0 && target != null) {
-//                target.update(g, tweenType, startValues);
-//            } else if (target != null) {
-//                this.startValues = target.getTweenValues(tweenType);
-//
-//                int size = startValues.size();
-//                targetMinusStartValues.clear();
-//
-//                for (int i = 0; i < size; i++) {
-//
-//                    if( isRelative ) {
-//                        targetValues.set(i, startValues.get(i) + targetValues.get(i));
-//                    }
-//                    targetMinusStartValues.add(targetValues.get(i) - startValues.get(i));
-//                }
-//            }
-//            callStartCallbacks();
-//        }else if(!isStarted){
-//            return;
-//        }
-//
-//        if (checkEnd(currentMillis) && !isEnded) {
-//            isEnded = true;
-//
-//            if (target != null) {
-//
-//                int size = startValues.size();
-//
-//                for (int i = 0; i < size; i++) {
-//                    currentValues.set(i, isReversed
-//                            ? targetValues.get(i) - targetMinusStartValues.get(i)
-//                            : startValues.get(i) + targetMinusStartValues.get(i));
-//                }
-//                target.update(g, tweenType, currentValues);
-//            }
-//
-//            if (isRepeat()) {
-//                callIterationCompleteCallbacks();
-//            } else {
-//                isCompleted = true;
-//                callIterationCompleteCallbacks();
-//                callCompleteCallbacks();
-//            }
-
-//        }
         if (this.getStatus() != TweenAnimationStatus.RUNNING) {
             return;
         }
@@ -182,24 +116,8 @@ public class TweenAnimation {
             return;
         }
 
-        value = equation.compute(currentTime - startTime, startValue, endValue - startValue, duration);
+        value = equation.compute(currentTime - startTime, getStartValue(), getEndValue() - getStartValue(), getDuration());
     }
-
-    public void end() {
-
-    }
-
-//    public boolean isRepeat() {
-//        return repeat;
-//    }
-//
-//    public void setRepeat(boolean repeat) {
-//        this.repeat = repeat;
-//    }
-//
-//    public long getNumRepeats() {
-//        return numRepeats;
-//    }
 
     public double getReadyTime() {
         return readyTime;

@@ -34,7 +34,6 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.material.Material;
-import casmi.graphics.object.Mask;
 import casmi.graphics.object.Renderable;
 import casmi.graphics.object.Resettable;
 import casmi.matrix.Vector3D;
@@ -49,18 +48,16 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
     protected double strokeRed   = 0.0;
 	protected double strokeGreen = 0.0;
 	protected double strokeBlue  = 0.0;
-	protected double strokeAlpha = 1.0;
+//	protected double strokeAlpha = 1.0;
 
 	protected double fillRed   = 1.0;
 	protected double fillGreen = 1.0;
 	protected double fillBlue  = 1.0;
-	protected double fillAlpha = 1.0;
+//	protected double fillAlpha = 1.0;
 
 	private double sceneA = 1.0;
 
-//	protected Texture texture;
-//	protected Texture normalMap;
-	protected Mask mask;
+//	protected Mask mask;
 
 	public boolean enableMask = true;
 
@@ -73,19 +70,16 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	protected double scaleZ = 1.0;
 
 	protected double rotate = 0.0;
-//	protected double tAS;
-//	protected double tAF;
 
-	protected Color strokeColor      = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha);
-	protected Color fillColor        = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha);
-	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, strokeAlpha * sceneA);
-	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, fillAlpha * sceneA);
+	protected Color strokeColor      = new RGBColor(strokeRed, strokeGreen, strokeBlue, 1.0);
+	protected Color fillColor        = new RGBColor(fillRed, fillGreen, fillBlue, 1.0);
+	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, 1.0 * sceneA);
+	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, 1.0 * sceneA);
 	protected Material material      = new Material();
 	protected boolean ismaterial = false;
 
 	protected boolean stroke = true;
 	protected boolean fill   = true;
-	protected boolean tween  = false;
 
 	protected float strokeWidth = 1.0f;
 
@@ -93,11 +87,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	private boolean currentMouseOver = false;
 	private boolean prevMouseOver = false;
 
-//	private boolean selectionBuffer = false;
-
 	private boolean depthTest = true;
-//	private boolean removeElement = false;
-//	private boolean threeD = false;
 
 	protected boolean enableTexture = false;
 	protected boolean visible = true;
@@ -105,18 +95,6 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 
 	protected boolean reset = false;
 	protected boolean init = true;
-
-//	protected Shader shader;
-//	protected boolean enableShader = false;
-//    protected boolean enableBump = false;
-//
-//    protected BlurMode blurMode = BlurMode.BLUR;
-//    protected boolean enableBlur = false;
-//    protected boolean rootBlur = false;
-//    protected boolean rootMotionBlur = false;
-//
-//    protected double glowSize = 0.007;
-//    protected Shader objIDShader;
 
 	/**
 	 * Returns the width of this Element's stroke.
@@ -156,7 +134,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public void setStrokeColor(Color color) {
 		this.strokeColor = color;
-		this.strokeAlpha = color.getAlpha();
+//		this.strokeAlpha = color.getAlpha();
 	}
 
 	/**
@@ -167,7 +145,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public void setStrokeColorAlpha(double alpha) {
 		this.strokeColor.setAlpha(alpha);
-		this.strokeAlpha = alpha;
+//		this.strokeAlpha = alpha;
 	}
 
 	/**
@@ -190,7 +168,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public void setStrokeColor(ColorSet colorSet, double alpha) {
 	    strokeColor = new RGBColor(colorSet);
-	    this.strokeAlpha = alpha;
+//	    this.strokeAlpha = alpha;
 	}
 
 	/**
@@ -211,7 +189,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public void setFillColor(Color color) {
 		this.fillColor = color;
-		this.fillAlpha = color.getAlpha();
+//		this.fillAlpha = color.getAlpha();
 	}
 
 	/**
@@ -222,7 +200,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public void setFillColorAlpha(double alpha) {
 		this.fillColor.setAlpha(alpha);
-		this.fillAlpha = alpha;
+//		this.fillAlpha = alpha;
 	}
 
 	/**
@@ -245,7 +223,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public void setFillColor(ColorSet colorSet, double alpha) {
 		this.fillColor = new RGBColor(colorSet, alpha);
-		this.fillAlpha = alpha;
+//		this.fillAlpha = alpha;
 	}
 
 	public boolean isStroke() {
@@ -295,52 +273,55 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	}
 
 	public Color getSceneStrokeColor() {
-		sceneStrokeColor = strokeColor.clone();
-		if (tween) {
-			sceneStrokeColor.setAlpha(this.strokeAlpha * sceneA);
-		} else {
-			sceneStrokeColor.setAlpha(strokeColor.getAlpha() * sceneA);
-		}
-		return sceneStrokeColor;
+//		sceneStrokeColor = strokeColor.clone();
+//		if (tween) {
+//			sceneStrokeColor.setAlpha(this.strokeAlpha * sceneA);
+//		} else {
+//			sceneStrokeColor.setAlpha(strokeColor.getAlpha() * sceneA);
+//		}
+//		return sceneStrokeColor;
+	    return strokeColor;
 	}
 
 	public Color getSceneFillColor() {
-	    sceneFillColor = fillColor.clone();
-		if (tween) {
-			sceneFillColor.setAlpha(this.fillAlpha * sceneA);
-		} else {
-			this.sceneFillColor.setAlpha(fillColor.getAlpha() * sceneA);
-		}
-		return this.sceneFillColor;
+//	    sceneFillColor = fillColor.clone();
+//		if (tween) {
+//			sceneFillColor.setAlpha(this.fillAlpha * sceneA);
+//		} else {
+//			this.sceneFillColor.setAlpha(fillColor.getAlpha() * sceneA);
+//		}
+//		return this.sceneFillColor;
+	    return fillColor;
 	}
 
 	public Color getSceneColor(Color color) {
-	    sceneFillColor = color.clone();
-		if (tween) {
-			sceneFillColor.setAlpha(this.fillAlpha * sceneA);
-		} else {
-			sceneFillColor.setAlpha(color.getAlpha() * sceneA);
-		}
-		return sceneFillColor;
+//	    sceneFillColor = color.clone();
+//		if (tween) {
+//			sceneFillColor.setAlpha(this.fillAlpha * sceneA);
+//		} else {
+//			sceneFillColor.setAlpha(color.getAlpha() * sceneA);
+//		}
+//		return sceneFillColor;
+	    return color;
 	}
 
-	/**Decides the Element has the tween or not.
-	 *
-	 * @param tween
-	 *
-	 */
-	public void setTween(boolean tween) {
-		this.tween = tween;
-	}
+//	/**Decides the Element has the tween or not.
+//	 *
+//	 * @param tween
+//	 *
+//	 */
+//	public void setTween(boolean tween) {
+//		this.tween = tween;
+//	}
 
-	/**Gets that the Element has has the tween or not.
-	 *
-	 * @return
-	 * 			Returns the tween prediction.
-	 */
-	public boolean isTween() {
-		return this.tween;
-	}
+//	/**Gets that the Element has has the tween or not.
+//	 *
+//	 * @return
+//	 * 			Returns the tween prediction.
+//	 */
+//	public boolean isTween() {
+//		return this.tween;
+//	}
 
 	protected void move(GL2 gl) {
 	    gl.glTranslated(x, y, z);
@@ -350,21 +331,21 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	    gl.glRotated(rotateY, 0.0, 1.0, 0.0);
 	}
 
-	public double getStrokeAlpha() {
-		return strokeAlpha;
-	}
-
-	public void setStrokeAlpha(double strokeAlpha) {
-		this.strokeAlpha = strokeAlpha;
-	}
-
-	public double getFillAlpha() {
-		return fillAlpha;
-	}
-
-	public void setFillAlpha(double fillAlpha) {
-		this.fillAlpha = fillAlpha;
-	}
+//	public double getStrokeAlpha() {
+//		return strokeAlpha;
+//	}
+//
+//	public void setStrokeAlpha(double strokeAlpha) {
+//		this.strokeAlpha = strokeAlpha;
+//	}
+//
+//	public double getFillAlpha() {
+//		return fillAlpha;
+//	}
+//
+//	public void setFillAlpha(double fillAlpha) {
+//		this.fillAlpha = fillAlpha;
+//	}
 
 	/**Gets x-coordinate of the Element.
 	 *
@@ -822,24 +803,24 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 		gradation = bool;
 	}
 
-	public Mask getMask() {
-		return mask;
-	}
-
-	public void setMask(Mask mask) {
-		this.mask = mask;
-	}
-
-	public void clearMask() {
-		this.mask = null;
-	}
-
-	public boolean isMasked() {
-		if(enableMask)
-			return mask != null;
-		else
-			return false;
-    }
+//	public Mask getMask() {
+//		return mask;
+//	}
+//
+//	public void setMask(Mask mask) {
+//		this.mask = mask;
+//	}
+//
+//	public void clearMask() {
+//		this.mask = null;
+//	}
+//
+//	public boolean isMasked() {
+//		if(enableMask)
+//			return mask != null;
+//		else
+//			return false;
+//    }
 
 	public boolean isDepthTest() {
 		return depthTest;

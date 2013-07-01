@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import javax.media.opengl.GL2;
-
 import casmi.MouseStatus;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
@@ -14,7 +12,6 @@ import casmi.graphics.object.Camera;
 import casmi.graphics.object.Light;
 import casmi.graphics.object.Projection;
 import casmi.graphics.object.Resettable;
-import casmi.tween.TweenerManager;
 
 /**
  * Graphics Object
@@ -29,8 +26,6 @@ public class Canvas {
     protected List<Light> lights;
     protected Camera camera;
     protected Projection projection;
-
-    protected TweenerManager tweenerManager;
 
     protected enum ObjectMatrixMode {
         APPLY,
@@ -51,7 +46,6 @@ public class Canvas {
 		lights = new CopyOnWriteArrayList<Light>();
 		camera = null;
 		projection = null;
-		tweenerManager = null;
 	}
 
 	public void add(Element e) {
@@ -75,10 +69,6 @@ public class Canvas {
 		this.projection = p;
 	}
 
-	public void setTweenManager(TweenerManager tweenerManager) {
-	    this.tweenerManager = tweenerManager;
-	}
-
 	public synchronized void remove(Element e) {
 		elementList.remove(e);
 	}
@@ -97,10 +87,6 @@ public class Canvas {
 
 	public Projection getProjection(int index) {
 		return this.projection;
-	}
-
-	public TweenerManager getTweenManager() {
-		return tweenerManager;
 	}
 
 	public synchronized void add(int index, Element r) {
@@ -140,7 +126,6 @@ public class Canvas {
 	}
 
 	protected synchronized void renderAll(Graphics g) {
-
 // TODO
 //	    if (removeObject) {
 //	        for (Object obj : elementList) {
@@ -149,8 +134,6 @@ public class Canvas {
 //	        }
 //	        removeObject = false;
 //	    }
-
-	    renderTweenManager(g);
 
 	    setupProjection(g, false);
 	    setupCamera(g);
@@ -168,7 +151,7 @@ public class Canvas {
 	protected synchronized int renderAllForSelection(Graphics g, double mouseX, double mouseY, int beginIndex) {
 	    int lastIndex;
 
-		renderTweenManager(g);
+//		renderTweenManager(g);
 
 		g.resetMatrix();
 		setupProjection(g, true);
@@ -186,23 +169,19 @@ public class Canvas {
 		return lastIndex;
 	}
 
-	protected final void renderTweenManager(Graphics g) {
-	    g.render(tweenerManager);
-	}
-
 	private static final void renderElement(Graphics g, Element e, boolean selection) {
 		if (e.isVisible()) {
-			if (e.isMasked()) {
-				e.getMask().render(g);
-			}
+//			if (e.isMasked()) {
+//				e.getMask().render(g);
+//			}
 
 			g.pushMatrix();
 			{
                 g.render(e, selection);
 
-			    if (e.isMasked()) {
-			        g.getGL().glDisable(GL2.GL_STENCIL_TEST);
-			    }
+//			    if (e.isMasked()) {
+//			        g.getGL().glDisable(GL2.GL_STENCIL_TEST);
+//			    }
 			}
 			g.popMatrix();
 		}
@@ -221,10 +200,6 @@ public class Canvas {
 	            }
 	        } else {
 // TODO
-//	            if (e.isRemove()) {
-//	                removeObject = true;
-//	            }
-
 //	            if (e.isReset()) {
 //	                resetObject = true;
 //	                e.setReset(false);

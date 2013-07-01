@@ -30,7 +30,6 @@ import casmi.graphics.color.RGBColor;
 import casmi.graphics.object.Renderable;
 import casmi.image.Texture;
 import casmi.matrix.Vector3D;
-import casmi.tween.TweenerManager;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -67,11 +66,11 @@ public class Graphics {
 //	    }
 //	}
 
-	public void render(TweenerManager tm) {
-	    if (tm != null) {
-	        tm.render(this);
-	    }
-	}
+//	public void render(TweenerManager tm) {
+//	    if (tm != null) {
+//	        tm.render(this);
+//	    }
+//	}
 
 	public Graphics(GL2 gl, GLU glu, GLUT glut, int width, int height) {
 		this.gl   = gl;
