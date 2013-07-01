@@ -21,7 +21,6 @@ package casmi.graphics;
 
 import java.nio.DoubleBuffer;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -705,101 +704,6 @@ public class Graphics {
     public void setVertex(Vector3D v, float nx, float ny) {
         gl.glTexCoord2f(nx, ny);
         gl.glVertex3d(v.getX(), v.getY(), v.getZ());
-    }
-
-    /**
-     * Displays texture img at position (x,y).
-     * If
-     */
-    public void setImage(Texture img, double x, double y) {
-        if (img.getTexture() != null) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
-            img.enableTexture(gl);
-            gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
-            gl.glBegin(GL2.GL_QUADS);
-            switch (img.getMode()) {
-            default:
-            case CORNER:
-                gl.glTexCoord2f(0.0f, 1.0f);
-                gl.glVertex2f((float) x, (float) y - img.getHeight());
-                gl.glTexCoord2f(0.0f, 0.0f);
-                gl.glVertex2f((float) x, (float) y);
-                gl.glTexCoord2f(1.0f, 0.0f);
-                gl.glVertex2f((float) x + img.getWidth(), (float) y);
-                gl.glTexCoord2f(1.0f, 1.0f);
-                gl.glVertex2f((float) x + img.getWidth(), (float) y - img.getHeight());
-                break;
-            case CENTER:
-                gl.glTexCoord2f(0.0f, 1.0f);
-                gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
-                        - img.getHeight() / 2.0f);
-                gl.glTexCoord2f(0.0f, 0.0f);
-                gl.glVertex2f((float) x - img.getWidth() / 2.0f, (float) y
-                        + img.getHeight() / 2.0f);
-                gl.glTexCoord2f(1.0f, 0.0f);
-                gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
-                        + img.getHeight() / 2.0f);
-                gl.glTexCoord2f(1.0f, 1.0f);
-                gl.glVertex2f((float) x + img.getWidth() / 2.0f, (float) y
-                        - img.getHeight() / 2.0f);
-                break;
-            }
-            gl.glEnd();
-            img.disableTexture(gl);
-            gl.glEnable(GL.GL_DEPTH_TEST);
-        }
-
-    }
-
-    /**
-     *  Displays texture img at the point(x,y) and sets the width and height (w,h) of the texture.
-     *  A call to imageMode(CORNERS) will change the width and height parameters to define
-     *  the x and y values of the opposite corner of the image.
-     * */
-    public void setImage(Texture img, double x, double y, double w, double h) {
-        if (img.getTexture() != null) {
-            gl.glDisable(GL.GL_DEPTH_TEST);
-            img.enableTexture(gl);
-            gl.glBindTexture(GL.GL_TEXTURE_2D, img.getTexture().getTextureObject(gl));
-            gl.glBegin(GL2.GL_QUADS);
-            switch (img.getMode()) {
-            default:
-            case CORNER:
-                gl.glTexCoord2f(0.0f, 1.0f);
-                gl.glVertex2f((float) x, (float) (y - h));
-                gl.glTexCoord2f(0.0f, 0.0f);
-                gl.glVertex2f((float) x, (float) y);
-                gl.glTexCoord2f(1.0f, 0.0f);
-                gl.glVertex2f((float) (x + w), (float) y);
-                gl.glTexCoord2f(1.0f, 1.0f);
-                gl.glVertex2f((float) (x + w), (float) (y - h));
-                break;
-            case CORNERS:
-                gl.glTexCoord2f(0.0f, 1.0f);
-                gl.glVertex2f((float) x, (float) h);
-                gl.glTexCoord2f(0.0f, 0.0f);
-                gl.glVertex2f((float) x, (float) y);
-                gl.glTexCoord2f(1.0f, 0.0f);
-                gl.glVertex2f((float) w, (float) y);
-                gl.glTexCoord2f(1.0f, 1.0f);
-                gl.glVertex2f((float) w, (float) h);
-                break;
-            case CENTER:
-                gl.glTexCoord2f(0.0f, 1.0f);
-                gl.glVertex2f((float) (x - w / 2.0), (float) (y - h / 2.0));
-                gl.glTexCoord2f(0.0f, 0.0f);
-                gl.glVertex2f((float) (x - w / 2.0), (float) (y + h / 2.0));
-                gl.glTexCoord2f(1.0f, 0.0f);
-                gl.glVertex2f((float) (x + w / 2.0), (float) (y + h / 2.0));
-                gl.glTexCoord2f(1.0f, 1.0f);
-                gl.glVertex2f((float) (x + w / 2.0), (float) (y - h / 2.0));
-                break;
-            }
-            gl.glEnd();
-            img.disableTexture(gl);
-            gl.glEnable(GL.GL_DEPTH_TEST);
-        }
-
     }
 
 	// camera

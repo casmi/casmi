@@ -25,6 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.image.Texture;
 import casmi.matrix.Vector3D;
 
 /**
@@ -49,6 +50,8 @@ public class Triangle extends Element {
     private int MODE;
 
     private Color cornerColor[] = new Color[3];
+
+    private Texture texture;
 
     /**
      * Creates a new Triangle object using x,y-coordinate of corners.
@@ -256,12 +259,9 @@ public class Triangle extends Element {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
-        if (this.enableTexture) {
-            // if (texture.reloadFlag) {
-            // Graphics.reloadTextures(gl);
-            // texture.reloadFlag = false;
-            // }
-            texture.enableTexture();
+        if (this.enableTexture && this.texture != null) {
+            texture.render(gl);
+            texture.enableTexture(gl);
         }
 
         gl.glPushMatrix();
@@ -350,8 +350,8 @@ public class Triangle extends Element {
         }
         gl.glPopMatrix();
 
-        if (this.enableTexture) {
-            texture.disableTexture();
+        if (this.enableTexture && this.texture != null) {
+            texture.disableTexture(gl);
         }
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
@@ -413,7 +413,8 @@ public class Triangle extends Element {
 
     @Override
     public void reset(GL2 gl) {
-        // TODO Auto-generated method stub
-
+        if (this.enableTexture && this.texture != null) {
+            texture.reload();
+        }
     }
 }
