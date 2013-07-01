@@ -106,14 +106,11 @@ public class Sphere extends Element implements Renderable, Resettable {
     public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (this.enableTexture && this.texture != null) {
             this.texture.render(gl);
+            this.texture.enableTexture(gl);
         }
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glDisable(GL2.GL_DEPTH_TEST);
-        }
-
-        if (this.enableTexture && this.texture != null) {
-            this.texture.enableTexture(gl);
         }
 
         gl.glPushMatrix();

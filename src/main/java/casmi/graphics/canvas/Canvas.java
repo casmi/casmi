@@ -71,7 +71,7 @@ public class Canvas {
 		this.camera = c;
 	}
 
-	public void addProjection(Projection p) {
+	public void setProjection(Projection p) {
 		this.projection = p;
 	}
 
@@ -172,15 +172,6 @@ public class Canvas {
 	    setupCamera(g);
 	    setupLight(g);
 
-// TODO
-//			if (!this.isUseProjection()) {
-//			    g.matrixMode(MatrixMode.PROJECTION);
-//                g.pushMatrix();
-//                g.resetMatrix();
-//                g.setJustOrtho();
-//                g.matrixMode(MatrixMode.MODELVIEW);
-//			}
-
 	    g.pushMatrix();
 	    {
 	        loadMatrix(g);
@@ -188,13 +179,6 @@ public class Canvas {
 	        renderAllElements(g, false, 0, 0, 0);
 	    }
 	    g.popMatrix();
-
-// TODO
-//			if (!this.isUseProjection()) {
-//              g.matrixMode(MatrixMode.PROJECTION);
-//              g.popMatrix();
-//              g.matrixMode(MatrixMode.MODELVIEW);
-//          }
 	}
 
 	protected int renderAllForSelection(Graphics g, double mouseX, double mouseY, int beginIndex) {
@@ -204,18 +188,8 @@ public class Canvas {
 
 		g.resetMatrix();
 		setupProjection(g, true);
-
 		setupCamera(g);
 		setupLight(g);
-
-// TODO
-//      if (!this.isUseProjection()) {
-//          g.matrixMode(MatrixMode.PROJECTION);
-//            g.pushMatrix();
-//            g.resetMatrix();
-//            g.setJustOrtho();
-//            g.matrixMode(MatrixMode.MODELVIEW);
-//      }
 
 		g.pushMatrix();
 		{
@@ -224,13 +198,6 @@ public class Canvas {
 		    lastIndex = renderAllElements(g, true, mouseX, mouseY, beginIndex);
 		}
 		g.popMatrix();
-
-// TODO
-//      if (!this.isUseProjection()) {
-//          g.matrixMode(MatrixMode.PROJECTION);
-//          g.popMatrix();
-//          g.matrixMode(MatrixMode.MODELVIEW);
-//      }
 
 		return lastIndex;
 	}

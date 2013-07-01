@@ -866,39 +866,39 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void setPerspective() {
-        rootCanvas.addProjection(new Perspective());
+        rootCanvas.setProjection(new Perspective());
     }
 
     public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
-        rootCanvas.addProjection(new Perspective(fov, aspect, zNear, zFar));
+        rootCanvas.setProjection(new Perspective(fov, aspect, zNear, zFar));
     }
 
     public void setPerspective(Perspective perspective) {
-        rootCanvas.addProjection(perspective);
+        rootCanvas.setProjection(perspective);
     }
 
     public void setOrtho() {
-        rootCanvas.addProjection(new Ortho());
+        rootCanvas.setProjection(new Ortho());
     }
 
     public void setOrtho(double left, double right, double bottom, double top, double near, double far) {
-        rootCanvas.addProjection(new Ortho(left, right, bottom, top, near, far));
+        rootCanvas.setProjection(new Ortho(left, right, bottom, top, near, far));
     }
 
     public void setOrtho(Ortho ortho) {
-        rootCanvas.addProjection(ortho);
+        rootCanvas.setProjection(ortho);
     }
 
     public void setFrustum() {
-        rootCanvas.addProjection(new Frustum());
+        rootCanvas.setProjection(new Frustum());
     }
 
     public void setFrustum(double left, double right, double bottom, double top, double near, double far) {
-        rootCanvas.addProjection(new Frustum(left, right, bottom, top, near, far));
+        rootCanvas.setProjection(new Frustum(left, right, bottom, top, near, far));
     }
 
     public void setFrustum(Frustum frustum) {
-        rootCanvas.addProjection(frustum);
+        rootCanvas.setProjection(frustum);
     }
 
     public void setCamera() {
