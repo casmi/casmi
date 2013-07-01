@@ -28,7 +28,7 @@ import javax.media.opengl.GL2;
 
 import casmi.MouseStatus;
 import casmi.graphics.Graphics;
-import casmi.graphics.object.BackgroundObject;
+import casmi.graphics.object.Background;
 import casmi.tween.Tweener;
 
 import com.jogamp.common.nio.Buffers;
@@ -41,7 +41,7 @@ import com.jogamp.common.nio.Buffers;
  */
 public class RootCanvas extends Canvas {
 
-    private BackgroundObject background;
+    private Background background;
 
     private IntBuffer selectionBuffer;
     private int selections[];
@@ -59,7 +59,7 @@ public class RootCanvas extends Canvas {
         selections = new int[SELECTION_BUFFER_SIZE];
     }
 
-    public void setBackGroundColor(BackgroundObject bg) {
+    public void setBackGroundColor(Background bg) {
         this.background = bg;
     }
 

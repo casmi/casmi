@@ -57,7 +57,7 @@ import casmi.graphics.canvas.RootCanvas;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.element.Element;
-import casmi.graphics.object.BackgroundObject;
+import casmi.graphics.object.Background;
 import casmi.graphics.object.Camera;
 import casmi.graphics.object.Frustum;
 import casmi.graphics.object.Light;
@@ -901,19 +901,19 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     }
 
     public void setBackGroundColor(double gray) {
-        rootCanvas.setBackGroundColor(new BackgroundObject(gray));
+        rootCanvas.setBackGroundColor(new Background(gray));
     }
 
     public void setBackGroundColor(double r, double g, double b) {
-        rootCanvas.setBackGroundColor(new BackgroundObject(r, g, b));
+        rootCanvas.setBackGroundColor(new Background(r, g, b));
     }
 
     public void setBackGroundColor(Color color) {
-        rootCanvas.setBackGroundColor(new BackgroundObject(color));
+        rootCanvas.setBackGroundColor(new Background(color));
     }
 
     public void setBackGroundColor(ColorSet colorset) {
-        rootCanvas.setBackGroundColor(new BackgroundObject(colorset));
+        rootCanvas.setBackGroundColor(new Background(colorset));
     }
 
     public static void showAlert(String title, String message) {

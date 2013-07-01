@@ -29,7 +29,7 @@ import casmi.graphics.color.ColorSet;
  *
  * @author Y. Ban
  */
-public class BackgroundObject {
+public class Background {
 
     private double red;
     private double green;
@@ -49,7 +49,7 @@ public class BackgroundObject {
      * @param gray
      *                 The gray-scale value of the BackGround.
      */
-    public BackgroundObject(double gray) {
+    public Background(double gray) {
         this.gray = gray;
         mode = colorMode.Gray;
     }
@@ -64,7 +64,7 @@ public class BackgroundObject {
      * @param blue
      *                 The blue color value of the BackGround.
      */
-    public BackgroundObject(double red,double green,double blue){
+    public Background(double red,double green,double blue){
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -79,7 +79,7 @@ public class BackgroundObject {
      *
      * @see casmi.graphics.color.Color
      */
-    public BackgroundObject(Color color){
+    public Background(Color color){
         this.c = color;
         mode = colorMode.Color;
     }
@@ -92,7 +92,7 @@ public class BackgroundObject {
      *
      * @see casmi.graphics.color.ColorSet
      */
-    public BackgroundObject(ColorSet colorSet){
+    public Background(ColorSet colorSet){
         this.cset = colorSet;
         mode = colorMode.ColorSet;
     }
