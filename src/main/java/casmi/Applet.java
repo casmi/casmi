@@ -95,7 +95,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private final PopupMenu popupMenu = new PopupMenu(this);
 
     private MouseButton mouseButton;
-    private MouseStatus mouseEvent;
+    private MouseStatus mouseStatus;
 
 	private GLCapabilities caps;
 	private GLJPanel panel = null;
@@ -161,7 +161,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	            keyboard.setReleased(false);
 	            keyboard.setTyped(false);
 
-	            rootCanvas.setMouseEvent(null);
+	            rootCanvas.updateMouseStatus(null);
 	        }
 	    }
 	}
@@ -343,7 +343,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    mouse.setButtonPressed(mouseButton, true);
 		mouseEvent(MouseStatus.PRESSED, mouseButton);
 
-		rootCanvas.setMouseEvent(MouseStatus.PRESSED);
+		rootCanvas.updateMouseStatus(MouseStatus.PRESSED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
@@ -369,7 +369,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	    mouse.setButtonPressed(mouseButton, false);
 	    mouseEvent(MouseStatus.RELEASED, mouseButton);
-		rootCanvas.setMouseEvent(MouseStatus.RELEASED);
+		rootCanvas.updateMouseStatus(MouseStatus.RELEASED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
@@ -385,44 +385,39 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		case java.awt.event.MouseEvent.BUTTON1:
 			mouseButton = MouseButton.LEFT;
 			mouseEvent(MouseStatus.CLICKED, MouseButton.LEFT);
-			mouseEvent = MouseStatus.CLICKED;
+			mouseStatus = MouseStatus.CLICKED;
 			if ((System.currentTimeMillis() - mouse.getMouseClickLeftTime()) < 300) {
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseStatus.DOUBLE_CLICKED, MouseButton.LEFT);
-				mouseEvent = MouseStatus.DOUBLE_CLICKED;
+				mouseStatus = MouseStatus.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON2:
 			mouseButton = MouseButton.MIDDLE;
 			mouseEvent(MouseStatus.CLICKED, MouseButton.MIDDLE);
-			mouseEvent = MouseStatus.CLICKED;
+			mouseStatus = MouseStatus.CLICKED;
 			if ((System.currentTimeMillis() - mouse.getMouseClickMiddleTime()) < 300) {
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseStatus.DOUBLE_CLICKED, MouseButton.MIDDLE);
-				mouseEvent = MouseStatus.DOUBLE_CLICKED;
+				mouseStatus = MouseStatus.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		case java.awt.event.MouseEvent.BUTTON3:
 			mouseButton = MouseButton.RIGHT;
 			mouseEvent(MouseStatus.CLICKED, MouseButton.RIGHT);
-			mouseEvent = MouseStatus.CLICKED;
+			mouseStatus = MouseStatus.CLICKED;
 			if ((System.currentTimeMillis() - mouse.getMouseClickRightTime()) < 300) {
 				mouse.setDoubleClicked(true);
 				mouseEvent(MouseStatus.DOUBLE_CLICKED, MouseButton.RIGHT);
-				mouseEvent = MouseStatus.DOUBLE_CLICKED;
+				mouseStatus = MouseStatus.DOUBLE_CLICKED;
 			}
 			mouse.setMouseClickLeftTime(System.currentTimeMillis());
 			break;
 		}
 
-		rootCanvas.setMouseEvent(mouseEvent);
-
-//		if (timeline) {
-//			rootTimeline.getScene().mouseEvent(mouseEvent, mouseButton);
-//			rootTimeline.getScene().setMouseEvent(mouseEvent);
-//		}
+		rootCanvas.updateMouseStatus(mouseStatus);
 	}
 
 	@Override
@@ -465,7 +460,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	    mouse.setButtonPressed(mouseButton, true);
 		mouseEvent(MouseStatus.DRAGGED, mouseButton);
-		rootCanvas.setMouseEvent(MouseStatus.DRAGGED);
+		rootCanvas.updateMouseStatus(MouseStatus.DRAGGED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.DRAGGED, mouseButton);
@@ -480,7 +475,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		mouse.setMoved(true);
 
 	    mouseEvent(MouseStatus.MOVED, MouseButton.LEFT);
-		rootCanvas.setMouseEvent(MouseStatus.MOVED);
+		rootCanvas.updateMouseStatus(MouseStatus.MOVED);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.MOVED,  MouseButton.LEFT);
@@ -1041,12 +1036,9 @@ class AppletGLEventListener implements GLEventListener {
 		synchronized (this) {
 			gl.glViewport(0, 0, this.width, this.height);
 
-			g.setOrtho();
+	        gl.glClearStencil(0);
 
-			gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			gl.glClearStencil(0);
-			gl.glEnable(GL2.GL_DEPTH_TEST);
-			gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
+			g.setOrtho();
 
 			gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 			gl.glEnable(GL2.GL_BLEND);

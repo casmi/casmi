@@ -709,6 +709,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
     *
     */
 	public void triggerMouseEvent(MouseStatus status, boolean selected) {
+	    if (mouseEventCallbacks == null || mouseEventCallbacks.size() == 0) {
+	        return; // do nothing
+	    }
+
 	    prevMouseOver = currentMouseOver;
 	    currentMouseOver = selected;
 
@@ -730,7 +734,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
             }
         }
 
-	    if (currentMouseOver) {
+	    if (currentMouseOver && status != null) {
 	        for (MouseEventCallback c : mouseEventCallbacks ) {
 	            if (c instanceof MouseClickCallback) {
 	                MouseClickCallback callback = (MouseClickCallback) c;
@@ -796,22 +800,6 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 		return null;
 	}
 
-//	public boolean isMouseOver() {
-//		return mouseOver;
-//	}
-//
-//	public void setMouseover(boolean bool) {
-//		mouseOver = bool;
-//	}
-//
-//	public boolean isPreMouseover() {
-//		return preMouseOver;
-//	}
-//
-//	public void setPrevMouseOver(boolean bool) {
-//		preMouseOver = bool;
-//	}
-
 	/**
 	 * Modify visibility of the Element.
 	 *
@@ -833,14 +821,6 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	public void setGradation(boolean bool) {
 		gradation = bool;
 	}
-
-//	public boolean isSelectionbuffer() {
-//		return selectionBuffer;
-//	}
-//
-//	public void setSelectionbuffer(boolean selectionbuffer) {
-//		this.selectionBuffer = selectionbuffer;
-//	}
 
 	public Mask getMask() {
 		return mask;
@@ -894,13 +874,5 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	}
 
 	@Override
-    public void reset(GL2 gl) {
-//	    if(this.enableTexture) {
-//	        if(texture != null){
-//	            texture.loadImage();
-//	        }else{
-//	            texture.reloadImage();
-//	        }
-//	    }
-    }
+    public void reset(GL2 gl) {}
 }

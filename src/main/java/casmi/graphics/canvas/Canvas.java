@@ -42,7 +42,7 @@ public class Canvas {
 
     protected DoubleBuffer matrix;
 
-	protected MouseStatus mouseStatus;
+	protected MouseStatus mouseStatus = MouseStatus.RELEASED;
 
 	private double x = 0.0, y = 0.0, z = 0.0;
 
@@ -169,9 +169,7 @@ public class Canvas {
 	    renderTweenManager(g);
 
 	    setupProjection(g, false);
-
 	    setupCamera(g);
-
 	    setupLight(g);
 
 // TODO
@@ -200,11 +198,13 @@ public class Canvas {
 	}
 
 	protected int renderAllForSelection(Graphics g, double mouseX, double mouseY, int beginIndex) {
-	    int lastIndex = beginIndex;
+	    int lastIndex;
 
 		renderTweenManager(g);
 
+		g.resetMatrix();
 		setupProjection(g, true);
+
 		setupCamera(g);
 		setupLight(g);
 
@@ -258,13 +258,13 @@ public class Canvas {
 	}
 
 	private final int renderAllElements(Graphics g, boolean selection, double mouseX, double mouseY, int beginIndex) {
-	    int selectionIndex = beginIndex;
+	    int index = beginIndex;
 	    for (Element e : elementList) {
 	        if (selection) {
-	            if (e.getMouseEventCallbacks() != null) {
-	                g.getGL().glLoadName(selectionIndex);
+	            if (e.getMouseEventCallbacks() != null && e.getMouseEventCallbacks().size() > 0) {
+	                g.getGL().glLoadName(index);
 
-	                selectionIndex++;
+	                index++;
 
 	                renderElement(g, e, true);
 	            }
@@ -283,18 +283,11 @@ public class Canvas {
 	        }
 	    }
 
-		return selectionIndex;
+		return index;
 	}
 
-	// TODO fix
-	public void setMouseEvent(casmi.MouseStatus e){
-		mouseStatus = e;
-		for (Object obj : elementList) {
-			if (obj instanceof Canvas) {
-				Canvas go = (Canvas) obj;
-				go.setMouseEvent(mouseStatus);
-			}
-		}
+	public void setMouseStatus(MouseStatus status){
+		this.mouseStatus = status;
 	}
 
 	private final void setupCamera(Graphics g) {
@@ -305,7 +298,11 @@ public class Canvas {
 
 	private final void setupProjection(Graphics g, boolean selection) {
 	    if (this.projection == null) {
-	        if (selection) g.setJustOrtho();
+	        if (selection) {
+	            g.setJustOrtho();
+	        } else {
+	            g.setOrtho();
+	        }
 	    } else {
 	        if (selection) {
 	            this.projection.projectForSelection(g);
@@ -363,9 +360,8 @@ public class Canvas {
 		}
 	}
 
-	// TODO fix
-	public void triggerMouseEvent(int selectedIndex) {
-        int index = 0;
+	public int triggerMouseEvent(int selectedIndex, int beginIndex) {
+        int index = beginIndex;
         for (Element e : elementList) {
             if (e.getMouseEventCallbacks() != null && e.getMouseEventCallbacks().size() > 0) {
                 if (index == selectedIndex) {
@@ -377,6 +373,8 @@ public class Canvas {
                 index ++;
             }
         }
+
+        return index;
     }
 
     public double getX() {

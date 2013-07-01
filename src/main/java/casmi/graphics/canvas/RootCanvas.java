@@ -26,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL2;
 
+import casmi.MouseStatus;
 import casmi.graphics.Graphics;
 import casmi.graphics.object.Background;
 
@@ -72,6 +73,7 @@ public class RootCanvas extends Canvas {
 //        }
 
         if (background != null) background.render(g);
+        g.clear();
 
         renderTweenManager(g);
 
@@ -118,10 +120,10 @@ public class RootCanvas extends Canvas {
 
         int selectedIndex = processHits(hits, selections);
 
-        triggerMouseEvent(selectedIndex);
+        int lastIndex = triggerMouseEvent(selectedIndex, 0);
 
         for (Canvas c: canvases) {
-            c.triggerMouseEvent(selectedIndex);
+            lastIndex = c.triggerMouseEvent(selectedIndex, lastIndex);
         }
     }
 
@@ -147,5 +149,13 @@ public class RootCanvas extends Canvas {
 
     public void removeCanvas(Canvas c) {
         canvases.remove(c);
+    }
+
+    public void updateMouseStatus(MouseStatus status) {
+        setMouseStatus(status);
+
+        for (Canvas c : canvases) {
+            c.setMouseStatus(status);
+        }
     }
 }

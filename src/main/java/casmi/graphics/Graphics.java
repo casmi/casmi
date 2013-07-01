@@ -194,6 +194,11 @@ public class Graphics {
 		setBackgroud(color);
 	}
 
+	public void clear() {
+//        gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_STENCIL_BUFFER_BIT);
+	}
+
 	public void setColor(Color color) {
 		gl.glColor4d(color.getRed(),
 		             color.getGreen(),

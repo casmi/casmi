@@ -149,13 +149,13 @@ public class Rect extends Element {
                 getSceneFillColor().setup(gl);
                 gl.glBegin(GL2.GL_QUADS);
                 if (!isGradation()) {
-                    if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
-                    gl.glVertex2d(x1, y1);
                     if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
+                    gl.glVertex2d(x1, y1);
+                    if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
                     gl.glVertex2d(x2, y2);
-                    if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
-                    gl.glVertex2d(x3, y3);
                     if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
+                    gl.glVertex2d(x3, y3);
+                    if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
                     gl.glVertex2d(x4, y4);
                 } else {
                     this.gradationColor.setRed((this.startColor.getRed() + this.endColor.getRed()) / 2);
@@ -165,58 +165,57 @@ public class Rect extends Element {
                     switch (mode) {
                     case HORIZONTAL:
                         getSceneColor(this.startColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(0, 1));
                         gl.glVertex2d(x1, y1);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(1, 1));
                         gl.glVertex2d(x2, y2);
                         getSceneColor(this.endColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(2, 1));
                         gl.glVertex2d(x3, y3);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(3, 1));
                         gl.glVertex2d(x4, y4);
                         break;
                     case VERTICAL:
                         getSceneColor(this.startColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
                         gl.glVertex2d(x1, y1);
                         getSceneColor(this.endColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
                         gl.glVertex2d(x2, y2);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
                         gl.glVertex2d(x3, y3);
                         getSceneColor(this.startColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
                         gl.glVertex2d(x4, y4);
                         break;
                     case LEFT_SIDEWAYS:
                         getSceneColor(this.startColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
                         gl.glVertex2d(x1, y1);
                         getSceneColor(this.gradationColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
                         gl.glVertex2d(x2, y2);
                         getSceneColor(this.endColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
                         gl.glVertex2d(x3, y3);
                         getSceneColor(this.gradationColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
                         gl.glVertex2d(x4, y4);
                         break;
                     case RIGHT_SIDEWAYS:
                         getSceneColor(this.gradationColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
                         gl.glVertex2d(x1, y1);
                         getSceneColor(this.endColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
                         gl.glVertex2d(x2, y2);
                         getSceneColor(this.gradationColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
                         gl.glVertex2d(x3, y3);
                         getSceneColor(this.startColor).setup(gl);
-                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
+                        if (this.enableTexture) gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
                         gl.glVertex2d(x4, y4);
                         break;
-
                     }
                 }
                 gl.glEnd();
