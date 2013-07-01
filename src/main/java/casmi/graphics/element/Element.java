@@ -96,7 +96,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 //	private boolean selectionBuffer = false;
 
 	private boolean depthTest = true;
-	private boolean removeElement = false;
+//	private boolean removeElement = false;
 //	private boolean threeD = false;
 
 	protected boolean enableTexture = false;
@@ -849,13 +849,13 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 		this.depthTest = depthTest;
 	}
 
-	public void remove() {
-		this.removeElement = true;
-	}
-
-	public boolean isRemove() {
-		return this.removeElement;
-	}
+//	public void remove() {
+//		this.removeElement = true;
+//	}
+//
+//	public boolean isRemove() {
+//		return this.removeElement;
+//	}
 
 	public boolean isReset() {
 		return reset;

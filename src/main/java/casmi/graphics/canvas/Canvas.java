@@ -58,20 +58,20 @@ public class Canvas {
 	    this.elementList.add(e);
 	}
 
-	public void addAll(Collection<? extends Element> c) {
+	public synchronized void addAll(Collection<? extends Element> c) {
 	    this.elementList.addAll(c);
 	}
 
-	public void addLight(Light l) {
+	public synchronized void addLight(Light l) {
 		l.setIndex(lights.size());
 		this.lights.add(l);
 	}
 
-	public void setCamera(Camera c) {
+	public synchronized void setCamera(Camera c) {
 		this.camera = c;
 	}
 
-	public void setProjection(Projection p) {
+	public synchronized void setProjection(Projection p) {
 		this.projection = p;
 	}
 
@@ -79,17 +79,12 @@ public class Canvas {
 	    this.tweenerManager = tweenerManager;
 	}
 
-	public void clearAllObjects() {
-		elementList = null;
-	    elementList = new CopyOnWriteArrayList<Element>();
+	public synchronized void remove(Element e) {
+		elementList.remove(e);
 	}
 
-	public void remove(int index) {
-		elementList.remove(index);
-	}
-
-	public void removeLight(int index) {
-		lights.remove(index);
+	public synchronized void removeLight(Light l) {
+		lights.remove(l);
 	}
 
 	public Element get(int index) {
@@ -108,55 +103,44 @@ public class Canvas {
 		return tweenerManager;
 	}
 
-	public void add(int index, Element r) {
+	public synchronized void add(int index, Element r) {
 		elementList.add(index, r);
 	}
 
-	public void addLight(int index, Light r) {
+	public synchronized void addLight(int index, Light r) {
 		lights.add(index, r);
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		elementList.clear();
 	}
 
-	public void clearLight() {
+	public synchronized void clearLight() {
 		lights.clear();
 	}
 
-	public void clearCamera() {
-		this.camera = null;
-	}
-
-	public void clearPerse() {
-		this.projection = null;
-	}
-
-	public void clearTweenManager() {
-	    tweenerManager = null;
-	}
-
-	public void applyMatrix(double[] matrix) {
+	public synchronized void applyMatrix(double[] matrix) {
 		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
 		this.mode   = ObjectMatrixMode.APPLY;
 	}
 
-	public void applyMatrix(DoubleBuffer matrix) {
+	public synchronized void applyMatrix(DoubleBuffer matrix) {
 		this.matrix = matrix;
 		this.mode   = ObjectMatrixMode.APPLY;
 	}
 
-	public void loadMatrix(double[] matrix) {
+	public synchronized void loadMatrix(double[] matrix) {
 	    this.matrix = java.nio.DoubleBuffer.wrap(matrix);
 		this.mode   = ObjectMatrixMode.LOAD;
 	}
 
-	public void loadMatrix(DoubleBuffer matrix) {
+	public synchronized  void loadMatrix(DoubleBuffer matrix) {
 	    this.matrix = matrix;
 	    this.mode   = ObjectMatrixMode.LOAD;
 	}
 
-	protected void renderAll(Graphics g) {
+	protected synchronized void renderAll(Graphics g) {
+
 // TODO
 //	    if (removeObject) {
 //	        for (Object obj : elementList) {
@@ -181,7 +165,7 @@ public class Canvas {
 	    g.popMatrix();
 	}
 
-	protected int renderAllForSelection(Graphics g, double mouseX, double mouseY, int beginIndex) {
+	protected synchronized int renderAllForSelection(Graphics g, double mouseX, double mouseY, int beginIndex) {
 	    int lastIndex;
 
 		renderTweenManager(g);
@@ -285,7 +269,7 @@ public class Canvas {
 		}
 	}
 
-	public void loadMatrix(Graphics g) {
+	private void loadMatrix(Graphics g) {
 		switch (mode) {
 		case APPLY:
 			g.applyMatrix(matrix);
@@ -319,7 +303,7 @@ public class Canvas {
 //		this.resetObject = resetObject;
 //	}
 
-	protected void resetObjects(Graphics g) {
+	protected synchronized void resetObjects(Graphics g) {
 		for (Element e : elementList) {
 		    if (e instanceof Resettable) {
 		        ((Resettable) e).reset(g.getGL());
@@ -327,7 +311,7 @@ public class Canvas {
 		}
 	}
 
-	public int triggerMouseEvent(int selectedIndex, int beginIndex) {
+	public synchronized int triggerMouseEvent(int selectedIndex, int beginIndex) {
         int index = beginIndex;
         for (Element e : elementList) {
             if (e.getMouseEventCallbacks() != null && e.getMouseEventCallbacks().size() > 0) {

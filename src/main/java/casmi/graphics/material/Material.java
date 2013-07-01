@@ -54,7 +54,7 @@ public class Material {
      * @param shininess
      *                 The amount of gloss in the surface of shapes of this Material.
      */
-    public void shininess(float shininess){
+    public void setShininess(float shininess){
         this.shininess = shininess;
         Sh = true;
     }
@@ -65,7 +65,7 @@ public class Material {
      * @param ambient
      *                 The ambient reflectance of this Material.
      */
-    public void ambient(float ambient[]){
+    public void setAmbient(float ambient[]){
         for(int i = 0; i<ambient.length;i++)
             this.ambient[i]=ambient[i];
         Am = true;
@@ -81,7 +81,7 @@ public class Material {
      * @param blue
      *                 The blue color of the ambient reflectance.
      */
-    public void ambient(float red, float green, float blue){
+    public void setAmbient(float red, float green, float blue){
         ambient[0]=red;
         ambient[1]=green;
         ambient[2]=blue;
@@ -94,7 +94,7 @@ public class Material {
      * @param gray
      *                 The gray-scale value of the ambient reflectance.
      */
-    public void ambient(float gray){
+    public void setAmbient(float gray){
         ambient[0]=gray;
         ambient[1]=gray;
         ambient[2]=gray;
@@ -107,7 +107,7 @@ public class Material {
      * @param diffuse
      *                 The diffuse color of the materials
      */
-    public void diffuse(float diffuse[]){
+    public void setDiffuse(float diffuse[]){
         for(int i = 0; i<diffuse.length;i++)
             this.diffuse[i]=diffuse[i];
         Di = true;
@@ -119,17 +119,11 @@ public class Material {
      * @param red
      *                 The red color of the diffuse.
      * @param green
-<<<<<<< HEAD
-     * 				The green color of the diffuse.
-     * @param blue
-     * 				The blue color of the diffuse.
-=======
      *                 The green color of the diffuse.
      * @param blue
      *                 The blue color of the diffuse.
->>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
-    public void diffuse(float red, float green, float blue){
+    public void setDiffuse(float red, float green, float blue){
         diffuse[0] = red;
         diffuse[1] = green;
         diffuse[2] = blue;
@@ -142,7 +136,7 @@ public class Material {
      * @param gray
      *                 The gray-scale value scale of the diffuse.
      */
-    public void diffuse(float gray){
+    public void setDiffuse(float gray){
         diffuse[0] = gray;
         diffuse[1] = gray;
         diffuse[2] = gray;
@@ -152,15 +146,10 @@ public class Material {
     /**
      * Sets the specular color of the materials used for shapes drawn to the screen.
      *
-<<<<<<< HEAD
      * 	@param specular
      * 				The specular color of the Material.
-=======
-     *     @param specular
-     *                 The specular color of the Material.
->>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
-    public void specular(float specular[]){
+    public void setSpecular(float specular[]){
         for(int i = 0; i<specular.length;i++)
             this.specular[i]=specular[i];
         Sp = true;
@@ -172,17 +161,11 @@ public class Material {
      * @param red
      *                 The red color of the specular.
      * @param green
-<<<<<<< HEAD
-     * 				The green color of the specular.
-     * @param blue
-     * 				The blue color of the specular.
-=======
      *                 The green color of the specular.
      * @param blue
      *                 The blue color of the specular.
->>>>>>> 16121fd9fe4eeaef3cb56619769a3119a9e6531a
      */
-    public void specular(float red, float green, float blue){
+    public void setSpecular(float red, float green, float blue){
         specular[0] = red;
         specular[1] = green;
         specular[2] = blue;
@@ -195,7 +178,7 @@ public class Material {
      * @param gray
      *                 The gray-scale value of the specular.
      */
-    public void specular(float gray){
+    public void setSpecular(float gray){
         specular[0] = gray;
         specular[1] = gray;
         specular[2] = gray;
@@ -208,7 +191,7 @@ public class Material {
      * @param emissive
      *                 The emissive color of the Material.
      */
-    public void emissive(float emissive[]){
+    public void setEmissive(float emissive[]){
         for(int i = 0; i<emissive.length;i++)
             this.emissive[i]=emissive[i];
         Em = true;
@@ -224,7 +207,7 @@ public class Material {
      * @param blue
      *                 The blue color of the emissive.
      */
-    public void emissive(float red, float green, float blue){
+    public void setEmissive(float red, float green, float blue){
         emissive[0] = red;
         emissive[1] = green;
         emissive[2] = blue;
@@ -237,7 +220,7 @@ public class Material {
      *@param gray
      *                The gray-scale value of the emissive.
      */
-    public void emissive(float gray){
+    public void setEmissive(float gray){
         emissive[0] = gray;
         emissive[1] = gray;
         emissive[2] = gray;
@@ -256,5 +239,4 @@ public class Material {
         if(Em==true)
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, emissive,0);
     }
-
 }

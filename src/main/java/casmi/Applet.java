@@ -131,9 +131,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	abstract public void exit();
 
-	abstract public void mouseEvent(MouseStatus e, MouseButton b);
+	abstract public void mouseEvent(MouseStatus status, MouseButton button);
 
-	abstract public void keyEvent(KeyEvent e);
+	abstract public void keyEvent(KeyEvent event);
 	// -------------------------------------------------------------------------
 
 	class GLRedisplayTask extends TimerTask {
@@ -168,8 +168,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	private void initCanvas() {
 		rootCanvas = new RootCanvas();
-//		rootObject.setSelectionbuffsize(rootObject.getSelectionbuffsize());
-//		rootObject.setDepthTest(false);
 	}
 
 	@Override
@@ -272,14 +270,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public double getWorkingFPS() {
 	    return workingFPS;
 	}
-
-//	public void setDepthTest(boolean depthTest) {
-//		rootObject.setDepthTest(depthTest);
-//	}
-
-//	public boolean isDepthTest() {
-////		return rootObject.isDepthTest();
-//	}
 
 	public boolean isFullScreen() {
 		return isFullScreen;
@@ -761,11 +751,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
     private final void drawObjects(Graphics g) {
-//        canvas.clearSelections();
-
         rootCanvas.render(g, getMouseX(), getMouseY());
-//        rootObject.drawAll(g);
-//        rootObject.drawAllForSelection(g, getMouseX(), getMouseY(), 0);
     }
 
     private static TweenerManager tweenerManager = null;
@@ -786,29 +772,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     public void removeTweener(Tweener t) {
         getTweenManager().remove(t);
     }
-
-//    public void setMask(Mask mask){
-//        rootObject.setMask(mask);
-//    }
-
-    public void clearTweeners(){
-        tweenerManager = null;
-        rootCanvas.clearTweenManager();
-    }
-
-
-//   public void setPosition(double x, double y, double z){
-//       rootObject.setPosition(x, y, z);
-//   }
-//
-//   public void setPosition(double x, double y){
-//       rootObject.setPosition(x, y);
-//   }
-//
-//
-//   public void setRotation(double angle, double x,double y, double z) {
-//       rootObject.setRotation(angle, x, y, z);
-//   }
 
    public void addObject(Element obj) {
        if(rootObjectIsInitialized){
@@ -839,13 +802,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
    public void addObject(Collection<? extends Element> objects) {
        rootCanvas.addAll(objects);
-//       for (Object obj : objectList) {
-//           addObject(obj);
-//       }
    }
 
-    public void removeObject(int index) {
-    	rootCanvas.remove(index);
+    public void removeObject(Element e) {
+    	rootCanvas.remove(e);
     }
 
 
@@ -921,16 +881,12 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootCanvas.addLight(light);
     }
 
-//    public void getLight(int index) {
-//        rootObject.getLight(index);
-//    }
-
     public void addLight(int index, Light light) {
         rootCanvas.addLight(index, light);
     }
 
-    public void removeLight(int index) {
-        rootCanvas.remove(index);
+    public void removeLight(Light light) {
+        rootCanvas.removeLight(light);
     }
 
     public void applyMatrix(DoubleBuffer matrix) {
