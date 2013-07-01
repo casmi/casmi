@@ -58,8 +58,8 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 
 	private double sceneA = 1.0;
 
-	protected Texture texture;
-	protected Texture normalMap;
+//	protected Texture texture;
+//	protected Texture normalMap;
 	protected Mask mask;
 
 	public boolean enableMask = true;
@@ -675,14 +675,14 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 		this.scaleZ = scaleZ;
 	}
 
-	/**Sets the texture to the Element.
-	 *
-	 * @param texture
-	 */
-	public void setTexture(Texture texture) {
-		this.texture = texture;
-		this.enableTexture = true;
-	}
+//	/**Sets the texture to the Element.
+//	 *
+//	 * @param texture
+//	 */
+//	public void setTexture(Texture texture) {
+//		this.texture = texture;
+//		this.enableTexture = true;
+//	}
 
 	/**Enables the texture.
 	 *
@@ -892,4 +892,15 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	public void disableMask() {
 		this.enableMask = false;
 	}
+
+	@Override
+    public void reset(GL2 gl) {
+//	    if(this.enableTexture) {
+//	        if(texture != null){
+//	            texture.loadImage();
+//	        }else{
+//	            texture.reloadImage();
+//	        }
+//	    }
+    }
 }

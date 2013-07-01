@@ -25,6 +25,7 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.image.Texture;
 import casmi.matrix.Vector3D;
 
 /**
@@ -48,6 +49,8 @@ public class Quad extends Element {
     private double z4;
 
     private Color[] cornerColor = new Color[4];
+
+    private Texture texture;
 
     /**
      * Creates a new Quad object using x,y-coordinate of corners.
@@ -236,12 +239,9 @@ public class Quad extends Element {
             gl.glDisable(GL2.GL_DEPTH_TEST);
         }
 
-        if (this.enableTexture) {
-            // if (texture.reloadFlag) {
-            // Graphics.reloadTextures(gl);
-            // texture.reloadFlag = false;
-            // }
-            texture.enableTexture(gl);
+        if (this.enableTexture && this.texture != null) {
+            this.texture.render(gl);
+            this.texture.enableTexture(gl);
         }
 
         gl.glPushMatrix();
@@ -253,19 +253,19 @@ public class Quad extends Element {
                 {
                     if (isGradation()) getSceneColor(cornerColor[0]).setup(gl);
                     if (this.enableTexture)
-                        gl.glTexCoord2f(texture.getTextureCorner(0, 0), texture.getTextureCorner(0, 1));
+                        gl.glTexCoord2f(getTexture().getTextureCorner(0, 0), getTexture().getTextureCorner(0, 1));
                     gl.glVertex2d(x1 - x, y1 - y);
                     if (isGradation()) getSceneColor(cornerColor[1]).setup(gl);
                     if (this.enableTexture)
-                        gl.glTexCoord2f(texture.getTextureCorner(1, 0), texture.getTextureCorner(1, 1));
+                        gl.glTexCoord2f(getTexture().getTextureCorner(1, 0), getTexture().getTextureCorner(1, 1));
                     gl.glVertex2d(x2 - x, y2 - y);
                     if (isGradation()) getSceneColor(cornerColor[2]).setup(gl);
                     if (this.enableTexture)
-                        gl.glTexCoord2f(texture.getTextureCorner(2, 0), texture.getTextureCorner(2, 1));
+                        gl.glTexCoord2f(getTexture().getTextureCorner(2, 0), getTexture().getTextureCorner(2, 1));
                     gl.glVertex2d(x3 - x, y3 - y);
                     if (isGradation()) getSceneColor(cornerColor[3]).setup(gl);
                     if (this.enableTexture)
-                        gl.glTexCoord2f(texture.getTextureCorner(3, 0), texture.getTextureCorner(3, 1));
+                        gl.glTexCoord2f(getTexture().getTextureCorner(3, 0), getTexture().getTextureCorner(3, 1));
                     gl.glVertex2d(x4 - x, y4 - y);
                 }
                 gl.glEnd();
@@ -301,7 +301,9 @@ public class Quad extends Element {
         }
         gl.glPopMatrix();
 
-        if (this.enableTexture) texture.disableTexture(gl);
+        if (this.enableTexture && this.texture != null) {
+            texture.disableTexture(gl);
+        }
 
         if (this.fillColor.getAlpha() < 0.001 || this.strokeColor.getAlpha() < 0.001 || !this.isDepthTest()) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -364,13 +366,17 @@ public class Quad extends Element {
 
     @Override
     public void reset(GL2 gl) {
-        if (this.enableTexture) {
-            if (init) {
-                texture.loadImage();
-                init = false;
-            } else {
-                texture.reloadImage(gl);
-            }
+        if (this.enableTexture && this.texture != null) {
+            this.texture.reload();
         }
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+        enableTexture();
     }
 }

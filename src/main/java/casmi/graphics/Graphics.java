@@ -29,7 +29,7 @@ import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
 import casmi.graphics.object.Renderable;
-import casmi.image.Image;
+import casmi.image.Texture;
 import casmi.matrix.Vector3D;
 import casmi.tween.TweenerManager;
 
@@ -672,14 +672,14 @@ public class Graphics {
 	/**
 	 * Enables texture.
 	 */
-	public void enableTexture(Image image) {
+	public void enableTexture(Texture image) {
 		image.enableTexture(gl);
 	}
 
 	/**
      * Disables texture.
      */
-    public void disableTexture(Image image) {
+    public void disableTexture(Texture image) {
         image.disableTexture(gl);
     }
 
@@ -711,7 +711,7 @@ public class Graphics {
      * Displays texture img at position (x,y).
      * If
      */
-    public void setImage(Image img, double x, double y) {
+    public void setImage(Texture img, double x, double y) {
         if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
             img.enableTexture(gl);
@@ -756,7 +756,7 @@ public class Graphics {
      *  A call to imageMode(CORNERS) will change the width and height parameters to define
      *  the x and y values of the opposite corner of the image.
      * */
-    public void setImage(Image img, double x, double y, double w, double h) {
+    public void setImage(Texture img, double x, double y, double w, double h) {
         if (img.getTexture() != null) {
             gl.glDisable(GL.GL_DEPTH_TEST);
             img.enableTexture(gl);

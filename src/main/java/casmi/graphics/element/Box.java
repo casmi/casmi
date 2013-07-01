@@ -26,6 +26,7 @@ import casmi.GradationMode3D;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
+import casmi.image.Texture;
 
 /**
  * Box class. Wrap JOGL and make it easy to use.
@@ -43,7 +44,6 @@ public class Box extends Element {
     private Texture[] textures = new Texture[6];
 
     private Color[] cornerColor = new Color[8];
-
 
     private Color startColor;
     private Color endColor;
@@ -159,17 +159,19 @@ public class Box extends Element {
 
         for (int i = 5; 0 <= i; i--) {
             if (type == GL2.GL_QUADS) {
-                if (this.enableTexture) {
-                    if (textures[i].loadFlag) {
-                        textures[i].getImage().loadTexture();
-                        textures[i].loadFlag = false;
-                    }
-                    if (textures[i].reloadFlag) {
-                        textures[i].getImage().reloadTexture(gl);
-                        textures[i].reloadFlag = false;
-                    }
-                    textures[i].enableTexture();
-                    textures[i].enableTexture(gl);
+                if (this.enableTexture && this.textures[i] != null) {
+                    this.textures[i].render(gl);
+//                    if (textures[i].requireToLoad) {
+//                        textures[i].getImage().loadTexture();
+//                        textures[i].requireToLoad = false;
+//                    }
+//                    if (textures[i].requireToReload) {
+//                        textures[i].getImage().reloadTexture(gl);
+//                        textures[i].requireToReload = false;
+//                    }
+//                    textures[i].enableTexture();
+//                    textures[i].enableTexture(gl);
+                    this.textures[i].enableTexture(gl);
                 }
             }
             gl.glBegin(type);
@@ -210,7 +212,7 @@ public class Box extends Element {
             }
 
             if (this.enableTexture && type == GL2.GL_QUADS) {
-                textures[i].disableTexture();
+//                textures[i].disableTexture();
                 textures[i].disableTexture(gl);
             }
             gl.glEnd();
@@ -288,12 +290,12 @@ public class Box extends Element {
      * @param index The index of the surface of the Box.
      * @param texture The texture of the Box.
      *
-     * @see casmi.graphics.element.Texture
+     * @see casmi.image.Texture
      */
     public void setTexture(int index, Texture texture) {
         this.enableTexture = true;
         textures[index] = texture;
-        textures[index].loadFlag = true;
+//        textures[index].requireToLoad = true;
     }
 
     /**
@@ -392,13 +394,8 @@ public class Box extends Element {
 
     @Override
     public void reset(GL2 gl) {
-        if (this.enableTexture) for (Texture tex : textures) {
-            if (init)
-                tex.loadImage();
-            else
-                tex.reloadImage(gl);
+        if (this.enableTexture) {
+            for (Texture t : textures) t.reload();
         }
-        init = false;
-
     }
 }
