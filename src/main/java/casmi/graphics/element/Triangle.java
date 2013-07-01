@@ -25,7 +25,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -33,7 +32,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Triangle extends Element implements Renderable {
+public class Triangle extends Element {
 
     public static final int TRIANGLE = 0;
     public static final int TRIANGLE_3D = 4;
@@ -410,5 +409,11 @@ public class Triangle extends Element implements Renderable {
      */
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
+    }
+
+    @Override
+    public void reset(GL2 gl) {
+        // TODO Auto-generated method stub
+
     }
 }

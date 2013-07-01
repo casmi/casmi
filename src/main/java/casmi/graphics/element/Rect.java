@@ -257,4 +257,7 @@ public class Rect extends Element {
     public void setGradationMode(GradationMode2D mode) {
         this.mode = mode;
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }

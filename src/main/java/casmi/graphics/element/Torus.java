@@ -22,14 +22,12 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.object.Renderable;
-
 /**
  * Torus class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
  */
-public class Torus extends Element implements Renderable {
+public class Torus extends Element {
 
     private double x;
     private double y;
@@ -188,5 +186,11 @@ public class Torus extends Element implements Renderable {
             cosTheta = cosTheta1;
             sinTheta = sinTheta1;
         }
+    }
+
+    @Override
+    public void reset(GL2 gl) {
+        // TODO Auto-generated method stub
+
     }
 }

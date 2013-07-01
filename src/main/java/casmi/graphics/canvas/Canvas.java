@@ -42,9 +42,6 @@ public class Canvas {
 
     protected DoubleBuffer matrix;
 
-	protected boolean removeObject = false;
-	protected boolean resetObject = false;
-
 	protected MouseStatus mouseStatus;
 
 	private double x = 0.0, y = 0.0, z = 0.0;
@@ -160,13 +157,14 @@ public class Canvas {
 	}
 
 	protected void renderAll(Graphics g) {
-	    if (removeObject) {
-	        for (Object obj : elementList) {
-	            if(obj instanceof Element && ((Element)obj).isRemove())
-	                elementList.remove(obj);
-	        }
-	        removeObject = false;
-	    }
+// TODO
+//	    if (removeObject) {
+//	        for (Object obj : elementList) {
+//	            if(obj instanceof Element && ((Element)obj).isRemove())
+//	                elementList.remove(obj);
+//	        }
+//	        removeObject = false;
+//	    }
 
 	    renderTweenManager(g);
 
@@ -271,14 +269,15 @@ public class Canvas {
 	                renderElement(g, e, true);
 	            }
 	        } else {
-	            if (e.isRemove()) {
-	                removeObject = true;
-	            }
+// TODO
+//	            if (e.isRemove()) {
+//	                removeObject = true;
+//	            }
 
-	            if (e.isReset()) {
-	                resetObject = true;
-	                e.setReset(false);
-	            }
+//	            if (e.isReset()) {
+//	                resetObject = true;
+//	                e.setReset(false);
+//	            }
 
 	            renderElement(g, e, false);
 	        }
@@ -287,6 +286,7 @@ public class Canvas {
 		return selectionIndex;
 	}
 
+	// TODO fix
 	public void setMouseEvent(casmi.MouseStatus e){
 		mouseStatus = e;
 		for (Object obj : elementList) {
@@ -338,24 +338,24 @@ public class Canvas {
 		return elementList.size();
 	}
 
-	public boolean isResetObject() {
-		for (Object obj : elementList) {
-			if (obj instanceof Canvas) {
-				Canvas go = (Canvas)obj;
-				if(go.isResetObject()){
-					resetObject = true;
-					go.setResetObject(false);
-				}
-			}
-		}
-		return resetObject;
-	}
+//	public boolean isResetObject() {
+//		for (Object obj : elementList) {
+//			if (obj instanceof Canvas) {
+//				Canvas go = (Canvas)obj;
+//				if(go.isResetObject()){
+//					resetObject = true;
+//					go.setResetObject(false);
+//				}
+//			}
+//		}
+//		return resetObject;
+//	}
+//
+//	public void setResetObject(boolean resetObject) {
+//		this.resetObject = resetObject;
+//	}
 
-	public void setResetObject(boolean resetObject) {
-		this.resetObject = resetObject;
-	}
-
-	public void resetObjects(Graphics g) {
+	protected void resetObjects(Graphics g) {
 		for (Element e : elementList) {
 		    if (e instanceof Resettable) {
 		        ((Resettable) e).reset(g.getGL());
@@ -363,6 +363,7 @@ public class Canvas {
 		}
 	}
 
+	// TODO fix
 	public void triggerMouseEvent(int selectedIndex) {
         int index = 0;
         for (Element e : elementList) {

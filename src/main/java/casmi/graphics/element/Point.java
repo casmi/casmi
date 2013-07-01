@@ -22,14 +22,12 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.object.Renderable;
-
 /**
  * Point class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
  */
-public class Point extends Element implements Renderable {
+public class Point extends Element {
 
     public static final int POINT = 0;
     public static final int POINTS = 1;
@@ -126,4 +124,7 @@ public class Point extends Element implements Renderable {
             || !this.isDepthTest())
             gl.glEnable(GL2.GL_DEPTH_TEST);
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }

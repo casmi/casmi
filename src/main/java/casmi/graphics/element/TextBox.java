@@ -26,8 +26,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
-import casmi.graphics.object.Resettable;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -37,7 +35,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  *
  * @author  T. Takeuchi, Y. Ban
  */
-public class TextBox extends Element implements Renderable, Resettable {
+public class TextBox extends Element {
 
     private static final boolean DEFAULT_FILL         = false;
     private static final Color   DEFAULT_FILL_COLOR   = new RGBColor(ColorSet.BLACK);

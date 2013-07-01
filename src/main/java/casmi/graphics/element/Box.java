@@ -26,15 +26,13 @@ import casmi.GradationMode3D;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
-import casmi.graphics.object.Resettable;
 
 /**
  * Box class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
  */
-public class Box extends Element implements Renderable, Resettable {
+public class Box extends Element {
 
     private static final double STROKE_BIAS_RATIO = 1.00;
 

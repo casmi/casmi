@@ -22,14 +22,12 @@ package casmi.graphics.element;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.object.Renderable;
-
 /**
  * RoundRect class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
  */
-public class RoundRect extends Element implements Renderable {
+public class RoundRect extends Element {
 
     public enum ShapeMode {
         CORNER, CORNERS, RADIUS, CENTER
@@ -338,4 +336,7 @@ public class RoundRect extends Element implements Renderable {
     public final void rectMode(ShapeMode mode) {
         this.MODE = mode;
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }

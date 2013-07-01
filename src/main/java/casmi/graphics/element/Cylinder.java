@@ -24,14 +24,12 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-import casmi.graphics.object.Renderable;
-
 /**
  * Cylinder class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
  */
-public class Cylinder extends Element implements Renderable {
+public class Cylinder extends Element {
 
     private double x;
     private double y;
@@ -251,4 +249,7 @@ public class Cylinder extends Element implements Renderable {
     public void setStacks(int stacks) {
         this.stacks = stacks;
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }

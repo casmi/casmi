@@ -28,7 +28,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -36,7 +35,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Lines extends Element implements Renderable {
+public class Lines extends Element {
 
     public static final int LINES = 1;
     public static final int LINES_3D = 3;
@@ -323,4 +322,7 @@ public class Lines extends Element implements Renderable {
     public void setCornerColor(int index, ColorSet colorSet) {
         setCornerColor(index, new RGBColor(colorSet));
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }

@@ -25,8 +25,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
-import casmi.graphics.object.Resettable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -34,7 +32,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Quad extends Element implements Renderable, Resettable {
+public class Quad extends Element {
 
     private double x1;
     private double y1;

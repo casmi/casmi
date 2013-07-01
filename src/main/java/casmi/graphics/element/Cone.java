@@ -24,14 +24,12 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
-import casmi.graphics.object.Renderable;
-
 /**
  * Cone class. Wrap JOGL and make it easy to use.
  *
  * @author Y. Ban
  */
-public class Cone extends Element implements Renderable {
+public class Cone extends Element {
 
     private double base;
     private double height;
@@ -245,5 +243,11 @@ public class Cone extends Element implements Renderable {
      */
     public int getStacks() {
         return this.stacks;
+    }
+
+    @Override
+    public void reset(GL2 gl) {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -611,13 +611,12 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
     public void resetGraphics(Graphics g) {
-		rootCanvas.resetObjects(g);
+		rootCanvas.reset(g);
 	}
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
         update();
-//        updateObjects();
 
 	    drawObjects(g);
 

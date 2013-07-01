@@ -28,8 +28,6 @@ import javax.media.opengl.GLException;
 import javax.media.opengl.glu.GLU;
 
 import casmi.graphics.font.Font;
-import casmi.graphics.object.Renderable;
-import casmi.graphics.object.Resettable;
 
 import com.jogamp.opengl.util.awt.TextRenderer;
 
@@ -38,7 +36,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  *
  * @author Y. Ban, T. Takeuchi
  */
-public class Text extends Element implements Renderable, Resettable {
+public class Text extends Element {
 
     private Font font;
     private String str;
@@ -162,12 +160,6 @@ public class Text extends Element implements Renderable, Resettable {
     public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         if (fillColor.getAlpha() < 1.0 || strokeColor.getAlpha() < 1.0 || !isDepthTest())
             gl.glDisable(GL2.GL_DEPTH_TEST);
-
-
-//        if (enableBlur && this.rootBlur) {
-//            gl.glActiveTexture(GL2.GL_TEXTURE0);
-//            this.objIDShader.setUniform("sampler", 0);
-//        }
 
         gl.glPushMatrix();
         {

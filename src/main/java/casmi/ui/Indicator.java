@@ -133,4 +133,9 @@ public class Indicator extends Element {
     public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
         // TODO fix
     }
+
+    @Override
+    public void reset(GL2 gl) {
+        // TODO fix
+    }
 }

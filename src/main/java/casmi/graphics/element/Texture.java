@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import casmi.graphics.object.Renderable;
-import casmi.graphics.object.Resettable;
 import casmi.image.Image;
 import casmi.image.ImageMode;
 import casmi.matrix.Vector3D;
@@ -37,7 +35,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Texture extends Element implements Renderable, Resettable {
+public class Texture extends Element {
 
     public static final int LINES = 1;
     public static final int LINES_3D = 3;

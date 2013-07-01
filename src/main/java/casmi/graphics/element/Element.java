@@ -36,6 +36,7 @@ import casmi.graphics.color.RGBColor;
 import casmi.graphics.material.Material;
 import casmi.graphics.object.Mask;
 import casmi.graphics.object.Renderable;
+import casmi.graphics.object.Resettable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -44,7 +45,7 @@ import casmi.matrix.Vector3D;
  * @author Y. Ban
  *
  */
-abstract public class Element implements Cloneable, Renderable {
+abstract public class Element implements Cloneable, Renderable, Resettable {
     protected double strokeRed   = 0.0;
 	protected double strokeGreen = 0.0;
 	protected double strokeBlue  = 0.0;

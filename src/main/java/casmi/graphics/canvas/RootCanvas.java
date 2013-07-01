@@ -125,6 +125,14 @@ public class RootCanvas extends Canvas {
         }
     }
 
+    public void reset(Graphics g) {
+        resetObjects(g);
+
+        for (Canvas c: canvases) {
+            c.resetObjects(g);
+        }
+    }
+
     private static final int processHits(int hits, int[] buffer) {
         if (hits > 0) {
             return buffer[4 * hits - 1];

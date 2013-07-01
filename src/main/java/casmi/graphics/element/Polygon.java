@@ -28,7 +28,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -36,7 +35,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Polygon extends Element implements Renderable {
+public class Polygon extends Element {
 
     public static final int LINES = 1;
     public static final int LINES_3D = 3;
@@ -322,4 +321,7 @@ public class Polygon extends Element implements Renderable {
     private void setNumberOfCorner(int size) {
         this.size = size;
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }

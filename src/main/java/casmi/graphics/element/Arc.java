@@ -25,7 +25,6 @@ import javax.media.opengl.glu.GLU;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
-import casmi.graphics.object.Renderable;
 import casmi.matrix.Vector3D;
 
 /**
@@ -33,7 +32,7 @@ import casmi.matrix.Vector3D;
  *
  * @author Y. Ban
  */
-public class Arc extends Element implements Renderable {
+public class Arc extends Element {
 
     private double w;
     private double h;
@@ -450,4 +449,7 @@ public class Arc extends Element implements Renderable {
         setGradation(true);
         this.edgeColor = RGBColor.color(colorSet);
     }
+
+    @Override
+    public void reset(GL2 gl) {}
 }
