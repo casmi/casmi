@@ -38,8 +38,8 @@ import casmi.util.SystemUtil;
  */
 public class AppletRunner {
 
-    static JFrame frame;
-    static GraphicsDevice displayDevice;
+//    static JFrame frame;
+//    static GraphicsDevice displayDevice;
 
     public static void run(String className, String title) {
         final Applet applet;
@@ -77,21 +77,25 @@ public class AppletRunner {
 
         applet.setRunAsApplication(true);
 
-        if (displayDevice == null) {
-            GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            displayDevice = environment.getDefaultScreenDevice();
-        }
+//        if (displayDevice == null) {
+        GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice displayDevice = environment.getDefaultScreenDevice();
+//        }
 
-        frame = new JFrame(displayDevice.getDefaultConfiguration());
+        JFrame frame = new JFrame(displayDevice.getDefaultConfiguration());
         frame.setTitle(title);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         frame.setResizable(true);
 
         frame.setLayout(new BorderLayout());
 
         frame.add(applet, BorderLayout.CENTER);
+
+        applet.setWindowFrame(frame);
+        applet.setDisplayDevice(displayDevice);
 
         applet.init();
 

@@ -21,6 +21,7 @@ package casmi;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
@@ -30,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
@@ -78,6 +80,9 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 abstract public class Applet extends JApplet
 implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
+
+    private JFrame windowFrame;
+    private GraphicsDevice displayDevice;
 
     private int width  = 100;
     private int height = 100;
@@ -193,7 +198,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		panel.setFocusable(true);
 
 		if (runAsApplication) {
-		    AppletRunner.frame.setJMenuBar(menuBar.getJMenuBar());
+		    this.windowFrame.setJMenuBar(menuBar.getJMenuBar());
 		} else {
 		    setJMenuBar(menuBar.getJMenuBar());
 		}
@@ -229,6 +234,12 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	void setAppletSize(int w, int h) {
 	    this.width = w;
 	    this.height = h;
+	}
+
+    public void exitApplet() {
+        if(windowFrame != null) {
+            windowFrame.dispatchEvent(new WindowEvent(windowFrame, WindowEvent.WINDOW_CLOSING));
+        }
 	}
 
 	/**
@@ -278,9 +289,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		if (isInitializing) {
 		    initialFullScreen = fullScreen;
 		    if (fullScreen) {
-		        AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
-		        innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
-		                     AppletRunner.displayDevice.getFullScreenWindow().getHeight());
+		        displayDevice.setFullScreenWindow(windowFrame);
+		        innerSetSize(displayDevice.getFullScreenWindow().getWidth(),
+		                     displayDevice.getFullScreenWindow().getHeight());
 		    }
 		    return;
 		}
@@ -291,26 +302,26 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		this.isFullScreen = fullScreen;
 
-		if (AppletRunner.frame.isDisplayable()) {
-		    AppletRunner.frame.dispose();
+		if (windowFrame.isDisplayable()) {
+		    windowFrame.dispose();
 		}
 
 		if (fullScreen) {
-		    AppletRunner.frame.setUndecorated(true);
-			AppletRunner.displayDevice.setFullScreenWindow(AppletRunner.frame);
+		    windowFrame.setUndecorated(true);
+			displayDevice.setFullScreenWindow(windowFrame);
 
-			innerSetSize(AppletRunner.displayDevice.getFullScreenWindow().getWidth(),
-			             AppletRunner.displayDevice.getFullScreenWindow().getHeight());
-			AppletRunner.frame.setSize(width, height);
+			innerSetSize(displayDevice.getFullScreenWindow().getWidth(),
+			             displayDevice.getFullScreenWindow().getHeight());
+			windowFrame.setSize(width, height);
 		} else {
 		    innerSetSize(normalWidth, normalHeight);
-		    AppletRunner.frame.setUndecorated(false);
-			AppletRunner.displayDevice.setFullScreenWindow(null);
-			Insets insets = AppletRunner.frame.getInsets();
-			AppletRunner.frame.setSize(width  + insets.left + insets.right,
+		    windowFrame.setUndecorated(false);
+			displayDevice.setFullScreenWindow(null);
+			Insets insets = windowFrame.getInsets();
+			windowFrame.setSize(width  + insets.left + insets.right,
 	                                   height + insets.top  + insets.bottom);
 		}
-		AppletRunner.frame.setVisible(true);
+		windowFrame.setVisible(true);
 	}
 
 	@Override
@@ -580,8 +591,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	    isInitializing = false;
 
-	    if (AppletRunner.frame != null && runAsApplication) {
-	        JFrame frame = AppletRunner.frame;
+	    if (this.windowFrame != null && runAsApplication) {
+	        JFrame frame = this.windowFrame;
 	        if (!initialFullScreen) {
 	            Insets insets = frame.getInsets();
 	            frame.setSize(getWidth()  + insets.left + insets.right,
@@ -900,20 +911,28 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootCanvas.loadMatrix(matrix);
     }
 
+    @Deprecated
     public void setBackGroundColor(double gray) {
         rootCanvas.setBackGroundColor(new Background(gray));
     }
 
+    @Deprecated
     public void setBackGroundColor(double r, double g, double b) {
         rootCanvas.setBackGroundColor(new Background(r, g, b));
     }
 
+    @Deprecated
     public void setBackGroundColor(Color color) {
         rootCanvas.setBackGroundColor(new Background(color));
     }
 
+    @Deprecated
     public void setBackGroundColor(ColorSet colorset) {
         rootCanvas.setBackGroundColor(new Background(colorset));
+    }
+
+    public void setBackgroundColor(Color color) {
+        rootCanvas.setBackground(new Background(color));
     }
 
     public static void showAlert(String title, String message) {
@@ -924,6 +943,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     public AppletGLEventListener getListener() {
         return listener;
+    }
+
+    public void setWindowFrame(JFrame windowFrame) {
+        this.windowFrame = windowFrame;
+    }
+
+    public void setDisplayDevice(GraphicsDevice displayDevice) {
+        this.displayDevice = displayDevice;
     }
 }
 

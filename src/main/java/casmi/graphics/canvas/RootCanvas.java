@@ -59,7 +59,12 @@ public class RootCanvas extends Canvas {
         selections = new int[SELECTION_BUFFER_SIZE];
     }
 
+    @Deprecated
     public void setBackGroundColor(Background bg) {
+        this.background = bg;
+    }
+
+    public void setBackground(Background bg) {
         this.background = bg;
     }
 
