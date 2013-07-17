@@ -21,9 +21,12 @@ package casmi;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -37,9 +40,42 @@ import casmi.util.SystemUtil;
  *
  */
 public class AppletRunner {
+    private static class AppletFrame extends JFrame implements ComponentListener{
+        private final Applet applet;
 
-//    static JFrame frame;
-//    static GraphicsDevice displayDevice;
+        public AppletFrame(GraphicsConfiguration configuration, final Applet applet) {
+            super(configuration);
+
+            this.applet = applet;
+
+            this.addComponentListener(this);
+        }
+
+        @Override
+        public void componentHidden(ComponentEvent e) {
+        }
+
+        @Override
+        public void componentMoved(ComponentEvent e) {
+        }
+
+        @Override
+        public void componentResized(ComponentEvent e) {
+        }
+
+        @Override
+        public void componentShown(ComponentEvent e) {
+            if (!applet.isFullScreen()) {
+                Insets insets = getInsets();
+                setSize(applet.getAppletWidth() + insets.left + insets.right,
+                        applet.getAppletHeight() + insets.top + insets.bottom);
+            } else {
+                setSize(applet.getAppletWidth(), applet.getAppletHeight());
+            }
+
+            applet.setInitializing(false);
+        }
+    }
 
     public static void run(String className, String title) {
         final Applet applet;
@@ -74,18 +110,16 @@ public class AppletRunner {
     }
 
     private static void runApplet(Applet applet, String title) {
-
         applet.setRunAsApplication(true);
 
-//        if (displayDevice == null) {
         GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice displayDevice = environment.getDefaultScreenDevice();
-//        }
 
-        JFrame frame = new JFrame(displayDevice.getDefaultConfiguration());
+        AppletFrame frame = new AppletFrame(displayDevice.getDefaultConfiguration(), applet);
+        applet.setWindowFrame(frame);
+
         frame.setTitle(title);
 
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         frame.setResizable(true);
@@ -94,22 +128,13 @@ public class AppletRunner {
 
         frame.add(applet, BorderLayout.CENTER);
 
-        applet.setWindowFrame(frame);
         applet.setDisplayDevice(displayDevice);
 
         applet.init();
 
         frame.pack();
 
-        if (!applet.isFullScreen()) {
-            Insets insets = frame.getInsets();
-            frame.setSize(applet.getWidth() + insets.left + insets.right, applet.getHeight()
-                + insets.top + insets.bottom);
-        } else {
-            frame.setSize(applet.getWidth(), applet.getHeight());
-        }
-
-        frame.setBackground(Color.BLACK); // TODO better to setup applet's default background color
+        frame.setBackground(Color.BLACK);  // TODO better to setup applet's default background color
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
