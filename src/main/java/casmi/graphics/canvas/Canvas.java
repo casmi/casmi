@@ -111,13 +111,23 @@ public class Canvas {
 	}
 
 	public synchronized void applyMatrix(double[] matrix) {
-		this.matrix = java.nio.DoubleBuffer.wrap(matrix);
-		this.mode   = ObjectMatrixMode.APPLY;
+	    DoubleBuffer o = java.nio.DoubleBuffer.wrap(matrix);
+
+	    if (this.matrix == null || !this.matrix.equals(o)) {
+	        this.matrix = o;
+	        this.mode   = ObjectMatrixMode.APPLY;
+
+	        callRerendering();
+	    }
 	}
 
 	public synchronized void applyMatrix(DoubleBuffer matrix) {
-		this.matrix = matrix;
-		this.mode   = ObjectMatrixMode.APPLY;
+	    if (this.matrix == null || !this.matrix.equals(matrix)) {
+	        this.matrix = matrix;
+	        this.mode   = ObjectMatrixMode.APPLY;
+
+	        callRerendering();
+	    }
 	}
 
 	public synchronized void loadMatrix(double[] matrix) {
@@ -313,7 +323,10 @@ public class Canvas {
     }
 
     public void setX(double x) {
-        this.x = x;
+        if (this.x != x) {
+            this.x = x;
+            callRerendering();
+        }
     }
 
     public double getY() {
@@ -321,7 +334,10 @@ public class Canvas {
     }
 
     public void setY(double y) {
-        this.y = y;
+        if (this.y != y) {
+            this.y = y;
+            callRerendering();
+        }
     }
 
     public double getZ() {
@@ -329,7 +345,10 @@ public class Canvas {
     }
 
     public void setZ(double z) {
-        this.z = z;
+        if (this.z != z) {
+            this.z = z;
+            callRerendering();
+        }
     }
 
     /**Sets the position of the Element in 2D.
@@ -340,8 +359,11 @@ public class Canvas {
     *              y-coordinate
     */
    public void setPosition(double x, double y) {
-       this.x = x;
-       this.y = y;
+       if (this.x != x || this.y != y) {
+           this.x = x;
+           this.y = y;
+           callRerendering();
+       }
    }
 
    /**Sets the position of the Element in 3D.
@@ -354,9 +376,13 @@ public class Canvas {
     *              z-coordinate
     */
    public void setPosition(double x, double y, double z) {
-       this.x = x;
-       this.y = y;
-       this.z = z;
+       if (this.x != x || this.y != y || this.z != z) {
+           this.x = x;
+           this.y = y;
+           this.z = z;
+
+           callRerendering();
+       }
    }
 
    public boolean isUpdated() {
