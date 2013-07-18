@@ -56,21 +56,8 @@ public class Graphics {
             return;
         }
 
-//        r.setAlpha(getAlpha());
         r.render(this.gl, this.glu, this.width, this.height, selection);
 	}
-
-//	public void render(Timeline tr) {
-//	    if (tr != null) {
-//	        tr.render(this);
-//	    }
-//	}
-
-//	public void render(TweenerManager tm) {
-//	    if (tm != null) {
-//	        tm.render(this);
-//	    }
-//	}
 
 	public Graphics(GL2 gl, GLU glu, GLUT glut, int width, int height) {
 		this.gl   = gl;

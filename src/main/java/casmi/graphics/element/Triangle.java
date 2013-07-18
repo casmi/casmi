@@ -71,7 +71,7 @@ public class Triangle extends Element {
         this.y2 = y2;
         this.x3 = x3;
         this.y3 = y3;
-        calcG();
+        updateCenter();
     }
 
     /**
@@ -92,7 +92,7 @@ public class Triangle extends Element {
         this.x3 = v3.getX();
         this.y3 = v3.getY();
         this.z1 = v3.getZ();
-        calcG();
+        updateCenter();
     }
 
     /**
@@ -120,7 +120,7 @@ public class Triangle extends Element {
         this.x3 = x3;
         this.y3 = y3;
         this.z3 = z3;
-        calcG();
+        updateCenter();
     }
 
     /**
@@ -135,13 +135,22 @@ public class Triangle extends Element {
      */
     public void set(double x1, double y1, double x2, double y2, double x3, double y3) {
         this.MODE = TRIANGLE;
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.x3 = x3;
-        this.y3 = y3;
-        calcG();
+
+        if (this.x1 != x1 || this.y1 != y1 ||
+            this.x2 != x2 || this.y2 != y2 ||
+            this.x3 != x3 || this.y3 != y3) {
+
+
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.x3 = x3;
+            this.y3 = y3;
+            updateCenter();
+
+            callRedraw();
+        }
     }
 
     /**
@@ -153,16 +162,24 @@ public class Triangle extends Element {
      */
     public void set(Vector3D v1, Vector3D v2, Vector3D v3) {
         this.MODE = TRIANGLE_3D;
-        this.x1 = v1.getX();
-        this.y1 = v1.getY();
-        this.z1 = v1.getZ();
-        this.x2 = v2.getX();
-        this.y2 = v2.getY();
-        this.z1 = v2.getZ();
-        this.x3 = v3.getX();
-        this.y3 = v3.getY();
-        this.z1 = v3.getZ();
-        calcG();
+
+        if (this.x1 != v1.getX() || this.y1 != v1.getY() ||
+            this.x2 != v2.getX() || this.y2 != v2.getY() ||
+            this.x3 != v3.getX() || this.y3 != v3.getY()) {
+
+            this.x1 = v1.getX();
+            this.y1 = v1.getY();
+            this.z1 = v1.getZ();
+            this.x2 = v2.getX();
+            this.y2 = v2.getY();
+            this.z1 = v2.getZ();
+            this.x3 = v3.getX();
+            this.y3 = v3.getY();
+            this.z1 = v3.getZ();
+            updateCenter();
+
+            callRedraw();
+        }
     }
 
     /**
@@ -180,16 +197,24 @@ public class Triangle extends Element {
      */
     public void set(double x1, double y1, double z1, double x2, double y2, double z2, double x3, double y3, double z3) {
         this.MODE = TRIANGLE_3D;
-        this.x1 = x1;
-        this.y1 = y1;
-        this.z1 = z1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.z2 = z2;
-        this.x3 = x3;
-        this.y3 = y3;
-        this.z3 = z3;
-        calcG();
+
+        if (this.x1 != x1 || this.y1 != y1 || this.z1 != z1 ||
+            this.x2 != x2 || this.y2 != y2 || this.z2 != z2 ||
+            this.x3 != x3 || this.y3 != y3 || this.z3 != z3) {
+
+            this.x1 = x1;
+            this.y1 = y1;
+            this.z1 = z1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.z2 = z2;
+            this.x3 = x3;
+            this.y3 = y3;
+            this.z3 = z3;
+            updateCenter();
+
+            callRedraw();
+        }
     }
 
     public void setCorner(int number, double x, double y) {
@@ -203,7 +228,9 @@ public class Triangle extends Element {
             this.x3 = x;
             this.y3 = y;
         }
-        calcG();
+        updateCenter();
+
+        callRedraw();
     }
 
     public void setCorner(int number, double x, double y, double z) {
@@ -220,7 +247,9 @@ public class Triangle extends Element {
             this.y3 = y;
             this.z3 = z;
         }
-        calcG();
+        updateCenter();
+
+        callRedraw();
     }
 
     public void setConer(int number, Vector3D v) {
@@ -237,7 +266,9 @@ public class Triangle extends Element {
             this.y3 = v.getY();
             this.z3 = v.getZ();
         }
-        calcG();
+        updateCenter();
+
+        callRedraw();
     }
 
     public Vector3D getConer(int number) {
@@ -359,7 +390,7 @@ public class Triangle extends Element {
         }
     }
 
-    private final void calcG() {
+    private final void updateCenter() {
         x = (x1 + x2 + x3) / 3.0;
         y = (y1 + y2 + y3) / 3.0;
         z = (z1 + z2 + z3) / 3.0;
@@ -381,7 +412,7 @@ public class Triangle extends Element {
         x3 = x3 + x - this.x;
         y3 = y3 + y - this.y;
         z3 = z3 + z - this.z;
-        calcG();
+        updateCenter();
     }
 
     /**

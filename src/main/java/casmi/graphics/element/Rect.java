@@ -78,8 +78,11 @@ public class Rect extends Element {
      * @param height The height of the rectangle.
      */
     public void set(double width, double height) {
-        this.w = width;
-        this.h = height;
+        if (this.w != width || this.h != height) {
+            this.w = width;
+            this.h = height;
+            callRedraw();
+        }
     }
 
     /**
@@ -88,7 +91,10 @@ public class Rect extends Element {
      * @param width The width of the rectangle.
      */
     public void setWidth(double width) {
-        this.w = width;
+        if (this.w != width) {
+            this.w = width;
+            callRedraw();
+        }
     }
 
     /**
@@ -97,7 +103,10 @@ public class Rect extends Element {
      * @param height The height of the rectangle.
      */
     public void setHeight(double height) {
-        this.h = height;
+        if (this.h != height) {
+            this.h = height;
+            callRedraw();
+        }
     }
 
     /**
@@ -118,7 +127,7 @@ public class Rect extends Element {
         return this.h;
     }
 
-    private final void calcRect() {
+    private final void updateRect() {
         this.x1 = -w / 2;
         this.y1 = h / 2;
         this.x2 = -w / 2;
@@ -131,7 +140,7 @@ public class Rect extends Element {
 
     @Override
     public void render(GL2 gl, GLU glu, int width, int height, boolean selection) {
-        calcRect();
+        updateRect();
 
         if (getSceneStrokeColor().getAlpha() < 1.0 || getSceneFillColor().getAlpha() < 1.0 || !isDepthTest())
             gl.glDisable(GL2.GL_DEPTH_TEST);

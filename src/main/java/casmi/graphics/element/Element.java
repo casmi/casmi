@@ -30,6 +30,7 @@ import casmi.callback.MouseClickEventType;
 import casmi.callback.MouseEventCallback;
 import casmi.callback.MouseOverCallback;
 import casmi.callback.MouseOverEventType;
+import casmi.graphics.canvas.Canvas;
 import casmi.graphics.color.Color;
 import casmi.graphics.color.ColorSet;
 import casmi.graphics.color.RGBColor;
@@ -45,19 +46,15 @@ import casmi.matrix.Vector3D;
  *
  */
 abstract public class Element implements Cloneable, Renderable, Resettable {
+    private Canvas canvas;
+
     protected double strokeRed   = 0.0;
 	protected double strokeGreen = 0.0;
 	protected double strokeBlue  = 0.0;
-//	protected double strokeAlpha = 1.0;
 
 	protected double fillRed   = 1.0;
 	protected double fillGreen = 1.0;
 	protected double fillBlue  = 1.0;
-//	protected double fillAlpha = 1.0;
-
-	private double sceneA = 1.0;
-
-//	protected Mask mask;
 
 	public boolean enableMask = true;
 
@@ -73,8 +70,8 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 
 	protected Color strokeColor      = new RGBColor(strokeRed, strokeGreen, strokeBlue, 1.0);
 	protected Color fillColor        = new RGBColor(fillRed, fillGreen, fillBlue, 1.0);
-	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, 1.0 * sceneA);
-	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, 1.0 * sceneA);
+	protected Color sceneStrokeColor = new RGBColor(strokeRed, strokeGreen, strokeBlue, 1.0);
+	protected Color sceneFillColor   = new RGBColor(fillRed, fillGreen, fillBlue, 1.0);
 	protected Material material      = new Material();
 	protected boolean ismaterial = false;
 
@@ -113,7 +110,11 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The width of the Element's stroke.
 	 */
 	public void setStrokeWidth(double strokeWidth) {
-		this.strokeWidth = (float) strokeWidth;
+	    float val = (float) strokeWidth;
+	    if(this.strokeWidth != val) {
+	        callRedraw();
+	        this.strokeWidth = val;
+	    }
 	}
 
 	/**
@@ -133,8 +134,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The color of the Element's stroke.
 	 */
 	public void setStrokeColor(Color color) {
-		this.strokeColor = color;
-//		this.strokeAlpha = color.getAlpha();
+	    if (!this.strokeColor.equals(color)) {
+	        this.strokeColor = color;
+	        callRedraw();
+	    }
 	}
 
 	/**
@@ -144,8 +147,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The color of the Element's stroke.
 	 */
 	public void setStrokeColorAlpha(double alpha) {
-		this.strokeColor.setAlpha(alpha);
-//		this.strokeAlpha = alpha;
+	    if(this.strokeColor.getAlpha() != alpha) {
+	        callRedraw();
+	        this.strokeColor.setAlpha(alpha);
+	    }
 	}
 
 	/**
@@ -155,7 +160,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The colorSet of the Element's stroke.
 	 */
 	public void setStrokeColor(ColorSet colorSet) {
-		strokeColor = new RGBColor(colorSet);
+	    Color c = new RGBColor(colorSet);
+
+	    if (!this.strokeColor.equals(c)) {
+	        strokeColor = c;
+	        callRedraw();
+	    }
 	}
 
 	/**
@@ -167,8 +177,13 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 			  The alpha of the Element's stroke.
 	 */
 	public void setStrokeColor(ColorSet colorSet, double alpha) {
-	    strokeColor = new RGBColor(colorSet);
-//	    this.strokeAlpha = alpha;
+	    Color c = new RGBColor(colorSet);
+	    c.setAlpha(alpha);
+
+        if (!this.strokeColor.equals(c)) {
+            strokeColor = c;
+            callRedraw();
+        }
 	}
 
 	/**
@@ -188,8 +203,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The color of the Element's fill.
 	 */
 	public void setFillColor(Color color) {
-		this.fillColor = color;
-//		this.fillAlpha = color.getAlpha();
+	    if (!this.fillColor.equals(color)) {
+	        this.fillColor = color;
+	        callRedraw();
+	    }
 	}
 
 	/**
@@ -199,8 +216,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The color of the Element's fill.
 	 */
 	public void setFillColorAlpha(double alpha) {
-		this.fillColor.setAlpha(alpha);
-//		this.fillAlpha = alpha;
+	    if (this.fillColor.getAlpha() != alpha) {
+	        this.fillColor.setAlpha(alpha);
+	        callRedraw();
+	    }
 	}
 
 	/**
@@ -210,7 +229,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 *            The color of the Element's fill.
 	 */
 	public void setFillColor(ColorSet colorSet) {
-		this.fillColor = new RGBColor(colorSet);
+	    Color c = new RGBColor(colorSet);
+
+	    if (!this.fillColor.equals(c)) {
+	        this.fillColor = c;
+	        callRedraw();
+	    }
 	}
 
 	/**
@@ -222,8 +246,13 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 			  The alpha of the Element's fill.
 	 */
 	public void setFillColor(ColorSet colorSet, double alpha) {
-		this.fillColor = new RGBColor(colorSet, alpha);
-//		this.fillAlpha = alpha;
+	    Color c = new RGBColor(colorSet, alpha);
+	    c.setAlpha(alpha);
+
+		if (!this.fillColor.equals(c)) {
+            this.fillColor = c;
+            callRedraw();
+        }
 	}
 
 	public boolean isStroke() {
@@ -236,7 +265,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * @param stroke
 	 */
 	public void setStroke(boolean stroke) {
-		this.stroke = stroke;
+	    if (this.stroke != stroke) {
+	        this.stroke = stroke;
+	        callRedraw();
+	    }
 	}
 
 	public boolean isFill() {
@@ -249,7 +281,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * @param fill
 	 */
 	public void setFill(boolean fill) {
-		this.fill = fill;
+	    if (this.fill != fill) {
+	        this.fill = fill;
+	        callRedraw();
+	    }
 	}
 
 	/**
@@ -266,11 +301,13 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	public void setSceneAlpha(double alpha) {
 		this.strokeColor.setAlpha(alpha);
 		this.fillColor.setAlpha(alpha);
+		callRedraw();
 	}
 
-    public void setAlpha(double alpha) {
-		this.sceneA = alpha;
-	}
+//    public void setAlpha(double alpha) {
+//		this.sceneA = alpha;
+//		callRedraw();
+//	}
 
 	public Color getSceneStrokeColor() {
 //		sceneStrokeColor = strokeColor.clone();
@@ -305,24 +342,6 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	    return color;
 	}
 
-//	/**Decides the Element has the tween or not.
-//	 *
-//	 * @param tween
-//	 *
-//	 */
-//	public void setTween(boolean tween) {
-//		this.tween = tween;
-//	}
-
-//	/**Gets that the Element has has the tween or not.
-//	 *
-//	 * @return
-//	 * 			Returns the tween prediction.
-//	 */
-//	public boolean isTween() {
-//		return this.tween;
-//	}
-
 	protected void move(GL2 gl) {
 	    gl.glTranslated(x, y, z);
 	    gl.glScaled(scaleX, scaleY, scaleZ);
@@ -330,22 +349,6 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	    gl.glRotated(rotateX, 1.0, 0.0, 0.0);
 	    gl.glRotated(rotateY, 0.0, 1.0, 0.0);
 	}
-
-//	public double getStrokeAlpha() {
-//		return strokeAlpha;
-//	}
-//
-//	public void setStrokeAlpha(double strokeAlpha) {
-//		this.strokeAlpha = strokeAlpha;
-//	}
-//
-//	public double getFillAlpha() {
-//		return fillAlpha;
-//	}
-//
-//	public void setFillAlpha(double fillAlpha) {
-//		this.fillAlpha = fillAlpha;
-//	}
 
 	/**Gets x-coordinate of the Element.
 	 *
@@ -390,7 +393,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 				x-coordinate to set.
 	 */
 	public void setX(double x) {
-		this.x = x;
+	    if (this.x != x) {
+	        this.x = x;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets y-coordinate of the Element.
@@ -399,7 +405,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 				y-coordinate to set.
 	 */
 	public void setY(double y) {
-		this.y = y;
+	    if (this.y != y) {
+	        this.y = y;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets z-coordinate of the Element.
@@ -408,7 +417,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 				z-coordinate to set.
 	 */
 	public void setZ(double z) {
-		this.z = z;
+	    if (this.z != z) {
+	        this.z = z;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the position of the Element in 2D.
@@ -419,8 +431,11 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 				y-coordinate
 	 */
 	public void setPosition(double x, double y) {
-		this.x = x;
-		this.y = y;
+	    if (this.x != x || this.y != y) {
+	        this.x = x;
+	        this.y = y;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the position of the Element in 3D.
@@ -433,9 +448,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 				z-coordinate
 	 */
 	public void setPosition(double x, double y, double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	    if (this.x != x || this.y != y || this.z != z) {
+	        this.x = x;
+	        this.y = y;
+	        this.z = z;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the position of the Element in 2D.
@@ -444,9 +462,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 				the vertex of the position of the Element
 	 */
 	public void setPosition(Vector3D v) {
-		this.x = v.getX();
-		this.y = v.getY();
-		this.z = v.getZ();
+	    if (this.x != v.getX() || this.y != v.getY() || this.z != v.getZ()) {
+	        this.x = v.getX();
+	        this.y = v.getY();
+	        this.z = v.getZ();
+	        callRedraw();
+	    }
 	}
 
 	/**Flips the Element. You can choose the way of flip with 0 or 1.
@@ -469,6 +490,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 			this.rotate += 180;
 			break;
 		}
+		callRedraw();
 	}
 
 	/**Sets the rotation angle of the Element round on z-axis.
@@ -477,7 +499,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The angle of rotation
 	 */
 	public void setRotation(double angle) {
-		this.rotate = angle;
+	    if (this.rotate != angle) {
+	        this.rotate = angle;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the rotation angle of the Element.
@@ -493,9 +518,15 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The rate of rotation angle round x-axis
 	 */
 	public void setRotation(double angle, double x, double y, double z) {
-		this.rotateX = angle * x;
-		this.rotateY = angle * y;
-		this.rotate  = angle * z;
+	    double ax = angle * x;
+	    double ay = angle * y;
+	    double az = angle * z;
+	    if (this.rotateX != ax || this.rotateY != ay || this.rotate != az) {
+	        this.rotateX = ax;
+	        this.rotateY = ay;
+	        this.rotate  = az;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the rotation angle of the Element.
@@ -508,9 +539,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The rotation angle round x-axis
 	 */
 	public void setRotation(double x, double y, double z) {
-		this.rotateX = x;
-		this.rotateY = y;
-		this.rotate  = z;
+	    if (this.rotateX != x || this.rotateY != y || this.rotate != z) {
+	        this.rotateX = x;
+	        this.rotateY = y;
+	        this.rotate  = z;
+	        callRedraw();
+	    }
 	}
 
 	/**Gets the rotation angle round on z-axis.
@@ -528,7 +562,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The angle of rotation round on x-axis
 	 */
 	public void setRotationX(double angle) {
-		this.rotateX = angle;
+	    if (this.rotateX != angle) {
+	        this.rotateX = angle;
+	        callRedraw();
+	    }
 	}
 
 	/**Gets the rotation angle round x-axis.
@@ -546,7 +583,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The angle of rotation round on y-axis
 	 */
 	public void setRotationY(double angle) {
-		this.rotateY = angle;
+	    if (this.rotateY != angle) {
+	        this.rotateY = angle;
+	        callRedraw();
+	    }
 	}
 
 	/**Gets the rotation angle round y-axis.
@@ -564,7 +604,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The angle of rotation round on z-axis
 	 */
 	public void setRotationZ(double angle) {
-		this.rotate = angle;
+	    if (this.rotate != angle) {
+	        this.rotate = angle;
+	        callRedraw();
+	    }
 	}
 
 	/**Gets the rotation angle round z-axis.
@@ -609,9 +652,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The scale of the Element
 	 */
 	public void setScale(double scale) {
-		this.scaleX = scale;
-		this.scaleY = scale;
-		this.scaleZ = scale;
+	    if (this.scaleX != scale || this.scaleY != scale || this.scaleZ != scale) {
+	        this.scaleX = scale;
+	        this.scaleY = scale;
+	        this.scaleZ = scale;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the scale of the Element
@@ -624,9 +670,12 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The scale of the Element of z-axis direction
 	 */
 	public void setScale(double scaleX, double scaleY, double scaleZ) {
-		this.scaleX = scaleX;
-		this.scaleY = scaleY;
-		this.scaleZ = scaleZ;
+	    if (this.scaleX != scaleX || this.scaleY != scaleY || this.scaleZ != scaleZ) {
+	        this.scaleX = scaleX;
+	        this.scaleY = scaleY;
+	        this.scaleZ = scaleZ;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the scale of the Element of x-axis direction.
@@ -635,7 +684,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The scale of the Element of x-axis direction
 	 */
 	public void setScaleX(double scaleX) {
-		this.scaleX = scaleX;
+	    if (this.scaleX != scaleX) {
+	        this.scaleX = scaleX;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the scale of the Element of y-axis direction.
@@ -644,7 +696,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The scale of the Element of y-axis direction
 	 */
 	public void setScaleY(double scaleY) {
-		this.scaleY = scaleY;
+	    if (this.scaleY != scaleY) {
+	        this.scaleY = scaleY;
+	        callRedraw();
+	    }
 	}
 
 	/**Sets the scale of the Element of z-axis direction.
@@ -653,7 +708,10 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 * 					The scale of the Element of z-axis direction
 	 */
 	public void setScaleZ(double scaleZ) {
-		this.scaleZ = scaleZ;
+	    if (this.scaleZ != scaleZ) {
+	        this.scaleZ = scaleZ;
+	        callRedraw();
+	    }
 	}
 
 //	/**Sets the texture to the Element.
@@ -856,4 +914,18 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 
 	@Override
     public void reset(GL2 gl) {}
+
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+    public void setCanvas(Canvas canvas) {
+        this.canvas = canvas;
+    }
+
+    protected void callRedraw() {
+        if (canvas != null) {
+            this.canvas.callRerendering();
+        }
+    }
 }

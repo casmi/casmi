@@ -106,9 +106,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private AppletGLEventListener listener = null;
 
 	private Timer timer;
+	private GLRedisplayTask timerTask;
 
 	private boolean isFullScreen = false;
-	private boolean initialFullScreen = false;
+	private boolean isInitializedFullScreen = false;
 //	private int normalWidth, normalHeight;
 
 	private boolean isInitializing = true;
@@ -142,15 +143,44 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	class GLRedisplayTask extends TimerTask {
 
+	    private Applet applet;
+
+	    GLRedisplayTask(Applet applet) {
+	        this.applet = applet;
+	    }
+
 	    @Override
 	    public void run() {
-	        if (panel != null) { // TODO if no update, do not re-render
-	            if (initialFullScreen) {
+	        if (applet.isInitializing()) {
+	            return;
+	        }
+
+	        if (panel != null) {
+	            if (isInitializedFullScreen) {
 	                setFullScreen(true);
-	                initialFullScreen = false;
+	                isInitializedFullScreen = false;
 	            }
 
-	            panel.display();
+	            if (runAsApplication) {
+	                if (windowFrame == null || !windowFrame.isVisible()) {
+	                    try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            // do nothing
+                        }
+
+	                    return;
+	                }
+	            }
+
+	            synchronized(applet) {
+	                applet.update();
+	            }
+
+	            if (rootCanvas.isRequiredToRender()) {
+	                panel.display();
+	                rootCanvas.finishRendering();
+	            }
 
 	            mouse.setPressed(false);
 	            mouse.setClicked(false);
@@ -178,8 +208,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public void init() {
 		initCanvas();
 
-//		setSize(0, 0);
-
 		// JOGL setup
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
 		this.caps = new GLCapabilities(profile);
@@ -204,7 +232,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		}
 
 		timer = new Timer();
-		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
+		timerTask = new GLRedisplayTask(this);
+		timer.schedule(timerTask, 0, (long)(1000.0 / fps));
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 		    @Override
@@ -216,14 +245,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void setSize(int width, int height) {
-//	    normalWidth  = width;
-//	    normalHeight = height;
-	    innerSetSize(width, height);
-	}
-
-	private void innerSetSize(int width, int height) {
-//		this.width  = width;
-//		this.height = height;
         super.setSize(new Dimension(width, height));
 
         this.setAppletSize(width, height);
@@ -231,11 +252,15 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         if (panel != null) {
             panel.setSize(new Dimension(width, height));
         }
+
+        rootCanvas.callRerendering();
 	}
 
 	void setAppletSize(int w, int h) {
 	    this.appletWidth = w;
 	    this.appletHeight = h;
+
+	    rootCanvas.callRerendering();
 	}
 
     public void exitApplet() {
@@ -266,13 +291,19 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	public void setFPS(double fps) {
-		this.fps = fps;
+	    if (this.fps != fps) {
+	        this.fps = fps;
 
-		if (!isInitializing()) {
-		    timer.cancel();
-		    timer = new Timer();
-		    timer.schedule(new GLRedisplayTask(), 0, (long) (1000.0 / fps));
-		}
+	        if (!isInitializing()) {
+	            timerTask.cancel();
+	            timer.cancel();
+	            timer.purge();
+
+	            timer = new Timer();
+	            timerTask = new GLRedisplayTask(this);
+	            timer.schedule(timerTask, 0, (long) (1000.0 / fps));
+	        }
+	    }
 	}
 
 	public double getFPS() {
@@ -289,11 +320,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	public void setFullScreen(boolean fullScreen) {
 		if (isInitializing()) {
-		    initialFullScreen = fullScreen;
+		    isInitializedFullScreen = fullScreen;
 		    if (fullScreen) {
 		        displayDevice.setFullScreenWindow(windowFrame);
-		        innerSetSize(displayDevice.getFullScreenWindow().getWidth(),
-		                     displayDevice.getFullScreenWindow().getHeight());
+		        setSize(displayDevice.getFullScreenWindow().getWidth(),
+		                displayDevice.getFullScreenWindow().getHeight());
 		    }
 		    return;
 		}
@@ -311,11 +342,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		if (fullScreen) {
 		    windowFrame.setUndecorated(true);
 			displayDevice.setFullScreenWindow(windowFrame);
-			innerSetSize(displayDevice.getFullScreenWindow().getWidth(),
-			             displayDevice.getFullScreenWindow().getHeight());
+			setSize(displayDevice.getFullScreenWindow().getWidth(),
+			        displayDevice.getFullScreenWindow().getHeight());
 			windowFrame.setSize(appletWidth, appletHeight);
 		} else {
-		    innerSetSize(appletWidth, appletHeight);
+		    setSize(appletWidth, appletHeight);
 		    windowFrame.setUndecorated(false);
 			displayDevice.setFullScreenWindow(null);
 			Insets insets = windowFrame.getInsets();
@@ -592,7 +623,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	    if (runAsApplication) {
 	        if(windowFrame != null) {
-	            if (!initialFullScreen) {
+	            if (!isInitializedFullScreen) {
 	                Insets insets = windowFrame.getInsets();
 	                windowFrame.setSize(appletWidth  + insets.left + insets.right,
 	                                    appletHeight + insets.top  + insets.bottom);
@@ -607,48 +638,50 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
     public void resetGraphics(Graphics g) {
-		rootCanvas.reset(g);
+        synchronized (this) {
+	        rootCanvas.reset(g);
+        }
 	}
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
-        update();
+	    synchronized (this) {
+	        rootCanvas.render(g, getMouseX(), getMouseY());
 
-	    drawObjects(g);
+	        // Calculate real fps.
+	        {
+	            frame++;
+	            long now = System.currentTimeMillis();
+	            long elapse = now - baseTime;
+	            if (1000 < elapse) {
+	                workingFPS = frame * 1000.0 / elapse;
+	                baseTime = now;
+	                frame = 0;
+	            }
+	        }
 
-		// Calculate real fps.
-		{
-		    frame++;
-		    long now = System.currentTimeMillis();
-		    long elapse = now - baseTime;
-		    if (1000 < elapse) {
-		        workingFPS = frame * 1000.0 / elapse;
-		        baseTime = now;
-		        frame = 0;
-		    }
-		}
+	        // capture image
+	        if (saveImageFlag) {
+	            saveImageFlag = false;
 
-		// capture image
-		if (saveImageFlag) {
-			saveImageFlag = false;
-
-			try {
-				switch (imageType) {
-				case JPG:
-				case PNG:
-				case BMP:
-				case GIF:
-				default:
-					Screenshot.writeToFile(new File(saveFile),
-					                       appletWidth, appletHeight, !saveBackground);
-					break;
-				}
-			} catch (GLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	            try {
+	                switch (imageType) {
+	                case JPG:
+	                case PNG:
+	                case BMP:
+	                case GIF:
+	                default:
+	                    Screenshot.writeToFile(new File(saveFile),
+	                        appletWidth, appletHeight, !saveBackground);
+	                    break;
+	                }
+	            } catch (GLException e) {
+	                e.printStackTrace();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
 	}
 
 	public boolean isRunAsApplication() {
@@ -750,20 +783,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	public PopupMenu getPopupMenu() {
 	    return popupMenu;
 	}
-
-//	@Override
-//    public int getWidth() {
-//		return width;
-//	}
-//
-//	@Override
-//	public int getHeight() {
-//		return height;
-//	}
-
-    private final void drawObjects(Graphics g) {
-        rootCanvas.render(g, getMouseX(), getMouseY());
-    }
 
     public void addTweener(Tweener t) {
         rootCanvas.addTweener(t);

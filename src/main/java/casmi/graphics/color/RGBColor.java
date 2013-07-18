@@ -27,7 +27,7 @@ import javax.media.opengl.GL2;
  * @author T. Takeuchi
  *
  */
-public class RGBColor implements Color {
+public class RGBColor extends Color {
 
     protected double red   = 1.0;
     protected double green = 1.0;

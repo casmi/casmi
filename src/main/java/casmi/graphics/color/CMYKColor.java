@@ -26,7 +26,7 @@ import javax.media.opengl.GL2;
  *
  * @author T. Takeuchi
  */
-public class CMYKColor implements Color {
+public class CMYKColor extends Color {
 
     protected double cyan    = 1.0;
     protected double magenta = 1.0;

@@ -93,7 +93,9 @@ public class RootCanvas extends Canvas {
         renderAll(g);
 
         for (Canvas c : canvases) {
-            c.renderAll(g);
+            if (c.isUpdated()) {
+                c.renderAll(g);
+            }
         }
 
         // render for selection
@@ -186,5 +188,32 @@ public class RootCanvas extends Canvas {
 
     public synchronized void removeAllTweeners() {
         tweeners.clear();
+    }
+
+    public boolean isRequiredToRender() {
+        if (this.isUpdated()) return true;
+
+        for (Canvas c : canvases) {
+            if (c.isUpdated()) return true;
+        }
+
+        return false;
+    }
+
+    public void finishRendering() {
+        this.setUpdated(false);
+
+        for (Canvas c : canvases) {
+            c.setUpdated(false);
+        }
+    }
+
+    @Override
+    public void callRerendering() {
+        setUpdated(true);
+
+        for (Canvas c : canvases) {
+            c.setUpdated(true);
+        }
     }
 }

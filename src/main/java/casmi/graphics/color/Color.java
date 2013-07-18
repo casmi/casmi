@@ -32,25 +32,41 @@ import javax.media.opengl.GL2;
  *
  * @author Y. Ban
  */
-public interface Color {
+public abstract class Color {
 
-    double getRed();
+    public abstract double getRed();
 
-    void setRed(double red);
+    public abstract void setRed(double red);
 
-    double getGreen();
+    public abstract double getGreen();
 
-    void setGreen(double green);
+    public abstract void setGreen(double green);
 
-    double getBlue();
+    public abstract double getBlue();
 
-    void setBlue(double blue);
+    public abstract void setBlue(double blue);
 
-    double getAlpha();
+    public abstract double getAlpha();
 
-    void setAlpha(double alpha);
+    public abstract void setAlpha(double alpha);
 
-    void setup(GL2 gl);
+    public abstract void setup(GL2 gl);
 
-    Color clone();
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Color) {
+            Color c = (Color) obj;
+
+            if (c.getRed() == this.getRed() &&
+                c.getGreen() == this.getGreen() &&
+                c.getBlue() == this.getBlue() &&
+                c.getAlpha() == this.getAlpha()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
 }

@@ -26,7 +26,7 @@ import javax.media.opengl.GL2;
  *
  * @author T. Takeuchi
  */
-public class GrayColor implements Color {
+public class GrayColor extends Color {
 
     protected double gray  = 1.0;
     protected double alpha = 1.0;

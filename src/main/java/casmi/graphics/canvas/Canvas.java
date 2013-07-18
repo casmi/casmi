@@ -20,6 +20,7 @@ import casmi.graphics.object.Resettable;
  * @author Takashi AOKI <federkasten@me.com>
  */
 public class Canvas {
+    private boolean updated = true;
 
     protected List<Element> elementList;
 
@@ -49,10 +50,14 @@ public class Canvas {
 	}
 
 	public void add(Element e) {
+	    e.setCanvas(this);
 	    this.elementList.add(e);
 	}
 
 	public synchronized void addAll(Collection<? extends Element> c) {
+	    for (Element e : c) {
+	        e.setCanvas(this);
+	    }
 	    this.elementList.addAll(c);
 	}
 
@@ -353,6 +358,16 @@ public class Canvas {
        this.y = y;
        this.z = z;
    }
+
+   public boolean isUpdated() {
+       return updated;
+   }
+
+   public void setUpdated(boolean updated) {
+       this.updated = updated;
+   }
+
+   public void callRerendering() {
+       this.setUpdated(true);
+   }
 }
-
-

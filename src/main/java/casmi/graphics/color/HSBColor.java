@@ -26,7 +26,7 @@ import javax.media.opengl.GL2;
  *
  * @author T. Takeuchi
  */
-public class HSBColor implements Color {
+public class HSBColor extends Color {
 
     protected double hue        = 1.0;
     protected double saturation = 1.0;
