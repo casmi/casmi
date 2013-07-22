@@ -749,7 +749,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	    }
 	}
 
-	/**Adds the mosueEventCallback to the Element
+	/**Add a mouse event callback to a element
 	 *
 	 * @param callback
 	 * 					mouseEventCallback
@@ -761,7 +761,20 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 		mouseEventCallbacks.add(callback);
 	}
 
-	/**Returns the callbacks that are added to the Element.
+
+	/**Remove a mouse event callback from a element
+	 *
+	 * @param callback
+	 */
+	public void removeMouseEventCallback(MouseEventCallback callback) {
+	    if (mouseEventCallbacks == null) {
+	        return;  // do nothing
+	    }
+
+	    mouseEventCallbacks.remove(callback);
+	}
+
+	/**Return all callbacks that are registered to a element.
 	 *
 	 * @return
 	 * 				The callbacks that are added to the Element.
