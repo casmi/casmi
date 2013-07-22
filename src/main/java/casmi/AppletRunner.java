@@ -21,12 +21,8 @@ package casmi;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -40,44 +36,8 @@ import casmi.util.SystemUtil;
  *
  */
 public class AppletRunner {
-    private static class AppletFrame extends JFrame implements ComponentListener{
-        private final Applet applet;
 
-        public AppletFrame(GraphicsConfiguration configuration, final Applet applet) {
-            super(configuration);
-
-            this.applet = applet;
-
-            this.addComponentListener(this);
-        }
-
-        @Override
-        public void componentHidden(ComponentEvent e) {
-        }
-
-        @Override
-        public void componentMoved(ComponentEvent e) {
-        }
-
-        @Override
-        public void componentResized(ComponentEvent e) {
-        }
-
-        @Override
-        public void componentShown(ComponentEvent e) {
-            if (!applet.isFullScreen()) {
-                Insets insets = getInsets();
-                setSize(applet.getAppletWidth() + insets.left + insets.right,
-                        applet.getAppletHeight() + insets.top + insets.bottom);
-            } else {
-                setSize(applet.getAppletWidth(), applet.getAppletHeight());
-            }
-
-            applet.setInitializing(false);
-        }
-    }
-
-    public static void run(String className, String title) {
+    public static AppletFrame run(String className, String title) {
         final Applet applet;
 
         try {
@@ -88,11 +48,11 @@ public class AppletRunner {
             throw new CasmiRuntimeException("Failed to create instance of " + className, e);
         }
 
-        runApplet(applet, title);
+        return runApplet(applet, title);
     }
 
-    public static void run(final Applet applet, String title) {
-        runApplet(applet, title);
+    public static AppletFrame run(final Applet applet, String title) {
+        return runApplet(applet, title);
     }
 
     private static void initBeforeCreateApplet(String title) {
@@ -109,7 +69,7 @@ public class AppletRunner {
         }
     }
 
-    private static void runApplet(Applet applet, String title) {
+    private static AppletFrame runApplet(Applet applet, String title) {
         applet.setRunAsApplication(true);
 
         GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -137,5 +97,7 @@ public class AppletRunner {
         frame.setBackground(Color.BLACK);  // TODO better to setup applet's default background color
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        return frame;
     }
 }
