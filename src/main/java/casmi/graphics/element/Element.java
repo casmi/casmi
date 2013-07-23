@@ -20,6 +20,7 @@
 package casmi.graphics.element;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.media.opengl.GL2;
@@ -781,6 +782,15 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
 	 */
 	public List<MouseEventCallback> getMouseEventCallbacks() {
 	    return mouseEventCallbacks;
+	}
+
+	public void setMouseEventCallbacks(Collection<? extends MouseEventCallback> callbacks) {
+	    if (mouseEventCallbacks == null) {
+	        mouseEventCallbacks = new ArrayList<MouseEventCallback>();
+	    }
+
+	    mouseEventCallbacks.clear();
+	    mouseEventCallbacks.addAll(callbacks);
 	}
 
 	@Override
