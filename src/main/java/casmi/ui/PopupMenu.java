@@ -29,6 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import casmi.Applet;
+import casmi.Mouse;
 
 /**
  * Class for creating popup menu easily.
@@ -51,13 +52,13 @@ public class PopupMenu extends JPopupMenu {
         show(target, x, y);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void show() {
-        show(target, target.getMouseX(), target.getHeight() - target.getMouseY());
+        Mouse m = target.getMouse();
+        show(target, m.getX(), target.getHeight() - m.getY());
     }
 
-    public void addMenuItem(final String buttonName, final String methodName, final Object... args) {
+    public void addMenuItem(final String buttonName, final String methodName, final Object... args) {  // TODO fix to use interface
 
         JMenuItem menuItem = new JMenuItem(buttonName);
 

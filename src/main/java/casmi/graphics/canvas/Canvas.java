@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import casmi.MouseStatus;
+import casmi.MouseEvent;
 import casmi.graphics.Graphics;
 import casmi.graphics.element.Element;
 import casmi.graphics.object.Camera;
@@ -37,7 +37,7 @@ public class Canvas {
 
     protected DoubleBuffer matrix;
 
-	protected MouseStatus mouseStatus = MouseStatus.RELEASED;
+	protected MouseEvent mouseStatus = MouseEvent.RELEASED;
 
 	private double x = 0.0, y = 0.0, z = 0.0;
 
@@ -212,7 +212,7 @@ public class Canvas {
 		return index;
 	}
 
-	public void setMouseStatus(MouseStatus status){
+	public void setMouseStatus(MouseEvent status){
 		this.mouseStatus = status;
 	}
 

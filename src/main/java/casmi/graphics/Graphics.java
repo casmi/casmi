@@ -96,7 +96,7 @@ public class Graphics {
 	/**
 	 * Returns the width of the display window.
 	 */
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 
@@ -110,7 +110,7 @@ public class Graphics {
 	/**
      * Returns the height of the display window.
      */
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
@@ -746,16 +746,16 @@ public class Graphics {
 		double cameraZ = ((height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
 		matrixMode(MatrixMode.PROJECTION);
 		resetMatrix();
-		glu.gluPerspective(Math.PI / 3.0, (double) this.width
-				/ (double) this.height, cameraZ / 10.0, cameraZ * 10.0);
+		glu.gluPerspective(Math.PI / 3.0, this.width
+				/ this.height, cameraZ / 10.0, cameraZ * 10.0);
 		matrixMode(MatrixMode.MODELVIEW);
 		resetMatrix();
 	}
 
 	public void setJustPerspective(){
 		double cameraZ = ((height / 2.0) / Math.tan(Math.PI * 60.0 / 360.0));
-		glu.gluPerspective(Math.PI / 3.0, (double) this.width
-				/ (double) this.height, cameraZ / 10.0, cameraZ * 10.0);
+		glu.gluPerspective(Math.PI / 3.0, this.width
+				/ this.height, cameraZ / 10.0, cameraZ * 10.0);
 	}
 
 	/**

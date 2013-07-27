@@ -42,7 +42,7 @@ public class AppletRunner {
 
         try {
             Class<?> c = Thread.currentThread().getContextClassLoader().loadClass(className);
-            initBeforeCreateApplet(title);
+            setup(title);
             applet = (Applet)c.newInstance();
         } catch (Exception e) {
             throw new CasmiRuntimeException("Failed to create instance of " + className, e);
@@ -55,7 +55,7 @@ public class AppletRunner {
         return runApplet(applet, title);
     }
 
-    private static void initBeforeCreateApplet(String title) {
+    public static void setup(String title) {
         OS os = SystemUtil.getOS();
         if (os == OS.MAC || os == OS.MAC_64) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -69,14 +69,16 @@ public class AppletRunner {
         }
     }
 
-    private static AppletFrame runApplet(Applet applet, String title) {
-        applet.setRunAsApplication(true);
+    private static AppletFrame runApplet(final Applet applet, final String title) {
+//        applet.setRunAsApplication(true);
 
-        GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice displayDevice = environment.getDefaultScreenDevice();
+        final GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        final GraphicsDevice displayDevice = environment.getDefaultScreenDevice();
 
-        AppletFrame frame = new AppletFrame(displayDevice.getDefaultConfiguration(), applet);
+        final AppletFrame frame = new AppletFrame(displayDevice.getDefaultConfiguration(), applet);
+
         applet.setWindowFrame(frame);
+        applet.setDisplayDevice(displayDevice);
 
         frame.setTitle(title);
 
@@ -85,16 +87,10 @@ public class AppletRunner {
         frame.setResizable(true);
 
         frame.setLayout(new BorderLayout());
-
-        frame.add(applet, BorderLayout.CENTER);
-
-        applet.setDisplayDevice(displayDevice);
-
-        applet.init();
-
+        frame.getContentPane().add(applet.getPanel(), BorderLayout.CENTER);
         frame.pack();
 
-        frame.setBackground(Color.BLACK);  // TODO better to setup applet's default background color
+        frame.setBackground(Color.BLACK);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 

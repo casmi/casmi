@@ -26,7 +26,7 @@ package casmi;
  */
 public class Keyboard {
 
-    private char key;
+    private char character;
 
     private int keyCode;
 
@@ -36,12 +36,12 @@ public class Keyboard {
 
     Keyboard() {}
 
-    public char getKey() {
-        return key;
+    public char getCharacter() {
+        return character;
     }
 
-    void setKey(char key) {
-        this.key = key;
+    void setCharacter(char key) {
+        this.character = key;
     }
 
     public int getKeyCode() {
@@ -75,5 +75,4 @@ public class Keyboard {
     void setTyped(boolean typed) {
         this.typed = typed;
     }
-
 }

@@ -25,7 +25,7 @@ import java.util.List;
 
 import javax.media.opengl.GL2;
 
-import casmi.MouseStatus;
+import casmi.MouseEvent;
 import casmi.callback.MouseClickCallback;
 import casmi.callback.MouseClickEventType;
 import casmi.callback.MouseEventCallback;
@@ -690,7 +690,7 @@ abstract public class Element implements Cloneable, Renderable, Resettable {
     /**
     *
     */
-	public void triggerMouseEvent(MouseStatus status, boolean selected) {
+	public void triggerMouseEvent(MouseEvent status, boolean selected) {
 	    if (mouseEventCallbacks == null || mouseEventCallbacks.size() == 0) {
 	        return; // do nothing
 	    }

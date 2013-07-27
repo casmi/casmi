@@ -26,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.media.opengl.GL2;
 
-import casmi.MouseStatus;
+import casmi.MouseEvent;
 import casmi.graphics.Graphics;
 import casmi.graphics.object.Background;
 import casmi.tween.Tweener;
@@ -168,7 +168,7 @@ public class RootCanvas extends Canvas {
         canvases.clear();
     }
 
-    public void updateMouseStatus(MouseStatus status) {
+    public void updateMouseStatus(MouseEvent status) {
         setMouseStatus(status);
 
         for (Canvas c : canvases) {
