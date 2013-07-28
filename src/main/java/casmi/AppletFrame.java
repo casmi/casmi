@@ -35,7 +35,6 @@ public class AppletFrame extends JFrame implements ComponentListener{
 
     @Override
     public void componentShown(ComponentEvent e) {
-        System.out.println("shown " + applet.getAppletWidth() + ", " + applet.getHeight());
         if (!applet.isFullScreen()) {
             Insets insets = getInsets();
             setSize(applet.getAppletWidth() + insets.left + insets.right,

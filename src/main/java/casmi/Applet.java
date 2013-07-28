@@ -1074,10 +1074,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     public void componentResized(ComponentEvent e) {
         Dimension size = this.getSize();
 
-        System.out.println("set size " + size.getWidth() + ", " + size.getHeight());
-
         if (canvas != null) {
-            System.out.println("set canvas size " + size.getWidth() + ", " + size.getHeight());
             canvas.setSize(size);
         }
     }
@@ -1175,8 +1172,6 @@ class AppletGLEventListener implements GLEventListener {
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-	    System.out.println("reshape " + width + ", " + height);
-
 	    GLCanvasPanel panel = (GLCanvasPanel) d;
 	    if (!panel.isInitializing()) {
 	        panel.setPanelSize(width, height);
