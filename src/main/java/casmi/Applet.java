@@ -915,8 +915,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         //       }
     }
 
-    public void addObject(Collection<? extends Element> objects) {
-        rootCanvas.addAll(objects);
+    public void replaceObject(Collection<? extends Element> objects) {
+        rootCanvas.replace(objects);
     }
 
     public void removeObject(Element e) {

@@ -49,10 +49,15 @@ public class Canvas {
 	}
 
 	public void add(Element e) {
-	    this.elementList.add(e);
+	    if( !this.elementList.contains(e) ) {
+	        this.elementList.add(e);
+	    }
+
+	    System.out.println(this.elementList.size());
 	}
 
-	public synchronized void addAll(Collection<? extends Element> c) {
+	public synchronized void replace(Collection<? extends Element> c) {
+	    this.elementList.clear();
 	    this.elementList.addAll(c);
 	}
 
