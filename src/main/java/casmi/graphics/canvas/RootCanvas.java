@@ -21,6 +21,7 @@ package casmi.graphics.canvas;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -164,7 +165,12 @@ public class RootCanvas extends Canvas {
         canvases.remove(c);
     }
 
-    public synchronized void removeAllCanvases() {
+    public synchronized void replaceCanvases(Collection<? extends Canvas> c) {
+        canvases.clear();
+        canvases.addAll(c);
+    }
+
+    public synchronized void clearCanvases() {
         canvases.clear();
     }
 

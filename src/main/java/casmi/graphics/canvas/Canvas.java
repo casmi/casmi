@@ -56,9 +56,9 @@ public class Canvas {
 	    System.out.println(this.elementList.size());
 	}
 
-	public synchronized void replace(Collection<? extends Element> c) {
+	public synchronized void replace(Collection<? extends Element> elements) {
 	    this.elementList.clear();
-	    this.elementList.addAll(c);
+	    this.elementList.addAll(elements);
 	}
 
 	public synchronized void addLight(Light l) {

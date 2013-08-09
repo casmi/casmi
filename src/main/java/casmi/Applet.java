@@ -940,8 +940,12 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootCanvas.removeCanvas(c);
     }
 
-    public void removeAllCanvases() {
-        rootCanvas.removeAllCanvases();
+    public void replaceCanvases(Collection<? extends Canvas> c) {
+        rootCanvas.replaceCanvases(c);
+    }
+
+    public void clearCanvases() {
+        rootCanvas.clearCanvases();
     }
 
     public void setProjection(Projection p) {
