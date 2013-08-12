@@ -91,8 +91,16 @@ public class AppletRunner {
         frame.pack();
 
         frame.setBackground(Color.BLACK);
-        frame.setLocationRelativeTo(null);
+//        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                frame.setAlwaysOnTop(true);
+                frame.setAlwaysOnTop(false);
+            }
+        });
 
         return frame;
     }

@@ -52,8 +52,6 @@ public class Canvas {
 	    if( !this.elementList.contains(e) ) {
 	        this.elementList.add(e);
 	    }
-
-	    System.out.println(this.elementList.size());
 	}
 
 	public synchronized void replace(Collection<? extends Element> elements) {

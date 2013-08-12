@@ -37,7 +37,9 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,6 +53,7 @@ import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.glu.GLU;
+import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -69,6 +72,7 @@ import casmi.graphics.object.Light;
 import casmi.graphics.object.Projection;
 import casmi.image.ImageType;
 import casmi.tween.Tweener;
+import casmi.ui.Component;
 import casmi.ui.PopupMenu;
 import casmi.util.FileUtil;
 
@@ -310,6 +314,10 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
     public void addLight(Light l) {
         panel.addLight(l);
     }
+
+    public void addControlComponent(Component c) {
+        panel.addControlComponent(c);
+    }
 }
 
 /**
@@ -335,7 +343,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     private int panelWidth  = 100;
     private int panelHeight = 100;
 
-    // FPS.
+    // FPS
     private double fps = 30.0;
     private double workingFPS = fps;
     private int frame = 0;
@@ -370,6 +378,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private boolean saveImageFlag = false;
 	private boolean saveBackground = true;
 	private String saveFile;
+
+	private JPanel controlPanel;
+
+	private List<Component> components = new ArrayList<Component>();
 
 	// -------------------------------------------------------------------------
 
@@ -408,7 +420,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	}
 
 	public GLCanvasPanel() {
-		// JOGL setup
+	    // setup layered pane
+	    this.controlPanel = new JPanel();
+	    this.controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+
+		// setup JOGL
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
 		this.caps = new GLCapabilities(profile);
 		this.caps.setStencilBits(8);
@@ -952,42 +968,6 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
         rootCanvas.setProjection(p);
     }
 
-//    public void setPerspective() {
-//        rootCanvas.setProjection(new Perspective());
-//    }
-//
-//    public void setPerspective(double fov, double aspect, double zNear,    double zFar) {
-//        rootCanvas.setProjection(new Perspective(fov, aspect, zNear, zFar));
-//    }
-//
-//    public void setPerspective(Perspective perspective) {
-//        rootCanvas.setProjection(perspective);
-//    }
-//
-//    public void setOrtho() {
-//        rootCanvas.setProjection(new Ortho());
-//    }
-//
-//    public void setOrtho(double left, double right, double bottom, double top, double near, double far) {
-//        rootCanvas.setProjection(new Ortho(left, right, bottom, top, near, far));
-//    }
-//
-//    public void setOrtho(Ortho ortho) {
-//        rootCanvas.setProjection(ortho);
-//    }
-//
-//    public void setFrustum() {
-//        rootCanvas.setProjection(new Frustum());
-//    }
-//
-//    public void setFrustum(double left, double right, double bottom, double top, double near, double far) {
-//        rootCanvas.setProjection(new Frustum(left, right, bottom, top, near, far));
-//    }
-//
-//    public void setFrustum(Frustum frustum) {
-//        rootCanvas.setProjection(frustum);
-//    }
-
     public void setCamera() {
         rootCanvas.setCamera(new Camera());
     }
@@ -1014,6 +994,33 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     public void removeLight(Light light) {
         rootCanvas.removeLight(light);
+    }
+
+    public void addControlComponent(Component c) {
+        components.add(c);
+        updateControl();
+    }
+
+    public void removeControlComponent(Component c) {
+        components.clear();
+        updateControl();
+    }
+
+    private void updateControl() {
+        if(components.size() == 0) {
+            if(controlPanel.isDisplayable()) {
+                this.remove(controlPanel);
+            }
+        } else {
+            if(!controlPanel.isDisplayable()) {
+                this.add(controlPanel, BorderLayout.NORTH);
+            }
+
+            controlPanel.removeAll();
+            for(Component c : components) {
+                controlPanel.add(c.getInstance());
+            }
+        }
     }
 
     public void applyMatrix(DoubleBuffer matrix) {
@@ -1056,6 +1063,10 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
     public GLCanvas getGLCanvas() {
         return this.canvas;
+    }
+
+    public JPanel getControlPanel() {
+        return controlPanel;
     }
 
     public boolean isInitializing() {
