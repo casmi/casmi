@@ -498,6 +498,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 //			rootTimeline.getScene().mouseEvent(MouseEvent.PRESSED,mouseButton);
 //			rootTimeline.getScene().setMouseEvent(MouseEvent.PRESSED);
 //		}
+
+		updateMouse();
 	}
 
 	@Override
@@ -524,6 +526,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 //			rootTimeline.getScene().mouseEvent(MouseEvent.RELEASED, mouseButton);
 //			rootTimeline.getScene().setMouseEvent(MouseEvent.RELEASED);
 //		}
+
+		updateMouse();
 	}
 
 	@Override
@@ -571,24 +575,28 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {
-	    eventListener.mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT, mouse);
+	    eventListener.mouseEvent(MouseEvent.ENTERED, MouseButton.NONE, mouse);
 
 		mouse.setEntered(true);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.ENTERED, MouseButton.LEFT);
 //		}
+
+		initMouse();
 	}
 
 	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {
-	    eventListener.mouseEvent(MouseEvent.EXITED, MouseButton.LEFT, mouse);
+	    eventListener.mouseEvent(MouseEvent.EXITED, MouseButton.NONE, mouse);
 
 		mouse.setEntered(false);
 
 //		if (timeline) {
 //			rootTimeline.getScene().mouseEvent(MouseEvent.EXITED, MouseButton.LEFT);
 //		}
+
+		initMouse();
 	}
 
 	@Override
@@ -655,6 +663,17 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 			mouse.setY(getHeight() - p.y);
 		}
 	}
+
+	private final void initMouse() {
+        Point p = getMousePosition(true);
+        if (p != null) {
+            mouse.setX(p.x);
+            mouse.setY(getHeight() - p.y);
+
+            mouse.setPrevX(mouse.getX());
+            mouse.setPrevY(mouse.getY());
+        }
+    }
 
 	@Override
 	public void keyPressed(java.awt.event.KeyEvent e) {
