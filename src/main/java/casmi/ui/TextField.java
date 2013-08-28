@@ -2,6 +2,8 @@ package casmi.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextField;
 
@@ -10,21 +12,42 @@ public class TextField extends Component {
 
     private JTextField myInstance;
 
+    private boolean isPerformable = true;
+
+    private List<ActionListener> listeners = new ArrayList<ActionListener>();
+
     public TextField() {
         myInstance = new JTextField();
         instance = myInstance;
     }
 
     public void addActionListener(final TextFieldActionListener listener) {
-        myInstance.addActionListener(new ActionListener() {
+        ActionListener l = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                @SuppressWarnings("unchecked")
                 JTextField t = (JTextField)e.getSource();
 
-                listener.performed(t.getText());
+                if (isPerformable) {
+                    listener.performed(t.getText());
+                }
             }
-        });
+        };
 
+        myInstance.addActionListener(l);
+    }
+
+    public void clearActionListeners() {
+        for (ActionListener l : listeners) {
+            myInstance.removeActionListener(l);
+        }
+        listeners.clear();
+    }
+
+    public void setText(String t) {
+        isPerformable = false;
+
+        myInstance.setText(t);
+
+        isPerformable = true;
     }
 }
