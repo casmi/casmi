@@ -42,6 +42,7 @@ public class ComboBox extends Component {
         };
 
         myInstance.addActionListener(l);
+        listeners.add(l);
     }
 
     public void clearActionListeners() {

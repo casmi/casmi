@@ -34,6 +34,7 @@ public class TextField extends Component {
         };
 
         myInstance.addActionListener(l);
+        listeners.add(l);
     }
 
     public void clearActionListeners() {
