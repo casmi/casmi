@@ -86,7 +86,6 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 abstract public class Applet extends JApplet implements GLCanvasPanelEventListener {
 
-    @Override
     abstract public void setup();
 
     @Override
@@ -101,6 +100,9 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
     @Override
     abstract public void keyEvent(KeyEvent event, Keyboard keyboard);
 
+    @Override
+    public void refresh() {}
+
     private MenuBar menuBar = null;
     private final PopupMenu popupMenu = new PopupMenu(this);
 
@@ -110,6 +112,8 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
     private boolean isFullScreen = false;
 
     private GraphicsDevice displayDevice;
+
+    private boolean available = false;
 
     public Applet() {
         panel = new GLCanvasPanel();
@@ -121,6 +125,18 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
                 exit();
             }
         });
+    }
+
+    @Override
+    public void start() {
+        this.setup();
+
+        available = true;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return available;
     }
 
     public GLCanvasPanel getPanel() {
@@ -325,11 +341,13 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
  *
  */
 interface GLCanvasPanelEventListener {
-    void setup();
+    void start();
     void update();
+    void refresh();
     void exit();
     void mouseEvent(MouseEvent event, MouseButton button, Mouse mouse);
     void keyEvent(KeyEvent event, Keyboard keyboard);
+    boolean isAvailable();
 }
 
 /**
@@ -360,6 +378,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private AppletGLEventListener listener = null;
 
 	private Timer timer;
+	private Timer updateTimer;
 
 //	private boolean initialFullScreen = false;
 
@@ -384,6 +403,16 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	private List<Component> components = new ArrayList<Component>();
 
 	// -------------------------------------------------------------------------
+
+	class UpdateTask extends TimerTask {
+
+	    @Override
+	    public void run() {
+	        if (canvas != null && eventListener != null && eventListener.isAvailable()) {
+	            eventListener.update();
+	        }
+	    }
+	}
 
 	class GLRedisplayTask extends TimerTask {
 
@@ -447,6 +476,9 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
+
+		updateTimer = new Timer();
+		updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, (long)(1000.0 / 24));
 
 		this.addComponentListener(this);
 	}
@@ -753,7 +785,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 	    rootObjectIsInitialized = true;
 	    rootCanvas = new RootCanvas();
 
-	    eventListener.setup();
+	    eventListener.start();
 
 // TODO fix
 //	    if (runAsApplication) {
@@ -780,7 +812,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 
 	@Override
 	public void drawWithGraphics(Graphics g) {
-        eventListener.update();
+        eventListener.refresh();
 
 	    drawObjects(g);
 
