@@ -5,4 +5,3 @@ install: /bin/true
 script:
   - mvn test
   - mvn install -DskipTests=true -U
-after_script: mvn deploy -Dmaven.test.skip=true 
