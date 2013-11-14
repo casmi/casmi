@@ -1,0 +1,8 @@
+language: java
+jdk:
+  - oraclejdk7
+install: /bin/true
+script: 
+  - mvn test
+  - mvn install -DskipTests=true
+after_script: mvn deploy
