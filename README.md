@@ -1,5 +1,7 @@
 2D/3D visualization for Java
 
+[![Build Status](https://travis-ci.org/casmi/casmi.png?branch=master)](https://travis-ci.org/casmi/casmi)
+
 ```xml
 <dependency>
     <groupId>com.github.casmi</groupId>
