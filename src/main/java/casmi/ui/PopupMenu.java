@@ -21,9 +21,6 @@ package casmi.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -38,55 +35,20 @@ import casmi.Mouse;
  */
 public class PopupMenu extends JPopupMenu {
 
-    private final Applet target;
-
-    public PopupMenu(Applet target) {
-        this.target = target;
-    }
-
-    public void show(MouseEvent event) {
-        show(event.getComponent(), event.getX(), event.getY());
-    }
-
-    public void show(int x, int y) {
-        show(target, x, y);
-    }
-
-    @Override
-    public void show() {
+    public void show(Applet target) {
         Mouse m = target.getMouse();
-        show(target, m.getX(), target.getHeight() - m.getY());
+        show(target.getWindowFrame(), m.getX(), target.getHeight() - m.getY());
     }
 
-    public void addMenuItem(final String buttonName, final String methodName, final Object... args) {  // TODO fix to use interface
-
+    public void addMenuItem(final String buttonName, final PopupMenuActionListener listener) {
         JMenuItem menuItem = new JMenuItem(buttonName);
 
         menuItem.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                Method method;
-                try {
-                    int length = args.length;
-                    Class<?>[] c = new Class[length];
-                    for (int i = 0; i < length; i++) {
-                        c[i] = args[i].getClass();
-                    }
-                    method = target.getClass().getMethod(methodName, c);
-                } catch (SecurityException exception) {
-                    throw new RuntimeException(exception);
-                } catch (NoSuchMethodException exception) {
-                    throw new RuntimeException(exception);
-                }
-                try {
-                    method.invoke(target, args);
-                } catch (IllegalArgumentException exception) {
-                    throw new RuntimeException(exception);
-                } catch (IllegalAccessException exception) {
-                    throw new RuntimeException(exception);
-                } catch (InvocationTargetException exception) {
-                    throw new RuntimeException(exception);
+                if (listener != null) {
+                    listener.performed();
                 }
             }
         });

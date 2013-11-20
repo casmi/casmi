@@ -73,7 +73,6 @@ import casmi.graphics.object.Projection;
 import casmi.image.ImageType;
 import casmi.tween.Tweener;
 import casmi.ui.Component;
-import casmi.ui.PopupMenu;
 import casmi.util.FileUtil;
 
 import com.jogamp.opengl.util.awt.Screenshot;
@@ -104,7 +103,6 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
     public void refresh() {}
 
     private MenuBar menuBar = null;
-    private final PopupMenu popupMenu = new PopupMenu(this);
 
     private JFrame windowFrame = null;
     private GLCanvasPanel panel = null;
@@ -197,10 +195,6 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
         } else {
             this.setJMenuBar(menuBar.getJMenuBar());
         }
-    }
-
-    public PopupMenu getPopupMenu() {
-        return popupMenu;
     }
 
     public int getAppletWidth() {
@@ -959,27 +953,11 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
     public void addObject(Element obj) {
         if(rootObjectIsInitialized){
             rootCanvas.add(obj);
-            //           if(obj instanceof Timeline){
-            //               rootTimeline = (Timeline) obj;
-            //               timeline = true;
-            //               rootTimeline.setKeyboard(keyboard);
-            //               rootTimeline.setMouse(mouse);
-            //               rootTimeline.setPopup(popupMenu);
-            //               rootTimeline.setApplet(this);
-            //           }
         }
     }
 
     public void addObject(int index, Element obj) {
         rootCanvas.add(index, obj);
-        //       if(obj instanceof Timeline){
-        //           rootTimeline = (Timeline)obj;
-        //           timeline = true;
-        //           rootTimeline.setKeyboard(keyboard);
-        //           rootTimeline.setMouse(mouse);
-        //           rootTimeline.setPopup(popupMenu);
-        //           rootTimeline.setApplet(this);
-        //       }
     }
 
     public void replaceObject(Collection<? extends Element> objects) {
