@@ -17,9 +17,11 @@ import java.net.URL;
 public class SystemTrayMenu {
 
     private PopupMenu popup;
+    private Frame frame;
+    private TrayIcon trayIcon;
 
     public SystemTrayMenu(URL imageUrl, String name) {
-        final Frame frame = new Frame("");
+        frame = new Frame("");
         frame.setUndecorated(true);
 
         // Check the SystemTray is supported
@@ -27,8 +29,7 @@ public class SystemTrayMenu {
             throw new RuntimeException("SystemTray is not supported");
         }
 
-        final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(imageUrl), name);
-        final SystemTray tray = SystemTray.getSystemTray();
+        trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(imageUrl), name);
 
         popup = new PopupMenu();
 
@@ -45,15 +46,22 @@ public class SystemTrayMenu {
                 }
             }
         });
+    }
 
+    public void show() {
         frame.setResizable(false);
         frame.setVisible(true);
 
         try {
-            tray.add(trayIcon);
-        } catch (AWTException e1) {
+            SystemTray.getSystemTray().add(trayIcon);
+        } catch (AWTException e) {
             throw new RuntimeException("Failed to initialize SystemTrayMenu");
         }
+    }
+
+    public void hide() {
+        frame.setVisible(false);
+        SystemTray.getSystemTray().remove(trayIcon);
     }
 
     public void addMenuItem(String name, final SystemTrayMenuActionListener listener) {
