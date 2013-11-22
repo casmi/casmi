@@ -64,6 +64,10 @@ public class SystemTrayMenu {
         SystemTray.getSystemTray().remove(trayIcon);
     }
 
+    public void setImage(URL imageUrl) {
+        trayIcon.setImage(Toolkit.getDefaultToolkit().getImage(imageUrl));
+    }
+
     public void addMenuItem(String name, final SystemTrayMenuActionListener listener) {
         MenuItem item = new MenuItem(name);
 
@@ -76,6 +80,10 @@ public class SystemTrayMenu {
         });
 
         popup.add(item);
+    }
+
+    public MenuItem getMenuItem(int index) {
+        return popup.getItem(index);
     }
 
     public void addSeparator() {
