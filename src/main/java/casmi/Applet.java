@@ -466,7 +466,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		canvas.setFocusable(true);
 
 		this.setLayout(new BorderLayout());
-		this.add(canvas, BorderLayout.CENTER);
+		this.add(canvas, BorderLayout.CENTER, -1);
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
@@ -1044,7 +1044,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
             }
         } else {
             if(!controlPanel.isDisplayable()) {
-                this.add(controlPanel, BorderLayout.NORTH);
+                this.add(controlPanel, BorderLayout.NORTH, 1);
             }
 
             controlPanel.removeAll();
