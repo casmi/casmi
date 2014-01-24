@@ -85,42 +85,42 @@ public class Vector3D {
 
     public Vector3D mult(Vector3D a) {
         Vector3D result;
-        result = new Vector3D(a.x*this.x,a.y*this.y);
+        result = new Vector3D(a.x*this.x,a.y*this.y,a.z*this.z);
         return result;
     }
 
     public Vector3D par(Vector3D a) {
         Vector3D result;
-        result = new Vector3D(this.x/a.x,this.y/a.y);
+        result = new Vector3D(this.x/a.x,this.y/a.y, this.z/a.z);
         return result;
     }
 
     public Vector3D mult(double b) {
         Vector3D result;
-        result = new Vector3D(this.x*b,this.y*b);
+        result = new Vector3D(this.x*b,this.y*b, this.z*b);
         return result;
     }
 
     public Vector3D par(double a) {
         Vector3D result;
-        result = new Vector3D(this.x/a,this.y/a);
+        result = new Vector3D(this.x/a,this.y/a,this.z/a);
         return result;
     }
 
     public Vector3D add(double num) {
         Vector3D result;
-        result = new Vector3D(this.x+num, this.y+num);
+        result = new Vector3D(this.x+num, this.y+num ,this.z+num);
         return result;
     }
 
     public Vector3D add(Vector3D v) {
         Vector3D result;
-        result = new Vector3D(this.x+v.x,this.y+v.y);
+        result = new Vector3D(this.x+v.x,this.y+v.y, this.z+v.z);
         return result;
     }
 
     public double lengthSquared() {
-        return this.x*this.x+this.y*this.y;
+        return this.x*this.x+this.y*this.y+this.z*this.z;
     }
 
     public static double getDistance(Vector3D a, Vector3D b) {
