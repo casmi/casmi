@@ -90,13 +90,6 @@
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all</artifactId>
             <version>2.1.4</version>
-            <classifier>natives-linux-i586</classifier>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jogamp.jogl</groupId>
-            <artifactId>jogl-all</artifactId>
-            <version>2.1.4</version>
             <classifier>natives-linux-amd64</classifier>
             <scope>runtime</scope>
         </dependency>
@@ -143,23 +136,16 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
             <version>2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jogamp.gluegen</groupId>
-            <artifactId>gluegen-rt</artifactId>
-            <version>2.1.4</version>
-            <classifier>natives-linux-i586</classifier>
+            <classifier>natives-windows-amd64</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt</artifactId>
             <version>2.1.4</version>
-            <classifier>natives-linux-i586</classifier>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jogamp.gluegen</groupId>
