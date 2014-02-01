@@ -475,6 +475,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, (long)(1000.0 / 24));
 
 		this.addComponentListener(this);
+
+		this.validate();
 	}
 
 	void setPanelSize(int w, int h) {
@@ -1049,6 +1051,14 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
             for(Component c : components) {
                 controlPanel.add(c.getInstance());
             }
+        }
+
+        this.validate();
+
+        Dimension size = this.getSize();
+
+        if (canvas != null) {
+            canvas.setSize(size);
         }
     }
 
