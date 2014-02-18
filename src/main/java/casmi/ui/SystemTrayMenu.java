@@ -68,6 +68,10 @@ public class SystemTrayMenu {
         trayIcon.setImage(Toolkit.getDefaultToolkit().getImage(imageUrl));
     }
 
+    public void setIcon(URL iconURL) {
+    	frame.setIconImage(Toolkit.getDefaultToolkit().getImage(iconURL));
+    }
+
     public void addMenuItem(String name, final SystemTrayMenuActionListener listener) {
         MenuItem item = new MenuItem(name);
 

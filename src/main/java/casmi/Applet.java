@@ -36,6 +36,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -291,6 +292,12 @@ abstract public class Applet extends JApplet implements GLCanvasPanelEventListen
         return panel.getKeyboard();  // TODO modify to return immutable object
     }
 
+    public void setIcon(URL icon) {
+        if (windowFrame != null) {
+            windowFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(icon));
+        }
+    }
+
     // TODO refactor followings
 
     public void addObject(Element e) {
@@ -466,7 +473,7 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		canvas.setFocusable(true);
 
 		this.setLayout(new BorderLayout());
-		this.add(canvas, BorderLayout.CENTER);
+		this.add(canvas, BorderLayout.CENTER, -1);
 
 		timer = new Timer();
 		timer.schedule(new GLRedisplayTask(), 0, (long)(1000.0 / fps));
@@ -475,6 +482,8 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
 		updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, (long)(1000.0 / 24));
 
 		this.addComponentListener(this);
+
+		this.validate();
 	}
 
 	void setPanelSize(int w, int h) {
@@ -1042,13 +1051,21 @@ implements GraphicsDrawable, MouseListener, MouseMotionListener, MouseWheelListe
             }
         } else {
             if(!controlPanel.isDisplayable()) {
-                this.add(controlPanel, BorderLayout.NORTH);
+                this.add(controlPanel, BorderLayout.NORTH, 1);
             }
 
             controlPanel.removeAll();
             for(Component c : components) {
                 controlPanel.add(c.getInstance());
             }
+        }
+
+        this.validate();
+
+        Dimension size = this.getSize();
+
+        if (canvas != null) {
+            canvas.setSize(size);
         }
     }
 
