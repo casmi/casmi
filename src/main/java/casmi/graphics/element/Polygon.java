@@ -231,6 +231,7 @@ public class Polygon extends Element {
                 tmpx = this.cornerX.get(0);
                 tmpy = this.cornerY.get(0);
                 tmpz = this.cornerZ.get(0);
+                gl.glVertex3d(tmpx - this.x, tmpy - this.y, tmpz - this.z);
                 gl.glEnd();
             }
             break;
